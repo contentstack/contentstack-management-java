@@ -69,7 +69,7 @@
     100%
   </span>
   <span class="absValue">
-    (50/ 50)
+    (47/ 47)
   </span>
 </td>
   </tr>
@@ -85,10 +85,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    98%
+    97.9%
   </span>
   <span class="absValue">
-    (50/ 51)
+    (47/ 48)
   </span>
 </td>
 </tr>
@@ -133,7 +133,7 @@
 <i>33</i>&nbsp;
 <i>34</i>&nbsp;        /**
 <i>35</i>&nbsp;         * Client for the Contentstack
-<i>36</i>&nbsp;         * @param authtoken - authtoken for the Contentstack Client
+<i>36</i>&nbsp;         * @param authtoken authtoken for the Contentstack Client
 <i>37</i>&nbsp;         */
 <b class="fc"><i>38</i>&nbsp;        public Client(String authtoken) {</b>
 <b class="fc"><i>39</i>&nbsp;            if (authtoken.isEmpty()){</b>
@@ -162,7 +162,7 @@
 <i>62</i>&nbsp;
 <i>63</i>&nbsp;        /**
 <i>64</i>&nbsp;         *  Set/Update authtoken for the client
-<i>65</i>&nbsp;         * @param authtoken - authtoken for the Contentstack Client
+<i>65</i>&nbsp;         * @param authtoken authtoken for the Contentstack Client
 <i>66</i>&nbsp;         */
 <i>67</i>&nbsp;        public Client setAuthtoken(String authtoken) {
 <b class="fc"><i>68</i>&nbsp;            this.authtoken = authtoken;</b>
@@ -176,7 +176,7 @@
 <i>76</i>&nbsp;
 <i>77</i>&nbsp;        /**
 <i>78</i>&nbsp;         * Set protocol for client instance
-<i>79</i>&nbsp;         * @param protocol - protocol for the Contentstack Client
+<i>79</i>&nbsp;         * @param protocol protocol for the Contentstack Client
 <i>80</i>&nbsp;         * @return Client
 <i>81</i>&nbsp;         */
 <i>82</i>&nbsp;        public Client setProtocol(String protocol) {
@@ -249,9 +249,9 @@
 <b class="fc"><i>149</i>&nbsp;            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();</b>
 <b class="fc"><i>150</i>&nbsp;            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);</b>
 <b class="fc"><i>151</i>&nbsp;            return new OkHttpClient.Builder()</b>
-<b class="fc"><i>152</i>&nbsp;                    .readTimeout(this.timeout, TimeUnit.SECONDS)</b>
-<b class="fc"><i>153</i>&nbsp;                    .connectTimeout(this.timeout, TimeUnit.SECONDS)</b>
-<b class="fc"><i>154</i>&nbsp;                    .pingInterval(200, TimeUnit.MILLISECONDS)</b>
+<i>152</i>&nbsp;                    //.readTimeout(this.timeout, TimeUnit.SECONDS)
+<i>153</i>&nbsp;                    //.connectTimeout(this.timeout, TimeUnit.SECONDS)
+<i>154</i>&nbsp;                    //.pingInterval(200, TimeUnit.MILLISECONDS)
 <b class="fc"><i>155</i>&nbsp;                    .addInterceptor(new HeaderInterceptor(this.authtoken))</b>
 <b class="fc"><i>156</i>&nbsp;                    .retryOnConnectionFailure(true)</b>
 <b class="fc"><i>157</i>&nbsp;                    .build();</b>
@@ -291,7 +291,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-03-16 00:04</div>
+    <div style="float:right;">generated on 2021-03-16 02:25</div>
 </div>
 </body>
 </html>
