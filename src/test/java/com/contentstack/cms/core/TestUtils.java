@@ -1,9 +1,7 @@
 package com.contentstack.cms.core;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.*;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -53,5 +51,6 @@ public class TestUtils {
     @EnabledOnOs(OS.MAC)
     @interface TestOnMac {
     }
+
 
 }
