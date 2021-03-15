@@ -1,0 +1,102 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: HeaderInterceptor</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.contentstack.cms.core</a> ]
+</div>
+
+<h1>Coverage Summary for Class: HeaderInterceptor (com.contentstack.cms.core)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HeaderInterceptor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/ 8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.contentstack.cms.core;
+<i>2</i>&nbsp;import okhttp3.Interceptor;
+<i>3</i>&nbsp;import okhttp3.Request;
+<i>4</i>&nbsp;import okhttp3.Response;
+<i>5</i>&nbsp;import java.io.IOException;
+<i>6</i>&nbsp;
+<b class="fc"><i>7</i>&nbsp;public class HeaderInterceptor implements Interceptor {</b>
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;    @Override
+<i>10</i>&nbsp;    public Response intercept(Chain chain) throws IOException {
+<b class="fc"><i>11</i>&nbsp;        Request request = chain.request();</b>
+<b class="fc"><i>12</i>&nbsp;         request = chain.request()</b>
+<b class="fc"><i>13</i>&nbsp;                .newBuilder()</b>
+<b class="fc"><i>14</i>&nbsp;                .addHeader(&quot;X-User-Agent&quot;, &quot;contentstack-management-java-v.0.0.1&quot;)</b>
+<b class="fc"><i>15</i>&nbsp;                .addHeader(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0&quot;)</b>
+<b class="fc"><i>16</i>&nbsp;                .build();</b>
+<b class="fc"><i>17</i>&nbsp;        return chain.proceed(request);</b>
+<i>18</i>&nbsp;    }
+<i>19</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-03-07 02:06</div>
+</div>
+</body>
+</html>
