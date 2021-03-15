@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Contentstack.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">contentstack-management-java</a> &gt; <a href="index.source.html" class="el_package">com.contentstack.cms</a> &gt; <span class="el_source">Contentstack.java</span></div><h1>Contentstack.java</h1><pre class="source lang-java linenums">package com.contentstack.cms;
+import com.contentstack.cms.core.Constants;
+import com.contentstack.cms.core.HeaderInterceptor;
+import com.contentstack.cms.user.User;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.concurrent.TimeUnit;
+
+
+/**
+ * Contentstack is an API-based, headless content management platform
+ *
+ * @author  Shailesh Mishra
+ * @version 1.0.0
+ * @since   2021-03-31
+ */
+<span class="nc" id="L19">public class Contentstack {</span>
+
+
+    public static class Client {
+
+<span class="nc" id="L24">        protected String protocol = Constants.PROTOCOL; // Protocol for Contentstack API</span>
+<span class="nc" id="L25">        protected String hostname = Constants.HOST; // Host for Contentstack API (default: api.contentstack.io)</span>
+<span class="nc" id="L26">        protected String port = Constants.PORT; // PORT for Contentstack API</span>
+<span class="nc" id="L27">        protected String version = Constants.VERSION; // Version for Contentstack API</span>
+        protected String baseURL;
+<span class="nc" id="L29">        protected int timeout = Constants.TIMEOUT; // Default timeout 30 seconds</span>
+        protected Retrofit instance; // client instance
+        protected String authtoken; // authtoken for client
+
+
+        /**
+         * Client for the Contentstack
+         * @param authtoken authtoken for the Contentstack Client
+         */
+<span class="nc" id="L38">        public Client(String authtoken) {</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">            if (authtoken.isEmpty()){</span>
+<span class="nc" id="L40">                throw new NullPointerException(&quot;authtoken can not be null or empty&quot;);</span>
+            }
+<span class="nc" id="L42">            this.setAuthtoken(authtoken);</span>
+<span class="nc" id="L43">            initialiseClient();</span>
+<span class="nc" id="L44">        }</span>
+
+        /**
+         * Initialise Client for Contentstack
+         */
+<span class="nc" id="L49">        public Client() {</span>
+            // Even when build method not called return client instance
+<span class="nc" id="L51">            initialiseClient();</span>
+<span class="nc" id="L52">        }</span>
+
+        /**s
+         * Results authtoken for the client
+         *
+         * @return String authtoken
+         */
+        protected String getAuthtoken() {
+<span class="nc" id="L60">            return this.authtoken;</span>
+        }
+
+        /**
+         *  Set/Update authtoken for the client
+         * @param authtoken authtoken for the Contentstack Client
+         */
+        public Client setAuthtoken(String authtoken) {
+<span class="nc" id="L68">            this.authtoken = authtoken;</span>
+<span class="nc" id="L69">            return this;</span>
+        }
+
+
+<span class="nc" id="L73">        private Client(Retrofit instance) {</span>
+<span class="nc" id="L74">            this.instance=instance;</span>
+<span class="nc" id="L75">        }</span>
+
+        /**
+         * Set protocol for client instance
+         * @param protocol protocol for the Contentstack Client
+         * @return Client
+         */
+        public Client setProtocol(String protocol) {
+<span class="nc" id="L83">            this.protocol = protocol;</span>
+<span class="nc" id="L84">            return this;</span>
+        }
+
+        /**
+         * Set host for client instance
+         * @param hostname - hostname for the Contentstack Client
+         * @return Client
+         */
+        public Client setHostname(String hostname) {
+<span class="nc" id="L93">            this.hostname = hostname;</span>
+<span class="nc" id="L94">            return this;</span>
+        }
+
+        /**
+         * Set port for client instance
+         * @param port - port for the Contentstack Client
+         * @return Client
+         */
+        public Client setPort(String port) {
+<span class="nc" id="L103">            this.port = port;</span>
+<span class="nc" id="L104">            return this;</span>
+        }
+
+        /**
+         * Set version for client instance
+         * @param version - version for the Contentstack Client
+         * @return Client
+         */
+        public Client setVersion(String version) {
+<span class="nc" id="L113">            this.version = version;</span>
+<span class="nc" id="L114">            return this;</span>
+        }
+
+        /**
+         * Set timeout for client instance
+         * @param timeout - timeout for the Contentstack Client
+         * @return Client
+         */
+        public Client setTimeout(int timeout) {
+<span class="nc" id="L123">            this.timeout = timeout;</span>
+<span class="nc" id="L124">            return this;</span>
+        }
+
+        private Client initialiseClient(){
+            //TODO: check port name from javascript
+            // https://stackoverflow.com/questions/42131639/retrofit-request-on-ip-address-with-port
+<span class="nc" id="L130">            this.baseURL = this.protocol+&quot;://&quot;+this.hostname+&quot;/&quot;+this.version+&quot;/&quot;;</span>
+            //if (this.port.isEmpty()){
+            //this.baseURL = this.protocol+&quot;://&quot;+this.hostname+&quot;:&quot;+this.port+&quot;/&quot;+this.version+&quot;/&quot;;
+            //}
+<span class="nc" id="L134">            okHttpClient();</span>
+<span class="nc" id="L135">            Retrofit instance = client();</span>
+<span class="nc" id="L136">            return new Client(instance);</span>
+        }
+
+        private Retrofit client(){
+<span class="nc" id="L140">            this.instance = new Retrofit.Builder()</span>
+<span class="nc" id="L141">                    .baseUrl(this.baseURL)</span>
+<span class="nc" id="L142">                    .addConverterFactory(GsonConverterFactory.create())</span>
+<span class="nc" id="L143">                    .client(okHttpClient())</span>
+<span class="nc" id="L144">                    .build();</span>
+<span class="nc" id="L145">            return this.instance;</span>
+        }
+
+        private OkHttpClient okHttpClient(){
+<span class="nc" id="L149">            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();</span>
+<span class="nc" id="L150">            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);</span>
+<span class="nc" id="L151">            return new OkHttpClient.Builder()</span>
+<span class="nc" id="L152">                    .readTimeout(this.timeout, TimeUnit.SECONDS)</span>
+<span class="nc" id="L153">                    .connectTimeout(this.timeout, TimeUnit.SECONDS)</span>
+<span class="nc" id="L154">                    .pingInterval(200, TimeUnit.MILLISECONDS)</span>
+<span class="nc" id="L155">                    .addInterceptor(new HeaderInterceptor(this.authtoken))</span>
+<span class="nc" id="L156">                    .retryOnConnectionFailure(true)</span>
+<span class="nc" id="L157">                    .build();</span>
+        }
+
+
+        /**
+         * &lt;b&gt;[Note]:&lt;/b&gt;
+         * Before executing any calls, retrieve the authtoken by authenticating
+         * yourself via the Log in call of User Session. The authtoken is returned in
+         * the 'Response' body of the Log in call and is mandatory in all of the calls.
+         * &lt;p&gt;&lt;b&gt;Example:&lt;/b&gt; blt3cecf75b33bb2ebe
+         * &lt;p&gt;
+         * All accounts registered with Contentstack are known as Users.
+         * A stack can have many users with varying permissions and roles
+         * &lt;p&gt;To perform User operations first get User instance like below.
+         * &lt;p&gt;
+         * &lt;b&gt;Example:&lt;/b&gt;
+         * &lt;pre&gt;Client clientInstance = new Contentstack.Client();&lt;/pre&gt;
+         * &lt;br&gt;
+         * &lt;b&gt;OR: &lt;/b&gt;
+         * &lt;pre&gt;Client clientInstance = new Contentstack.Client(authtoken);&lt;/pre&gt;
+         * &lt;p&gt;
+         *
+         * @return User
+         */
+        public User user(){
+<span class="nc" id="L182">            return new User(this.instance);</span>
+        }
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
