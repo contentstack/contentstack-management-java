@@ -21,17 +21,25 @@ public interface UserService<T> {
     Call<T> activateUser(@Path("user_activation_token") String user_activation_token);
 
     @FormUrlEncoded
-    @POST("user/{forgot_password}")
-    Call<T> requestPassword(@Path("forgot_password") String forgot_password);
+    @POST("user/forgot_password")
+    Call<T> requestPassword();
 
-    @PUT("user/{reset_password}")
-    Call<T> resetPassword(@Path("reset_password") String reset_password);
+    @PUT("user/reset_password")
+    Call<T> resetPassword();
 
-    @FormUrlEncoded
-    @POST("user/{user_session}")
-    Call<T> login(@Path("user_session") String reset_password);
+    @DELETE("user/user-session")
+    // ACCEPT PARAM AUTHTOKEN
+    Call<T> logout(@Header("authtoken") String authtoken);
 
-    @DELETE("user/{user_session}")
-    Call<T> logout(@Path("user_session") String reset_password);
+    @DELETE("user/user-session")
+        // ACCEPT PARAM AUTHTOKEN
+    Call<T> logout();
+
+
+//    @FormUrlEncoded
+//    @POST("user/user_session")
+//    Call<T> login(@Path("user_session") String reset_password);
+
+
 
 }

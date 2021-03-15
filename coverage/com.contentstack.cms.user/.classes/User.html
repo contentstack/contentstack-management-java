@@ -50,18 +50,18 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    50%
+    22.2%
   </span>
   <span class="absValue">
-    (2/ 4)
+    (2/ 9)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    50%
+    22.2%
   </span>
   <span class="absValue">
-    (2/ 4)
+    (2/ 9)
   </span>
 </td>
 </tr>
@@ -73,28 +73,40 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package com.contentstack.cms.user;
-<i>2</i>&nbsp;import com.contentstack.cms.user.model.UserModel;
+<i>2</i>&nbsp;
 <i>3</i>&nbsp;import retrofit2.Call;
 <i>4</i>&nbsp;import retrofit2.Retrofit;
 <i>5</i>&nbsp;
-<i>6</i>&nbsp;public class User {
-<i>7</i>&nbsp;
-<i>8</i>&nbsp;    private UserService userService;
-<i>9</i>&nbsp;
-<b class="nc"><i>10</i>&nbsp;    private User(){}</b>
-<i>11</i>&nbsp;
-<b class="fc"><i>12</i>&nbsp;    public User(Retrofit client) { this.userService = client.create(UserService.class); }</b>
-<i>13</i>&nbsp;
-<b class="fc"><i>14</i>&nbsp;    public Call&lt;UserModel&gt; getUser(){ return this.userService.getUser(); }</b>
-<i>15</i>&nbsp;
-<b class="nc"><i>16</i>&nbsp;    public Call&lt;UserModel&gt; updateUser(){ return userService.updateUser(); }</b>
-<i>17</i>&nbsp;}
+<i>6</i>&nbsp;// TODO: create documentation
+<i>7</i>&nbsp;public class User {
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;    private UserService userService;
+<i>10</i>&nbsp;
+<b class="nc"><i>11</i>&nbsp;    private User(){ }</b>
+<i>12</i>&nbsp;
+<b class="fc"><i>13</i>&nbsp;    public User(Retrofit client) { this.userService = client.create(UserService.class); }</b>
+<i>14</i>&nbsp;
+<b class="fc"><i>15</i>&nbsp;    public Call getUser(){ return this.userService.getUser(); }</b>
+<i>16</i>&nbsp;
+<b class="nc"><i>17</i>&nbsp;    public Call updateUser(){ return userService.updateUser(); }</b>
+<i>18</i>&nbsp;
+<b class="nc"><i>19</i>&nbsp;    public Call activateUser(){ return userService.updateUser(); }</b>
+<i>20</i>&nbsp;
+<b class="nc"><i>21</i>&nbsp;    public Call requestPassword(){ return userService.updateUser(); }</b>
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;    public Call resetPassword(){ return userService.updateUser(); }</b>
+<i>24</i>&nbsp;
+<b class="nc"><i>25</i>&nbsp;    public Call logoutWithAuthtoken(String authtoken){ return userService.logout(authtoken); }</b>
+<i>26</i>&nbsp;
+<b class="nc"><i>27</i>&nbsp;    public Call logout(){ return userService.logout(); }</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-03-07 02:06</div>
+    <div style="float:right;">generated on 2021-03-16 00:04</div>
 </div>
 </body>
 </html>
