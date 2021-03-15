@@ -38,55 +38,48 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package com.contentstack.cms.user;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import retrofit2.Call;
-<i>4</i>&nbsp;import retrofit2.http.*;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;public interface UserService&lt;T&gt; {
-<i>7</i>&nbsp;
-<i>8</i>&nbsp;    @Headers({
-<i>9</i>&nbsp;            &quot;Cache-Control: max-age=640000&quot;,
-<i>10</i>&nbsp;            &quot;Content-Type: application/json&quot;,
-<i>11</i>&nbsp;            &quot;content_encoding:   UTF-8&quot;
-<i>12</i>&nbsp;    })
-<i>13</i>&nbsp;    @GET(&quot;user&quot;)
-<i>14</i>&nbsp;    Call&lt;T&gt; getUser();
-<i>15</i>&nbsp;
-<i>16</i>&nbsp;    @PUT(&quot;user&quot;)
-<i>17</i>&nbsp;    Call&lt;T&gt; updateUser();
-<i>18</i>&nbsp;
-<i>19</i>&nbsp;    @FormUrlEncoded
-<i>20</i>&nbsp;    @POST(&quot;user/activate/{user_activation_token}&quot;)
-<i>21</i>&nbsp;    Call&lt;T&gt; activateUser(@Path(&quot;user_activation_token&quot;) String user_activation_token);
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;    @FormUrlEncoded
-<i>24</i>&nbsp;    @POST(&quot;user/forgot_password&quot;)
-<i>25</i>&nbsp;    Call&lt;T&gt; requestPassword();
-<i>26</i>&nbsp;
-<i>27</i>&nbsp;    @PUT(&quot;user/reset_password&quot;)
-<i>28</i>&nbsp;    Call&lt;T&gt; resetPassword();
-<i>29</i>&nbsp;
-<i>30</i>&nbsp;    @DELETE(&quot;user/user-session&quot;)
-<i>31</i>&nbsp;    // ACCEPT PARAM AUTHTOKEN
-<i>32</i>&nbsp;    Call&lt;T&gt; logout(@Header(&quot;authtoken&quot;) String authtoken);
-<i>33</i>&nbsp;
-<i>34</i>&nbsp;    @DELETE(&quot;user/user-session&quot;)
-<i>35</i>&nbsp;        // ACCEPT PARAM AUTHTOKEN
-<i>36</i>&nbsp;    Call&lt;T&gt; logout();
+<i>3</i>&nbsp;import okhttp3.ResponseBody;
+<i>4</i>&nbsp;import retrofit2.Call;
+<i>5</i>&nbsp;import retrofit2.http.*;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public interface UserService&lt;T&gt; {
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;    @Headers({
+<i>10</i>&nbsp;            &quot;Cache-Control: max-age=640000&quot;,
+<i>11</i>&nbsp;            &quot;Content-Type: application/json&quot;,
+<i>12</i>&nbsp;            &quot;content_encoding:   UTF-8&quot;
+<i>13</i>&nbsp;    })
+<i>14</i>&nbsp;    @GET(&quot;user&quot;)
+<i>15</i>&nbsp;    Call&lt;ResponseBody&gt; getUser();
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    @PUT(&quot;user&quot;)
+<i>18</i>&nbsp;    Call&lt;ResponseBody&gt; updateUser();
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    @FormUrlEncoded
+<i>21</i>&nbsp;    @POST(&quot;user/activate/{user_activation_token}&quot;)
+<i>22</i>&nbsp;    Call&lt;ResponseBody&gt; activateUser(@Path(&quot;user_activation_token&quot;) String user_activation_token);
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    @FormUrlEncoded
+<i>25</i>&nbsp;    @POST(&quot;user/forgot_password&quot;)
+<i>26</i>&nbsp;    Call&lt;ResponseBody&gt; requestPassword();
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    @PUT(&quot;user/reset_password&quot;)
+<i>29</i>&nbsp;    Call&lt;ResponseBody&gt; resetPassword();
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    @DELETE(&quot;user/user-session&quot;)
+<i>32</i>&nbsp;    // ACCEPT PARAM AUTHTOKEN
+<i>33</i>&nbsp;    Call&lt;ResponseBody&gt; logout(@Header(&quot;authtoken&quot;) String authtoken);
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    @DELETE(&quot;user/user-session&quot;)
+<i>36</i>&nbsp;    Call&lt;ResponseBody&gt; logout();
 <i>37</i>&nbsp;
-<i>38</i>&nbsp;
-<i>39</i>&nbsp;//    @FormUrlEncoded
-<i>40</i>&nbsp;//    @POST(&quot;user/user_session&quot;)
-<i>41</i>&nbsp;//    Call&lt;T&gt; login(@Path(&quot;user_session&quot;) String reset_password);
-<i>42</i>&nbsp;
-<i>43</i>&nbsp;
-<i>44</i>&nbsp;
-<i>45</i>&nbsp;}
+<i>38</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-03-16 00:04</div>
+    <div style="float:right;">generated on 2021-03-16 02:25</div>
 </div>
 </body>
 </html>

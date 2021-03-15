@@ -127,7 +127,7 @@ public class Contentstack {
         private Client initialiseClient(){
             //TODO: check port name from javascript
             // https://stackoverflow.com/questions/42131639/retrofit-request-on-ip-address-with-port
-            this.baseURL = this.protocol+"://"+this.hostname+"/"+this.version+"/";
+            this.baseURL = this.protocol+"://"+this.hostname+":"+this.port+"/"+this.version+"/";
             //if (this.port.isEmpty()){
             //this.baseURL = this.protocol+"://"+this.hostname+":"+this.port+"/"+this.version+"/";
             //}
@@ -149,9 +149,9 @@ public class Contentstack {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             return new OkHttpClient.Builder()
-                    .readTimeout(this.timeout, TimeUnit.SECONDS)
-                    .connectTimeout(this.timeout, TimeUnit.SECONDS)
-                    .pingInterval(200, TimeUnit.MILLISECONDS)
+                    //.readTimeout(this.timeout, TimeUnit.SECONDS)
+                    //.connectTimeout(this.timeout, TimeUnit.SECONDS)
+                    //.pingInterval(200, TimeUnit.MILLISECONDS)
                     .addInterceptor(new HeaderInterceptor(this.authtoken))
                     .retryOnConnectionFailure(true)
                     .build();
