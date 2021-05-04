@@ -1,0 +1,103 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UserService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.contentstack.cms.user</a>
+</div>
+
+<h1>Coverage Summary for Class: UserService (com.contentstack.cms.user)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">UserService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.contentstack.cms.user;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import okhttp3.ResponseBody;
+<i class="no-highlight">4</i>&nbsp;import retrofit2.Call;
+<i class="no-highlight">5</i>&nbsp;import retrofit2.http.*;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import java.util.Map;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;public interface UserService {
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;    @GET(&quot;user&quot;)
+<i class="no-highlight">12</i>&nbsp;    Call&lt;ResponseBody&gt; getUser();
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    @PUT(&quot;user&quot;)
+<i class="no-highlight">15</i>&nbsp;    Call&lt;ResponseBody&gt; updateUser();
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;    @POST(&quot;user/activate/{user_activation_token}&quot;)
+<i class="no-highlight">18</i>&nbsp;    Call&lt;ResponseBody&gt; activateUser(@Path(&quot;user_activation_token&quot;) String token);
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    @POST(&quot;user/forgot_password&quot;)
+<i class="no-highlight">21</i>&nbsp;    Call&lt;ResponseBody&gt; requestPassword();
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;    @PUT(&quot;user/reset_password&quot;)
+<i class="no-highlight">24</i>&nbsp;    Call&lt;ResponseBody&gt; resetPassword();
+<i class="no-highlight">25</i>&nbsp;
+<i class="no-highlight">26</i>&nbsp;    @DELETE(&quot;user/user-session&quot;)
+<i class="no-highlight">27</i>&nbsp;    Call&lt;ResponseBody&gt; logout(@Header(&quot;authtoken&quot;) String authtoken);
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    @DELETE(&quot;user/user-session&quot;)
+<i class="no-highlight">30</i>&nbsp;    Call&lt;ResponseBody&gt; logout();
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;    @GET(&quot;user&quot;)
+<i class="no-highlight">33</i>&nbsp;    Call&lt;ResponseBody&gt; getUserOrganization(@QueryMap Map&lt;String, String&gt; options);
+<i class="no-highlight">34</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-05-04 12:41</div>
+</div>
+</body>
+</html>

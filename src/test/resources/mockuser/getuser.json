@@ -1,0 +1,72 @@
+{
+  "user": {
+    "uid": "blt22e22222d22d2f22222a2b2f",
+    "created_at": "2016-06-30T05:02:27.516Z",
+    "updated_at": "2019-07-16T10:35:30.898Z",
+    "email": "john.doe@contentstack.com",
+    "username": "john.doe_blt11fed1e1",
+    "first_name": "John",
+    "last_name": "Doe",
+    "company": "Contentstack",
+    "org_uid": [
+      "blt44444c44ea4ddf222"
+    ],
+    "shared_org_uid": [
+      "bltcde1e1cdf1f11e5f",
+      "blt22e2222dd2e2fb22",
+      "blt3f3ad33ca33cb3a3"
+    ],
+    "mobile_number": "9898989898",
+    "country_code": "91",
+    "tfa_status": "verified",
+    "authy_id": "123123123",
+    "active": true,
+    "failed_attempts": 0,
+    "authtoken": "bltd111c111111c11ec",
+    "roles": [{
+      "uid": "bltc0aa00ea0000b000",
+      "name": "Developer",
+      "description": "Developer can perform all Content Manager's actions, view audit logs, create roles, invite users, manage content types, languages, and environments.",
+      "users": [
+        "blt1d11a1d11c1b11111e111a1f",
+        "blt22dd2fd22222222e22f2aa22",
+        "sys_blt3a3333e33b30c3ea"
+      ],
+      "created_at": "2016-03-21T10:15:09.434Z",
+      "updated_at": "2018-06-20T10:44:19.618Z",
+      "api_key": "blt444ad44e4d44aa4a",
+      "rules": [{
+        "module": "locale",
+        "locales": [
+          "$all"
+        ],
+        "acl": {
+          "read": true
+        }
+      },
+        {
+          "module": "environment",
+          "environments": [
+            "$all"
+          ],
+          "acl": {
+            "read": true
+          }
+        },
+        {
+          "module": "asset",
+          "assets": [
+            "$all"
+          ],
+          "acl": {
+            "create": true,
+            "read": true,
+            "update": true,
+            "delete": true,
+            "publish": true
+          }
+        }
+      ]
+    }]
+  }
+}
