@@ -2,12 +2,14 @@
 
 ### Implementation:
 
+coverage:
+
+
 ```java
- Client client = new Client.Builder().setAuthtoken("blt3cecf75b33bb2ebe").build();
+    Client client = new Client.Builder().setAuthtoken("auth_token").build();
 
- [and]
-
- Client client = new Client.Builder().setAuthtoken("blt3cecf75b33bb2ebe").build();
- User userInstance = client.user();
- Response response = userInstance.getUser().execute();
+        
+    Client client = new Client.Builder().setAuthtoken("auth_token").build();
+    User userInstance = client.user();
+    Response response = userInstance.getUser().execute();
 ```

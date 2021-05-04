@@ -14,6 +14,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/**
+ * The type User mock tests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("Mock")
@@ -24,6 +27,12 @@ public class UserMockTests {
     private static final Logger logger = Logger.getLogger(UserMockTests.class.getName());
     private JSONObject mockJsonObject;
 
+    /**
+     * Read json json object.
+     *
+     * @param file the file
+     * @return the json object
+     */
     public JSONObject readJson(String file) {
         String path = "src/test/resources/mockuser/" + file;
         Object obj = null;
@@ -37,12 +46,18 @@ public class UserMockTests {
         return mockJsonObject;
     }
 
+    /**
+     * Sets before all.
+     */
     @BeforeAll
     public void setupBeforeAll() {
         logger.setLevel(Level.FINE);
     }
 
 
+    /**
+     * Mock test get user.
+     */
     @Test
     @DisplayName("Mock testcase for get user to check with all available keys")
     @Order(1)
@@ -77,6 +92,9 @@ public class UserMockTests {
         Assertions.assertArrayEquals(Arrays.stream(keyArray).toArray(), allKeys.toArray());
     }
 
+    /**
+     * Test mock testcase update user.
+     */
     @Test
     @DisplayName("Mock testcase for update user")
     @Order(2)
@@ -87,26 +105,29 @@ public class UserMockTests {
         Set allKeys = mockJsonObject.keySet();
         allKeys.forEach(System.out::println);
         String[] keyArray = {
-                "org_uid",
-                "authy_id",
-                "failed_attempts",
-                "shared_org_uid",
-                "created_at",
-                "last_name",
                 "active",
-                "uid",
-                "country_code",
-                "updated_at",
-                "tfa_status",
+                "authy_id",
                 "company",
-                "mobile_number",
-                "first_name",
+                "country_code",
+                "created_at",
                 "email",
+                "failed_attempts",
+                "first_name",
+                "last_name",
+                "mobile_number",
+                "org_uid",
+                "shared_org_uid",
+                "tfa_status",
+                "uid",
+                "updated_at",
                 "username"
         };
         Assertions.assertArrayEquals(Arrays.stream(keyArray).toArray(), allKeys.toArray());
     }
 
+    /**
+     * Test mock testcase activate user.
+     */
     @Test
     @DisplayName("Mock test notice message for activate user")
     @Order(3)
@@ -115,6 +136,9 @@ public class UserMockTests {
         Assertions.assertEquals("Your account has been activated.", mockJsonObject.get("notice"));
     }
 
+    /**
+     * Test mock testcase request password.
+     */
     @Test
     @DisplayName("Mock testcase for request password")
     @Order(4)
@@ -123,6 +147,9 @@ public class UserMockTests {
         Assertions.assertEquals("We sent an email to john.doe@contentstack.com with instructions to reset your password.", mockJsonObject.get("notice"));
     }
 
+    /**
+     * Test mock testcase reset password.
+     */
     @Test
     @DisplayName("Mock testcase for reset password")
     @Order(5)
@@ -132,6 +159,9 @@ public class UserMockTests {
     }
 
 
+    /**
+     * Test mock testcase logout.
+     */
     @Test
     @DisplayName("Mock testcase for user logout")
     @Order(6)
@@ -140,6 +170,9 @@ public class UserMockTests {
         Assertions.assertEquals("You've logged out successfully!", mockJsonObject.get("notice"));
     }
 
+    /**
+     * Test mock testcase get user organisation.
+     */
     @Test
     @DisplayName("mock testcase for get user organisation")
     @Order(8)
