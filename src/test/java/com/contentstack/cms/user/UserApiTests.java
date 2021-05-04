@@ -10,6 +10,9 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
+/**
+ * The type User api tests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("API")
@@ -18,6 +21,9 @@ public class UserApiTests {
 
     private User userInstance;
 
+    /**
+     * Init before all.
+     */
     @BeforeAll
     public void initBeforeAll() {
         // Accessing the authtoken from the .env file
@@ -27,6 +33,11 @@ public class UserApiTests {
         userInstance = client.user();
     }
 
+    /**
+     * Api test get user.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     @DisplayName("api testcase for get user")
     @Order(1)
@@ -42,6 +53,11 @@ public class UserApiTests {
         }
     }
 
+    /**
+     * Test api testcase update user.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     @DisplayName("api testcase for update user")
     @Order(2)
@@ -56,6 +72,11 @@ public class UserApiTests {
         }
     }
 
+    /**
+     * Test api testcase activate user.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     @DisplayName("api testcase for activate user")
     @Order(3)
@@ -66,6 +87,11 @@ public class UserApiTests {
         }
     }
 
+    /**
+     * Test api testcase request password.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     @DisplayName("api testcase for request password")
     @Order(4)
@@ -76,6 +102,11 @@ public class UserApiTests {
         }
     }
 
+    /**
+     * Test api testcase reset password.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     @DisplayName("api testcase for reset password")
     @Order(5)
@@ -87,6 +118,11 @@ public class UserApiTests {
     }
 
 
+    /**
+     * Test api testcase logout.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     @DisplayName("api testcase for user logout")
     @Order(6)
@@ -97,6 +133,11 @@ public class UserApiTests {
         }
     }
 
+    /**
+     * Test api testcase logout with authtoken.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     @DisplayName("api testcase for logout with authtoken")
     @Order(7)
@@ -107,6 +148,11 @@ public class UserApiTests {
         }
     }
 
+    /**
+     * Test api testcase get user organisation.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     @DisplayName("api testcase for get user organisation")
     @Order(8)

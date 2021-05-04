@@ -36,8 +36,11 @@ public class User {
     }
 
     /**
+     * The Get user call returns comprehensive information of an existing user account.
+     * The information returned includes details of the stacks and organisation owned by and shared
+     * with the specified user account.
      *
-     * @return
+     * @return {@link UserService}
      */
     public Call<ResponseBody> getUserOrganizations() {
         Map<String, String> map = new HashMap<>();
