@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 @DisplayName("User class Mock test case")
 public class UserMockTests {
 
+
     private static final Logger logger = Logger.getLogger(UserMockTests.class.getName());
     private JSONObject mockJsonObject;
 
