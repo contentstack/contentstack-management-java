@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HeaderInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">contentstack-management-java</a> &gt; <a href="index.source.html" class="el_package">com.contentstack.cms.core</a> &gt; <span class="el_source">HeaderInterceptor.java</span></div><h1>HeaderInterceptor.java</h1><pre class="source lang-java linenums">package com.contentstack.cms.core;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
+import java.io.IOException;
+import static com.contentstack.cms.core.Constants.SDK_NAME;
+import static com.contentstack.cms.core.Constants.SDK_VERSION;
+
+public class HeaderInterceptor implements Interceptor {
+
+    String authtoken;
+
+<span class="nc" id="L14">    public HeaderInterceptor(String authtoken) {</span>
+<span class="nc" id="L15">        this.authtoken = authtoken;</span>
+<span class="nc" id="L16">    }</span>
+
+
+    @NotNull
+    @Override
+    public Response intercept(Chain chain) throws IOException {
+
+<span class="nc" id="L23">        String X_USER_AGENT = SDK_NAME+&quot;/v&quot;+SDK_VERSION;</span>
+<span class="nc" id="L24">        String USER_AGENT = Util.defaultUserAgent();</span>
+
+<span class="nc" id="L26">        Request request = chain.request().newBuilder()</span>
+<span class="nc" id="L27">                .addHeader(&quot;authtoken&quot;, this.authtoken)</span>
+<span class="nc" id="L28">                .addHeader(&quot;X-User-Agent&quot;, X_USER_AGENT)</span>
+<span class="nc" id="L29">                .addHeader(&quot;User-Agent&quot;, USER_AGENT)</span>
+<span class="nc" id="L30">                .addHeader(&quot;Content-Type&quot;, &quot;application/json&quot;)</span>
+<span class="nc" id="L31">                .build();</span>
+
+<span class="nc" id="L33">        return chain.proceed(request);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
