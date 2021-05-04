@@ -23,7 +23,7 @@ Install it via maven:
 </dependency>
 ```
 To import the SDK, use the following command:
-```
+```java
 import com.contentstack.cms.Contentstack;
 
 Contentstack client = new Contentstack.Builder().build();
@@ -33,46 +33,46 @@ Contentstack client = new Contentstack.Builder().build();
 To use this SDK, you need to authenticate your users by using the Authtoken, credentials, or Management Token (stack-level token).
 ### Authtoken
 An [Authtoken](https://www.contentstack.com/docs/developers/create-tokens/types-of-tokens/#authentication-tokens-authtokens-) is a read-write token used to make authorized CMA requests, and it is a **user-specific** token.
-```
+```java
 Contentstack client = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
 ```
 ### Login
 To Login to Contentstack by using credentials, you can use the following lines of code:
-```
+```java
 Contentstack client = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
 Response<ResponseBody> response = client.login("EMAIL", "PASSWORD").execute()
 ```
 
 ### Management Token
 [Management Tokens](https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens/) are **stack-level** tokens, with no users attached to them.
-```
+```java
 Contentstack client = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
 Response<ResponseBody> response = client.stack("API_KEY", "MANAGEMENT_TOKEN").contentType().execute()
 ```
 ### Contentstack Management JavaScript SDK: 5-minute Quickstart
 #### Initializing Your SDK:
 To use the JavaScript CMA SDK, you need to first initialize it. To do this, use the following code:
-```
+```java
 import com.contentstack.cms.Contentstack 
 
 Contentstack client = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
 ```
 #### Fetch Stack Detail
 Use the following lines of code to fetch your stack detail using this SDK:
-```
+```java
 Contentstack client = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
 Response<ResponseBody> response = client.stack("API_KEY").exceute()
 ```
 
 #### Create Entry
 To create an entry in a specific content type of a stack, use the following lines of code:
-```
+```java
 Under development
 ```
 
 #### Create Asset
 The following lines of code can be used to upload assets to your stack:
-```
+```java
 Under development
 ```
 
