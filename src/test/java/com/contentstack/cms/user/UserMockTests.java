@@ -35,9 +35,8 @@ public class UserMockTests {
      */
     public JSONObject readJson(String file) {
         String path = "src/test/resources/mockuser/" + file;
-        Object obj = null;
         try {
-            obj = new JSONParser().parse(new FileReader(new File(path).getPath()));
+            Object obj = new JSONParser().parse(new FileReader(new File(path).getPath()));
             mockJsonObject = (JSONObject) obj;
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -105,21 +104,21 @@ public class UserMockTests {
         Set allKeys = mockJsonObject.keySet();
         allKeys.forEach(System.out::println);
         String[] keyArray = {
-                "active",
-                "authy_id",
-                "company",
-                "country_code",
-                "created_at",
-                "email",
-                "failed_attempts",
-                "first_name",
-                "last_name",
-                "mobile_number",
                 "org_uid",
+                "authy_id",
+                "failed_attempts",
                 "shared_org_uid",
-                "tfa_status",
+                "created_at",
+                "last_name",
+                "active",
                 "uid",
+                "country_code",
                 "updated_at",
+                "tfa_status",
+                "company",
+                "mobile_number",
+                "first_name",
+                "email",
                 "username"
         };
         Assertions.assertArrayEquals(Arrays.stream(keyArray).toArray(), allKeys.toArray());
