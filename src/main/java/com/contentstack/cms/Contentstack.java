@@ -8,23 +8,50 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * The type Contentstack.
+ */
 public class Contentstack {
 
+    /**
+     * The Host.
+     */
     protected String host;
+    /**
+     * The Port.
+     */
     protected String port;
+    /**
+     * The Version.
+     */
     protected String version;
+    /**
+     * The Timeout.
+     */
     protected int timeout;
+    /**
+     * The Authtoken.
+     */
     protected String authtoken;
+    /**
+     * The Instance.
+     */
     protected Retrofit instance;
 
 
+    /**
+     * Instantiates a new Contentstack.
+     *
+     * @param builder the builder
+     */
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
         this.port = builder.port;
         this.version = builder.version;
         this.timeout = builder.timeout;
         this.authtoken = builder.authtoken;
-        this.instance = builder.instance;;
+        this.instance = builder.instance;
+        ;
     }
 
 
@@ -52,14 +79,16 @@ public class Contentstack {
      * </pre>
      * <p>
      *
-     * @return User
+     * @return User user
      */
     public User user() {
         return new User(this.instance);
     }
 
 
-    // Static class Builder
+    /**
+     * The type Builder.
+     */
     public static class Builder {
 
         private String authtoken;  // authtoken for client
@@ -71,6 +100,9 @@ public class Contentstack {
         private String baseURL = Constants.BASE_URL; // Default base url for contentstack
 
 
+        /**
+         * Instantiates a new Builder.
+         */
         public Builder() {
 
         }
@@ -84,7 +116,7 @@ public class Contentstack {
          * Set host for client instance
          *
          * @param hostname - host for the Contentstack Client
-         * @return Client
+         * @return Client host
          */
         public Builder setHost(String hostname) {
             this.hostname = hostname;
@@ -96,7 +128,7 @@ public class Contentstack {
          * Set port for client instance
          *
          * @param port - port for the Contentstack Client
-         * @return Client
+         * @return Client port
          */
         public Builder setPort(String port) {
             this.port = port;
@@ -108,7 +140,7 @@ public class Contentstack {
          * Set version for client instance
          *
          * @param version - version for the Contentstack Client
-         * @return Client
+         * @return Client version
          */
         public Builder setVersion(String version) {
             this.version = version;
@@ -120,7 +152,7 @@ public class Contentstack {
          * Set timeout for client instance
          *
          * @param timeout - timeout for the Contentstack Client
-         * @return Client
+         * @return Client timeout
          */
         public Builder setTimeout(int timeout) {
             this.timeout = timeout;
@@ -132,7 +164,7 @@ public class Contentstack {
          * Sets authtoken for the client
          *
          * @param authtoken authtoken for the client
-         * @return Contentstack
+         * @return Contentstack authtoken
          */
         public Builder setAuthtoken(String authtoken) {
             this.authtoken = authtoken;
@@ -142,7 +174,8 @@ public class Contentstack {
 
         /**
          * Create Client instance for Contentstack
-         * @return Contentstack
+         *
+         * @return Contentstack contentstack
          */
         public Contentstack build() {
             new Builder();
