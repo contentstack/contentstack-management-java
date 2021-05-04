@@ -1,5 +1,9 @@
 package com.contentstack.cms.user;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -67,6 +71,12 @@ public class UserMockTests {
         Set allKeys = mockJsonObject.keySet();
         String authtoken = (String) mockJsonObject.get("authtoken");
 
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonParser jp = new JsonParser();
+        JsonElement je = jp.parse(mockJsonObject.toJSONString());
+        String prettyJsonString = gson.toJson(je);
+        logger.fine(prettyJsonString);
+
         String[] keyArray = {"org_uid",
                 "authy_id",
                 "failed_attempts",
@@ -85,8 +95,7 @@ public class UserMockTests {
                 "first_name",
                 "email",
                 "username"};
-        // TODO: Remove the line
-        allKeys.forEach(System.out::println);
+
         Assertions.assertEquals("bltd111c111111c11ec", authtoken);
         Assertions.assertArrayEquals(Arrays.stream(keyArray).toArray(), allKeys.toArray());
     }
@@ -102,7 +111,7 @@ public class UserMockTests {
         Assertions.assertEquals("Profile updated successfully.", mockJsonObject.get("notice"));
         mockJsonObject = (JSONObject) mockJsonObject.get("user");
         Set allKeys = mockJsonObject.keySet();
-        allKeys.forEach(System.out::println);
+        logger.info(mockJsonObject.toJSONString());
         String[] keyArray = {
                 "org_uid",
                 "authy_id",
