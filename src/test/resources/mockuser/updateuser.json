@@ -1,0 +1,27 @@
+{
+  "notice": "Profile updated successfully.",
+  "user": {
+    "uid": "abcdef1234567890abcdef",
+    "created_at": "2015-03-13T07:37:03.494Z",
+    "updated_at": "2015-03-13T07:37:03.494Z",
+    "email": "developer@example.com",
+    "username": "john.doe_blt11fed1e1",
+    "first_name": "John",
+    "last_name": "Doe",
+    "company": "company name inc.",
+    "org_uid": [
+      "blt44444c44ea4ddf222"
+    ],
+    "shared_org_uid": [
+      "bltcde1e1cdf1f11e5f",
+      "blt22e2222dd2e2fb22",
+      "blt3f3ad33ca33cb3a3"
+    ],
+    "mobile_number": "9898989898",
+    "country_code": "91",
+    "tfa_status": "verified",
+    "authy_id": "123123123",
+    "active": true,
+    "failed_attempts": 0
+  }
+}

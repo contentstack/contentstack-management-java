@@ -1,12 +1,13 @@
 # contentstack-management-java
 
-Uses:
+### Implementation:
 
 ```java
-Contentstack.Client client = new Contentstack.Client();
+ Client client = new Client.Builder().setAuthtoken("blt3cecf75b33bb2ebe").build();
 
-or 
+ [and]
 
-Contentstack.Client client = new Contentstack.Client("authtoken");
-User user = client.user()
+ Client client = new Client.Builder().setAuthtoken("blt3cecf75b33bb2ebe").build();
+ User userInstance = client.user();
+ Response response = userInstance.getUser().execute();
 ```
