@@ -198,6 +198,7 @@ public class Contentstack {
             interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
             return new OkHttpClient.Builder()
                     .addInterceptor(new HeaderInterceptor(this.authtoken))
+                    .addInterceptor(interceptor)
                     .retryOnConnectionFailure(true)
                     .build();
         }
