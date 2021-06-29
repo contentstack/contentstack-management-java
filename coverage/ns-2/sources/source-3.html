@@ -84,29 +84,40 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">9</i>&nbsp;
 <i class="no-highlight">10</i>&nbsp;import static com.contentstack.cms.core.Constants.*;
 <i class="no-highlight">11</i>&nbsp;
-<i class="no-highlight">12</i>&nbsp;public class HeaderInterceptor implements Interceptor {
-<i class="no-highlight">13</i>&nbsp;
-<i class="no-highlight">14</i>&nbsp;    String authtoken;
-<i class="no-highlight">15</i>&nbsp;
-<b class="fc"><i class="no-highlight">16</i>&nbsp;    public HeaderInterceptor(String authtoken) {</b>
-<b class="fc"><i class="no-highlight">17</i>&nbsp;        this.authtoken = authtoken;</b>
-<b class="fc"><i class="no-highlight">18</i>&nbsp;    }</b>
-<i class="no-highlight">19</i>&nbsp;
-<i class="no-highlight">20</i>&nbsp;    @NotNull
-<i class="no-highlight">21</i>&nbsp;    @Override
-<i class="no-highlight">22</i>&nbsp;    public Response intercept(Chain chain) throws IOException {
-<i class="no-highlight">23</i>&nbsp;
-<b class="fc"><i class="no-highlight">24</i>&nbsp;        Request request = chain.request().newBuilder()</b>
-<b class="fc"><i class="no-highlight">25</i>&nbsp;                .addHeader(AUTHTOKEN, this.authtoken)</b>
-<b class="fc"><i class="no-highlight">26</i>&nbsp;                .addHeader(X_USER_AGENT_KEY, X_USER_AGENT_VALUE)</b>
-<b class="fc"><i class="no-highlight">27</i>&nbsp;                .addHeader(User_AGENT, Util.defaultUserAgent())</b>
-<b class="fc"><i class="no-highlight">28</i>&nbsp;                .addHeader(CONTENT_TYPE, APPLICATION_JSON)</b>
-<b class="fc"><i class="no-highlight">29</i>&nbsp;                .build();</b>
+<i class="no-highlight">12</i>&nbsp;/**
+<i class="no-highlight">13</i>&nbsp; * The type Header interceptor.
+<i class="no-highlight">14</i>&nbsp; */
+<i class="no-highlight">15</i>&nbsp;public class HeaderInterceptor implements Interceptor {
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;    /**
+<i class="no-highlight">18</i>&nbsp;     * The Authtoken.
+<i class="no-highlight">19</i>&nbsp;     */
+<i class="no-highlight">20</i>&nbsp;    String authtoken;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;    /**
+<i class="no-highlight">23</i>&nbsp;     * Instantiates a new Header interceptor.
+<i class="no-highlight">24</i>&nbsp;     *
+<i class="no-highlight">25</i>&nbsp;     * @param authtoken the authtoken
+<i class="no-highlight">26</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">27</i>&nbsp;    public HeaderInterceptor(String authtoken) {</b>
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        this.authtoken = authtoken;</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;    }</b>
 <i class="no-highlight">30</i>&nbsp;
-<b class="fc"><i class="no-highlight">31</i>&nbsp;        return chain.proceed(request);</b>
-<i class="no-highlight">32</i>&nbsp;    }
-<i class="no-highlight">33</i>&nbsp;
-<i class="no-highlight">34</i>&nbsp;}
+<i class="no-highlight">31</i>&nbsp;    @NotNull
+<i class="no-highlight">32</i>&nbsp;    @Override
+<i class="no-highlight">33</i>&nbsp;    public Response intercept(Chain chain) throws IOException {
+<i class="no-highlight">34</i>&nbsp;
+<b class="fc"><i class="no-highlight">35</i>&nbsp;        Request request = chain.request().newBuilder()</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;                .addHeader(AUTHTOKEN, this.authtoken)</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;                .addHeader(X_USER_AGENT_KEY, X_USER_AGENT_VALUE)</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;                .addHeader(User_AGENT, Util.defaultUserAgent())</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;                .addHeader(CONTENT_TYPE, APPLICATION_JSON)</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;                .build();</b>
+<i class="no-highlight">41</i>&nbsp;
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        return chain.proceed(request);</b>
+<i class="no-highlight">43</i>&nbsp;    }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -133,7 +144,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-05-04 12:41</div>
+    <div style="float:right;">generated on 2021-05-04 18:31</div>
 </div>
 </body>
 </html>

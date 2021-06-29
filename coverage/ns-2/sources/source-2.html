@@ -78,48 +78,100 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">3</i>&nbsp;import com.google.gson.annotations.SerializedName;
 <i class="no-highlight">4</i>&nbsp;
 <i class="no-highlight">5</i>&nbsp;
-<i class="no-highlight">6</i>&nbsp;public class Error {
-<i class="no-highlight">7</i>&nbsp;
-<i class="no-highlight">8</i>&nbsp;    @SerializedName(&quot;errors&quot;)
-<i class="no-highlight">9</i>&nbsp;    Object error;
-<i class="no-highlight">10</i>&nbsp;    @SerializedName(&quot;error_message&quot;)
-<i class="no-highlight">11</i>&nbsp;    String errorMessage;
-<i class="no-highlight">12</i>&nbsp;    @SerializedName(&quot;error_code&quot;)
-<i class="no-highlight">13</i>&nbsp;    int errorCode;
-<i class="no-highlight">14</i>&nbsp;
-<b class="fc"><i class="no-highlight">15</i>&nbsp;    public Error() {</b>
-<b class="fc"><i class="no-highlight">16</i>&nbsp;    }</b>
-<i class="no-highlight">17</i>&nbsp;
-<b class="fc"><i class="no-highlight">18</i>&nbsp;    public Error(Object error, String errorMessage, int errorCode) {</b>
-<b class="fc"><i class="no-highlight">19</i>&nbsp;        this.error = error;</b>
-<b class="fc"><i class="no-highlight">20</i>&nbsp;        this.errorMessage = errorMessage;</b>
-<b class="fc"><i class="no-highlight">21</i>&nbsp;        this.errorCode = errorCode;</b>
-<b class="fc"><i class="no-highlight">22</i>&nbsp;    }</b>
-<i class="no-highlight">23</i>&nbsp;
-<i class="no-highlight">24</i>&nbsp;    public Object getError() {
-<b class="fc"><i class="no-highlight">25</i>&nbsp;        return error;</b>
-<i class="no-highlight">26</i>&nbsp;    }
-<i class="no-highlight">27</i>&nbsp;
-<i class="no-highlight">28</i>&nbsp;    public void setError(Object error) {
-<b class="fc"><i class="no-highlight">29</i>&nbsp;        this.error = error;</b>
-<b class="fc"><i class="no-highlight">30</i>&nbsp;    }</b>
-<i class="no-highlight">31</i>&nbsp;
-<i class="no-highlight">32</i>&nbsp;    public int getErrorCode() {
-<b class="fc"><i class="no-highlight">33</i>&nbsp;        return errorCode;</b>
-<i class="no-highlight">34</i>&nbsp;    }
-<i class="no-highlight">35</i>&nbsp;
-<i class="no-highlight">36</i>&nbsp;    public void setErrorCode(int errorCode) {
-<b class="fc"><i class="no-highlight">37</i>&nbsp;        this.errorCode = errorCode;</b>
-<b class="fc"><i class="no-highlight">38</i>&nbsp;    }</b>
-<i class="no-highlight">39</i>&nbsp;
-<i class="no-highlight">40</i>&nbsp;    public String getErrorMessage() {
-<b class="fc"><i class="no-highlight">41</i>&nbsp;        return errorMessage;</b>
-<i class="no-highlight">42</i>&nbsp;    }
-<i class="no-highlight">43</i>&nbsp;
-<i class="no-highlight">44</i>&nbsp;    public void setErrorMessage(String errorMessage) {
-<b class="fc"><i class="no-highlight">45</i>&nbsp;        this.errorMessage = errorMessage;</b>
-<b class="fc"><i class="no-highlight">46</i>&nbsp;    }</b>
-<i class="no-highlight">47</i>&nbsp;}
+<i class="no-highlight">6</i>&nbsp;/**
+<i class="no-highlight">7</i>&nbsp; * The type Error.
+<i class="no-highlight">8</i>&nbsp; */
+<i class="no-highlight">9</i>&nbsp;public class Error {
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;    /**
+<i class="no-highlight">12</i>&nbsp;     * The Error.
+<i class="no-highlight">13</i>&nbsp;     */
+<i class="no-highlight">14</i>&nbsp;    @SerializedName(&quot;errors&quot;)
+<i class="no-highlight">15</i>&nbsp;    Object error;
+<i class="no-highlight">16</i>&nbsp;    /**
+<i class="no-highlight">17</i>&nbsp;     * The Error message.
+<i class="no-highlight">18</i>&nbsp;     */
+<i class="no-highlight">19</i>&nbsp;    @SerializedName(&quot;error_message&quot;)
+<i class="no-highlight">20</i>&nbsp;    String errorMessage;
+<i class="no-highlight">21</i>&nbsp;    /**
+<i class="no-highlight">22</i>&nbsp;     * The Error code.
+<i class="no-highlight">23</i>&nbsp;     */
+<i class="no-highlight">24</i>&nbsp;    @SerializedName(&quot;error_code&quot;)
+<i class="no-highlight">25</i>&nbsp;    int errorCode;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * Instantiates a new Error.
+<i class="no-highlight">29</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">30</i>&nbsp;    public Error() {</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;    }</b>
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;    /**
+<i class="no-highlight">34</i>&nbsp;     * Instantiates a new Error.
+<i class="no-highlight">35</i>&nbsp;     *
+<i class="no-highlight">36</i>&nbsp;     * @param error        the error
+<i class="no-highlight">37</i>&nbsp;     * @param errorMessage the error message
+<i class="no-highlight">38</i>&nbsp;     * @param errorCode    the error code
+<i class="no-highlight">39</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">40</i>&nbsp;    public Error(Object error, String errorMessage, int errorCode) {</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;        this.error = error;</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        this.errorMessage = errorMessage;</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;        this.errorCode = errorCode;</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;    }</b>
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Gets error.
+<i class="no-highlight">48</i>&nbsp;     *
+<i class="no-highlight">49</i>&nbsp;     * @return the error
+<i class="no-highlight">50</i>&nbsp;     */
+<i class="no-highlight">51</i>&nbsp;    public Object getError() {
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        return error;</b>
+<i class="no-highlight">53</i>&nbsp;    }
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;    /**
+<i class="no-highlight">56</i>&nbsp;     * Sets error.
+<i class="no-highlight">57</i>&nbsp;     *
+<i class="no-highlight">58</i>&nbsp;     * @param error the error
+<i class="no-highlight">59</i>&nbsp;     */
+<i class="no-highlight">60</i>&nbsp;    public void setError(Object error) {
+<b class="fc"><i class="no-highlight">61</i>&nbsp;        this.error = error;</b>
+<b class="fc"><i class="no-highlight">62</i>&nbsp;    }</b>
+<i class="no-highlight">63</i>&nbsp;
+<i class="no-highlight">64</i>&nbsp;    /**
+<i class="no-highlight">65</i>&nbsp;     * Gets error code.
+<i class="no-highlight">66</i>&nbsp;     *
+<i class="no-highlight">67</i>&nbsp;     * @return the error code
+<i class="no-highlight">68</i>&nbsp;     */
+<i class="no-highlight">69</i>&nbsp;    public int getErrorCode() {
+<b class="fc"><i class="no-highlight">70</i>&nbsp;        return errorCode;</b>
+<i class="no-highlight">71</i>&nbsp;    }
+<i class="no-highlight">72</i>&nbsp;
+<i class="no-highlight">73</i>&nbsp;    /**
+<i class="no-highlight">74</i>&nbsp;     * Sets error code.
+<i class="no-highlight">75</i>&nbsp;     *
+<i class="no-highlight">76</i>&nbsp;     * @param errorCode the error code
+<i class="no-highlight">77</i>&nbsp;     */
+<i class="no-highlight">78</i>&nbsp;    public void setErrorCode(int errorCode) {
+<b class="fc"><i class="no-highlight">79</i>&nbsp;        this.errorCode = errorCode;</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;    }</b>
+<i class="no-highlight">81</i>&nbsp;
+<i class="no-highlight">82</i>&nbsp;    /**
+<i class="no-highlight">83</i>&nbsp;     * Gets error message.
+<i class="no-highlight">84</i>&nbsp;     *
+<i class="no-highlight">85</i>&nbsp;     * @return the error message
+<i class="no-highlight">86</i>&nbsp;     */
+<i class="no-highlight">87</i>&nbsp;    public String getErrorMessage() {
+<b class="fc"><i class="no-highlight">88</i>&nbsp;        return errorMessage;</b>
+<i class="no-highlight">89</i>&nbsp;    }
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;    /**
+<i class="no-highlight">92</i>&nbsp;     * Sets error message.
+<i class="no-highlight">93</i>&nbsp;     *
+<i class="no-highlight">94</i>&nbsp;     * @param errorMessage the error message
+<i class="no-highlight">95</i>&nbsp;     */
+<i class="no-highlight">96</i>&nbsp;    public void setErrorMessage(String errorMessage) {
+<b class="fc"><i class="no-highlight">97</i>&nbsp;        this.errorMessage = errorMessage;</b>
+<b class="fc"><i class="no-highlight">98</i>&nbsp;    }</b>
+<i class="no-highlight">99</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -146,7 +198,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-05-04 12:41</div>
+    <div style="float:right;">generated on 2021-05-04 18:31</div>
 </div>
 </body>
 </html>

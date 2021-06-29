@@ -75,31 +75,76 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.contentstack.cms.core;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;// CAUTION: DO NOT MODIFY STRINGS KEYS/VALUES
-<b class="fc"><i class="no-highlight">4</i>&nbsp;public class Constants {</b>
-<i class="no-highlight">5</i>&nbsp;
-<i class="no-highlight">6</i>&nbsp;    // KEYS FROM CORE PACKAGE
-<b class="fc"><i class="no-highlight">7</i>&nbsp;    public static String BASE_URL = &quot;https://api.contentstack.io/v3/&quot;;</b>
-<b class="fc"><i class="no-highlight">8</i>&nbsp;    public static String PROTOCOL = &quot;https&quot;;</b>
-<b class="fc"><i class="no-highlight">9</i>&nbsp;    public static String HOST = &quot;api.contentstack.io&quot;;</b>
-<b class="fc"><i class="no-highlight">10</i>&nbsp;    public static String PORT = &quot;443&quot;;</b>
-<b class="fc"><i class="no-highlight">11</i>&nbsp;    public static String VERSION = &quot;v3&quot;;</b>
-<b class="fc"><i class="no-highlight">12</i>&nbsp;    public static int TIMEOUT = 30; // default timeout in seconds</b>
-<b class="fc"><i class="no-highlight">13</i>&nbsp;    protected static String SDK_NAME = &quot;contentstack-management-java&quot;;</b>
-<i class="no-highlight">14</i>&nbsp;    // Update everytime when new build of package uploaded
-<b class="fc"><i class="no-highlight">15</i>&nbsp;    protected static String SDK_VERSION = &quot;0.0.1&quot;;</b>
-<i class="no-highlight">16</i>&nbsp;
-<i class="no-highlight">17</i>&nbsp;
-<i class="no-highlight">18</i>&nbsp;    // KEYS FROM HeaderInterceptor
-<i class="no-highlight">19</i>&nbsp;    // CAUTION: DO NOT MODIFY STRINGS KEYS/VALUES
-<b class="fc"><i class="no-highlight">20</i>&nbsp;    protected static String AUTHTOKEN = &quot;authtoken&quot;;</b>
-<b class="fc"><i class="no-highlight">21</i>&nbsp;    protected static String X_USER_AGENT_KEY = &quot;X-User-Agent&quot;;</b>
-<b class="fc"><i class="no-highlight">22</i>&nbsp;    protected static String X_USER_AGENT_VALUE = SDK_NAME + &quot;/v&quot; + SDK_VERSION;</b>
-<b class="fc"><i class="no-highlight">23</i>&nbsp;    protected static String User_AGENT = &quot;User-Agent&quot;;</b>
-<b class="fc"><i class="no-highlight">24</i>&nbsp;    protected static String CONTENT_TYPE = &quot;Content-Type&quot;;</b>
-<b class="fc"><i class="no-highlight">25</i>&nbsp;    protected static String APPLICATION_JSON = &quot;application/json&quot;;</b>
-<i class="no-highlight">26</i>&nbsp;
-<i class="no-highlight">27</i>&nbsp;}
+<i class="no-highlight">3</i>&nbsp;/**
+<i class="no-highlight">4</i>&nbsp; * The type Constants.
+<i class="no-highlight">5</i>&nbsp; */
+<i class="no-highlight">6</i>&nbsp;// CAUTION: DO NOT MODIFY STRINGS KEYS/VALUES
+<b class="fc"><i class="no-highlight">7</i>&nbsp;public class Constants {</b>
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;    /**
+<i class="no-highlight">10</i>&nbsp;     * The constant BASE_URL.
+<i class="no-highlight">11</i>&nbsp;     */
+<i class="no-highlight">12</i>&nbsp;// KEYS FROM CORE PACKAGE
+<b class="fc"><i class="no-highlight">13</i>&nbsp;    public static String BASE_URL = &quot;https://api.contentstack.io/v3/&quot;;</b>
+<i class="no-highlight">14</i>&nbsp;    /**
+<i class="no-highlight">15</i>&nbsp;     * The constant PROTOCOL.
+<i class="no-highlight">16</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">17</i>&nbsp;    public static String PROTOCOL = &quot;https&quot;;</b>
+<i class="no-highlight">18</i>&nbsp;    /**
+<i class="no-highlight">19</i>&nbsp;     * The constant HOST.
+<i class="no-highlight">20</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">21</i>&nbsp;    public static String HOST = &quot;api.contentstack.io&quot;;</b>
+<i class="no-highlight">22</i>&nbsp;    /**
+<i class="no-highlight">23</i>&nbsp;     * The constant PORT.
+<i class="no-highlight">24</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">25</i>&nbsp;    public static String PORT = &quot;443&quot;;</b>
+<i class="no-highlight">26</i>&nbsp;    /**
+<i class="no-highlight">27</i>&nbsp;     * The constant VERSION.
+<i class="no-highlight">28</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">29</i>&nbsp;    public static String VERSION = &quot;v3&quot;;</b>
+<i class="no-highlight">30</i>&nbsp;    /**
+<i class="no-highlight">31</i>&nbsp;     * The constant TIMEOUT.
+<i class="no-highlight">32</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">33</i>&nbsp;    public static int TIMEOUT = 30; // default timeout in seconds</b>
+<i class="no-highlight">34</i>&nbsp;    /**
+<i class="no-highlight">35</i>&nbsp;     * The constant SDK_NAME.
+<i class="no-highlight">36</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">37</i>&nbsp;    protected static String SDK_NAME = &quot;contentstack-management-java&quot;;</b>
+<i class="no-highlight">38</i>&nbsp;    /**
+<i class="no-highlight">39</i>&nbsp;     * The constant SDK_VERSION.
+<i class="no-highlight">40</i>&nbsp;     */
+<i class="no-highlight">41</i>&nbsp;// Update everytime when new build of package uploaded
+<b class="fc"><i class="no-highlight">42</i>&nbsp;    protected static String SDK_VERSION = &quot;0.0.1&quot;;</b>
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    /**
+<i class="no-highlight">46</i>&nbsp;     * The constant AUTHTOKEN.
+<i class="no-highlight">47</i>&nbsp;     */
+<i class="no-highlight">48</i>&nbsp;// KEYS FROM HeaderInterceptor
+<i class="no-highlight">49</i>&nbsp;    // CAUTION: DO NOT MODIFY STRINGS KEYS/VALUES
+<b class="fc"><i class="no-highlight">50</i>&nbsp;    protected static String AUTHTOKEN = &quot;authtoken&quot;;</b>
+<i class="no-highlight">51</i>&nbsp;    /**
+<i class="no-highlight">52</i>&nbsp;     * The constant X_USER_AGENT_KEY.
+<i class="no-highlight">53</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">54</i>&nbsp;    protected static String X_USER_AGENT_KEY = &quot;X-User-Agent&quot;;</b>
+<i class="no-highlight">55</i>&nbsp;    /**
+<i class="no-highlight">56</i>&nbsp;     * The constant X_USER_AGENT_VALUE.
+<i class="no-highlight">57</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">58</i>&nbsp;    protected static String X_USER_AGENT_VALUE = SDK_NAME + &quot;/v&quot; + SDK_VERSION;</b>
+<i class="no-highlight">59</i>&nbsp;    /**
+<i class="no-highlight">60</i>&nbsp;     * The constant User_AGENT.
+<i class="no-highlight">61</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">62</i>&nbsp;    protected static String User_AGENT = &quot;User-Agent&quot;;</b>
+<i class="no-highlight">63</i>&nbsp;    /**
+<i class="no-highlight">64</i>&nbsp;     * The constant CONTENT_TYPE.
+<i class="no-highlight">65</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">66</i>&nbsp;    protected static String CONTENT_TYPE = &quot;Content-Type&quot;;</b>
+<i class="no-highlight">67</i>&nbsp;    /**
+<i class="no-highlight">68</i>&nbsp;     * The constant APPLICATION_JSON.
+<i class="no-highlight">69</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">70</i>&nbsp;    protected static String APPLICATION_JSON = &quot;application/json&quot;;</b>
+<i class="no-highlight">71</i>&nbsp;
+<i class="no-highlight">72</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -126,7 +171,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-05-04 12:41</div>
+    <div style="float:right;">generated on 2021-05-04 18:31</div>
 </div>
 </body>
 </html>

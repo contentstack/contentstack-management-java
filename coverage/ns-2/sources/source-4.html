@@ -75,14 +75,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.contentstack.cms.core;
 <i class="no-highlight">2</i>&nbsp;
-<b class="fc"><i class="no-highlight">3</i>&nbsp;public class Util {</b>
-<i class="no-highlight">4</i>&nbsp;
-<i class="no-highlight">5</i>&nbsp;    protected static String defaultUserAgent() {
-<b class="fc"><i class="no-highlight">6</i>&nbsp;        String agent = System.getProperty(&quot;http.agent&quot;);</b>
-<b class="fc"><i class="no-highlight">7</i>&nbsp;        String operatingSystem = System.getProperty(&quot;os.name&quot;).toUpperCase();</b>
-<b class="fc"><i class="no-highlight">8</i>&nbsp;        return agent != null ? agent : (&quot;Java&quot; + System.getProperty(&quot;java.version&quot;) + &quot; OS: &quot; + operatingSystem);</b>
-<i class="no-highlight">9</i>&nbsp;    }
-<i class="no-highlight">10</i>&nbsp;}
+<i class="no-highlight">3</i>&nbsp;/**
+<i class="no-highlight">4</i>&nbsp; * The type Util.
+<i class="no-highlight">5</i>&nbsp; */
+<b class="fc"><i class="no-highlight">6</i>&nbsp;public class Util {</b>
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;    /**
+<i class="no-highlight">9</i>&nbsp;     * Default user agent string.
+<i class="no-highlight">10</i>&nbsp;     *
+<i class="no-highlight">11</i>&nbsp;     * @return the string
+<i class="no-highlight">12</i>&nbsp;     */
+<i class="no-highlight">13</i>&nbsp;    protected static String defaultUserAgent() {
+<b class="fc"><i class="no-highlight">14</i>&nbsp;        String agent = System.getProperty(&quot;http.agent&quot;);</b>
+<b class="fc"><i class="no-highlight">15</i>&nbsp;        String operatingSystem = System.getProperty(&quot;os.name&quot;).toUpperCase();</b>
+<b class="fc"><i class="no-highlight">16</i>&nbsp;        return agent != null ? agent : (&quot;Java&quot; + System.getProperty(&quot;java.version&quot;) + &quot; OS: &quot; + operatingSystem);</b>
+<i class="no-highlight">17</i>&nbsp;    }
+<i class="no-highlight">18</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -109,7 +117,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-05-04 12:41</div>
+    <div style="float:right;">generated on 2021-05-04 18:31</div>
 </div>
 </body>
 </html>
