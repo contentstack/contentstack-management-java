@@ -4,12 +4,17 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * The interface User service.
  */
 public interface UserService {
+
+
+    @GET("user-session")
+    Call<ResponseBody> login(Map<String, HashMap<String, String>> map); //TODO: pass the user body here: user: {email: "", password: "", token: ""}
 
     /**
      * Gets user.

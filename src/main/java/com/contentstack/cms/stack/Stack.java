@@ -1,4 +1,4 @@
-package com.contentstack.cms.organization;
+package com.contentstack.cms.stack;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -13,10 +13,11 @@ import java.util.Map;
  * consisting of stacks and stack resources, and users.
  * Organization allows easy management of projects as well
  * as users within the Organization.
+ * <p>
  */
-public class Organization {
+public class Stack {
 
-    private final OrganizationService orgService;
+    private final StackService orgService;
     private String authtoken;
 
     /**
@@ -24,8 +25,8 @@ public class Organization {
      *
      * @param client the client
      */
-    public Organization(Retrofit client) {
-        this.orgService = client.create(OrganizationService.class);
+    public Stack(Retrofit client) {
+        this.orgService = client.create(StackService.class);
     }
 
 

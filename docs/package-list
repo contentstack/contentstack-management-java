@@ -1,4 +1,5 @@
 com.contentstack.cms
 com.contentstack.cms.core
 com.contentstack.cms.organization
+com.contentstack.cms.stack
 com.contentstack.cms.user

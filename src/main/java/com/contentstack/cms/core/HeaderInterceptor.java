@@ -10,7 +10,10 @@ import java.io.IOException;
 import static com.contentstack.cms.core.Constants.*;
 
 /**
- * The type Header interceptor.
+ * The type Header interceptor that extends Interceptor
+ * </br>Interceptor: Observes, modifies, and potentially short-circuits requests
+ * going out and the corresponding responses coming back in. Typically
+ * interceptors add, remove, or transform headers on the request or response..
  */
 public class HeaderInterceptor implements Interceptor {
 
@@ -31,14 +34,12 @@ public class HeaderInterceptor implements Interceptor {
     @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {
-
         Request request = chain.request().newBuilder()
                 .addHeader(AUTHTOKEN, this.authtoken)
                 .addHeader(X_USER_AGENT_KEY, X_USER_AGENT_VALUE)
                 .addHeader(User_AGENT, Util.defaultUserAgent())
                 .addHeader(CONTENT_TYPE, APPLICATION_JSON)
                 .build();
-
         return chain.proceed(request);
     }
 
