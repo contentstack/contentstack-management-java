@@ -1,4 +1,4 @@
-package com.contentstack.cms.organization;
+package com.contentstack.cms.stack;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * The interface Organization service.
  */
-public interface OrganizationService {
+public interface StackService {
 
     /**
      * Gets all.

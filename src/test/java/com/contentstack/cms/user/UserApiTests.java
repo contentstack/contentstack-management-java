@@ -47,7 +47,7 @@ public class UserApiTests {
             Gson gson = new Gson();
             assert response.errorBody() != null;
             Error error = gson.fromJson(response.errorBody().charStream(), Error.class);
-            Assertions.assertNull(error.getError());
+            Assertions.assertNull(error.getErrors());
             Assertions.assertEquals(105, error.getErrorCode());
             Assertions.assertEquals("You're not allowed in here unless you're logged in.", error.getErrorMessage());
         }
@@ -66,7 +66,7 @@ public class UserApiTests {
         if (!response.isSuccessful()) {
             assert response.errorBody() != null;
             Error error = new Gson().fromJson(response.errorBody().charStream(), Error.class);
-            Assertions.assertNull(error.getError());
+            Assertions.assertNull(error.getErrors());
             Assertions.assertEquals(105, error.getErrorCode());
             Assertions.assertEquals("You're not allowed in here unless you're logged in.", error.getErrorMessage());
         }

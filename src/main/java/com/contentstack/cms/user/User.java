@@ -23,6 +23,13 @@ public class User {
         this.userService = client.create(UserService.class);
     }
 
+
+    public Call<ResponseBody> login(HashMap<String, String> params) {
+        Map<String, HashMap<String, String>> map = new HashMap<>();
+        map.put("user", params);
+        return this.userService.login(map);
+    }
+
     /**
      * The Get user call returns comprehensive information of an existing user account.
      * The information returned includes details of the stacks owned by and shared
@@ -72,7 +79,7 @@ public class User {
      *                        registered email address. You can find the activation token in the
      *                        activation URL sent to the email address used while signing up.
      *                        <br>
-     *                        Example:bltf36705c7361d4734
+     *                        Example:[activationToken]
      * @return {@link UserService}
      */
     public Call<ResponseBody> activateUser(String activationToken) {

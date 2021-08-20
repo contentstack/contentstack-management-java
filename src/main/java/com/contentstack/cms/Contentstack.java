@@ -8,36 +8,21 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.net.Proxy;
+
 /**
  * The type Contentstack.
  */
 public class Contentstack {
 
-    /**
-     * The Host.
-     */
     protected String host;
-    /**
-     * The Port.
-     */
     protected String port;
-    /**
-     * The Version.
-     */
     protected String version;
-    /**
-     * The Timeout.
-     */
     protected int timeout;
-    /**
-     * The Authtoken.
-     */
     protected String authtoken;
-    /**
-     * The Instance.
-     */
     protected Retrofit instance;
-
+    protected Boolean retryOnFailure = true;
+    protected Proxy proxy;
 
     /**
      * Instantiates a new Contentstack.
@@ -51,7 +36,8 @@ public class Contentstack {
         this.timeout = builder.timeout;
         this.authtoken = builder.authtoken;
         this.instance = builder.instance;
-        ;
+        this.retryOnFailure = builder.retryOnFailure;
+        this.proxy = builder.proxy;
     }
 
 
@@ -60,7 +46,7 @@ public class Contentstack {
      * Before executing any calls, retrieve the authtoken by authenticating
      * yourself via the Log in call of User Session. The authtoken is returned in
      * the 'Response' body of the Log in call and is mandatory in all of the calls.
-     * <p><b>Example:</b> blt3cecf75b33bb2ebe
+     * <p><b>Example:</b>
      * <p>
      * All accounts registered with Contentstack are known as Users.
      * A stack can have many users with varying permissions and roles
@@ -68,7 +54,7 @@ public class Contentstack {
      * <p>
      * <b>Example:</b>
      * <pre>
-     *  Client client = new Client.Builder().setAuthtoken("blt3cecf75b33bb2ebe").build();
+     *  Client client = new Client.Builder().setAuthtoken("authtoken").build();
      *  User userInstance = client.user();
      * </pre>
      * <br>
@@ -81,6 +67,8 @@ public class Contentstack {
      *
      * @return User user
      */
+
+
     public User user() {
         return new User(this.instance);
     }
@@ -90,14 +78,15 @@ public class Contentstack {
      * The type Builder.
      */
     public static class Builder {
-
+        public Proxy proxy;
         private String authtoken;  // authtoken for client
         private Retrofit instance; // client instance
         private String hostname = Constants.HOST; // Default Host for Contentstack API (default: api.contentstack.io)
         private String port = Constants.PORT; // Default PORT for Contentstack API
         private String version = Constants.VERSION; // Default Version for Contentstack API
         private int timeout = Constants.TIMEOUT; // Default timeout 30 seconds
-        private String baseURL = Constants.BASE_URL; // Default base url for contentstack
+        private String baseURL = Constants.BASE_URL;
+        private Boolean retryOnFailure = Constants.RETRY_ON_FAILURE;// Default base url for contentstack
 
 
         /**
@@ -107,15 +96,26 @@ public class Contentstack {
 
         }
 
-        private void setBaseUrl(String baseURL) {
+        public Builder setBaseUrl(String baseURL) {
             this.baseURL = baseURL;
+            return this;
         }
 
+
+        public Builder setProxy(Proxy proxy) {
+            this.proxy = proxy;
+            return this;
+        }
+
+        public Builder setRetryOnFailure(Boolean retry) {
+            this.retryOnFailure = retry;
+            return this;
+        }
 
         /**
          * Set host for client instance
          *
-         * @param hostname - host for the Contentstack Client
+         * @param hostname host for the Contentstack Client
          * @return Client host
          */
         public Builder setHost(String hostname) {
@@ -139,7 +139,7 @@ public class Contentstack {
         /**
          * Set version for client instance
          *
-         * @param version - version for the Contentstack Client
+         * @param version version for the Contentstack Client
          * @return Client version
          */
         public Builder setVersion(String version) {
@@ -151,7 +151,7 @@ public class Contentstack {
         /**
          * Set timeout for client instance
          *
-         * @param timeout - timeout for the Contentstack Client
+         * @param timeout timeout for the Contentstack Client
          * @return Client timeout
          */
         public Builder setTimeout(int timeout) {
@@ -184,22 +184,24 @@ public class Contentstack {
             this.instance = new Retrofit.Builder()
                     .baseUrl(this.baseURL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient())
+                    .client(httpClient(this.retryOnFailure))
                     .build();
 
             return new Contentstack(this);
         }
 
 
-        private OkHttpClient httpClient() {
+        private OkHttpClient httpClient(Boolean retryOnFailure) {
             // Add more custom fields here
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            HeaderInterceptor headerInterceptor = new HeaderInterceptor(this.authtoken);
             //interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
             return new OkHttpClient.Builder()
-                    .addInterceptor(new HeaderInterceptor(this.authtoken))
+                    .addInterceptor(headerInterceptor)
                     .addInterceptor(interceptor)
-                    .retryOnConnectionFailure(true)
+                    .proxy(this.proxy)
+                    .retryOnConnectionFailure(retryOnFailure)
                     .build();
         }
 

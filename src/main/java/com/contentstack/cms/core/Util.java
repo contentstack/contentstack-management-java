@@ -1,7 +1,7 @@
 package com.contentstack.cms.core;
 
 /**
- * The type Util.
+ * The Utility class that contains utility common functions
  */
 public class Util {
 

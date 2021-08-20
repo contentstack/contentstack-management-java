@@ -20,7 +20,7 @@ import java.util.Map;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("UNIT")
 @DisplayName("Up and running unit testcases for organization class")
-public class OrganizationUnitTests {
+public class StackUnitTests {
 
     private Organization organization;
     private String DEFAULT_AUTHTOKEN;
@@ -54,7 +54,10 @@ public class OrganizationUnitTests {
         DEFAULT_AUTHTOKEN = dotenv.get("auth_token");
         DEFAULT_ORG_UID = dotenv.get("organizations_uid");
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.contentstack.io/v3/").build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.contentstack.io/v3/")
+                .build();
+
         organization = new Organization(retrofit);
     }
 
@@ -73,7 +76,7 @@ public class OrganizationUnitTests {
     @Test
     @DisplayName("Test embedded url path from getAllOrganizations method")
     void testOrganizationClassWithGetAllMethodContainingRelativeUrl() {
-        Request requestInfo = organization.getAll(DEFAULT_AUTHTOKEN).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("/v3/organizations", requestInfo.url().encodedPath());
     }
 
@@ -87,12 +90,13 @@ public class OrganizationUnitTests {
     @Order(1)
     @DisplayName("Test get all organizations with no query parameters")
     void testGetAllWithoutQueryParameter() {
-        Request requestInfo = organization.getAll(DEFAULT_AUTHTOKEN).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("GET", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
         Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https only");
         Assertions.assertTrue(isValid(requestInfo.url().toString()));
-        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(), "executes without parameter");
+        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(),
+                "executes without parameter");
     }
 
     /**
@@ -111,7 +115,7 @@ public class OrganizationUnitTests {
         queryParam.put("include_count", "true");
         queryParam.put("typeahead", "Contentstack");
 
-        Request requestInfo = organization.getAll(DEFAULT_AUTHTOKEN, queryParam).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("GET", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
         Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https only");
@@ -127,7 +131,7 @@ public class OrganizationUnitTests {
     @Order(3)
     @DisplayName("Tests get all organizations url host")
     void testGetAllOrganizationsUrlHost() {
-        Request requestInfo = organization.getAll(DEFAULT_AUTHTOKEN).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
     }
 
@@ -138,7 +142,7 @@ public class OrganizationUnitTests {
     @Order(4)
     @DisplayName("Tests get all organizations url request method")
     void testGetAllOrganizationsUrlRequestMethod() {
-        Request requestInfo = organization.getAll(DEFAULT_AUTHTOKEN).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("GET", requestInfo.method());
     }
 
@@ -149,7 +153,7 @@ public class OrganizationUnitTests {
     @Order(5)
     @DisplayName("Tests get all organizations url request")
     void testGetAllOrganizationsUrlRequestHeaders() {
-        Request requestInfo = organization.getAll(DEFAULT_AUTHTOKEN).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals(1, requestInfo.headers().names().size());
     }
 
@@ -158,12 +162,12 @@ public class OrganizationUnitTests {
      */
     @Test
     @Order(6)
-    @DisplayName("Test get all organizations url request with few query params")
+    @DisplayName("Test get all organizations url request for single organisation")
     void testGetAllOrganizationsUrlRequestFewQueryParameters() {
         HashMap<String, String> queryParam = new HashMap<>();
         queryParam.put("limit", "1");
         queryParam.put("skip", "1");
-        Request requestInfo = organization.getAll(DEFAULT_AUTHTOKEN, queryParam).request();
+        Request requestInfo = organization.fetch(queryParam).request();
         Assertions.assertEquals(2, requestInfo.url().queryParameterNames().size());
     }
 
@@ -177,7 +181,7 @@ public class OrganizationUnitTests {
     @Order(7)
     @DisplayName("Test get single organizations with no query parameters")
     void testGetSingleWithoutQueryParameter() {
-        Request requestInfo = organization.getSingle(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("GET", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
         Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https only");
@@ -193,9 +197,9 @@ public class OrganizationUnitTests {
     @DisplayName("Test get single organizations with all parameters")
     void testGetSingleOrganizationsWithAllParameters() {
         // Adding parameters to hashmap
-        HashMap<String, Object> queryParam = new HashMap<>();
+        HashMap<String, String> queryParam = new HashMap<>();
         queryParam.put("include_plan", "true");
-        Request requestInfo = organization.getSingle(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID, queryParam).request();
+        Request requestInfo = organization.fetch(queryParam).request();
         Assertions.assertEquals("GET", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
         Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https only");
@@ -215,7 +219,7 @@ public class OrganizationUnitTests {
     @Order(9)
     @DisplayName("Tests get single organizations url host")
     void testGetSingleOrganizationsUrlHost() {
-        Request requestInfo = organization.getSingle(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
     }
 
@@ -226,7 +230,7 @@ public class OrganizationUnitTests {
     @Order(10)
     @DisplayName("Tests get single organizations url request method")
     void testGetSingleOrganizationsUrlRequestMethod() {
-        Request requestInfo = organization.getSingle(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("GET", requestInfo.method());
     }
 
@@ -237,7 +241,7 @@ public class OrganizationUnitTests {
     @Order(11)
     @DisplayName("Tests get single organizations url request")
     void testGetSingleOrganizationsUrlRequestHeaders() {
-        Request requestInfo = organization.getSingle(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals(1, requestInfo.headers().names().size());
     }
 
@@ -245,7 +249,7 @@ public class OrganizationUnitTests {
     @Order(12)
     @DisplayName("Tests get single organizations relative url")
     void testGetSingleOrganizationsRelativeUrl() {
-        Request requestInfo = organization.getSingle(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.fetch(new HashMap<>()).request();
         Assertions.assertEquals("https://" + requestInfo.url().host() + "/v3/organizations/" + DEFAULT_ORG_UID,
                 requestInfo.url().toString());
     }
@@ -260,7 +264,7 @@ public class OrganizationUnitTests {
     @Order(13)
     @DisplayName("Test get organizations role with no query parameters")
     void testGetRoleWithoutQueryParameter() {
-        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.getRoles(DEFAULT_ORG_UID, new HashMap<>()).request();
         Assertions.assertEquals("GET", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
         Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https only");
@@ -278,7 +282,7 @@ public class OrganizationUnitTests {
         // Adding parameters to hashmap
         HashMap<String, String> queryParam = new HashMap<>();
         queryParam.put("include_plan", "true");
-        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID, queryParam).request();
+        Request requestInfo = organization.getRoles(DEFAULT_ORG_UID, queryParam).request();
         Assertions.assertEquals("GET", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
         Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https only");
@@ -295,7 +299,7 @@ public class OrganizationUnitTests {
     @Order(15)
     @DisplayName("Tests get organizations role url host")
     void testGetRoleOrganizationsUrlHost() {
-        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, new HashMap<>()).request();
         Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
     }
 
@@ -306,7 +310,7 @@ public class OrganizationUnitTests {
     @Order(16)
     @DisplayName("Tests get organizations role url request method")
     void testGetRoleOrganizationsUrlRequestMethod() {
-        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.getRoles("org_uid", new HashMap<>()).request();
         Assertions.assertEquals("GET", requestInfo.method());
     }
 
@@ -317,7 +321,7 @@ public class OrganizationUnitTests {
     @Order(17)
     @DisplayName("Tests get organizations role url request")
     void testGetRoleOrganizationsUrlRequestHeaders() {
-        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.getRoles("org_uid", new HashMap<>()).request();
         Assertions.assertEquals(1, requestInfo.headers().names().size());
     }
 
@@ -325,7 +329,7 @@ public class OrganizationUnitTests {
     @Order(18)
     @DisplayName("Tests get organizations role relative url")
     void testGetRoleOrganizationsRelativeUrl() {
-        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.getRoles("org_uid", new HashMap<>()).request();
         Assertions.assertEquals(
                 "https://" + requestInfo.url().host() + "/v3/organizations/" + DEFAULT_ORG_UID + "/roles",
                 requestInfo.url().toString());
@@ -338,7 +342,7 @@ public class OrganizationUnitTests {
         Map<String, String> mapQueryParam = new HashMap<>();
         mapQueryParam.putIfAbsent("limit", "10");
         mapQueryParam.putIfAbsent("skip", "2");
-        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID, mapQueryParam).request();
+        Request requestInfo = organization.getRoles("org_uid", mapQueryParam).request();
         Assertions.assertEquals("GET", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
         Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https only");
@@ -359,7 +363,7 @@ public class OrganizationUnitTests {
     @DisplayName("Test Invite user with no query parameters")
     void testInviteUserWithNoParameter() {
 
-        Request requestInfo = organization.inviteUser(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).request();
+        Request requestInfo = organization.inviteUser(DEFAULT_ORG_UID).request();
 
         Assertions.assertEquals("POST", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
@@ -370,7 +374,7 @@ public class OrganizationUnitTests {
                 requestInfo.url().toString());
 
         try {
-            Response<ResponseBody> response = organization.inviteUser(DEFAULT_AUTHTOKEN, DEFAULT_ORG_UID).execute();
+            Response<ResponseBody> response = organization.inviteUser(DEFAULT_ORG_UID).execute();
             boolean isAvail = response.isSuccessful();
             if (isAvail) {
                 System.out.println(" response: " + response.body());
