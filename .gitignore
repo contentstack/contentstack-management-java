@@ -11,6 +11,8 @@ factoryConfiguration.json
 .env
 .env/
 bin/
+coverage/
+docs/
 tmp/
 *.tmp
 *.bak
