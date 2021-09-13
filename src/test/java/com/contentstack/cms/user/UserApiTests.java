@@ -6,9 +6,11 @@ import com.google.gson.Gson;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.*;
+import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * The type User api tests.
@@ -20,6 +22,8 @@ import java.io.IOException;
 public class UserApiTests {
 
     private User userInstance;
+    private String emailId;
+    private String password;
 
     /**
      * Init before all.
@@ -29,8 +33,30 @@ public class UserApiTests {
         // Accessing the authtoken from the .env file
         Dotenv dotenv = Dotenv.load();
         String DEFAULT_AUTHTOKEN = dotenv.get("auth_token");
-        Contentstack client = new Contentstack.Builder().setAuthtoken(DEFAULT_AUTHTOKEN).build();
+        emailId = dotenv.get("username");
+        password = dotenv.get("password");
+        Contentstack client = new Contentstack.Builder().
+                setAuthtoken(DEFAULT_AUTHTOKEN)
+                .build();
         userInstance = client.user();
+    }
+
+
+    @Test
+    void testContentstackLogin() {
+        Contentstack client = new Contentstack.Builder().build();
+        //ContentstackResponse<LoginDetails, Error> response = client.login(username, password);
+        //Assertions.assertTrue(isLoggedIn);
+    }
+
+
+    @Test
+    void testContentstackLoginWith() throws IOException {
+        Contentstack client = new Contentstack.Builder().build();
+        User user = client.user();
+        Call<ResponseBody> aboutUser = user.getUser();
+        //Response<ResponseBody> result = client.login(emailId, password);
+        //Assertions.assertTrue(isLoggedIn);
     }
 
     /**
@@ -157,8 +183,11 @@ public class UserApiTests {
     @DisplayName("api testcase for get user organisation")
     @Order(8)
     void test_api_testcase_get_user_organisation() throws IOException {
-        Response<ResponseBody> response = userInstance.getUserOrganizations().execute();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("limit", 10);
+        Response<ResponseBody> response = userInstance.getUserOrganizations(map).execute();
         assert response.isSuccessful() || response.errorBody() != null;
+        assert response.errorBody() != null;
         Error error = new Gson().fromJson(response.errorBody().charStream(), Error.class);
         Assertions.assertEquals(105, error.getErrorCode());
     }

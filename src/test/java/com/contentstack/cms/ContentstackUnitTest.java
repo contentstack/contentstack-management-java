@@ -1,20 +1,18 @@
 package com.contentstack.cms;
 
-import com.contentstack.cms.core.Constants;
-import com.contentstack.cms.core.Util;
+import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import retrofit2.Response;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 
 
-/**
- * The type Contentstack unit test.
- */
 public class ContentstackUnitTest {
 
 
-    /**
-     * Test default client instance.
-     */
     @Test
     void testDefaultClientInstance() {
         Contentstack contentstack = new Contentstack.Builder().build();
@@ -26,61 +24,31 @@ public class ContentstackUnitTest {
         Assertions.assertNotNull(contentstack);
     }
 
-    /**
-     * Test default constant instance.
-     */
-    @Test
-    void testDefaultConstantInstance() {
-        Assertions.assertNotNull(new Constants());
-    }
 
-    /**
-     * Test default util instance.
-     */
-    @Test
-    void testDefaultUtilInstance() {
-        Assertions.assertNotNull(new Util());
-    }
-
-    /**
-     * Test default client instance without authtoken.
-     */
     @Test
     void testDefaultClientInstanceWithoutAuthtoken() {
         Contentstack contentstack = new Contentstack.Builder().build();
         Assertions.assertNotNull(contentstack);
     }
 
-    /**
-     * Test default client port.
-     */
     @Test
     void testDefaultClientPort() {
         Contentstack contentstack = new Contentstack.Builder().setPort("400").build();
         Assertions.assertEquals("400", contentstack.port);
     }
 
-    /**
-     * Test default client version.
-     */
     @Test
     void testDefaultClientVersion() {
         Contentstack contentstack = new Contentstack.Builder().setVersion("v10").build();
         Assertions.assertEquals("v10", contentstack.version);
     }
 
-    /**
-     * Test default client timeout.
-     */
     @Test
     void testDefaultClientTimeout() {
         Contentstack contentstack = new Contentstack.Builder().setTimeout(10).build();
         Assertions.assertEquals(10, contentstack.timeout);
     }
 
-    /**
-     * Test default client instance with authtoken.
-     */
     @Test
     void testDefaultClientInstanceWithAuthtoken() {
         Contentstack contentstack = new Contentstack.Builder().setAuthtoken("fake_authtoken").build();
@@ -88,9 +56,6 @@ public class ContentstackUnitTest {
         Assertions.assertEquals("fake_authtoken", contentstack.authtoken);
     }
 
-    /**
-     * Test client set port method.
-     */
     @Test
     void testClientSetPortMethod() {
         Contentstack contentstack = new Contentstack.Builder()
@@ -100,6 +65,80 @@ public class ContentstackUnitTest {
                 .setVersion("v2")
                 .build();
         Assertions.assertEquals(10, contentstack.timeout);
+    }
+
+
+    @Test
+    void setProxy() {
+        // This is how a developer can set the proxy
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
+        Contentstack contentstack = new Contentstack.Builder()
+                .setProxy(proxy)
+                .build();
+        Assertions.assertEquals("HTTP @ hostname:433", contentstack.proxy.toString());
+
+    }
+
+    @Test
+    void setRetryOnFailure() {
+        Contentstack contentstack = new Contentstack.Builder()
+                .setRetryOnFailure(true)
+                .build();
+        Assertions.assertEquals(true, contentstack.retryOnFailure);
+    }
+
+    @Test
+    void setHost() {
+        String hostDemo = "api.thehostname.com";
+        Contentstack contentstack = new Contentstack.Builder()
+                .setHost(hostDemo)
+                .build();
+        Assertions.assertEquals(hostDemo, contentstack.host);
+    }
+
+    @Test
+    void setPort() {
+        Contentstack contentstack = new Contentstack.Builder()
+                .setPort("443")
+                .build();
+        Assertions.assertEquals("443", contentstack.port);
+    }
+
+    @Test
+    void setVersion() {
+        Contentstack contentstack = new Contentstack.Builder()
+                .setVersion("v8")
+                .build();
+        Assertions.assertEquals("v8", contentstack.version);
+    }
+
+    @Test
+    void setTimeout() {
+        Contentstack contentstack = new Contentstack.Builder()
+                .setTimeout(3)
+                .build();
+        Assertions.assertEquals(3, contentstack.timeout);
+    }
+
+    @Test
+    void setAuthtoken() {
+        Contentstack contentstack = new Contentstack.Builder()
+                .setAuthtoken("authtoken_dummy")
+                .build();
+        Assertions.assertEquals("authtoken_dummy", contentstack.authtoken);
+    }
+
+    @Test
+    void testLogoutFromContentstack() throws IOException {
+        Contentstack contentstack = new Contentstack.Builder()
+                .setAuthtoken("authtoken_dummy")
+                .build();
+        Response<ResponseBody> logout = contentstack.logout();
+        if (logout.isSuccessful()) {
+            assert logout.body() != null;
+            String responseString = logout.body().string();
+        }
+        Assertions.assertEquals("authtoken_dummy", contentstack.authtoken);
     }
 
 

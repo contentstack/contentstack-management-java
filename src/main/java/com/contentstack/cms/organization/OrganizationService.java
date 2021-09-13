@@ -1,5 +1,6 @@
 package com.contentstack.cms.organization;
 
+import com.contentstack.cms.user.CSResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -11,30 +12,50 @@ import java.util.Map;
  */
 public interface OrganizationService {
 
+
     /**
-     * Gets all.
+     * Gets all organizations.
      *
-     * @param authtoken   the authtoken
-     * @param queryParams the query params
+     * @param authtoken the authtoken
+     * @return the all
+     */
+    @GET("organizations")
+    Call<ResponseBody> get(
+            @Header("authtoken") String authtoken
+    );
+
+    /**
+     * s
+     * Gets all organizations.
+     *
+     * @param authtoken the authtoken
+     * @param options   the query params
      * @return the all
      */
     @GET("organizations")
     Call<ResponseBody> get(@Header("authtoken") String authtoken,
-                           @QueryMap Map<String, String> queryParams);
+                           @QueryMap Map<String, Object> options);
+
+
+    @GET("organizations/{organization_uid}")
+    Call<ResponseBody> singleOrganization(
+            @Path("organization_uid") String _uid,
+            @QueryMap Map<String, String> options);
 
 
     /**
      * Gets roles.
      *
-     * @param authtoken   the authtoken
-     * @param _uid        the uid
-     * @param queryParams the query params
+     * @param authtoken the authtoken
+     * @param _uid      the uid
+     * @param options   the query params
      * @return the roles
      */
     @GET("organizations/{organization_uid}/roles")
-    Call<ResponseBody> getRoles(@Header("authtoken") String authtoken,
-                                @Path("organization_uid") String _uid,
-                                @QueryMap Map<String, String> queryParams);
+    Call<ResponseBody> getRoles(
+            @Header("authtoken") String authtoken,
+            @Path("organization_uid") String _uid,
+            @QueryMap Map<String, String> options);
 
     /**
      * Invite user call.
@@ -44,8 +65,9 @@ public interface OrganizationService {
      * @return the call
      */
     @POST("organizations/{organization_uid}/share")
-    Call<ResponseBody> inviteUser(@Header("authtoken") String authtoken,
-                                  @Path("organization_uid") String _uid);
+    Call<ResponseBody> inviteUser(
+            @Header("authtoken") String authtoken,
+            @Path("organization_uid") String _uid);
 
 
     /**
@@ -56,8 +78,9 @@ public interface OrganizationService {
      * @return the call
      */
     @DELETE("organizations/{organization_uid}/share")
-    Call<ResponseBody> removeUser(@Header("authtoken") String authtoken,
-                                  @Path("organization_uid") String _uid);
+    Call<ResponseBody> removeUser(
+            @Header("authtoken") String authtoken,
+            @Path("organization_uid") String _uid);
 
     /**
      * Resend invitation call.
@@ -67,21 +90,23 @@ public interface OrganizationService {
      * @return the call
      */
     @GET("organizations/{organization_uid}/share/{share_uid}")
-    Call<ResponseBody> resendInvitation(@Path("organization_uid") String _uid,
-                                        @Path("share_uid") String share_uid);
+    Call<ResponseBody> resendInvitation(
+            @Path("organization_uid") String _uid,
+            @Path("share_uid") String share_uid);
 
     /**
      * Gets all invitations.
      *
-     * @param authtoken   the authtoken
-     * @param _uid        the uid
-     * @param queryParams the query params
+     * @param authtoken the authtoken
+     * @param _uid      the uid
+     * @param options   the query params
      * @return the all invitations
      */
     @GET("organizations/{organization_uid}/share")
-    Call<ResponseBody> getAllInvitations(@Header("authtoken") String authtoken,
-                                         @Path("organization_uid") String _uid,
-                                         @QueryMap Map<String, String> queryParams);
+    Call<ResponseBody> getAllInvitations(
+            @Header("authtoken") String authtoken,
+            @Path("organization_uid") String _uid,
+            @QueryMap Map<String, String> options);
 
     /**
      * Transfer ownership call.
@@ -92,8 +117,10 @@ public interface OrganizationService {
      */
     @FormUrlEncoded
     @POST("organizations/{organization_uid}/ownership")
-    Call<ResponseBody> transferOwnership(@Header("authtoken") String authtoken,
-                                         @Path("organization_uid") String _uid, @Body String transfer_to);
+    Call<ResponseBody> transferOwnership(
+            @Header("authtoken") String authtoken,
+            @Path("organization_uid") String _uid,
+            @Body String transfer_to);
 
     /**
      * The Get all stacks in an organization call
@@ -101,15 +128,16 @@ public interface OrganizationService {
      * <br>
      * When executing the API call, provide the Organization UID.
      *
-     * @param authtoken   the authtoken
-     * @param _uid        the uid
-     * @param queryParams the query params
+     * @param authtoken the authtoken
+     * @param _uid      the uid
+     * @param options   the query params
      * @return the stacks
      */
     @GET("organizations/{organization_uid}/stacks")
-    Call<ResponseBody> getStacks(@Header("authtoken") String authtoken,
-                                 @Path("organization_uid") String _uid,
-                                 @QueryMap Map<String, String> queryParams);
+    Call<ResponseBody> getStacks(
+            @Header("authtoken") String authtoken,
+            @Path("organization_uid") String _uid,
+            @QueryMap Map<String, String> options);
 
 
     /**
@@ -124,8 +152,10 @@ public interface OrganizationService {
      * @return the logs
      */
     @GET("organizations/{organization_uid}/logs/{log_uid}")
-    Call<ResponseBody> getLogs(@Header("authtoken") String authtoken,
-                               @Path("organization_uid") String _uid,
-                               @Path("log_uid") String log_uid);
+    Call<ResponseBody> getLogs(
+            @Header("authtoken") String authtoken,
+            @Path("organization_uid") String _uid,
+            @Path("log_uid") String log_uid);
+
 
 }
