@@ -1,27 +1,35 @@
 package com.contentstack.cms.core;
 
 // CAUTION: DO NOT MODIFY STRINGS KEYS/VALUES
-public class Constants {
+public final class Constants {
 
-    public static Boolean RETRY_ON_FAILURE = true;
-
-    // KEYS FROM CORE PACKAGE
-    public static String BASE_URL = "https://api.contentstack.io/v3/";
-    public static String PROTOCOL = "https";
-    public static String HOST = "api.contentstack.io";
-    public static String PORT = "443";
-    public static String VERSION = "v3";
+    public static final Boolean RETRY_ON_FAILURE = true;
+    public static final String PROTOCOL = "https"; // protocol
+    public static final String HOST = "api.contentstack.io"; // host of the url
+    public static final String PORT = "443"; // https port
+    public static final String VERSION = "v3"; // api version
     public static int TIMEOUT = 30; // default timeout in seconds
-    protected static String SDK_NAME = "contentstack-management-java";
-    protected static String SDK_VERSION = "v0.0.1";
+    public static final String SDK_NAME = "contentstack-management-java";
+    public static final String SDK_VERSION = "v0.0.1";
+    public static String BASE_URL = PROTOCOL + "://" + HOST + "/" + VERSION + "/";
+
+    private Constants() {
+        throw new UnsupportedOperationException();
+    }
 
     // KEYS FROM HeaderInterceptor
     // CAUTION: DO NOT MODIFY STRINGS KEYS/VALUES
-    protected static String AUTHTOKEN = "authtoken";
-    protected static String X_USER_AGENT_KEY = "X-User-Agent";
-    protected static String X_USER_AGENT_VALUE = SDK_NAME + "/" + SDK_VERSION;
-    protected static String User_AGENT = "User-Agent";
-    protected static String CONTENT_TYPE = "Content-Type";
-    protected static String APPLICATION_JSON = "application/json";
+    public static final String AUTHTOKEN = "authtoken";
+    public static final String X_USER_AGENT_KEY = "X-User-Agent";
+    public static final String X_USER_AGENT_VALUE = SDK_NAME + "/" + SDK_VERSION;
+    public static final String User_AGENT = "User-Agent";
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String APPLICATION_JSON = "application/json";
+
+
+    // Error Message // Information Message
+    public static final String USER_ALREADY_LOGGED_IN = "User is already loggedIn, " +
+            "Please logout then try to login again";
+    public static final String LOGIN_FLAG = "Please Login to access user instance";
 
 }

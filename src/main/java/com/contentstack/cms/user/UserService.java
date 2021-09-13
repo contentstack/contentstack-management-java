@@ -1,6 +1,7 @@
 package com.contentstack.cms.user;
 
 import okhttp3.ResponseBody;
+import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -13,8 +14,8 @@ import java.util.Map;
 public interface UserService {
 
 
-    @GET("user-session")
-    Call<ResponseBody> login(Map<String, HashMap<String, String>> map); //TODO: pass the user body here: user: {email: "", password: "", token: ""}
+    @POST("user-session")
+    Call<ResponseBody> login(@Body HashMap<String, HashMap<String, String>> body);
 
     /**
      * Gets user.
@@ -81,5 +82,5 @@ public interface UserService {
      * @return the user organization
      */
     @GET("user")
-    Call<ResponseBody> getUserOrganization(@QueryMap Map<String, String> options);
+    Call<ResponseBody> getUserOrganization(@QueryMap HashMap<String, Object> options);
 }

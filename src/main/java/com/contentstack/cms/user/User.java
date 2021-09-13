@@ -1,11 +1,12 @@
 package com.contentstack.cms.user;
 
+import com.contentstack.cms.core.Util;
 import okhttp3.ResponseBody;
+import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * All accounts registered with Contentstack are known as Users.
@@ -15,19 +16,66 @@ public class User {
 
     private final UserService userService;
 
-    public User() {
-        throw new UnsupportedOperationException("Can not initialise User Class");
+    private User() throws IllegalAccessException {
+        throw new IllegalAccessException("constructor==private");
     }
 
+    /**
+     * Instantiates a new User.
+     *
+     * @param client the client
+     */
     public User(Retrofit client) {
         this.userService = client.create(UserService.class);
     }
 
 
-    public Call<ResponseBody> login(HashMap<String, String> params) {
-        Map<String, HashMap<String, String>> map = new HashMap<>();
-        map.put("user", params);
-        return this.userService.login(map);
+    /**
+     * The Log in to your account request is used to sign in to your Contentstack account and obtain the authtoken.
+     *
+     * @param emailId  the email id
+     * @param password the password
+     * @return the call
+     */
+    public Call<ResponseBody> login(@NotNull String emailId, @NotNull String password) {
+        HashMap<String, HashMap<String, String>> userSession = new HashMap<>();
+        userSession.put("user", setCredentials(emailId, password));
+        return this.userService.login(userSession);
+    }
+
+    /**
+     * Login call.
+     *
+     * @param emailId  the email id
+     * @param password the password
+     * @param tfaToken the tfa token
+     * @return the call
+     */
+    public Call<ResponseBody> login(String emailId, String password, String tfaToken) {
+        HashMap<String, HashMap<String, String>> userSession = new HashMap<>();
+        userSession.put("user", setCredentials(emailId, password, tfaToken));
+        return this.userService.login(userSession);
+    }
+
+
+    private HashMap<String, String> setCredentials(@NotNull String... arguments) {
+        HashMap<String, String> credentials = new HashMap<>();
+        if (arguments[0].isEmpty()) {
+            Util.nullEmptyThrowsException(arguments[0]);
+        }
+        if (arguments[1].isEmpty()) {
+            Util.nullEmptyThrowsException(arguments[1]);
+        }
+        credentials.put("email", arguments[0]);
+        credentials.put("password", arguments[1]);
+        if (arguments.length > 2) {
+            if (arguments[2].isEmpty()) {
+                Util.nullEmptyThrowsException(arguments[2]);
+            }
+            credentials.put("tfa_token", arguments[2]);
+        }
+        return credentials;
+
     }
 
     /**
@@ -47,12 +95,10 @@ public class User {
      * The information returned includes details of the stacks and organisation owned by and shared
      * with the specified user account.
      *
+     * @param map the map
      * @return {@link UserService}
      */
-    public Call<ResponseBody> getUserOrganizations() {
-        Map<String, String> map = new HashMap<>();
-        map.put("include_orgs", "true");
-        map.put("include_orgs_roles", "true");
+    public Call<ResponseBody> getUserOrganizations(HashMap<String, Object> map) {
         return this.userService.getUserOrganization(map);
     }
 
@@ -71,15 +117,11 @@ public class User {
     }
 
     /**
-     * The Activate a user account call activates the account of a user after signing up.
+     * The activate_token a user account call activates the account of a user after signing up.
      * For account activation, you will require the token received in the activation email.
      * <br>
      *
-     * @param activationToken Enter the activation token received on the
-     *                        registered email address. You can find the activation token in the
-     *                        activation URL sent to the email address used while signing up.
-     *                        <br>
-     *                        Example:[activationToken]
+     * @param activationToken Enter the activation token received on the                        registered email address. You can find the activation token in the                        activation URL sent to the email address used while signing up.                        <br>                        Example:[activationToken]
      * @return {@link UserService}
      */
     public Call<ResponseBody> activateUser(String activationToken) {
@@ -120,7 +162,7 @@ public class User {
     /**
      * The Log out of your account call is used to sign out the user of Contentstack account
      *
-     * @param authtoken: authtoken
+     * @param authtoken : authtoken
      * @return {@link UserService}
      */
     public Call<ResponseBody> logoutWithAuthtoken(String authtoken) {
