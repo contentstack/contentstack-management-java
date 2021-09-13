@@ -10,6 +10,7 @@ factoryConfiguration.json
 .metadata
 .env
 .env/
+test-report/
 bin/
 coverage/
 docs/
@@ -264,3 +265,4 @@ gradle-app.setting
 java.iml
 src/main/resources/
 /.idea/
+/test-report/
