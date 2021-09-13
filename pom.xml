@@ -3,12 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.contentstack</groupId>
     <artifactId>cms</artifactId>
     <name>contentstack-management-java</name>
-    <version>0.0.1-SNAPSHOT</version>
-    <description>Java SDK for Contentstack Content Management API, Contentstack is a headless CMS with an API-first
+    <version>${sdk.version.snapshot}</version>
+    <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
+        API-first
         approach
     </description>
     <url>https://github.com/contentstack/contentstack-management-java/</url>
@@ -72,10 +72,12 @@
     </distributionManagement>
 
     <properties>
+        <!--update sdk version before every release push for SNAPSHOT/RELEASE-->
+        <sdk.version.snapshot>v0.0.1-SNAPSHOT</sdk.version.snapshot>
+        <sdk.version.release>v0.0.1</sdk.version.release>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--        <build-helper.version>3.0.0</build-helper.version>-->
         <surefire-report-plugin.version>2.22.0</surefire-report-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
@@ -313,8 +315,6 @@
                     </properties>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-
 </project>
