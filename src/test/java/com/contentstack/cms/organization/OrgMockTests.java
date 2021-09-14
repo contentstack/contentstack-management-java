@@ -1,6 +1,5 @@
 package com.contentstack.cms.organization;
 
-import com.contentstack.cms.user.CSResponse;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -24,16 +23,10 @@ public class OrgMockTests {
 
     @BeforeAll
     public void setUp() {
-        // Loads the environment variables from .env file
-        // from the root folder
         Dotenv dotenv = Dotenv.load();
-        // loads the authtoken from the .env file
         DEFAULT_AUTHTOKEN = dotenv.get("auth_token");
-        // loads the organizations_uid from the .env file
         DEFAULT_ORG_UID = dotenv.get("organizations_uid");
-        // creates own retrofit builder with base url
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.contentstack.io/v3/").build();
-        // create organization instance
         organization = new Organization(retrofit);
     }
 

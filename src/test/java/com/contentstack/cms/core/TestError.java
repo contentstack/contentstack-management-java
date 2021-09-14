@@ -88,8 +88,11 @@ public class TestError {
      */
     @Test
     public void testErrorAllArgsConstructor() {
-        ///Error error = new Error("{\"environment\":[\"is required.\"]}}", "Failed to fetch entries. Please try again with valid parameters.", 141);
-        //Assertions.assertNotNull(error.getError());
+        Error error = new Error();
+        error.setErrorMessage("{\"environment\":[\"is required.\"]}}");
+        error.setErrorCode(141);
+        error.setErrors("Failed to fetch entries. Please try again with valid parameters.");
+        Assertions.assertNotNull(error.getErrorCode());
     }
 
     /**

@@ -3,10 +3,10 @@ package com.contentstack.cms.user;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Error;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.*;
-import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -18,26 +18,24 @@ import java.util.HashMap;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("API")
-@DisplayName("Api Testcases for User Class")
 public class UserApiTests {
 
-    private User userInstance;
-    private String emailId;
-    private String password;
+    private static User userInstance;
+    private static String emailId;
+    private static String password;
+    private static Contentstack client;
 
     /**
      * Init before all.
      */
     @BeforeAll
-    public void initBeforeAll() {
+    public static void initBeforeAll() {
         // Accessing the authtoken from the .env file
         Dotenv dotenv = Dotenv.load();
         String DEFAULT_AUTHTOKEN = dotenv.get("auth_token");
         emailId = dotenv.get("username");
         password = dotenv.get("password");
-        Contentstack client = new Contentstack.Builder().
-                setAuthtoken(DEFAULT_AUTHTOKEN)
-                .build();
+        client = new Contentstack.Builder().setAuthtoken(DEFAULT_AUTHTOKEN).build();
         userInstance = client.user();
     }
 
@@ -50,13 +48,15 @@ public class UserApiTests {
     }
 
 
-    @Test
-    void testContentstackLoginWith() throws IOException {
-        Contentstack client = new Contentstack.Builder().build();
-        User user = client.user();
-        Call<ResponseBody> aboutUser = user.getUser();
-        //Response<ResponseBody> result = client.login(emailId, password);
-        //Assertions.assertTrue(isLoggedIn);
+    @Test()
+    void throwExceptionWhileLoginWithoutAuthtoken() {
+        try {
+            new Contentstack.Builder().build().user();
+        } catch (Exception e) {
+            e.getLocalizedMessage();
+            Assertions.assertEquals("Please login to access user instance", e.getLocalizedMessage());
+        }
+
     }
 
     /**
@@ -65,7 +65,6 @@ public class UserApiTests {
      * @throws IOException the io exception
      */
     @Test
-    @DisplayName("api testcase for get user")
     @Order(1)
     void api_test_get_user() throws IOException {
         Response<ResponseBody> response = userInstance.getUser().execute();
@@ -79,24 +78,6 @@ public class UserApiTests {
         }
     }
 
-    /**
-     * Test api testcase update user.
-     *
-     * @throws IOException the io exception
-     */
-    @Test
-    @DisplayName("api testcase for update user")
-    @Order(2)
-    void test_api_testcase_update_user() throws IOException {
-        Response<ResponseBody> response = userInstance.updateUser().execute();
-        if (!response.isSuccessful()) {
-            assert response.errorBody() != null;
-            Error error = new Gson().fromJson(response.errorBody().charStream(), Error.class);
-            Assertions.assertNull(error.getErrors());
-            Assertions.assertEquals(105, error.getErrorCode());
-            Assertions.assertEquals("You're not allowed in here unless you're logged in.", error.getErrorMessage());
-        }
-    }
 
     /**
      * Test api testcase activate user.
@@ -104,7 +85,6 @@ public class UserApiTests {
      * @throws IOException the io exception
      */
     @Test
-    @DisplayName("api testcase for activate user")
     @Order(3)
     void test_api_testcase_activate_user() throws IOException {
         Response<ResponseBody> response = userInstance.activateUser("bltf36705c7361d4734").execute();
@@ -119,7 +99,6 @@ public class UserApiTests {
      * @throws IOException the io exception
      */
     @Test
-    @DisplayName("api testcase for request password")
     @Order(4)
     void test_api_testcase_request_password() throws IOException {
         Response<ResponseBody> response = userInstance.requestPassword().execute();
@@ -134,7 +113,6 @@ public class UserApiTests {
      * @throws IOException the io exception
      */
     @Test
-    @DisplayName("api testcase for reset password")
     @Order(5)
     void test_api_testcase_reset_password() throws IOException {
         Response<ResponseBody> response = userInstance.resetPassword().execute();
@@ -150,7 +128,6 @@ public class UserApiTests {
      * @throws IOException the io exception
      */
     @Test
-    @DisplayName("api testcase for user logout")
     @Order(6)
     void test_api_testcase_logout() throws IOException {
         Response<ResponseBody> response = userInstance.logout().execute();
@@ -186,10 +163,33 @@ public class UserApiTests {
         HashMap<String, Object> map = new HashMap<>();
         map.put("limit", 10);
         Response<ResponseBody> response = userInstance.getUserOrganizations(map).execute();
-        assert response.isSuccessful() || response.errorBody() != null;
-        assert response.errorBody() != null;
-        Error error = new Gson().fromJson(response.errorBody().charStream(), Error.class);
-        Assertions.assertEquals(105, error.getErrorCode());
+        if (response.isSuccessful() || response.body() != null) {
+            assert response.body() != null;
+            JsonObject convertedToJson = new Gson().fromJson(response.body().string(), JsonObject.class);
+            JsonObject userObj = convertedToJson.getAsJsonObject("user");
+            Assertions.assertTrue(userObj.isJsonObject());
+            Assertions.assertTrue(userObj.has("uid"));
+            Assertions.assertTrue(userObj.has("created_at"));
+            Assertions.assertTrue(userObj.has("updated_at"));
+            Assertions.assertTrue(userObj.has("email"));
+            Assertions.assertTrue(userObj.has("username"));
+            Assertions.assertTrue(userObj.has("first_name"));
+            Assertions.assertTrue(userObj.has("last_name"));
+            Assertions.assertTrue(userObj.has("org_uid"));
+            Assertions.assertTrue(userObj.has("shared_org_uid"));
+            Assertions.assertTrue(userObj.has("authtoken"));
+            Assertions.assertTrue(userObj.has("profile_type"));
+            Assertions.assertTrue(userObj.has("failed_attempts"));
+            Assertions.assertTrue(userObj.has("roles"));
+            Assertions.assertTrue(userObj.getAsJsonArray("roles").isJsonArray());
+            Assertions.assertTrue(userObj.getAsJsonArray("organizations").isJsonArray());
+
+        } else {
+            assert response.errorBody() != null;
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals("You're not allowed in here unless you're logged in.", error.getErrorMessage());
+            Assertions.assertEquals(105, error.getErrorCode());
+        }
     }
 
 }

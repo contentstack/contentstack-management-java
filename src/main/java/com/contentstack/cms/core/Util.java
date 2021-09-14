@@ -1,5 +1,9 @@
 package com.contentstack.cms.core;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 /**
  * The Utility class that contains utility common functions
  */
@@ -7,7 +11,8 @@ public class Util {
 
     static final String PRIVATE_CONSTRUCTOR = "private constructor can't be accessed outside the class";
 
-    private Util() {
+    Util() throws IllegalAccessException {
+        throw new IllegalAccessException("private=modifier");
     }
 
     /**
@@ -24,26 +29,25 @@ public class Util {
     /**
      * @param field throws an exception for not providing a valid input
      */
-    public static void nullEmptyThrowsException(String field) {
+    public static void nullEmptyThrowsException(@NotNull String field) {
+        Objects.requireNonNull(field);
         throw new RuntimeException(field + " cannot take in an empty String or null value");
     }
 
     /**
-     * When private constructor to be initialized
-     * {@link AssertionError} otherwise.
+     * When private constructor to be initialized {@link AssertionError} otherwise.
      */
     public static void assertionError() {
         throw new AssertionError(PRIVATE_CONSTRUCTOR);
     }
 
     /**
-     * Asserts that the given {@code object} with name {@code param} is not null, throws
-     * {@link IllegalArgumentException} otherwise.
+     * Asserts that the given {@code object} with name {@code param} is not null,
+     * throws {@link IllegalArgumentException} otherwise.
      */
     public static void assertNotNull(Object object, String param) {
         if (object == null) {
-            throw new IllegalArgumentException(String.format(
-                    "%s may not be null.", param));
+            throw new IllegalArgumentException(String.format("%s may not be null.", param));
         }
     }
 }

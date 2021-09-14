@@ -1,7 +1,6 @@
 package com.contentstack.cms.organization;
 
 import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.user.CSResponse;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,7 +18,7 @@ public class OrgApiTests {
     private Organization organization;
     String emailId = Dotenv.load().get("username");
     String password = Dotenv.load().get("password");
-    String authtoken = Dotenv.load().get("authtoken"); // read default authtoken from the .env file
+    String authtoken = Dotenv.load().get("authtoken");
 
     @BeforeAll
     public void setUp() throws IOException {
@@ -32,15 +31,6 @@ public class OrgApiTests {
     @DisplayName("organization fetch all")
     void testOrganizationFetchAll() throws IOException {
         Response<ResponseBody> response = organization.getAll().execute();
-
-//        if (response.isSuccessful()){
-//            response.toJson()
-//            response.toString()
-//            response.(LoginDetails.class)
-//        }
-
-        //Request orgsRequest = organization.getAll().request();
-        //System.out.println(orgs);
     }
 
 

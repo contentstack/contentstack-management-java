@@ -1,10 +1,10 @@
 package com.contentstack.cms.organization;
 
-import com.contentstack.cms.user.CSResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -55,7 +55,7 @@ public interface OrganizationService {
     Call<ResponseBody> getRoles(
             @Header("authtoken") String authtoken,
             @Path("organization_uid") String _uid,
-            @QueryMap Map<String, String> options);
+            @QueryMap HashMap<String, Object> options);
 
     /**
      * Invite user call.

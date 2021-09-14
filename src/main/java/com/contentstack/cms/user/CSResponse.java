@@ -27,7 +27,6 @@ public class CSResponse {
         return new Gson().toJson(body);
     }
 
-
     public String asJson(String string) {
         Objects.requireNonNull(string, "string == null");
         return new Gson().toJson(string);
