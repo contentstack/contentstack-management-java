@@ -13,10 +13,10 @@ import java.util.logging.Logger;
  */
 public abstract class CallbackWithRetry<T> implements Callback<T> {
 
-    private static final int TOTAL_RETRIES = 3;
     private static final String TAG = CallbackWithRetry.class.getSimpleName();
-    private final Call<T> call;
     private final Logger log = Logger.getLogger(CallbackWithRetry.class.getName());
+    private static final int TOTAL_RETRIES = 3;
+    private final Call<T> call;
     private int retryCount = 0;
 
     /**

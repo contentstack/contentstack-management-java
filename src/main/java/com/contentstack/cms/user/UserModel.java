@@ -128,5 +128,4 @@ public class UserModel {
     @SerializedName("roles")
     public List<Object> roles;
 
-
 }

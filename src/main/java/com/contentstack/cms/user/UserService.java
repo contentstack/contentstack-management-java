@@ -1,21 +1,18 @@
 package com.contentstack.cms.user;
 
 import okhttp3.ResponseBody;
-import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.*;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The interface User service.
  */
 public interface UserService {
 
-
     @POST("user-session")
-    Call<ResponseBody> login(@Body HashMap<String, HashMap<String, String>> body);
+    Call<LoginDetails> login(@Body HashMap<String, HashMap<String, String>> body);
 
     /**
      * Gets user.

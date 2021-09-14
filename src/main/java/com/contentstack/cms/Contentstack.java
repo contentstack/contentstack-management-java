@@ -4,9 +4,9 @@ import com.contentstack.cms.core.Constants;
 import com.contentstack.cms.core.Error;
 import com.contentstack.cms.core.HeaderInterceptor;
 import com.contentstack.cms.organization.Organization;
-import com.contentstack.cms.user.CSResponse;
 import com.contentstack.cms.user.LoginDetails;
 import com.contentstack.cms.user.User;
+import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -17,9 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.net.Proxy;
-
-import static com.contentstack.cms.core.Constants.LOGIN_FLAG;
-import static com.contentstack.cms.core.Constants.USER_ALREADY_LOGGED_IN;
 
 public class Contentstack {
 
@@ -32,25 +29,7 @@ public class Contentstack {
     protected Boolean retryOnFailure;
     protected Proxy proxy;
     protected HeaderInterceptor headerInterceptor;
-    User user;
-
-    /**
-     * Instantiates a new Contentstack.
-     *
-     * @param builder the builder
-     */
-    public Contentstack(Builder builder) {
-        this.host = builder.hostname;
-        this.port = builder.port;
-        this.version = builder.version;
-        this.timeout = builder.timeout;
-        this.authtoken = builder.authtoken;
-        this.instance = builder.instance;
-        this.retryOnFailure = builder.retryOnFailure;
-        this.proxy = builder.proxy;
-        this.headerInterceptor = builder.headerInterceptor;
-        user = new User(this.instance);
-    }
+    protected User user;
 
     /**
      * All accounts registered with Contentstack are known as Users. A stack can
@@ -78,14 +57,15 @@ public class Contentstack {
      */
     public User user() {
         if (this.authtoken == null)
-            throw new NullPointerException(LOGIN_FLAG);
-        return new User(this.instance);
+            throw new NullPointerException(Constants.LOGIN_FLAG);
+        user = new User(this.instance);
+        return user;
     }
 
     /**
      * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
      * authenticating yourself via the Log in call of User Session. The authtoken is
-     * returned in the 'Response' body of the Log in call and is mandatory in all of
+     * returned to the 'Response' body of the Log in call and is mandatory in all
      * the calls.
      * <p>
      * <b>Example:</b>
@@ -117,25 +97,24 @@ public class Contentstack {
      * @param password the password
      * @return response the @Response<ResponseBody>
      */
-
-    public Response<ResponseBody> login(String emailId, String password) throws IOException {
+    public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
-            throw new IllegalStateException(USER_ALREADY_LOGGED_IN);
+            throw new IllegalStateException(Constants.USER_ALREADY_LOGGED_IN);
         user = new User(this.instance);
-        Response<ResponseBody> response = user.login(emailId, password).execute();
+        Response<LoginDetails> response = user.login(emailId, password).execute();
         setupLoginCredentials(response);
         return response;
     }
 
-    /* Setting up authtoken to the header interceptor */
-    private void setupLoginCredentials(Response<ResponseBody> responseBody) throws IOException {
-        if (responseBody.isSuccessful()) {
-            LoginDetails loginDetails = new CSResponse(responseBody).toModel(LoginDetails.class);
-            this.authtoken = loginDetails.getUser()
-                    .getAuthtoken();
+    private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
+        if (loginResponse.isSuccessful()) {
+            assert loginResponse.body() != null;
+            this.authtoken = loginResponse.body().getUser().getAuthtoken();
             this.headerInterceptor.setAuthtoken(this.authtoken);
         } else {
-            new CSResponse(responseBody).toModel(Error.class);
+            assert loginResponse.errorBody() != null;
+            String errorJsonString = loginResponse.errorBody().string();
+            new Gson().fromJson(errorJsonString, Error.class);
         }
     }
 
@@ -159,6 +138,24 @@ public class Contentstack {
     }
 
     /**
+     * Instantiates a new Contentstack.
+     *
+     * @param builder the builder class instance
+     */
+    public Contentstack(Builder builder) {
+        this.host = builder.hostname;
+        this.port = builder.port;
+        this.version = builder.version;
+        this.timeout = builder.timeout;
+        this.authtoken = builder.authtoken;
+        this.instance = builder.instance;
+        this.retryOnFailure = builder.retryOnFailure;
+        this.proxy = builder.proxy;
+        this.headerInterceptor = builder.headerInterceptor;
+        // user = new User(this.instance);
+    }
+
+    /**
      * The type Builder.
      */
     public static class Builder {
@@ -172,11 +169,9 @@ public class Contentstack {
         private int timeout = Constants.TIMEOUT; // Default timeout 30 seconds
         private Boolean retryOnFailure = Constants.RETRY_ON_FAILURE;// Default base url for contentstack
 
-        /**
-         * Instantiates a new Builder.
-         */
+        /* Instantiates a new Builder. */
         public Builder() {
-            // default builder constroctor
+            // default builder constructor
         }
 
         /**
@@ -256,39 +251,45 @@ public class Contentstack {
          * @param authtoken authtoken for the client
          * @return Contentstack authtoken
          */
-        public Builder setAuthtoken(@NotNull String authtoken) {
+        public Builder setAuthtoken(String authtoken) {
             this.authtoken = authtoken;
             return this;
         }
 
         protected HeaderInterceptor getHeaderInterceptor() {
+            this.headerInterceptor = new HeaderInterceptor();
             return this.headerInterceptor;
         }
 
-        /**
-         * Create Client instance for Contentstack
-         *
-         * @return Contentstack contentstack
-         */
+
         public Contentstack build() {
-            new Builder();
-            String baseUrl = Constants.PROTOCOL + "://" + this.hostname + "/" + version + "/";
-            this.instance = createClient(baseUrl);
-            return new Contentstack(this);
+            Contentstack contentstack = new Contentstack(this);
+            validateClient(contentstack);
+            return contentstack;
         }
 
-        private Retrofit createClient(@NotNull String baseUrl) {
-            this.instance = new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient(this.retryOnFailure)).build();
-            return this.instance;
+        private void validateClient(Contentstack contentstack) {
+            String baseUrl = Constants.PROTOCOL + "://" + this.hostname + "/" + version + "/";
+            this.headerInterceptor = contentstack.headerInterceptor = new HeaderInterceptor();
+            this.instance = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(httpClient(this.retryOnFailure))
+                    .build();
+            contentstack.instance = this.instance;
         }
 
         private OkHttpClient httpClient(Boolean retryOnFailure) {
-            HttpLoggingInterceptor loggerInterceptor = new HttpLoggingInterceptor()
-                    .setLevel(HttpLoggingInterceptor.Level.NONE);
-            this.headerInterceptor = new HeaderInterceptor(this.authtoken);
-            return new OkHttpClient.Builder().addInterceptor(headerInterceptor).addInterceptor(loggerInterceptor)
-                    .proxy(this.proxy).retryOnConnectionFailure(retryOnFailure).build();
+            return new OkHttpClient.Builder()
+                    .addInterceptor(this.headerInterceptor)
+                    .addInterceptor(logger())
+                    .proxy(this.proxy)
+                    .retryOnConnectionFailure(retryOnFailure)
+                    .build();
+        }
+
+        private HttpLoggingInterceptor logger() {
+            return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE);
         }
 
     }

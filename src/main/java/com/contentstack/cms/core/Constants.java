@@ -3,6 +3,10 @@ package com.contentstack.cms.core;
 // CAUTION: DO NOT MODIFY STRINGS KEYS/VALUES
 public final class Constants {
 
+    private Constants() {
+        throw new UnsupportedOperationException();
+    }
+
     public static final Boolean RETRY_ON_FAILURE = true;
     public static final String PROTOCOL = "https"; // protocol
     public static final String HOST = "api.contentstack.io"; // host of the url
@@ -13,23 +17,8 @@ public final class Constants {
     public static final String SDK_VERSION = "v0.0.1";
     public static String BASE_URL = PROTOCOL + "://" + HOST + "/" + VERSION + "/";
 
-    private Constants() {
-        throw new UnsupportedOperationException();
-    }
-
-    // KEYS FROM HeaderInterceptor
-    // CAUTION: DO NOT MODIFY STRINGS KEYS/VALUES
-    public static final String AUTHTOKEN = "authtoken";
-    public static final String X_USER_AGENT_KEY = "X-User-Agent";
-    public static final String X_USER_AGENT_VALUE = SDK_NAME + "/" + SDK_VERSION;
-    public static final String User_AGENT = "User-Agent";
-    public static final String CONTENT_TYPE = "Content-Type";
-    public static final String APPLICATION_JSON = "application/json";
-
-
-    // Error Message // Information Message
-    public static final String USER_ALREADY_LOGGED_IN = "User is already loggedIn, " +
-            "Please logout then try to login again";
-    public static final String LOGIN_FLAG = "Please Login to access user instance";
+    public static final String USER_ALREADY_LOGGED_IN = "User is already loggedIn, "
+            + "Please logout then try to login again";
+    public static final String LOGIN_FLAG = "Please login to access user instance";
 
 }
