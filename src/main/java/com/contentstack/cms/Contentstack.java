@@ -1,8 +1,8 @@
 package com.contentstack.cms;
 
-import com.contentstack.cms.core.Constants;
 import com.contentstack.cms.core.Error;
 import com.contentstack.cms.core.HeaderInterceptor;
+import com.contentstack.cms.core.Util;
 import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.user.LoginDetails;
 import com.contentstack.cms.user.User;
@@ -57,7 +57,7 @@ public class Contentstack {
      */
     public User user() {
         if (this.authtoken == null)
-            throw new NullPointerException(Constants.LOGIN_FLAG);
+            throw new NullPointerException(Util.LOGIN_FLAG);
         user = new User(this.instance);
         return user;
     }
@@ -99,7 +99,7 @@ public class Contentstack {
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
-            throw new IllegalStateException(Constants.USER_ALREADY_LOGGED_IN);
+            throw new IllegalStateException(Util.USER_ALREADY_LOGGED_IN);
         user = new User(this.instance);
         Response<LoginDetails> response = user.login(emailId, password).execute();
         setupLoginCredentials(response);
@@ -137,6 +137,7 @@ public class Contentstack {
         return new Organization(this.instance);
     }
 
+
     /**
      * Instantiates a new Contentstack.
      *
@@ -152,7 +153,6 @@ public class Contentstack {
         this.retryOnFailure = builder.retryOnFailure;
         this.proxy = builder.proxy;
         this.headerInterceptor = builder.headerInterceptor;
-        // user = new User(this.instance);
     }
 
     /**
@@ -163,11 +163,11 @@ public class Contentstack {
         private HeaderInterceptor headerInterceptor;
         private String authtoken; // authtoken for client
         private Retrofit instance; // client instance
-        private String hostname = Constants.HOST; // Default Host for Contentstack API (default: api.contentstack.io)
-        private String port = Constants.PORT; // Default PORT for Contentstack API
-        private String version = Constants.VERSION; // Default Version for Contentstack API
-        private int timeout = Constants.TIMEOUT; // Default timeout 30 seconds
-        private Boolean retryOnFailure = Constants.RETRY_ON_FAILURE;// Default base url for contentstack
+        private String hostname = Util.HOST; // Default Host for Contentstack API (default: api.contentstack.io)
+        private String port = Util.PORT; // Default PORT for Contentstack API
+        private String version = Util.VERSION; // Default Version for Contentstack API
+        private int timeout = Util.TIMEOUT; // Default timeout 30 seconds
+        private Boolean retryOnFailure = Util.RETRY_ON_FAILURE;// Default base url for contentstack
 
         /* Instantiates a new Builder. */
         public Builder() {
@@ -257,7 +257,6 @@ public class Contentstack {
         }
 
         protected HeaderInterceptor getHeaderInterceptor() {
-            this.headerInterceptor = new HeaderInterceptor();
             return this.headerInterceptor;
         }
 
@@ -269,7 +268,7 @@ public class Contentstack {
         }
 
         private void validateClient(Contentstack contentstack) {
-            String baseUrl = Constants.PROTOCOL + "://" + this.hostname + "/" + version + "/";
+            String baseUrl = Util.PROTOCOL + "://" + this.hostname + "/" + version + "/";
             this.headerInterceptor = contentstack.headerInterceptor = new HeaderInterceptor();
             this.instance = new Retrofit.Builder()
                     .baseUrl(baseUrl)

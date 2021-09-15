@@ -27,7 +27,11 @@ public class OrgUnitTests {
     public static void setUp() {
         authtoken = Dotenv.load().get("auth_token");
         assert authtoken != null;
-        organization = new Contentstack.Builder().setAuthtoken(authtoken).build().organization();
+        organization = new Contentstack
+                .Builder()
+                .setAuthtoken(authtoken)
+                .build()
+                .organization();
     }
 
     @Test
@@ -98,7 +102,7 @@ public class OrgUnitTests {
         param.put("asc", "created_at");
         param.put("desc", "update_at");
         param.put("include_count", "true");
-        param.put("typeahead", "Contentstack");
+        param.put("typeahead", "contentstack");
         Request requestInfo = organization.getAll(param).request();
         Assertions.assertEquals("GET", requestInfo.method());
         Assertions.assertEquals(1, requestInfo.headers().names().size());
@@ -118,7 +122,7 @@ public class OrgUnitTests {
     @DisplayName("Tests get all organizations url request method")
     void testGetAllOrganizationsUrlRequestMethod() {
         Request requestInfo = organization.getAll(new HashMap<>()).request();
-        Assertions.assertEquals("GET", requestInfo.method());
+        Assertions.assertEquals("GET", requestInfo.method().toString());
     }
 
 //    @Test
