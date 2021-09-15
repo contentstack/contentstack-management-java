@@ -12,15 +12,9 @@ import lombok.Setter;
 @Setter
 public class LoginDetails {
 
-    /**
-     * The Notice.
-     */
     @SerializedName("notice")
     public String notice;
 
-    /**
-     * The User.
-     */
     @SerializedName("user")
     public UserModel user;
 

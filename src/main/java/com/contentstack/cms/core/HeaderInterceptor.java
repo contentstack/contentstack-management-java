@@ -1,5 +1,6 @@
 package com.contentstack.cms.core;
 
+import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -15,14 +16,11 @@ import java.io.IOException;
  */
 public class HeaderInterceptor implements Interceptor {
 
-    public static final String SDK_NAME = "contentstack-management-java";
-    public static final String SDK_VERSION = "v0.0.1";
-    public static final String AUTHTOKEN = "authtoken";
-    public static final String X_USER_AGENT_KEY = "X-User-Agent";
-    public static final String X_USER_AGENT_VALUE = SDK_NAME + "/" + SDK_VERSION;
-    public static final String User_AGENT = "User-Agent";
-    public static final String CONTENT_TYPE = "Content-Type";
-    public static final String APPLICATION_JSON = "application/json";
+    public final String AUTHTOKEN = "authtoken";
+    public final String X_USER_AGENT_KEY = "X-User-Agent";
+    public final String User_AGENT = "User-Agent";
+    public final String CONTENT_TYPE = "Content-Type";
+    public final String APPLICATION_JSON = "application/json";
 
     public HeaderInterceptor() {
     }
@@ -44,12 +42,16 @@ public class HeaderInterceptor implements Interceptor {
     @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request.Builder request =
-                chain.request()
-                        .newBuilder()
-                        .addHeader(X_USER_AGENT_KEY, X_USER_AGENT_VALUE)
-                        .addHeader(User_AGENT, Util.defaultUserAgent())
-                        .addHeader(CONTENT_TYPE, APPLICATION_JSON);
+        // Adding User agent properties
+        String xUserAgent = Util.SDK_NAME + "/" + Util.SDK_VERSION;
+        // Adding static header agent properties
+        Headers headers = new Headers.Builder()
+                .add(X_USER_AGENT_KEY, xUserAgent)
+                .add(User_AGENT, Util.defaultUserAgent())
+                .add(CONTENT_TYPE, APPLICATION_JSON)
+                .build();
+        Request.Builder request = chain.request().newBuilder()
+                .headers(headers);
 
         if (this.authtoken != null) {
             request.addHeader(AUTHTOKEN, this.authtoken);
