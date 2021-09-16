@@ -26,10 +26,10 @@ public interface UserService {
     @PUT("user/reset_password")
     Call<ResponseBody> resetPassword();
 
-    @DELETE("user/user-session")
+    @DELETE("user-session")
     Call<ResponseBody> logout(@Header("authtoken") String authtoken);
 
-    @DELETE("user/user-session")
+    @DELETE("user-session")
     Call<ResponseBody> logout();
 
     @GET("user")

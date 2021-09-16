@@ -1,7 +1,7 @@
 package com.contentstack.cms;
 
+import com.contentstack.cms.core.AuthInterceptor;
 import com.contentstack.cms.core.Error;
-import com.contentstack.cms.core.HeaderInterceptor;
 import com.contentstack.cms.core.Util;
 import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.user.LoginDetails;
@@ -28,7 +28,7 @@ public class Contentstack {
     protected Retrofit instance;
     protected Boolean retryOnFailure;
     protected Proxy proxy;
-    protected HeaderInterceptor headerInterceptor;
+    protected AuthInterceptor interceptor;
     protected User user;
 
     /**
@@ -40,7 +40,7 @@ public class Contentstack {
      * <b>Example:</b>
      *
      * <pre>
-     * Client client = new Client.Builder().setAuthtoken("authtoken").build();
+     * Contentstack client = new Contentstack.Builder().setAuthtoken("authtoken").build();
      * User userInstance = client.user();
      * </pre>
      *
@@ -78,8 +78,8 @@ public class Contentstack {
      * <b>Example:</b>
      *
      * <pre>
-     *  Client client = new Client.Builder().setAuthtoken("authtoken").build();
-     *  User userInstance = client.user();
+     * Contentstack contentstack = new Contentstack.Builder().setAuthtoken("authtoken").build();
+     * Response<LoginDetails> login = contentstack.login();
      *
      * Access more other user functions from the userInstance
      * </pre>
@@ -88,8 +88,8 @@ public class Contentstack {
      * <b>OR: </b>
      *
      * <pre>
-     * Client client = new Client.Builder().build();
-     * User userInstance = client.login("emailId", "password");
+     * Contentstack client = new Contentstack.Builder().build();
+     * Response<LoginDetails> login = client.login("emailId", "password");
      * </pre>
      * <p>
      *
@@ -106,11 +106,12 @@ public class Contentstack {
         return response;
     }
 
+    // gets authtoken from the loggedIn user for further uses
     private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
         if (loginResponse.isSuccessful()) {
             assert loginResponse.body() != null;
             this.authtoken = loginResponse.body().getUser().getAuthtoken();
-            this.headerInterceptor.setAuthtoken(this.authtoken);
+            this.interceptor.setAuthtoken(this.authtoken);
         } else {
             assert loginResponse.errorBody() != null;
             String errorJsonString = loginResponse.errorBody().string();
@@ -118,22 +119,56 @@ public class Contentstack {
         }
     }
 
+    /*
+     * The Log out of your account call is used to
+     * sign out the user of Contentstack account
+     *
+     * <b> Example </b>
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * User userInstance = client.logout();
+     * </pre>
+     * <p>
+     */
     Response<ResponseBody> logout() throws IOException {
         user = new User(this.instance);
         return user.logoutWithAuthtoken(this.authtoken).execute();
     }
 
+    /*
+     * The Log out of your account using authtoken is used to
+     * sign out the user of Contentstack account
+     *
+     * <b> Example </b>
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * User userInstance = client.logoutWithAuthtoken("authtoken");
+     * </pre>
+     * <p>
+     */
     Response<ResponseBody> logoutWithAuthtoken(String authtoken) throws IOException {
         user = new User(this.instance);
+        this.authtoken = authtoken;
         if (authtoken != null) {
             return user.logoutWithAuthtoken(authtoken).execute();
         }
         return logout();
     }
 
+    /*
+     * Organization is the top-level entity in the hierarchy of Contentstack,
+     * consisting of stacks and stack resources, and users.
+     * Organization allows easy management of projects as well as users within the Organization.
+     *
+     * <b> Example </b>
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * Organization org = client.organization();
+     * </pre>
+     */
     public Organization organization() {
         if (this.authtoken == null)
-            throw new NullPointerException("Please LogIn to access user instance");
+            throw new NullPointerException("Please Login to access user instance");
         return new Organization(this.instance);
     }
 
@@ -150,24 +185,22 @@ public class Contentstack {
         this.timeout = builder.timeout;
         this.authtoken = builder.authtoken;
         this.instance = builder.instance;
-        this.retryOnFailure = builder.retryOnFailure;
+        this.retryOnFailure = builder.retry;
         this.proxy = builder.proxy;
-        this.headerInterceptor = builder.headerInterceptor;
+        this.interceptor = builder.authInterceptor;
     }
 
-    /**
-     * The type Builder.
-     */
+
     public static class Builder {
         public Proxy proxy;
-        private HeaderInterceptor headerInterceptor;
+        private AuthInterceptor authInterceptor;
         private String authtoken; // authtoken for client
         private Retrofit instance; // client instance
         private String hostname = Util.HOST; // Default Host for Contentstack API (default: api.contentstack.io)
         private String port = Util.PORT; // Default PORT for Contentstack API
         private String version = Util.VERSION; // Default Version for Contentstack API
         private int timeout = Util.TIMEOUT; // Default timeout 30 seconds
-        private Boolean retryOnFailure = Util.RETRY_ON_FAILURE;// Default base url for contentstack
+        private Boolean retry = Util.RETRY_ON_FAILURE;// Default base url for contentstack
 
         /* Instantiates a new Builder. */
         public Builder() {
@@ -196,8 +229,8 @@ public class Contentstack {
          * @param retry the retry
          * @return the retry on failure
          */
-        public Builder setRetryOnFailure(@NotNull Boolean retry) {
-            this.retryOnFailure = retry;
+        public Builder setRetry(@NotNull Boolean retry) {
+            this.retry = retry;
             return this;
         }
 
@@ -256,11 +289,6 @@ public class Contentstack {
             return this;
         }
 
-        protected HeaderInterceptor getHeaderInterceptor() {
-            return this.headerInterceptor;
-        }
-
-
         public Contentstack build() {
             Contentstack contentstack = new Contentstack(this);
             validateClient(contentstack);
@@ -269,18 +297,18 @@ public class Contentstack {
 
         private void validateClient(Contentstack contentstack) {
             String baseUrl = Util.PROTOCOL + "://" + this.hostname + "/" + version + "/";
-            this.headerInterceptor = contentstack.headerInterceptor = new HeaderInterceptor();
+            this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
             this.instance = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient(this.retryOnFailure))
+                    .client(httpClient(this.retry))
                     .build();
             contentstack.instance = this.instance;
         }
 
         private OkHttpClient httpClient(Boolean retryOnFailure) {
             return new OkHttpClient.Builder()
-                    .addInterceptor(this.headerInterceptor)
+                    .addInterceptor(this.authInterceptor)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
                     .retryOnConnectionFailure(retryOnFailure)
@@ -288,7 +316,8 @@ public class Contentstack {
         }
 
         private HttpLoggingInterceptor logger() {
-            return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE);
+            return new HttpLoggingInterceptor()
+                    .setLevel(HttpLoggingInterceptor.Level.NONE);
         }
 
     }

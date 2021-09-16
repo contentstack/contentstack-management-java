@@ -26,47 +26,6 @@ public class ContentstackAPITest {
     }
 
     @Test
-    void testCredentialsAuthtoken() {
-        String authToken = dotenv.get("auth_token");
-        Assertions.assertNotNull(authToken, "authToken is not null");
-    }
-
-    @Test
-    void testCredentialsUsername() {
-        Assertions.assertNotNull(dotenv.get("username"), "username/ email is not null");
-    }
-
-    @Test
-    void testCredentialsPassword() {
-        Assertions.assertNotNull(dotenv.get("password"), "password is not null");
-    }
-
-    @Test
-    void testCredentialsDeliveryToken() {
-        Assertions.assertNotNull(dotenv.get("delivery_token"), "deliveryToekn is not null");
-    }
-
-    @Test
-    void testCredentialsApiKey() {
-        Assertions.assertNotNull(dotenv.get("api_key"), "apikey is not null");
-    }
-
-    @Test
-    void testCredentialsEnv() {
-        Assertions.assertNotNull(dotenv.get("environment"), "environment is not null");
-    }
-
-    @Test
-    void testCredentialsHost() {
-        Assertions.assertNotNull(dotenv.get("host"), "host is not null");
-    }
-
-    @Test
-    void testCredentialsOrganizationUid() {
-        Assertions.assertNotNull(dotenv.get("organizations_uid"), "organization uid is not null");
-    }
-
-    @Test
     void testContentstackUserLogin() throws IOException {
         String authToken = dotenv.get("auth_token");
         Contentstack contentstack = new Contentstack
@@ -88,5 +47,75 @@ public class ContentstackAPITest {
         Assertions.assertEquals(authToken, contentstack.authtoken);
     }
 
+
+    @Test
+    void testContentstackUserLoginWithNullAuthtoken() throws IOException {
+        Contentstack contentstack = new Contentstack.Builder()
+                .setAuthtoken(null)
+                .build();
+        try {
+            contentstack.user().getUser().execute();
+        } catch (Exception e) {
+            Assertions.assertEquals("Please login to access user instance", e.getLocalizedMessage());
+        }
+        Assertions.assertNull(contentstack.authtoken);
+    }
+
+    @Test
+    void testContentstackUserLoginWithInvalidCredentials() throws IOException {
+        Contentstack contentstack = new Contentstack.Builder()
+                .build();
+        try {
+            contentstack.login("invalid@credentials.com", "invalid@password");
+        } catch (Exception e) {
+            Assertions.assertEquals("Please login to access user instance", e.getLocalizedMessage());
+        }
+        Assertions.assertNull(contentstack.authtoken);
+    }
+
+
+    @Test
+    void testContentstackUserLoginWhenAlreadyLoggedIn() throws IOException {
+        String authToken = dotenv.get("auth_token");
+        Contentstack contentstack = new Contentstack.Builder()
+                .setAuthtoken(authToken)
+                .build();
+        try {
+            contentstack.login("invalid@credentials.com", "invalid@password");
+        } catch (Exception e) {
+            Assertions.assertEquals("User is already loggedIn, Please logout then try to login again", e.getLocalizedMessage());
+        }
+        Assertions.assertEquals(authToken, contentstack.authtoken);
+    }
+
+    @Test
+    void testLogoutWithAuthtoken() throws IOException {
+        String authToken = dotenv.get("auth_token");
+        Contentstack contentstack = new Contentstack
+                .Builder()
+                .setAuthtoken(authToken)
+                .build();
+        Response<ResponseBody> status = contentstack.logoutWithAuthtoken(authToken);
+        if (status.isSuccessful()) {
+            System.out.println(status.body().string());
+            Assertions.assertEquals(200, status.code());
+        } else {
+            Error error = new Gson().fromJson(status.errorBody().string(), Error.class);
+            Assertions.assertEquals(105, error.getErrorCode());
+        }
+    }
+
+    @Test
+    void testLogoutFromContentstack() throws IOException {
+        Contentstack contentstack = new Contentstack.Builder().build();
+        Response<ResponseBody> logout = contentstack.logoutWithAuthtoken(null);
+        if (logout.isSuccessful()) {
+            Assertions.assertEquals(200, logout.code());
+        } else {
+            Error error = new Gson().fromJson(logout.errorBody().string(), Error.class);
+            Assertions.assertEquals(105, error.getErrorCode());
+        }
+        Assertions.assertNull(contentstack.authtoken);
+    }
 
 }

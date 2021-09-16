@@ -537,7 +537,7 @@ public class UserUnitTests {
                 .assertEquals("api.contentstack.io",
                         requestInfo.url().host());
         Assertions
-                .assertEquals("/v3/user/user-session",
+                .assertEquals("/v3/user-session",
                         requestInfo.url().encodedPath());
     }
 
@@ -616,7 +616,7 @@ public class UserUnitTests {
                 .assertEquals("api.contentstack.io",
                         requestInfo.url().host());
         Assertions
-                .assertEquals("/v3/user/user-session",
+                .assertEquals("/v3/user-session",
                         requestInfo.url().encodedPath());
     }
 

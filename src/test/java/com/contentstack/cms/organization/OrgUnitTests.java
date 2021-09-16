@@ -6,7 +6,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import retrofit2.Retrofit;
 
@@ -27,13 +26,10 @@ public class OrgUnitTests {
     public static void setUp() {
         authtoken = Dotenv.load().get("auth_token");
         assert authtoken != null;
-        organization = new Contentstack
-                .Builder()
+        organization = new Contentstack.Builder()
                 .setAuthtoken(authtoken)
-                .build()
-                .organization();
+                .build().organization();
     }
-
     @Test
     public void testConstructorIsPrivate() throws NoSuchMethodException {
         Constructor<User> constructor = User.class.getDeclaredConstructor();
@@ -41,7 +37,6 @@ public class OrgUnitTests {
         constructor.setAccessible(true);
         assertThrows(InvocationTargetException.class, constructor::newInstance);
     }
-
     @Test
     void testConstructorIsPrivateInOrganization() throws NoSuchMethodException {
         Constructor<Organization> constructor = Organization.class.getDeclaredConstructor();
@@ -51,37 +46,588 @@ public class OrgUnitTests {
     }
 
     @Test
-    @DisplayName("init org constructor with authtoken")
-    void testConstructorWithAuthtoken() {
-        Organization organization = new Organization(authtoken);
-        assertEquals(authtoken, organization.authtoken);
-    }
-
-    @Test
-    @DisplayName("init org constructor with retrofit")
-    void testConstructorWithRetrofitClient() {
-        organization = new Organization(authtoken);
-        assertEquals(authtoken, organization.authtoken);
-    }
-
-    @Test
-    @DisplayName("init org constructor with retrofit and authtoken")
     void testConstructorWithRetrofitClientAndAuthtoken() {
         // create retrofit client
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.contentstack.io/v3/").build();
-        Organization organization = new Organization(retrofit, authtoken);
+        Organization organization = new Organization(retrofit);
         assertEquals("https://api.contentstack.io/v3/", retrofit.baseUrl().toString());
-        assertEquals(authtoken, organization.authtoken);
     }
 
     @Test
     void testOrganizationGetAllRelativeUrl() {
         Request requestInfo = organization.getAll().request();
         Assertions.assertEquals("/v3/organizations", requestInfo.url().encodedPath());
-        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size());
-        Assertions.assertNull(requestInfo.url().query());
-        Assertions.assertTrue(requestInfo.url().isHttps());
     }
+
+
+    //////////////////////////////
+    @Test
+    void testGetAllMethod() {
+        Request requestInfo = organization.getAll().request();
+        Assertions.assertEquals("GET", requestInfo.method());
+    }
+
+    @Test
+    void testGetAllBaseUrl() {
+        Request requestInfo = organization.getAll().request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations",
+                requestInfo.url().toString());
+    }
+
+    @Test
+    void testGetAllEncodedPath() {
+        Request requestInfo = organization.getAll().request();
+        Assertions.assertEquals("/v3/organizations",
+                requestInfo.url().encodedPath());
+    }
+
+    @Test
+    void testGetAllCompleteUrl() {
+        HashMap<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("limit", 5);
+        mapQuery.put("skip", 5);
+        mapQuery.put("asc", "created_at");
+        mapQuery.put("desc", "update_at");
+        mapQuery.put("include_count", "true");
+        mapQuery.put("typeahead", "contentstack");
+        Request requestInfo = organization.getAll(mapQuery).request();
+        Assertions.assertEquals("asc=created_at&limit=5&skip=5&include_count=true&typeahead=contentstack&desc=update_at",
+                requestInfo.url().query());
+    }
+
+    @Test
+    void testGetAllHeaders() {
+        Request requestInfo = organization.getAll().request();
+        Assertions.assertEquals("",
+                requestInfo.url().queryParameterNames());
+    }
+
+    @Test
+    void testGetAllRequestParam() {
+        HashMap<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("limit", 5);
+        mapQuery.put("skip", 5);
+        Request requestInfo = organization.getAll(mapQuery).request();
+        Assertions.assertEquals("limit=5&skip=5",
+                requestInfo.url().query());
+    }
+    /////////////////////////////////
+
+
+    //////////////////////////////
+    @Test
+    void testGetSingleMethod() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getSingleOrganization(organizationUid).request();
+        Assertions.assertEquals("GET",
+                requestInfo.method());
+    }
+
+    @Test
+    void testGetSingleBaseUrl() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getSingleOrganization(organizationUid).request();
+        Assertions.assertEquals("api.contentstack.io",
+                requestInfo.url().host());
+    }
+
+    @Test
+    void testGetSingleEncodedPath() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getSingleOrganization(organizationUid).request();
+        Assertions.assertEquals("/v3/organizations/" + organizationUid,
+                requestInfo.url().encodedPath());
+    }
+
+    @Test
+    void testGetSingleCompleteUrl() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_plan", true);
+        Request requestInfo = organization.getSingleOrganization(organizationUid, mapQuery).request();
+        Assertions.assertEquals("include_plan=true",
+                requestInfo.url().query());
+    }
+
+    @Test
+    void testGetSingleHeaders() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getSingleOrganization(organizationUid).request();
+        Assertions.assertEquals("",
+                requestInfo.headers());
+    }
+
+    /////////////////////////////////
+
+
+    //////////////////////////////
+    @Test
+    void testGetRoleMethod() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getRoles(organizationUid).request();
+        Assertions.assertEquals("GET",
+                requestInfo.method());
+    }
+
+    @Test
+    void testGetRoleBaseUrl() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getRoles(organizationUid).request();
+        Assertions.assertEquals("api.contentstack.io",
+                requestInfo.url().host());
+    }
+
+    @Test
+    void testGetRoleEncodedPath() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getRoles(organizationUid).request();
+        Assertions.assertEquals("/v3/organizations/" + organizationUid + "/roles",
+                requestInfo.url().encodedPath());
+    }
+
+    @Test
+    void testGetRoleCompleteUrl() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getRoles(organizationUid).request();
+        Assertions.assertEquals("/v3/organizations/" + organizationUid + "/roles",
+                requestInfo.url().encodedPath());
+    }
+
+    @Test
+    void testGetRoleHeaders() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getRoles(organizationUid).request();
+        Assertions.assertEquals("",
+                requestInfo.headers("authtoken"));
+    }
+
+    @Test
+    void testGetRoleRequestBody() {
+        //limit={limit_value}&skip={skip_value}&asc={field_uid}&desc={field_uid}&include_count={boolean_value}&include_stack_roles={boolean_value}
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> queryParams = new HashMap<>();
+        queryParams.put("limit", 4);
+        queryParams.put("skip", 4);
+        Request requestInfo = organization.getRoles(organizationUid, queryParams).request();
+        Assertions.assertEquals("limit=4&skip=4",
+                requestInfo.url().encodedQuery());
+    }
+
+    @Test
+    void testGetRoleEncodedPathWithOptParams() {
+        //limit={limit_value}&skip={skip_value}&asc={field_uid}&desc={field_uid}&include_count={boolean_value}&include_stack_roles={boolean_value}
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> queryParams = new HashMap<>();
+        queryParams.put("limit", 4);
+        queryParams.put("skip", 4);
+        Request requestInfo = organization.getRoles(orgUid, queryParams).request();
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/roles",
+                requestInfo.url().encodedPath());
+    }
+
+    @Test
+    void testGetRoleRequestParam() {
+        String organizationUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> queryParams = new HashMap<>();
+        queryParams.put("limit", 4);
+        queryParams.put("skip", 4);
+        queryParams.put("asc", "uid128038438984");
+        queryParams.put("desc", "uid128038438984");
+        queryParams.put("include_count", true);
+        queryParams.put("include_stack_roles", true);
+        Request requestInfo = organization.getRoles(organizationUid, queryParams).request();
+        Assertions.assertEquals("asc=uid128038438984&include_stack_roles=true&limit=4&skip=4&include_count=true&desc=uid128038438984",
+                requestInfo.url().encodedQuery());
+    }
+
+
+    //////////////////////////////
+    @Test
+    void testInviteUserMethod() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.inviteUser(orgUid).request();
+        Assertions.assertEquals("POST", requestInfo.method());
+    }
+
+    @Test
+    void testInviteUserBaseUrl() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.inviteUser(orgUid).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + orgUid + "/share", requestInfo.url().toString());
+    }
+
+    @Test
+    void testInviteUserHeaders() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.inviteUser(orgUid).request();
+        Assertions.assertEquals("", requestInfo.headers());
+    }
+
+    @Test
+    void testInviteUserRequestBody() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.inviteUser(orgUid).request();
+        Assertions.assertNull(requestInfo.url().encodedQuery());
+    }
+
+    @Test
+    void testInviteUserRequestParam() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.inviteUser(orgUid).request();
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/share",
+                requestInfo.url().encodedPath());
+    }
+    /////////////////////////////////
+
+
+    //////////////////////////////
+    @Test
+    void testRemoveUsersMethod() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.removeUsers(orgUid).request();
+        Assertions.assertEquals("DELETE",
+                requestInfo.method());
+    }
+
+    @Test
+    void testRemoveUsersBaseUrl() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.removeUsers(orgUid).request();
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/share",
+                requestInfo.url().encodedPath());
+    }
+
+
+    @Test
+    void testRemoveUsersCompleteUrl() {
+        String host = "https://api.contentstack.io";
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.removeUsers(orgUid).request();
+        Assertions.assertEquals(host + "/v3/organizations/" + orgUid + "/share",
+                requestInfo.url().toString());
+    }
+
+    @Test
+    void testRemoveUsersHeaders() {
+    }
+
+    @Test
+    void testRemoveUsersRequestBody() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.removeUsers(orgUid).request();
+        Assertions.assertEquals(null,
+                requestInfo.url().query());
+    }
+
+    /////////////////////////////////
+
+
+    //////////////////////////////
+    @Test
+    void testResendInvitationMethod() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
+        Assertions.assertEquals("GET",
+                requestInfo.method());
+    }
+
+    @Test
+    void testResendInvitationBaseUrl() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
+        Assertions.assertEquals("api.contentstack.io",
+                requestInfo.url().host());
+    }
+
+    @Test
+    void testResendInvitationEncodedPath() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/share/invitation_uid/resend_invitation",
+                requestInfo.url().encodedPath());
+    }
+
+
+    @Test
+    void testResendInvitationHeaders() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
+        Assertions.assertEquals("",
+                requestInfo.headers());
+    }
+
+    @Test
+    void testResendInvitationRequestBody() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
+        Assertions.assertNull(
+                requestInfo.url().query());
+    }
+
+    @Test
+    void testResendInvitationsRequestParam() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
+        Assertions.assertNull(
+                requestInfo.url().encodedQuery());
+    }
+    /////////////////////////////////
+
+
+    //////////////////////////////
+    @Test
+    void testGetAllInvitationMethod() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> queryParams = new HashMap<>();
+        queryParams.put("limit", 4);
+        queryParams.put("skip", 4);
+        Request requestInfo = organization.getAllInvitations(orgUid, queryParams).request();
+        Assertions.assertEquals("limit=4&skip=4",
+                requestInfo.url().encodedQuery());
+    }
+
+    @Test
+    void testGetAllInvitationBaseUrl() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getAllInvitations(orgUid).request();
+        Assertions.assertEquals("GET",
+                requestInfo.method());
+    }
+
+    @Test
+    void testGetAllInvitationEncodedPath() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> queryParams = new HashMap<>();
+        queryParams.put("limit", 4);
+        queryParams.put("skip", 4);
+        Request requestInfo = organization.getAllInvitations(orgUid, queryParams).request();
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/share",
+                requestInfo.url().encodedPath());
+    }
+
+    @Test
+    void testGetAllInvitationHeaders() {
+    }
+
+
+    @Test
+    void testGetAllInvitationsRequestParam() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> queryParams = new HashMap<>();
+        queryParams.put("limit", 4);
+        queryParams.put("skip", 4);
+        Request requestInfo = organization.getAllInvitations(orgUid, queryParams).request();
+        Assertions.assertEquals("limit=4&skip=4",
+                requestInfo.url().encodedQuery());
+    }
+    /////////////////////////////////
+
+
+    //////////////////////////////
+    @Test
+    void testTransferOwnershipMethod() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        String transferToEmail = "ishaileshmishra@gmail.com";
+        Request requestInfo = organization.transferOwnership(orgUid, transferToEmail).request();
+        Assertions.assertEquals("POST",
+                requestInfo.method());
+    }
+
+    @Test
+    void testTransferOwnershipEncodedPath() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        String transferToEmail = "ishaileshmishra@gmail.com";
+        Request requestInfo = organization.transferOwnership(orgUid, transferToEmail).request();
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/transfer-ownership",
+                requestInfo.url().encodedPath());
+    }
+
+
+    @Test
+    void testTransferOwnershipHeaders() {
+    }
+
+    @Test
+    void testTransferOwnershipRequestBody() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        String transferToEmail = "ishaileshmishra@gmail.com";
+        Request requestInfo = organization.transferOwnership(orgUid, transferToEmail).request();
+        Assertions.assertNull(
+                requestInfo.url().encodedQuery());
+    }
+
+
+    /////////////////////////////////
+
+    //////////////////////////////
+    @Test
+    void testGetStacksMethod() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("limit", 4);
+        hashMap.put("skip", 4);
+        Request requestInfo = organization.getStacks(orgUid, hashMap).request();
+        Assertions.assertEquals("GET",
+                requestInfo.method());
+    }
+
+    @Test
+    void testGetStacksBaseUrl() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("limit", 4);
+        hashMap.put("skip", 4);
+        Request requestInfo = organization.getStacks(orgUid, hashMap).request();
+        Assertions.assertEquals("api.contentstack.io",
+                requestInfo.url().host());
+    }
+
+    @Test
+    void testGetStacksEncodedPath() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("limit", 4);
+        hashMap.put("skip", 4);
+        hashMap.put("asc", false);
+        hashMap.put("desc", true);
+        hashMap.put("include_count", true);
+        hashMap.put("typehead", "contentstack");
+        Request requestInfo = organization.getStacks(orgUid, hashMap).request();
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/stacks",
+                requestInfo.url().encodedPath());
+    }
+
+
+    @Test
+    void testGetStacksHeaders() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("limit", 4);
+        hashMap.put("skip", 4);
+        hashMap.put("asc", false);
+        hashMap.put("desc", true);
+        Request requestInfo = organization.getStacks(orgUid, hashMap).request();
+        Assertions.assertEquals("",
+                requestInfo.headers());
+    }
+
+    @Test
+    void testGetStacksRequestBody() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("limit", 4);
+        hashMap.put("skip", 4);
+        hashMap.put("asc", false);
+        hashMap.put("desc", true);
+        hashMap.put("include_count", true);
+        hashMap.put("typehead", "contentstack");
+        Request requestInfo = organization.getStacks(orgUid, hashMap).request();
+        Assertions.assertEquals("asc=false&typehead=contentstack&limit=4&skip=4&include_count=true&desc=true",
+                requestInfo.url().query());
+    }
+
+    @Test
+    void testGetStacksEncodedQueryParam() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("limit", 4);
+        hashMap.put("skip", 4);
+        hashMap.put("asc", false);
+        hashMap.put("desc", true);
+        hashMap.put("include_count", true);
+        hashMap.put("typehead", "contentstack");
+        Request requestInfo = organization.getStacks(orgUid, hashMap).request();
+        Assertions.assertEquals("asc=false&typehead=contentstack&limit=4&skip=4&include_count=true&desc=true",
+                requestInfo.url().encodedQuery());
+    }
+    /////////////////////////////////
+
+    //////////////////////////////
+    @Test
+    void testGetLogsMethod() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsDetails(orgUid).request();
+        Assertions.assertEquals("GET", requestInfo.method());
+    }
+
+    @Test
+    void testGetLogsBaseUrl() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsDetails(orgUid).request();
+        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
+    }
+
+    @Test
+    void testGetLogsEncodedPath() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsDetails(orgUid).request();
+        Assertions.assertEquals("/v3/organizations/blt4444c44ea4ddf444/logs", requestInfo.url().encodedPath());
+    }
+
+    @Test
+    void testGetLogsHeaders() {
+    }
+
+    @Test
+    void testGetLogsRequestBody() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsDetails(orgUid).request();
+        Assertions.assertNull(
+                requestInfo.url().encodedQuery());
+    }
+
+    @Test
+    void testGetLogsRequestParam() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsDetails(orgUid).request();
+        Assertions.assertNull(
+                requestInfo.url().query());
+    }
+    /////////////////////////////////
+
+
+    //////////////////////////////
+    @Test
+    void testGetLogItemsMethod() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsItem(orgUid, "idlogUid12345").request();
+        Assertions.assertEquals("GET", requestInfo.method());
+    }
+
+    @Test
+    void testGetLogItemsBaseUrl() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsDetails(orgUid).request();
+        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
+    }
+
+    @Test
+    void testGetLogItemsEncodedPath() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsItem(orgUid, "idlogUid12345").request();
+        Assertions.assertEquals("/v3/organizations/blt4444c44ea4ddf444/logs/idlogUid12345", requestInfo.url().encodedPath());
+    }
+
+    @Test
+    void testGetLogItemsHeaders() {
+    }
+
+    @Test
+    void testGetLogItemsRequestBody() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsItem(orgUid, "idLogUid12345").request();
+        Assertions.assertNull(
+                requestInfo.url().encodedQuery());
+    }
+
+    @Test
+    void testGetLogItemsRequestParam() {
+        String orgUid = Dotenv.load().get("organizations_uid");
+        Request requestInfo = organization.getLogsItem(orgUid, "idLogUid12345").request();
+        Assertions.assertNull(
+                requestInfo.url().query());
+    }
+    /////////////////////////////////
 
     @Test
     void testGetAllWithQueryParamLimit() {
@@ -91,255 +637,7 @@ public class OrgUnitTests {
         Assertions.assertEquals("GET", requestInfo.method());
         assertTrue(isValid(requestInfo.url().toString()));
         assertEquals("3", requestInfo.url().queryParameter("limit"));
-        Assertions.assertEquals(1, requestInfo.url().queryParameterNames().size());
     }
 
-    @Test
-    void testGetAllOrganizationsWithAllParameters() {
-        HashMap<String, Object> param = new HashMap<>();
-        param.put("limit", 5);
-        param.put("skip", 5);
-        param.put("asc", "created_at");
-        param.put("desc", "update_at");
-        param.put("include_count", "true");
-        param.put("typeahead", "contentstack");
-        Request requestInfo = organization.getAll(param).request();
-        Assertions.assertEquals("GET", requestInfo.method());
-        Assertions.assertEquals(1, requestInfo.headers().names().size());
-        assertTrue(requestInfo.isHttps());
-        assertTrue(isValid(requestInfo.url().toString()));
-        Assertions.assertEquals(param.size(), requestInfo.url().queryParameterNames().size());
-    }
-
-    @Test
-    @DisplayName("Tests get all organizations url host")
-    void testGetAllOrganizationsUrlHost() {
-        Request requestInfo = organization.getAll(new HashMap<>()).request();
-        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
-    }
-
-    @Test
-    @DisplayName("Tests get all organizations url request method")
-    void testGetAllOrganizationsUrlRequestMethod() {
-        Request requestInfo = organization.getAll(new HashMap<>()).request();
-        Assertions.assertEquals("GET", requestInfo.method().toString());
-    }
-
-//    @Test
-//    void testGetAllOrganizastionsUrlRequestHeaders() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//    }
-//
-//    @Test
-//    @DisplayName("Test get all organizations url request for single
-//            organisation")
-//            void testGetAllOrganizationsUrlRequestFewQueryParameters(){
-//            HashMap<String, String>queryParam = new HashMap<>();
-//            queryParam.put("limit", "1");
-//     queryParam.put("skip","1");
-//    Request requestInfo = organization.getAll(queryParam).request();
-//     Assertions.assertEquals(2,requestInfo.url().
-//
-//    queryParameterNames().
-//
-//    size());
-//}
-//
-//    // ======================================================================//
-//    // ======================================================================//
-//
-//    @Test
-//    @DisplayName("Test get single organizations with no query parameters")
-//    void testGetSingleWithoutQueryParameter() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(),
-//                "executes without parameter");
-//    }
-//
-//    @Test
-//    @DisplayName("Test get single organizations with all parameters")
-//    void testGetSingleOrganizationsWithAllParameters() {
-//        // Adding parameters to hashmap
-//        HashMap<String, String> queryParam = new HashMap<>();
-//        queryParam.put("include_plan", "true");
-//        Request requestInfo = organization.getAll(queryParam).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(queryParam.size(),
-//                requestInfo.url().queryParameterNames().size(),
-//                "executes with parameter");
-//        Assertions.assertEquals("include_plan=true",
-//                requestInfo.url().encodedQuery());
-//        Assertions.assertEquals(
-//                "https://" + requestInfo.url().host() + "/v3/organizations/" +
-//                        DEFAULT_ORG_UID + "?include_plan=true",
-//                requestInfo.url().toString());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get single organizations url host")
-//    void testGetSingleOrganizationsUrlHost() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get single organizations url request method")
-//    void testGetSingleOrganizationsUrlRequestMethod() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get single organizations url request")
-//    void testGetSingleOrganizationsUrlRequestHeaders() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get single organizations relative url")
-//    void testGetSingleOrganizationsRelativeUrl() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals("https://" + requestInfo.url().host() +
-//                        "/v3/organizations/" + DEFAULT_ORG_UID,
-//                requestInfo.url().toString());
-//    }
-//
-//    // ======================================================================//
-//    // ======================================================================//
-//
-//    @Test
-//    @DisplayName("Test get organizations role with no query parameters")
-//    void testGetRoleWithoutQueryParameter() {
-//        Request requestInfo = organization.getRoles(DEFAULT_ORG_UID, new
-//                HashMap<>()).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(),
-//                "executes without parameter");
-//    }
-//
-//    @Test
-//    @DisplayName("Test get organizations role with all parameters")
-//    void testGetRoleOrganizationsWithAllParameters() {
-//        // Adding parameters to hashmap
-//        HashMap<String, String> queryParam = new HashMap<>();
-//        queryParam.put("include_plan", "true");
-//        Request requestInfo = organization.getRoles(DEFAULT_ORG_UID,
-//                queryParam).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(queryParam.size(),
-//                requestInfo.url().queryParameterNames().size(),
-//                "executes with parameter");
-//        Assertions.assertEquals("include_plan=true",
-//                requestInfo.url().encodedQuery());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get organizations role url host")
-//    void testGetRoleOrganizationsUrlHost() {
-//        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, new
-//                HashMap<>()).request();
-//        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get organizations role url request method")
-//    void testGetRoleOrganizationsUrlRequestMethod() {
-//        Request requestInfo = organization.getRoles("org_uid", new
-//                HashMap<>()).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get organizations role url request")
-//    void testGetRoleOrganizationsUrlRequestHeaders() {
-//        Request requestInfo = organization.getRoles("org_uid", new
-//                HashMap<>()).request();
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get organizations role relative url")
-//    void testGetRoleOrganizationsRelativeUrl() {
-//        Request requestInfo = organization.getRoles("org_uid", new
-//                HashMap<>()).request();
-//        Assertions.assertEquals(
-//                "https://" + requestInfo.url().host() + "/v3/organizations/" +
-//                        DEFAULT_ORG_UID + "/roles",
-//                requestInfo.url().toString());
-//    }
-//
-//    @Test
-//    @DisplayName("Test get role with query parameters")
-//    void testGetRoleWithQueryParameter() {
-//        Map<String, String> mapQueryParam = new HashMap<>();
-//        mapQueryParam.putIfAbsent("limit", "10");
-//        mapQueryParam.putIfAbsent("skip", "2");
-//        Request requestInfo = organization.getRoles("org_uid",
-//                mapQueryParam).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(2, requestInfo.url().queryParameterNames().size(),
-//                "executes with query parameter");
-//    }
-//
-//    // Class<T> type
-//
-//    // ======================================================================//
-//    // ======================================================================//
-//
-//    @Test
-//    @DisplayName("Test Invite user with no query parameters")
-//    void testInviteUserWithNoParameter() {
-//
-//        Request requestInfo = organization.inviteUser(DEFAULT_ORG_UID).request();
-//
-//        Assertions.assertEquals("POST", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(),
-//                "executes without parameter");
-//        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" +
-//                        DEFAULT_ORG_UID + "/share",
-//                requestInfo.url().toString());
-//
-//        try {
-//            Response<ResponseBody> response =
-//                    organization.inviteUser(DEFAULT_ORG_UID).execute();
-//            boolean isAvail = response.isSuccessful();
-//            if (isAvail) {
-//                System.out.println(" response: " + response.body());
-//            } else {
-//                System.out.println(" response: " + response.errorBody());
-//            }
-//        } catch (IOException e) {
-//
-//            e.printStackTrace();
-//        }
-//
-//    }
 
 }
