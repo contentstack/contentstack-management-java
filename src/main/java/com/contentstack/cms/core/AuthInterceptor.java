@@ -14,15 +14,15 @@ import java.io.IOException;
  * going out and the corresponding responses coming back in. Typically,
  * interceptors add, remove, or transform headers on the request or response..
  */
-public class HeaderInterceptor implements Interceptor {
+public class AuthInterceptor implements Interceptor {
 
-    public final String AUTHTOKEN = "authtoken";
-    public final String X_USER_AGENT_KEY = "X-User-Agent";
-    public final String User_AGENT = "User-Agent";
-    public final String CONTENT_TYPE = "Content-Type";
-    public final String APPLICATION_JSON = "application/json";
+    private final String AUTHTOKEN = "authtoken";
+    private final String X_USER_AGENT_KEY = "X-User-Agent";
+    private final String User_AGENT = "User-Agent";
+    private final String CONTENT_TYPE = "Content-Type";
+    private final String APPLICATION_JSON = "application/json";
 
-    public HeaderInterceptor() {
+    public AuthInterceptor() {
     }
 
     /**
@@ -35,7 +35,11 @@ public class HeaderInterceptor implements Interceptor {
      *
      * @param authtoken the authtoken
      */
-    public HeaderInterceptor(String authtoken) {
+    public AuthInterceptor(String authtoken) {
+        this.authtoken = authtoken;
+    }
+
+    public void setAuthtoken(String authtoken) {
         this.authtoken = authtoken;
     }
 
@@ -59,7 +63,5 @@ public class HeaderInterceptor implements Interceptor {
         return chain.proceed(request.build());
     }
 
-    public void setAuthtoken(String authtoken) {
-        this.authtoken = authtoken;
-    }
+
 }

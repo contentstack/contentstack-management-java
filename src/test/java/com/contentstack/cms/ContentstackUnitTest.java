@@ -1,9 +1,11 @@
 package com.contentstack.cms;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -14,17 +16,116 @@ import java.net.Proxy;
 public class ContentstackUnitTest {
 
 
+    private static Dotenv dotenv;
+
+    @BeforeAll
+    public static void getCredentials() {
+        dotenv = Dotenv.load();
+    }
+
+    @Test
+    void testCredentialsAuthtoken() {
+        String authToken = dotenv.get("auth_token");
+        Assertions.assertNotNull(authToken, "authToken is not null");
+    }
+
+    @Test
+    void testCredentialsUsername() {
+        Assertions.assertNotNull(
+                dotenv.get("username"), "username/ email is not null");
+    }
+
+    @Test
+    void testCredentialsPassword() {
+        Assertions.assertNotNull(
+                dotenv.get("password"), "password is not null");
+    }
+
+    @Test
+    void testCredentialsDeliveryToken() {
+        Assertions.assertNotNull(
+                dotenv.get("delivery_token"), "deliveryToekn is not null");
+    }
+
+    @Test
+    void testCredentialsApiKey() {
+        Assertions.assertNotNull(
+                dotenv.get("api_key"), "apikey is not null");
+    }
+
+    @Test
+    void testCredentialsEnv() {
+        Assertions.assertNotNull(
+                dotenv.get("environment"), "environment is not null");
+    }
+
+    @Test
+    void testCredentialsHost() {
+        Assertions.assertNotNull(
+                dotenv.get("host"), "host is not null");
+    }
+
+    @Test
+    void testCredentialsOrganizationUid() {
+        Assertions.assertNotNull(
+                dotenv.get("organizations_uid"), "organization uid is not null");
+    }
+
     @Test
     void testDefaultClientInstance() {
         Contentstack client = new Contentstack.Builder().build();
-        System.out.println(client);
+        Assertions.assertEquals("api.contentstack.io", client.host);
+        Assertions.assertEquals("443", client.port);
+        Assertions.assertEquals("v3", client.version);
+        Assertions.assertEquals(30, client.timeout);
+        Assertions.assertNull(client.authtoken);
+        Assertions.assertNotNull(client);
+    }
 
-//        Assertions.assertEquals("api.contentstack.io", contentstack.host);
-//        Assertions.assertEquals("443", contentstack.port);
-//        Assertions.assertEquals("v3", contentstack.version);
-//        Assertions.assertEquals(30, contentstack.timeout);
-//        Assertions.assertNull(contentstack.authtoken);
-//        Assertions.assertNotNull(contentstack);
+    @Test
+    void testClientDefaultPort() {
+        Contentstack client = new Contentstack.Builder().build();
+        Assertions.assertEquals("api.contentstack.io", client.host);
+        Assertions.assertEquals("443", client.port);
+    }
+
+    @Test
+    void testClientDefaultHost() {
+        Contentstack client = new Contentstack.Builder().build();
+        Assertions.assertEquals("api.contentstack.io", client.host);
+    }
+
+    @Test
+    void testClientAPIDefaultVersion() {
+        Contentstack client = new Contentstack.Builder().build();
+        Assertions.assertEquals("v3", client.version);
+
+    }
+
+    @Test
+    void testClientDefaultTimeout() {
+        Contentstack client = new Contentstack.Builder().build();
+        Assertions.assertEquals(30, client.timeout);
+    }
+
+    @Test
+    void testClientDefaultAuthtoken() {
+        Contentstack client = new Contentstack.Builder().build();
+        Assertions.assertNull(client.authtoken);
+    }
+
+    @Test
+    void testClientIfNotNull() {
+        Contentstack client = new Contentstack.Builder().build();
+        Assertions.assertNull(client.authtoken);
+    }
+
+    @Test
+    void testClientDefaultHeaders() throws IOException {
+        Contentstack client = new Contentstack.Builder().build();
+        Response<ResponseBody> logout = client.logout();
+        Headers defaultHeaders = logout.headers();
+        Assertions.assertNotNull(defaultHeaders);
     }
 
 
@@ -85,7 +186,7 @@ public class ContentstackUnitTest {
     @Test
     void setRetryOnFailure() {
         Contentstack contentstack = new Contentstack.Builder()
-                .setRetryOnFailure(true)
+                .setRetry(true)
                 .build();
         Assertions.assertEquals(true, contentstack.retryOnFailure);
     }
@@ -117,31 +218,35 @@ public class ContentstackUnitTest {
 
     @Test
     void setTimeout() {
-        Contentstack contentstack = new Contentstack.Builder()
+        Contentstack contentstack = new Contentstack
+                .Builder()
                 .setTimeout(3)
                 .build();
         Assertions.assertEquals(3, contentstack.timeout);
     }
 
     @Test
-    void setAuthtoken() {
-        Contentstack contentstack = new Contentstack.Builder()
+    void testSetAuthtoken() {
+        Contentstack contentstack = new Contentstack
+                .Builder()
                 .setAuthtoken("authtoken_dummy")
                 .build();
         Assertions.assertEquals("authtoken_dummy", contentstack.authtoken);
     }
 
     @Test
-    void testLogoutFromContentstack() throws IOException {
-        Contentstack contentstack = new Contentstack.Builder()
-                .setAuthtoken("authtoken_dummy")
+    void testSetOrganizations() {
+        Contentstack client = new Contentstack
+                .Builder()
+                .setAuthtoken(null)
                 .build();
-        Response<ResponseBody> logout = contentstack.logout();
-        if (logout.isSuccessful()) {
-            assert logout.body() != null;
-            String responseString = logout.body().string();
+        Assertions.assertNull(client.authtoken);
+        try {
+            client.organization();
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            Assertions.assertEquals("Please Login to access user instance", e.getLocalizedMessage());
         }
-        Assertions.assertEquals("authtoken_dummy", contentstack.authtoken);
     }
 
 
