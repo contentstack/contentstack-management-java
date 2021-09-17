@@ -4,6 +4,7 @@ import com.contentstack.cms.core.AuthInterceptor;
 import com.contentstack.cms.core.Error;
 import com.contentstack.cms.core.Util;
 import com.contentstack.cms.organization.Organization;
+import com.contentstack.cms.stack.Stack;
 import com.contentstack.cms.user.LoginDetails;
 import com.contentstack.cms.user.User;
 import com.google.gson.Gson;
@@ -170,6 +171,25 @@ public class Contentstack {
         if (this.authtoken == null)
             throw new NullPointerException("Please Login to access user instance");
         return new Organization(this.instance);
+    }
+
+
+    /**
+     * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
+     * A stack is a space that stores the content of a project (a web or mobile property).
+     * Within a stack, you can create content structures, content entries, users, etc.
+     * related to the project..
+     * <p>
+     * <b> Example </b>
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * Stack org = client.stack();
+     * </pre>
+     */
+    public Stack stack() {
+        if (this.authtoken == null)
+            throw new NullPointerException("Please Login to access stack instance");
+        return new Stack(this.instance);
     }
 
 
