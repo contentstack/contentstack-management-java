@@ -1,7 +1,6 @@
 package com.contentstack.cms.organization;
 
 import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.user.User;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.junit.jupiter.api.Assertions;
@@ -9,13 +8,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import retrofit2.Retrofit;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 import static com.contentstack.cms.user.UserUnitTests.isValid;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OrgUnitTests {
 
@@ -30,20 +27,22 @@ public class OrgUnitTests {
                 .setAuthtoken(authtoken)
                 .build().organization();
     }
-    @Test
-    public void testConstructorIsPrivate() throws NoSuchMethodException {
-        Constructor<User> constructor = User.class.getDeclaredConstructor();
-        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
-        constructor.setAccessible(true);
-        assertThrows(InvocationTargetException.class, constructor::newInstance);
-    }
-    @Test
-    void testConstructorIsPrivateInOrganization() throws NoSuchMethodException {
-        Constructor<Organization> constructor = Organization.class.getDeclaredConstructor();
-        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
-        constructor.setAccessible(true);
-        assertThrows(InvocationTargetException.class, constructor::newInstance);
-    }
+//
+//    @Test
+//    public void testConstructorIsPrivate() throws NoSuchMethodException {
+//        Constructor<User> constructor = User.class.getDeclaredConstructor();
+//        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+//        constructor.setAccessible(true);
+//        assertThrows(InvocationTargetException.class, constructor::newInstance);
+//    }
+
+//    @Test
+//    void testConstructorIsPrivateInOrganization() throws NoSuchMethodException {
+//        Constructor<Organization> constructor = Organization.class.getDeclaredConstructor();
+//        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+//        constructor.setAccessible(true);
+//        assertThrows(InvocationTargetException.class, constructor::newInstance);
+//    }
 
     @Test
     void testConstructorWithRetrofitClientAndAuthtoken() {
@@ -95,12 +94,17 @@ public class OrgUnitTests {
                 requestInfo.url().query());
     }
 
+
     @Test
-    void testGetAllHeaders() {
-        Request requestInfo = organization.getAll().request();
-        Assertions.assertEquals("",
-                requestInfo.url().queryParameterNames());
+    void testGetAllCompleteQueryLimitSkip() {
+        HashMap<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("limit", 5);
+        mapQuery.put("skip", 5);
+        Request requestInfo = organization.getAll(mapQuery).request();
+        Assertions.assertEquals("limit=5&skip=5",
+                requestInfo.url().query());
     }
+
 
     @Test
     void testGetAllRequestParam() {
@@ -111,10 +115,8 @@ public class OrgUnitTests {
         Assertions.assertEquals("limit=5&skip=5",
                 requestInfo.url().query());
     }
-    /////////////////////////////////
 
 
-    //////////////////////////////
     @Test
     void testGetSingleMethod() {
         String organizationUid = Dotenv.load().get("organizations_uid");
@@ -149,18 +151,7 @@ public class OrgUnitTests {
                 requestInfo.url().query());
     }
 
-    @Test
-    void testGetSingleHeaders() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.getSingleOrganization(organizationUid).request();
-        Assertions.assertEquals("",
-                requestInfo.headers());
-    }
 
-    /////////////////////////////////
-
-
-    //////////////////////////////
     @Test
     void testGetRoleMethod() {
         String organizationUid = Dotenv.load().get("organizations_uid");
@@ -193,17 +184,9 @@ public class OrgUnitTests {
                 requestInfo.url().encodedPath());
     }
 
-    @Test
-    void testGetRoleHeaders() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.getRoles(organizationUid).request();
-        Assertions.assertEquals("",
-                requestInfo.headers("authtoken"));
-    }
 
     @Test
     void testGetRoleRequestBody() {
-        //limit={limit_value}&skip={skip_value}&asc={field_uid}&desc={field_uid}&include_count={boolean_value}&include_stack_roles={boolean_value}
         String organizationUid = Dotenv.load().get("organizations_uid");
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 4);
@@ -215,7 +198,6 @@ public class OrgUnitTests {
 
     @Test
     void testGetRoleEncodedPathWithOptParams() {
-        //limit={limit_value}&skip={skip_value}&asc={field_uid}&desc={field_uid}&include_count={boolean_value}&include_stack_roles={boolean_value}
         String orgUid = Dotenv.load().get("organizations_uid");
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 4);
@@ -241,7 +223,6 @@ public class OrgUnitTests {
     }
 
 
-    //////////////////////////////
     @Test
     void testInviteUserMethod() {
         String orgUid = Dotenv.load().get("organizations_uid");
@@ -256,12 +237,6 @@ public class OrgUnitTests {
         Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + orgUid + "/share", requestInfo.url().toString());
     }
 
-    @Test
-    void testInviteUserHeaders() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
-        Assertions.assertEquals("", requestInfo.headers());
-    }
 
     @Test
     void testInviteUserRequestBody() {
@@ -277,10 +252,8 @@ public class OrgUnitTests {
         Assertions.assertEquals("/v3/organizations/" + orgUid + "/share",
                 requestInfo.url().encodedPath());
     }
-    /////////////////////////////////
 
 
-    //////////////////////////////
     @Test
     void testRemoveUsersMethod() {
         String orgUid = Dotenv.load().get("organizations_uid");
@@ -326,7 +299,8 @@ public class OrgUnitTests {
     @Test
     void testResendInvitationMethod() {
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
+        Request requestInfo = organization.resendInvitation(orgUid,
+                "invitation_uid").request();
         Assertions.assertEquals("GET",
                 requestInfo.method());
     }
@@ -334,7 +308,8 @@ public class OrgUnitTests {
     @Test
     void testResendInvitationBaseUrl() {
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
+        Request requestInfo = organization.resendInvitation(orgUid,
+                "invitation_uid").request();
         Assertions.assertEquals("api.contentstack.io",
                 requestInfo.url().host());
     }
@@ -347,14 +322,6 @@ public class OrgUnitTests {
                 requestInfo.url().encodedPath());
     }
 
-
-    @Test
-    void testResendInvitationHeaders() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
-        Assertions.assertEquals("",
-                requestInfo.headers());
-    }
 
     @Test
     void testResendInvitationRequestBody() {
@@ -371,10 +338,8 @@ public class OrgUnitTests {
         Assertions.assertNull(
                 requestInfo.url().encodedQuery());
     }
-    /////////////////////////////////
 
 
-    //////////////////////////////
     @Test
     void testGetAllInvitationMethod() {
         String orgUid = Dotenv.load().get("organizations_uid");
@@ -405,10 +370,6 @@ public class OrgUnitTests {
                 requestInfo.url().encodedPath());
     }
 
-    @Test
-    void testGetAllInvitationHeaders() {
-    }
-
 
     @Test
     void testGetAllInvitationsRequestParam() {
@@ -420,10 +381,8 @@ public class OrgUnitTests {
         Assertions.assertEquals("limit=4&skip=4",
                 requestInfo.url().encodedQuery());
     }
-    /////////////////////////////////
 
 
-    //////////////////////////////
     @Test
     void testTransferOwnershipMethod() {
         String orgUid = Dotenv.load().get("organizations_uid");
@@ -457,9 +416,6 @@ public class OrgUnitTests {
     }
 
 
-    /////////////////////////////////
-
-    //////////////////////////////
     @Test
     void testGetStacksMethod() {
         String orgUid = Dotenv.load().get("organizations_uid");
@@ -507,8 +463,9 @@ public class OrgUnitTests {
         hashMap.put("asc", false);
         hashMap.put("desc", true);
         Request requestInfo = organization.getStacks(orgUid, hashMap).request();
-        Assertions.assertEquals("",
-                requestInfo.headers());
+        Assertions.assertEquals(
+                "/v3/organizations/blt4444c44ea4ddf444/stacks",
+                requestInfo.url().encodedPath());
     }
 
     @Test
@@ -608,9 +565,6 @@ public class OrgUnitTests {
         Assertions.assertEquals("/v3/organizations/blt4444c44ea4ddf444/logs/idlogUid12345", requestInfo.url().encodedPath());
     }
 
-    @Test
-    void testGetLogItemsHeaders() {
-    }
 
     @Test
     void testGetLogItemsRequestBody() {
@@ -627,7 +581,6 @@ public class OrgUnitTests {
         Assertions.assertNull(
                 requestInfo.url().query());
     }
-    /////////////////////////////////
 
     @Test
     void testGetAllWithQueryParamLimit() {
@@ -638,6 +591,7 @@ public class OrgUnitTests {
         assertTrue(isValid(requestInfo.url().toString()));
         assertEquals("3", requestInfo.url().queryParameter("limit"));
     }
+
 
 
 }

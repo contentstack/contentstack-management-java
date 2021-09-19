@@ -1,6 +1,5 @@
 package com.contentstack.cms.organization;
 
-import com.contentstack.cms.core.Util;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -8,30 +7,20 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 
-import static com.contentstack.cms.core.Util.assertNotNull;
 
-/**
+/*
  * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#organizations">Organization</a>
  * is the top-level entity in the hierarchy of Contentstack,
  * consisting of stacks and <a href="https://www.contentstack.com/docs/developers/set-up-stack/about-stack">stack</a>
- * resources, and users.<br/>
+ * resources, and users.<p>
  * Organization allows easy management of projects as well
  * as users within the Organization.
  */
 public class Organization {
 
-    private OrganizationService orgService;
+    private final OrganizationService orgService;
 
-    //    protected String authtoken;
-    private Organization() {
-        Util.assertionError();
-    }
-
-//    public Organization(@NotNull String authtoken) {
-//        this.authtoken = authtoken;
-//    }
-
-    /**
+    /*
      * Instantiates a new Organization.
      *
      * @param client the client
@@ -41,7 +30,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * <b>Gets all organizations.</b><br>
      * The Get all organizations call lists all organizations
      * related to the system user in the order that they were created
@@ -53,44 +42,12 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * <b>Gets all organizations.</b><br>
      * The Get all organizations call lists all organizations
      * related to the system user in the order that they were created
      *
-     * @param queryParams Below are the query parameters:<br/>
-     *                    <p>
-     *                    <br/><b>limit(optional):</b>
-     *                    The ‘limit’ parameter will return a specific number of entries in the output.
-     *                    <br/>Example, if there are 10 organizations and you wish to fetch only the first 2,
-     *                    you need to specify '2' as the value in this parameter.
-     *                    <p>
-     *                    <p>
-     *                    <br/><br/><b>skip(optional):</b>
-     *                    The ‘skip’ parameter will skip a specific number of organizations in the output.
-     *                    <br/>Example, if there are 12 organizations and you want to skip the first 2 to get
-     *                    only the last 10 in the response body, you need to specify ‘2’ here.
-     *                    <p>
-     *                    <br/><br/><b/>asc(optional):</b>
-     *                    The ‘asc’ parameter allows you to sort the list of organizations
-     *                    in the ascending order with respect to the value of a specific field
-     *                    <p>
-     *                    <br/><br/><b/>desc(optional):</b>
-     *                    The ‘desc’ parameter allows you to sort the list of Organizations
-     *                    in the descending order with respect to the value of a specific field
-     *                    <p>
-     *                    <br/><br/><b/>include_count(optional):</b>
-     *                    The ‘include_count’ parameter returns the total number of organizations related to the user.
-     *                    <br/>Example: If you wish to know the total number of organizations,
-     *                    you need to mention ‘true’.
-     *                    <p>
-     *                    <br/><br/><b/>typeahead(optional):</b>
-     *                    The typeahead parameter is a type of filter that allows you to perform a
-     *                    name-based search on all organizations based on the value provided.
-     *                    <br/>Example, if we have four organizations named
-     *                    ‘ABC’, ‘ABC1’, ‘XYZ’, and ‘ACC’, and we provide ‘ABC’ as
-     *                    the value to this parameter, the search result will return the organizations
-     *                    ‘ABC’ and ‘ABC1’ as the output
+     * @param queryParams the query params
      * @return the all organizations
      */
     public Call<ResponseBody> getAll(HashMap<String, Object> queryParams) {
@@ -98,7 +55,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * Get a single organization
      * <br>
      * The Get a single organization call gets the comprehensive details of a
@@ -110,12 +67,11 @@ public class Organization {
      * @throws IllegalArgumentException if spaceId is null.
      */
     public Call<ResponseBody> getSingleOrganization(
-            String organizationUid) {
-        assertNotNull(organizationUid, "organizationUid");
+            @NotNull String organizationUid) {
         return orgService.singleOrganization(organizationUid, new HashMap<>());
     }
 
-    /**
+    /*
      * Get a single organization
      * <br>
      * The Get a single organization call gets the comprehensive details of a
@@ -123,20 +79,19 @@ public class Organization {
      * <br>
      *
      * @param organizationUid the organization uid
-     * @param options         the Query Parameters
-     *                        include_plan(optional) = true
+     * @param options         the Query Parameters                        include_plan(optional) = true
      * @return the organization users
      * @throws IllegalArgumentException if spaceId is null.
      */
     public Call<ResponseBody> getSingleOrganization(
-            String organizationUid,
+            @NotNull String organizationUid,
             HashMap<String, Object> options) {
-        assertNotNull(organizationUid, "organizationUid");
+
         return orgService.singleOrganization(organizationUid, options);
     }
 
 
-    /**
+    /*
      * Gets organization role.
      *
      * @param organizationUid the organization uid
@@ -147,7 +102,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * Gets organization role.
      *
      * @param organizationUid the organization uid
@@ -160,7 +115,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * Gets organization users.
      * <p>
      * The Add users to organization call allows you to send invitations to add users to your organization.
@@ -176,7 +131,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * Remove users from organization
      * <br>
      * Note: Only the owner or the admin of the organization can remove users
@@ -192,10 +147,10 @@ public class Organization {
         return orgService.removeUser(organizationUid);
     }
 
-    /**
+    /*
      * Resend pending organization invitations call.
      * <br>
-     * The Resend pending organization invitation call allows you to resend
+     * Resend pending organization invitation call allows you to resend
      * Organization invitations to users who have not yet accepted the earlier
      * invitation. Only the owner or the admin of the Organization can resend
      * the invitation to add users to an Organization
@@ -209,7 +164,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * Get all organization invitations
      * <br>
      * The Get all organization invitations call gives you a list of all the
@@ -227,7 +182,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * Get all organization invitations
      * <br>
      * The Get all organization invitations call gives you a list of all the
@@ -246,13 +201,15 @@ public class Organization {
         return orgService.getAllInvitations(organizationUid, queryParam);
     }
 
-    /**
-     * Transfer organizations ownership call.<br>
-     * The Transfer organization ownership call transfers the ownership of an Organization to another user.
-     * When the call is executed, an email invitation for accepting the ownership of a particular
-     * Organization is sent to the specified user<br>
+    /*
+     * Transfer organizations ownership call.<br> The Transfer organization ownership call transfers the ownership of an
+     * Organization to another user. When the call is executed, an email invitation for accepting the ownership of a
+     * particular Organization is sent to the specified user<br>
      *
-     * @param organizationUid provide the Organization UID
+     * @param organizationUid
+     *         provide the Organization UID
+     * @param emailId
+     *         the email id
      * @return the call
      */
     public Call<ResponseBody> transferOwnership(String organizationUid, String emailId) {
@@ -260,7 +217,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * Gets all stacks in an organizations.
      * <br>
      * The Get all stacks in an organization call fetches the
@@ -274,7 +231,7 @@ public class Organization {
         return orgService.getStacks(organizationUid, queryParam);
     }
 
-    /**
+    /*
      * Gets organization logs.
      * <br>
      * The Get organization log details request is used to retrieve
@@ -296,7 +253,7 @@ public class Organization {
     }
 
 
-    /**
+    /*
      * Gets organization logs.
      * <br>
      * The Get organization log details request is used to retrieve the audit log details of an organization

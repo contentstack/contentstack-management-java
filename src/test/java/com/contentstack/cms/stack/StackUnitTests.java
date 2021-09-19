@@ -1,7 +1,6 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.user.User;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.junit.jupiter.api.Assertions;
@@ -9,14 +8,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StackUnitTests {
@@ -33,15 +26,15 @@ public class StackUnitTests {
         stack = new Contentstack.Builder().setAuthtoken(authtoken).build().stack();
     }
 
-    @Test
-    void testConstructorIsPrivate() throws NoSuchMethodException {
-        Constructor<User> constructor =
-                User.class.getDeclaredConstructor();
-        assertTrue(Modifier.isPrivate(
-                constructor.getModifiers()));
-        constructor.setAccessible(true);
-        assertThrows(InvocationTargetException.class, constructor::newInstance);
-    }
+//    @Test
+//    void testConstructorIsPrivate() throws NoSuchMethodException {
+//        Constructor<User> constructor =
+//                User.class.getDeclaredConstructor();
+//        assertTrue(Modifier.isPrivate(
+//                constructor.getModifiers()));
+//        constructor.setAccessible(true);
+//        assertThrows(InvocationTargetException.class, constructor::newInstance);
+//    }
 
     @Test
     void testStackWithoutAuthtokenExceptionExpected() {
