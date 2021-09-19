@@ -8,7 +8,6 @@ import java.net.URL;
 
 public class TestUtils {
 
-    /**/
     public static boolean isValid(String url) {
         try {
             new URL(url).toURI();
@@ -41,7 +40,9 @@ public class TestUtils {
         try {
             Util.nullEmptyThrowsException("customField");
         } catch (Exception e) {
-            Assertions.assertEquals("customField cannot take in an empty String or null value", e.getMessage());
+            Assertions.assertEquals(
+                    "customField cannot take in an empty String or null value",
+                    e.getMessage());
         }
     }
 
@@ -50,18 +51,11 @@ public class TestUtils {
         try {
             Util.assertionError();
         } catch (AssertionError e) {
-            Assertions.assertEquals("private constructor can't be accessed outside the class", e.getMessage());
+            Assertions.assertEquals(
+                    "private constructor can't be accessed outside the class",
+                    e.getMessage());
         }
     }
 
-
-    @Test
-    public void testAssertNotNull() {
-        try {
-            Util.assertNotNull(null, "String content");
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("String content may not be null.", e.getMessage());
-        }
-    }
 
 }

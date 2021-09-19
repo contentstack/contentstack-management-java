@@ -249,5 +249,31 @@ public class ContentstackUnitTest {
         }
     }
 
+    @Test
+    void testSetAuthtokenLogin() throws IOException {
+        Contentstack client = new Contentstack.Builder()
+                .setAuthtoken("fake@authtoken")
+                .build();
+        try {
+            client.login("fake@email.com", "fake@password");
+        } catch (Exception e) {
+            Assertions.assertEquals("User is already loggedIn, Please logout then try to login again", e.getMessage());
+        }
+        Assertions.assertEquals("fake@authtoken", client.authtoken);
+    }
+
+    @Test
+    void testSetAuthtokenLoginWithTfa() throws IOException {
+        Contentstack client = new Contentstack.Builder()
+                .setAuthtoken("fake@authtoken")
+                .build();
+        try {
+            client.login("fake@email.com", "fake@password", "fake@tfa");
+        } catch (Exception e) {
+            Assertions.assertEquals("User is already loggedIn, Please logout then try to login again", e.getMessage());
+        }
+        Assertions.assertEquals("fake@authtoken", client.authtoken);
+    }
+
 
 }

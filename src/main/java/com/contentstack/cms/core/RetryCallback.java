@@ -11,10 +11,10 @@ import java.util.logging.Logger;
  *
  * @param <T> the type parameter
  */
-public abstract class CallbackWithRetry<T> implements Callback<T> {
+public abstract class RetryCallback<T> implements Callback<T> {
 
-    private static final String TAG = CallbackWithRetry.class.getSimpleName();
-    private final Logger log = Logger.getLogger(CallbackWithRetry.class.getName());
+    //private static final String TAG = CallbackWithRetry.class.getSimpleName();
+    private final Logger log = Logger.getLogger(RetryCallback.class.getName());
     private static final int TOTAL_RETRIES = 3;
     private final Call<T> call;
     private int retryCount = 0;
@@ -24,7 +24,7 @@ public abstract class CallbackWithRetry<T> implements Callback<T> {
      *
      * @param call the call
      */
-    public CallbackWithRetry(Call<T> call) {
+    public RetryCallback(Call<T> call) {
         this.call = call;
     }
 

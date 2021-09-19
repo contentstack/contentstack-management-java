@@ -17,7 +17,7 @@ public class Stack {
 
     private final StackService orgService;
 
-    /**
+    /*
      * Instantiates a new Stack.
      *
      * @param client the client
@@ -27,7 +27,7 @@ public class Stack {
     }
 
 
-    /**
+    /*
      * <b>Get a single stack</b>
      * <br>
      * The Get a single stack call fetches comprehensive details of a specific stack
@@ -43,7 +43,7 @@ public class Stack {
     }
 
 
-    /**
+    /*
      * <b>Get a single stack</b>
      * <br>
      * The Get a single stack call fetches comprehensive details of a specific stack
@@ -62,7 +62,7 @@ public class Stack {
     }
 
 
-    /**
+    /*
      * <b>Get a single stack</b>
      * <br>
      * The Get a single stack call fetches comprehensive details of a specific stack
@@ -83,23 +83,22 @@ public class Stack {
     }
 
 
-//    /**
-//     * <b>Get all stacks</b>
-//     * <br>
-//     * The Get all stacks call fetches the list of all stacks owned by and shared with a
-//     * particular user account
-//     * <br>
-//     * <b>Note:</b> Note: For SSO-enabled organizations,
-//     * it is mandatory to pass the organization UID in the header.
-//     * <br>
-//     *
-//     * @return the organization role
-//     */
-//    public Call<ResponseBody> allStacks() {
-//        return orgService.allStacks();
-//    }
+    /*
+     * <b>Get all stacks</b>
+     * <br>
+     * The Get all stacks call fetches the list of all stacks owned by and shared with a
+     * particular user account
+     * <br>
+     * <b>Note:</b> Note: For SSO-enabled organizations,
+     * it is mandatory to pass the organization UID in the header.
+     * <br>
+     *
+     * @return the organization role
+     *
+     * public Call<ResponseBody> allStacks() { return orgService.allStacks();}
+     */
 
-    /**
+    /*
      * <b>Create stack.</b>
      * <p>
      * The Create stack call creates a new stack in your Contentstack account.
@@ -119,7 +118,7 @@ public class Stack {
         return orgService.createStack(organizationUid, body);
     }
 
-    /**
+    /*
      * <b>Update Stack</b>
      * <br>
      * The Update stack call lets you update the name and description of an existing stack.
@@ -139,7 +138,7 @@ public class Stack {
         return orgService.updateStack(apiKey, body);
     }
 
-    /**
+    /*
      * <b>Transfer Stack Ownership</b>
      * <br>
      * The Transfer stack ownership to other users call sends the

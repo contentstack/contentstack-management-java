@@ -1,4 +1,4 @@
-package com.contentstack.cms.user;
+package com.contentstack.cms.core;
 
 import com.google.gson.Gson;
 import okhttp3.ResponseBody;
@@ -9,13 +9,10 @@ import java.util.Objects;
 
 public class CSResponse {
 
-    private Response<ResponseBody> response;
+    private final Response<ResponseBody> response;
 
     public CSResponse(Response<ResponseBody> response) {
         this.response = response;
-    }
-
-    public CSResponse() {
     }
 
     public String asString() throws IOException {
@@ -38,7 +35,7 @@ public class CSResponse {
         return new Gson().fromJson(body, tClass);
     }
 
-    public <T> T toModel(Class<T> tClass, String response) throws IOException {
+    public <T> T toModel(Class<T> tClass, String response) {
         Objects.requireNonNull(tClass, "model class == null");
         Objects.requireNonNull(response, "response == null");
         return new Gson().fromJson(response, tClass);

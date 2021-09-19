@@ -1,5 +1,7 @@
 package com.contentstack.cms.user;
 
+import com.contentstack.cms.models.LoginDetails;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -9,7 +11,7 @@ import java.util.HashMap;
 public interface UserService {
 
     @POST("user-session")
-    Call<LoginDetails> login(@Body HashMap<String, HashMap<String, String>> body);
+    Call<LoginDetails> login(@Body RequestBody body);
 
     @GET("user")
     Call<ResponseBody> getUser();
@@ -34,4 +36,5 @@ public interface UserService {
 
     @GET("user")
     Call<ResponseBody> getUserOrganization(@QueryMap HashMap<String, Object> options);
+
 }

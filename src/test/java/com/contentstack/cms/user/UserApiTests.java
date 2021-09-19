@@ -12,9 +12,6 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.HashMap;
 
-/**
- * The type User api tests.
- */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("API")
@@ -25,9 +22,6 @@ public class UserApiTests {
     private static String password;
     private static Contentstack client;
 
-    /**
-     * Init before all.
-     */
     @BeforeAll
     public static void initBeforeAll() {
         // Accessing the authtoken from the .env file
@@ -41,10 +35,14 @@ public class UserApiTests {
 
 
     @Test
-    void testContentstackLogin() {
+    void testContentstackLogin() throws IOException {
         Contentstack client = new Contentstack.Builder().build();
-        //ContentstackResponse<LoginDetails, Error> response = client.login(username, password);
-        //Assertions.assertTrue(isLoggedIn);
+        client.login(emailId, password);
+        Response<ResponseBody> user = client.user().getUser().execute();
+        if (user.isSuccessful()) {
+            String response = user.body().toString();
+            Assertions.assertNotNull(response);
+        }
     }
 
 
@@ -54,16 +52,12 @@ public class UserApiTests {
             new Contentstack.Builder().build().user();
         } catch (Exception e) {
             e.getLocalizedMessage();
-            Assertions.assertEquals("Please login to access user instance", e.getLocalizedMessage());
+            Assertions.assertEquals("Please login to access user instance",
+                    e.getLocalizedMessage());
         }
 
     }
 
-    /**
-     * Api test get user.
-     *
-     * @throws IOException the io exception
-     */
     @Test
     @Order(1)
     void api_test_get_user() throws IOException {
@@ -79,11 +73,6 @@ public class UserApiTests {
     }
 
 
-    /**
-     * Test api testcase activate user.
-     *
-     * @throws IOException the io exception
-     */
     @Test
     @Order(3)
     void test_api_testcase_activate_user() throws IOException {
@@ -93,11 +82,6 @@ public class UserApiTests {
         }
     }
 
-    /**
-     * Test api testcase request password.
-     *
-     * @throws IOException the io exception
-     */
     @Test
     @Order(4)
     void test_api_testcase_request_password() throws IOException {
@@ -107,11 +91,6 @@ public class UserApiTests {
         }
     }
 
-    /**
-     * Test api testcase reset password.
-     *
-     * @throws IOException the io exception
-     */
     @Test
     @Order(5)
     void test_api_testcase_reset_password() throws IOException {
@@ -122,11 +101,6 @@ public class UserApiTests {
     }
 
 
-    /**
-     * Test api testcase logout.
-     *
-     * @throws IOException the io exception
-     */
     @Test
     @Order(6)
     void test_api_testcase_logout() throws IOException {
@@ -136,11 +110,6 @@ public class UserApiTests {
         }
     }
 
-    /**
-     * Test api testcase logout with authtoken.
-     *
-     * @throws IOException the io exception
-     */
     @Test
     @DisplayName("api testcase for logout with authtoken")
     @Order(7)
@@ -151,11 +120,6 @@ public class UserApiTests {
         }
     }
 
-    /**
-     * Test api testcase get user organisation.
-     *
-     * @throws IOException the io exception
-     */
     @Test
     @DisplayName("api testcase for get user organisation")
     @Order(8)

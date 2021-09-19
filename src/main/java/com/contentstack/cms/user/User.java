@@ -1,14 +1,16 @@
 package com.contentstack.cms.user;
 
-import com.contentstack.cms.core.Util;
+import com.contentstack.cms.models.LoginDetails;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
 
-/**
+/*
  * All accounts registered with Contentstack are known as Users. A stack can
  * have many users with varying permissions and roles.
  */
@@ -16,11 +18,7 @@ public class User {
 
     private final UserService userService;
 
-    private User() throws IllegalAccessException {
-        throw new IllegalAccessException("constructor==private");
-    }
-
-    /**
+    /*
      * Instantiates a new User.
      *
      * @param client the client
@@ -29,7 +27,7 @@ public class User {
         this.userService = client.create(UserService.class);
     }
 
-    /**
+    /*
      * The Log in to your account request is used to sign in to your Contentstack
      * account and obtain the authtoken.
      *
@@ -40,10 +38,11 @@ public class User {
     public Call<LoginDetails> login(@NotNull String emailId, @NotNull String password) {
         HashMap<String, HashMap<String, String>> userSession = new HashMap<>();
         userSession.put("user", setCredentials(emailId, password));
-        return this.userService.login(userSession);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(userSession)).toString());
+        return this.userService.login(body);
     }
 
-    /**
+    /*
      * Login call.
      *
      * @param emailId  the email id
@@ -51,33 +50,24 @@ public class User {
      * @param tfaToken the tfa token
      * @return the call
      */
-    public Call<LoginDetails> login(String emailId, String password, String tfaToken) {
+    public Call<LoginDetails> login(@NotNull String emailId, @NotNull String password, @NotNull String tfaToken) {
         HashMap<String, HashMap<String, String>> userSession = new HashMap<>();
         userSession.put("user", setCredentials(emailId, password, tfaToken));
-        return this.userService.login(userSession);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(userSession)).toString());
+        return this.userService.login(body);
     }
 
     private HashMap<String, String> setCredentials(@NotNull String... arguments) {
         HashMap<String, String> credentials = new HashMap<>();
-        if (arguments[0].isEmpty()) {
-            Util.nullEmptyThrowsException(arguments[0]);
-        }
-        if (arguments[1].isEmpty()) {
-            Util.nullEmptyThrowsException(arguments[1]);
-        }
         credentials.put("email", arguments[0]);
         credentials.put("password", arguments[1]);
         if (arguments.length > 2) {
-            if (arguments[2].isEmpty()) {
-                Util.nullEmptyThrowsException(arguments[2]);
-            }
             credentials.put("tfa_token", arguments[2]);
         }
         return credentials;
-
     }
 
-    /**
+    /*
      * The Get user call returns comprehensive information of an existing user
      * account. The information returned includes details of the stacks owned by and
      * shared with the specified user account. <br>
@@ -88,19 +78,19 @@ public class User {
         return this.userService.getUser();
     }
 
-    /**
+    /*
      * The Get user call returns comprehensive information of an existing user
      * account. The information returned includes details of the stacks and
      * organisation owned by and shared with the specified user account.
      *
-     * @param map the map
+     * @param query parameters
      * @return {@link UserService}
      */
-    public Call<ResponseBody> getUserOrganizations(HashMap<String, Object> map) {
-        return this.userService.getUserOrganization(map);
+    public Call<ResponseBody> getUserOrganizations(@NotNull HashMap<String, Object> query) {
+        return this.userService.getUserOrganization(query);
     }
 
-    /**
+    /*
      * The Update User API Request updates the details of an existing user account.
      * Only the information entered here will be updated, the existing data will
      * remain unaffected. <br>
@@ -114,7 +104,7 @@ public class User {
         return userService.updateUser();
     }
 
-    /**
+    /*
      * The activate_token a user account call activates the account of a user after
      * signing up. For account activation, you will require the token received in
      * the activation email. <br>
@@ -126,11 +116,11 @@ public class User {
      *                        Example:[activationToken]
      * @return {@link UserService}
      */
-    public Call<ResponseBody> activateUser(String activationToken) {
+    public Call<ResponseBody> activateUser(@NotNull String activationToken) {
         return userService.activateUser(activationToken);
     }
 
-    /**
+    /*
      * The Request for a password call sends a request for a temporary password to
      * log in to an account in case a user has forgotten the login password. <br>
      * Using this temporary password, you can log in to your account and set a new
@@ -143,7 +133,7 @@ public class User {
         return userService.requestPassword();
     }
 
-    /**
+    /*
      * The Reset password call sends a request for resetting the password of your
      * Contentstack account. <br>
      * When executing the call, in the 'Body' section, you need to provide the token
@@ -156,7 +146,7 @@ public class User {
         return userService.resetPassword();
     }
 
-    /**
+    /*
      * The Log out of your account call is used to sign out the user of Contentstack
      * account
      *
@@ -167,7 +157,7 @@ public class User {
         return userService.logout(authtoken);
     }
 
-    /**
+    /*
      * The Log out of your account call is used to sign out the user of Contentstack
      * account
      *
