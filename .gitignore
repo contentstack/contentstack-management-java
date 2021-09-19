@@ -266,3 +266,4 @@ java.iml
 src/main/resources/
 /.idea/
 /test-report/
+/.apt_generated_tests/
