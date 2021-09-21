@@ -10,7 +10,10 @@ factoryConfiguration.json
 .metadata
 .env
 .env/
+test-report/
 bin/
+coverage/
+docs/
 tmp/
 *.tmp
 *.bak
@@ -262,3 +265,5 @@ gradle-app.setting
 java.iml
 src/main/resources/
 /.idea/
+/test-report/
+/.apt_generated_tests/
