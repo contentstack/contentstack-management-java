@@ -28,7 +28,7 @@ public class TestError {
     public void testGsonErrors() {
         String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
         Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals("{environment=[is required.]}", error.getError().toString());
+        Assertions.assertEquals("{environment=[is required.]}", error.errors.toString());
     }
 
     /**
@@ -36,9 +36,10 @@ public class TestError {
      */
     @Test
     public void testGsonErrorCode() {
+
         String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
         Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals(141, error.getErrorCode());
+        Assertions.assertEquals(141, error.errorCode);
     }
 
 
@@ -49,7 +50,7 @@ public class TestError {
     public void testGsonErrorMessage() {
         String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
         Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.getErrorMessage());
+        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
     }
 
     /**
@@ -59,7 +60,7 @@ public class TestError {
     public void testSetGsonErrorMessage() {
         String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
         Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.getErrorMessage());
+        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
     }
 
     /**
@@ -69,7 +70,7 @@ public class TestError {
     public void testSetGsonErrorCode() {
         String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
         Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.getErrorMessage());
+        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
     }
 
     /**
@@ -79,7 +80,7 @@ public class TestError {
     public void testSetGsonErrors() {
         String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
         Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.getErrorMessage());
+        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
     }
 
     /**
@@ -87,8 +88,11 @@ public class TestError {
      */
     @Test
     public void testErrorAllArgsConstructor() {
-        Error error = new Error("{\"environment\":[\"is required.\"]}}", "Failed to fetch entries. Please try again with valid parameters.", 141);
-        Assertions.assertNotNull(error.getError());
+        Error error = new Error();
+        error.setErrorMessage("{\"environment\":[\"is required.\"]}}");
+        error.setErrorCode(141);
+        error.setErrors("Failed to fetch entries. Please try again with valid parameters.");
+        Assertions.assertNotNull(error.getErrorCode());
     }
 
     /**
@@ -97,7 +101,7 @@ public class TestError {
     @Test
     public void testErrorBuilder() {
         Error error = new Error();
-        error.setError("some dummy error");
+        error.setErrors("some dummy error");
         error.setErrorCode(400);
         error.setErrorMessage("this is dummy message");
         String jsonInString = new Gson().toJson(error);

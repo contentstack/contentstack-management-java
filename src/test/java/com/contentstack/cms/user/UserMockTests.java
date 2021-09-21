@@ -45,7 +45,7 @@ public class UserMockTests {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-        logger.info(mockJsonObject.toJSONString());
+        logger.fine(mockJsonObject.toJSONString());
         return mockJsonObject;
     }
 
@@ -54,7 +54,7 @@ public class UserMockTests {
      */
     @BeforeAll
     public void setupBeforeAll() {
-        logger.setLevel(Level.FINE);
+        logger.setLevel(Level.ALL);
     }
 
 
@@ -75,7 +75,7 @@ public class UserMockTests {
         JsonParser jp = new JsonParser();
         JsonElement je = jp.parse(mockJsonObject.toJSONString());
         String prettyJsonString = gson.toJson(je);
-        logger.fine(prettyJsonString);
+        logger.finer(prettyJsonString);
 
         String[] keyArray = {"org_uid",
                 "authy_id",
@@ -111,7 +111,7 @@ public class UserMockTests {
         Assertions.assertEquals("Profile updated successfully.", mockJsonObject.get("notice"));
         mockJsonObject = (JSONObject) mockJsonObject.get("user");
         Set allKeys = mockJsonObject.keySet();
-        logger.info(mockJsonObject.toJSONString());
+        logger.finest(mockJsonObject.toJSONString());
         String[] keyArray = {
                 "org_uid",
                 "authy_id",

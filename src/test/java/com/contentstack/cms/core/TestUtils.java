@@ -1,79 +1,60 @@
 package com.contentstack.cms.core;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.*;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
-/**
- * The type Test utils.
- */
+import java.net.URL;
+
+
 public class TestUtils {
 
-    /**
-     * Check version.
-     */
-    @Test
-    @EnabledOnOs(OS.MAC)
-    public void checkVersion(){
-        String defaultUserAgent = Util.defaultUserAgent();
-        Assertions.assertEquals("Java1.8.0_261 OS: MAC OS X", defaultUserAgent);
+    public static boolean isValid(String url) {
+        try {
+            new URL(url).toURI();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    /**
-     * This test only runs with up to date jr es.
-     */
+
     @Test
-    @DisabledOnJre(JRE.OTHER)
-    public void thisTestOnlyRunsWithUpToDateJREs() {
-        // this test will only run on Java 8, 9, 10, and 11.
+    public void testUtilConstructor() {
+        try {
+            new Util();
+        } catch (IllegalAccessException e) {
+            Assertions.assertEquals("private=modifier", e.getMessage());
+        }
     }
 
-    /**
-     * Only on mac os.
-     */
+
     @Test
-    @EnabledOnOs(OS.MAC)
-    void onlyOnMacOs() {
-        // ...
+    @TestOSBasedUtils.TestOnMac
+    public void testDefaultUserAgent() {
+        String result = Util.defaultUserAgent();
+        Assertions.assertEquals("Java1.8.0_261 OS: MAC OS X", result);
     }
 
-    /**
-     * Test on mac.
-     */
-    @TestOnMac
-    void testOnMac() {
-        // ...
+    @Test
+    public void testNullEmptyThrowsException() {
+        try {
+            Util.nullEmptyThrowsException("customField");
+        } catch (Exception e) {
+            Assertions.assertEquals(
+                    "customField cannot take in an empty String or null value",
+                    e.getMessage());
+        }
     }
 
-    /**
-     * On linux or mac.
-     */
     @Test
-    @EnabledOnOs({ OS.LINUX, OS.MAC })
-    void onLinuxOrMac() {
-        // ...
-    }
-
-    /**
-     * Not on windows.
-     */
-    @Test
-    @DisabledOnOs(OS.WINDOWS)
-    void notOnWindows() {
-        // ...
-    }
-
-    /**
-     * The interface Test on mac.
-     */
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
-    @Test
-    @EnabledOnOs(OS.MAC)
-    @interface TestOnMac {
+    public void testAssertionError() {
+        try {
+            Util.assertionError();
+        } catch (AssertionError e) {
+            Assertions.assertEquals(
+                    "private constructor can't be accessed outside the class",
+                    e.getMessage());
+        }
     }
 
 

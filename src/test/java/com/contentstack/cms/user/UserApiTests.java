@@ -3,164 +3,195 @@ package com.contentstack.cms.user;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Error;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 
-/**
- * The type User api tests.
- */
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("API")
-@DisplayName("Api Testcases for User Class")
 public class UserApiTests {
 
-    private User userInstance;
+    private static User userInstance;
+    private static Dotenv dotenv;
 
-    /**
-     * Init before all.
-     */
     @BeforeAll
-    public void initBeforeAll() {
-        // Accessing the authtoken from the .env file
-        Dotenv dotenv = Dotenv.load();
-        String DEFAULT_AUTHTOKEN = dotenv.get("auth_token");
-        Contentstack client = new Contentstack.Builder().setAuthtoken(DEFAULT_AUTHTOKEN).build();
+    public static void initBeforeAll() throws IOException {
+        dotenv = Dotenv.load();
+        String emailId = dotenv.get("username"); // gets username from .env
+        String password = dotenv.get("password"); // gets password from .env
+        Contentstack client = new Contentstack.Builder().build();
+        client.login(emailId, password);
         userInstance = client.user();
     }
 
-    /**
-     * Api test get user.
-     *
-     * @throws IOException the io exception
-     */
-    @Test
-    @DisplayName("api testcase for get user")
-    @Order(1)
-    void api_test_get_user() throws IOException {
-        Response<ResponseBody> response = userInstance.getUser().execute();
-        if (!response.isSuccessful()) {
-            Gson gson = new Gson();
-            assert response.errorBody() != null;
-            Error error = gson.fromJson(response.errorBody().charStream(), Error.class);
-            Assertions.assertNull(error.getError());
-            Assertions.assertEquals(105, error.getErrorCode());
-            Assertions.assertEquals("You're not allowed in here unless you're logged in.", error.getErrorMessage());
-        }
-    }
 
-    /**
-     * Test api testcase update user.
-     *
-     * @throws IOException the io exception
-     */
     @Test
-    @DisplayName("api testcase for update user")
-    @Order(2)
-    void test_api_testcase_update_user() throws IOException {
-        Response<ResponseBody> response = userInstance.updateUser().execute();
-        if (!response.isSuccessful()) {
-            assert response.errorBody() != null;
-            Error error = new Gson().fromJson(response.errorBody().charStream(), Error.class);
-            Assertions.assertNull(error.getError());
-            Assertions.assertEquals(105, error.getErrorCode());
-            Assertions.assertEquals("You're not allowed in here unless you're logged in.", error.getErrorMessage());
-        }
-    }
-
-    /**
-     * Test api testcase activate user.
-     *
-     * @throws IOException the io exception
-     */
-    @Test
-    @DisplayName("api testcase for activate user")
-    @Order(3)
-    void test_api_testcase_activate_user() throws IOException {
-        Response<ResponseBody> response = userInstance.activateUser("bltf36705c7361d4734").execute();
-        if (!response.isSuccessful()) {
-            assert response.errorBody() != null;
-        }
-    }
-
-    /**
-     * Test api testcase request password.
-     *
-     * @throws IOException the io exception
-     */
-    @Test
-    @DisplayName("api testcase for request password")
-    @Order(4)
-    void test_api_testcase_request_password() throws IOException {
-        Response<ResponseBody> response = userInstance.requestPassword().execute();
-        if (!response.isSuccessful()) {
-            assert response.errorBody() != null;
-        }
-    }
-
-    /**
-     * Test api testcase reset password.
-     *
-     * @throws IOException the io exception
-     */
-    @Test
-    @DisplayName("api testcase for reset password")
-    @Order(5)
-    void test_api_testcase_reset_password() throws IOException {
-        Response<ResponseBody> response = userInstance.resetPassword().execute();
-        if (!response.isSuccessful()) {
-            assert response.errorBody() != null;
+    void testGetUser() throws IOException {
+        Response<ResponseBody> userLogin = userInstance.getUser().execute();
+        if (userLogin.isSuccessful()) {
+            JsonObject user = toJson(userLogin);
+            Assertions.assertEquals(dotenv.get("userId"),
+                    user.getAsJsonObject("user").get("uid").toString().replace("\"", ""));
         }
     }
 
 
-    /**
-     * Test api testcase logout.
-     *
-     * @throws IOException the io exception
-     */
+    @Test()
+    void testUpdateUser() throws IOException {
+        String body = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"company\": \"company name inc.\"\n" +
+                "\t}\n" +
+                "}";
+        Response<ResponseBody> userLogin = userInstance.updateUser(body).execute();
+        if (userLogin.isSuccessful()) {
+            JsonObject user = toJson(userLogin);
+            Assertions.assertTrue(user.has("notice"));
+            Assertions.assertEquals("Profile updated successfully.",
+                    user.get("notice").toString().replace("\"", ""));
+        }
+    }
+
     @Test
-    @DisplayName("api testcase for user logout")
-    @Order(6)
-    void test_api_testcase_logout() throws IOException {
+    void testUserOrg() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("limit", 10);
+        Response<ResponseBody> response = userInstance.getUserOrganizations(query).execute();
+        if (response.isSuccessful()) {
+            JsonObject user = toJson(response);
+            Assertions.assertTrue(user.getAsJsonObject("user").has("organizations"));
+            Assertions.assertEquals(7,
+                    user.getAsJsonObject("user")
+                            .getAsJsonArray("organizations").size());
+        }
+    }
+
+    @Test
+    void testActivateUser() throws IOException {
+        String actToken = dotenv.get("userId");
+        String body = "{\n" +
+                "\"user\": {\n" +
+                "\"first_name\": \"Shailesh\",\n" +
+                "\"last_name\": \"Mishra\",\n" +
+                "\"password\": \"fake@password\",\n" +
+                "\"password_confirmation\": \"fake@password\"\n" +
+                "}\n" +
+                "}";
+        Response<ResponseBody> response =
+                userInstance.activateUser(actToken, body)
+                        .execute();
+        String errMsg = response.errorBody().string();
+        Error error = new Gson().fromJson(errMsg, Error.class);
+        Assertions.assertEquals("Unable to activate at this moment. Please contact support@contentstack.com for help.", error.getErrorMessage());
+        Assertions.assertEquals(102, error.getErrorCode());
+        Assertions.assertNotNull(error.getErrors());
+
+    }
+
+    @Test
+    void testRequestPassword() throws IOException {
+        String strBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"email\": \"john.doe@contentstack.com\"\n" +
+                "\t}\n" +
+                "}";
+        Response<ResponseBody> response =
+                userInstance.requestPassword(strBody)
+                        .execute();
+
+        if (response.isSuccessful()) {
+            JsonObject user = toJson(response);
+            Assertions.assertTrue(user.has("notice"));
+            Assertions.assertEquals(
+                    "If this email address exists, we will send you an email with instructions for resetting your password.",
+                    user.get("notice").getAsString());
+        }
+    }
+
+    @Test
+    void testResetPassword() throws IOException {
+        String requestBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"reset_password_token\": \"abcdefghijklmnop\",\n" +
+                "\t\t\"password\": \"Simple@123\",\n" +
+                "\t\t\"password_confirmation\": \"Simple@123\"\n" +
+                "\t}\n" +
+                "}";
+        String strError = "Uh oh, we weren't able to reset your password. You may have entered an invalid password, or the link might have expired. Please try again or email support at support@contentstack.com.";
+        Response<ResponseBody> response = userInstance.resetPassword(requestBody).execute();
+        if (response.isSuccessful()) {
+            JsonObject user = toJson(response);
+            Assertions.assertTrue(user.has("notice"));
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(108, error.getErrorCode());
+            Assertions.assertEquals(strError, error.getErrorMessage());
+        }
+    }
+
+    @Test
+    void testUserOrgWithAllAvailKeys() throws IOException {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("limit", 10);
+        Response<ResponseBody> response = userInstance.getUserOrganizations(map).execute();
+        if (response.isSuccessful() || response.body() != null) {
+            assert response.body() != null;
+            JsonObject userObj = toJson(response).getAsJsonObject("user");
+            Assertions.assertTrue(userObj.isJsonObject());
+            Assertions.assertTrue(userObj.has("uid"));
+            Assertions.assertTrue(userObj.has("created_at"));
+            Assertions.assertTrue(userObj.has("updated_at"));
+            Assertions.assertTrue(userObj.has("email"));
+            Assertions.assertTrue(userObj.has("username"));
+            Assertions.assertTrue(userObj.has("first_name"));
+            Assertions.assertTrue(userObj.has("last_name"));
+            Assertions.assertTrue(userObj.has("org_uid"));
+            Assertions.assertTrue(userObj.has("shared_org_uid"));
+            Assertions.assertTrue(userObj.has("authtoken"));
+            Assertions.assertTrue(userObj.has("profile_type"));
+            Assertions.assertTrue(userObj.has("failed_attempts"));
+            Assertions.assertTrue(userObj.has("roles"));
+            Assertions.assertTrue(userObj.getAsJsonArray("roles").isJsonArray());
+            Assertions.assertTrue(userObj.getAsJsonArray("organizations").isJsonArray());
+
+        } else {
+            assert response.errorBody() != null;
+            Error error = new Gson()
+                    .fromJson(response
+                            .errorBody()
+                            .string(), Error.class);
+            Assertions.assertEquals(
+                    "You're not allowed in here unless you're logged in.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(105,
+                    error.getErrorCode());
+        }
+    }
+
+
+    @Test
+    void testLogoutWithAuthtoken() throws IOException {
+        String strAuth = dotenv.get("auth_token");
+        Response<ResponseBody> response = userInstance.logoutWithAuthtoken(strAuth).execute();
+        if (response.isSuccessful()) {
+        }
+    }
+
+    @Test
+    void testLogout() throws IOException {
         Response<ResponseBody> response = userInstance.logout().execute();
-        if (!response.isSuccessful()) {
-            assert response.errorBody() != null;
+        if (response.isSuccessful()) {
         }
     }
 
-    /**
-     * Test api testcase logout with authtoken.
-     *
-     * @throws IOException the io exception
-     */
-    @Test
-    @DisplayName("api testcase for logout with authtoken")
-    @Order(7)
-    void test_api_testcase_logout_with_authtoken() throws IOException {
-        Response<ResponseBody> response = userInstance.logoutWithAuthtoken("bltf36705c7361d4734").execute();
-        if (!response.isSuccessful()) {
-            assert response.errorBody() != null;
-        }
-    }
 
-    /**
-     * Test api testcase get user organisation.
-     *
-     * @throws IOException the io exception
-     */
-    @Test
-    @DisplayName("api testcase for get user organisation")
-    @Order(8)
-    void test_api_testcase_get_user_organisation() throws IOException {
-        Response<ResponseBody> response = userInstance.getUserOrganizations().execute();
-        assert response.isSuccessful() || response.errorBody() != null;
-        Error error = new Gson().fromJson(response.errorBody().charStream(), Error.class);
-        Assertions.assertEquals(105, error.getErrorCode());
+    private JsonObject toJson(Response<ResponseBody> response) throws IOException {
+        return new Gson().fromJson(response.body().string(), JsonObject.class);
     }
 
 }

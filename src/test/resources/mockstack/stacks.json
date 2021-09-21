@@ -1,0 +1,58 @@
+{
+  "stacks": [{
+    "created_at": "2014-05-27T09:46:28.488Z",
+    "updated_at": "2014-10-21T12:20:00.453Z",
+    "uid": "uid_9349",
+    "name": "My First Stack",
+    "description": "My new test stack",
+    "org_uid": "org_uid_1234",
+    "api_key": "api_key_1234",
+    "master_locale": "en-us",
+    "is_asset_download_public": true,
+    "owner_uid": "owner_uid_xyz",
+    "user_uids": [
+      "user_uid_11f",
+      "user_uid_1234"
+    ],
+    "settings": {
+      "webhook_enabled": true,
+      "workflow_stages": true,
+      "publishing_rules": true
+    },
+    "master_key": "master_1234",
+    "SYS_ACL": {
+      "others": {
+        "invite": false,
+        "sub_acl": {
+          "create": false,
+          "read": false,
+          "update": false,
+          "delete": false
+        }
+      },
+      "roles": [{
+        "uid": "uid_1234",
+        "name": "Developer",
+        "invite": true,
+        "sub_acl": {
+          "create": true,
+          "read": true,
+          "update": true,
+          "delete": true
+        }
+      },
+        {
+          "uid": "uid_1234",
+          "name": "Admin",
+          "invite": true,
+          "sub_acl": {
+            "create": true,
+            "read": true,
+            "update": true,
+            "delete": true
+          }
+        }
+      ]
+    }
+  }]
+}
