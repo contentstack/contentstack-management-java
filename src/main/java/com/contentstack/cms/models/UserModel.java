@@ -3,11 +3,13 @@ package com.contentstack.cms.models;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
+@Setter
 public class UserModel {
 
     @SerializedName("uid")

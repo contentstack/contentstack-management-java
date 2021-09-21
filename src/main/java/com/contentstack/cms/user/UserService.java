@@ -17,24 +17,28 @@ public interface UserService {
     Call<ResponseBody> getUser();
 
     @PUT("user")
-    Call<ResponseBody> updateUser();
+    Call<ResponseBody> updateUser(@Body RequestBody body);
 
     @POST("user/activate/{user_activation_token}")
-    Call<ResponseBody> activateUser(@Path("user_activation_token") String token);
+    Call<ResponseBody> activateUser(
+            @Path("user_activation_token") String activationToken,
+            @Body RequestBody body);
 
     @POST("user/forgot_password")
-    Call<ResponseBody> requestPassword();
+    Call<ResponseBody> requestPassword(@Body RequestBody body);
 
-    @PUT("user/reset_password")
-    Call<ResponseBody> resetPassword();
+    @POST("user/reset_password")
+    Call<ResponseBody> resetPassword(@Body RequestBody body);
 
     @DELETE("user-session")
-    Call<ResponseBody> logout(@Header("authtoken") String authtoken);
+    Call<ResponseBody> logout(
+            @Header("authtoken") String authtoken);
 
     @DELETE("user-session")
     Call<ResponseBody> logout();
 
     @GET("user")
-    Call<ResponseBody> getUserOrganization(@QueryMap HashMap<String, Object> options);
+    Call<ResponseBody> getUserOrganization(
+            @QueryMap HashMap<String, Object> options);
 
 }
