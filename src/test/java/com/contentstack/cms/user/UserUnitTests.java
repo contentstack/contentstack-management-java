@@ -8,11 +8,8 @@ import retrofit2.Retrofit;
 import java.net.URL;
 import java.util.HashMap;
 
-
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("UNIT")
-@DisplayName("Started running unit testcases for user class")
 public class UserUnitTests {
 
     private User userInstance;
@@ -143,7 +140,7 @@ public class UserUnitTests {
     @Order(6)
     @DisplayName("tests all parameters from updateUser method")
     void testUserClassWithUpdateUserContainingAllParameters() {
-        Request requestInfo = userInstance.updateUser().request();
+        Request requestInfo = userInstance.updateUser("").request();
         Assertions.assertEquals("PUT", requestInfo.method());
         Assertions.assertEquals(0, requestInfo.headers().names().size());
         Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https only");
@@ -159,7 +156,7 @@ public class UserUnitTests {
     @Order(7)
     @DisplayName("tests url from updateUser method")
     void testUserClassWithUpdateUserContainingHost() {
-        Request requestInfo = userInstance.updateUser().request();
+        Request requestInfo = userInstance.updateUser("").request();
         Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
     }
 
@@ -170,7 +167,7 @@ public class UserUnitTests {
     @Order(8)
     @DisplayName("tests request method from updateUser")
     void testUserClassWithUpdateUserContainingMethod() {
-        Request requestInfo = userInstance.updateUser().request();
+        Request requestInfo = userInstance.updateUser("").request();
         Assertions.assertEquals("PUT",
                 requestInfo.method());
     }
@@ -182,7 +179,7 @@ public class UserUnitTests {
     @Order(9)
     @DisplayName("tests headers from updateUser method")
     void testUserClassWithUpdateUserContainingHeaders() {
-        Request requestInfo = userInstance.updateUser().request();
+        Request requestInfo = userInstance.updateUser("").request();
         Assertions.assertEquals(0, requestInfo.headers().names().size());
     }
 
@@ -193,7 +190,7 @@ public class UserUnitTests {
     @Order(10)
     @DisplayName("User's updateUser should not contain any parameters")
     void testUserClassWithUpdateUserContainingQueryParameters() {
-        Request requestInfo = userInstance.updateUser().request();
+        Request requestInfo = userInstance.updateUser("").request();
         Assertions.assertEquals(0,
                 requestInfo.url().queryParameterNames().size());
     }
@@ -289,7 +286,7 @@ public class UserUnitTests {
     @DisplayName("tests all parameters from ActivateUser method")
     void testUserClassWithActivateUserContainingAllParameters() {
         Request requestInfo = userInstance
-                .activateUser(activationToken)
+                .activateUser(activationToken, "")
                 .request();
         Assertions.assertEquals("POST", requestInfo.method());
         Assertions.assertEquals(0, requestInfo.headers().names().size());
@@ -306,7 +303,7 @@ public class UserUnitTests {
     @DisplayName("tests url from ActivateUser method")
     void testUserClassWithActivateUserContainingHost() {
         Request requestInfo = userInstance
-                .activateUser(activationToken)
+                .activateUser(activationToken, "")
                 .request();
         Assertions
                 .assertEquals("api.contentstack.io",
@@ -325,7 +322,7 @@ public class UserUnitTests {
     @DisplayName("tests request method from ActivateUser")
     void testUserClassWithActivateUserContainingMethod() {
         Request requestInfo = userInstance
-                .activateUser(activationToken)
+                .activateUser(activationToken, "")
                 .request();
         Assertions.assertEquals("POST",
                 requestInfo.method());
@@ -339,7 +336,7 @@ public class UserUnitTests {
     @DisplayName("tests headers from ActivateUser method")
     void testUserClassWithActivateUserContainingHeaders() {
         Request requestInfo = userInstance
-                .activateUser(activationToken)
+                .activateUser(activationToken, "")
                 .request();
         Assertions.assertEquals(0, requestInfo.headers().names().size());
     }
@@ -352,7 +349,7 @@ public class UserUnitTests {
     @DisplayName("User's ActivateUser should not contain any parameters")
     void testUserClassWithActivateUserContainingQueryParameters() {
         Request requestInfo = userInstance
-                .activateUser(activationToken)
+                .activateUser(activationToken, "")
                 .request();
         Assertions.assertEquals(0,
                 requestInfo.url().queryParameterNames().size());
@@ -367,8 +364,13 @@ public class UserUnitTests {
     @Order(21)
     @DisplayName("tests all parameters from RequestPassword method")
     void testUserClassWithRequestPasswordContainingAllParameters() {
+        String strBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"email\": \"john.doe@contentstack.com\"\n" +
+                "\t}\n" +
+                "}";
         Request requestInfo = userInstance
-                .requestPassword()
+                .requestPassword(strBody)
                 .request();
         Assertions.assertEquals("POST", requestInfo.method());
         Assertions.assertEquals(0, requestInfo.headers().names().size());
@@ -383,8 +385,13 @@ public class UserUnitTests {
     @Order(22)
     @DisplayName("tests url from RequestPassword method")
     void testUserClassWithRequestPasswordContainingHost() {
+        String strBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"email\": \"john.doe@contentstack.com\"\n" +
+                "\t}\n" +
+                "}";
         Request requestInfo = userInstance
-                .requestPassword()
+                .requestPassword(strBody)
                 .request();
         Assertions
                 .assertEquals("api.contentstack.io",
@@ -401,8 +408,13 @@ public class UserUnitTests {
     @Order(23)
     @DisplayName("tests request method from RequestPassword")
     void testUserClassWithRequestPasswordContainingMethod() {
+        String strBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"email\": \"john.doe@contentstack.com\"\n" +
+                "\t}\n" +
+                "}";
         Request requestInfo = userInstance
-                .requestPassword()
+                .requestPassword(strBody)
                 .request();
         Assertions.assertEquals("POST",
                 requestInfo.method());
@@ -415,7 +427,12 @@ public class UserUnitTests {
     @Order(24)
     @DisplayName("tests headers from RequestPassword method")
     void testUserClassWithRequestPasswordContainingHeaders() {
-        Request requestInfo = userInstance.requestPassword().request();
+        String strBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"email\": \"john.doe@contentstack.com\"\n" +
+                "\t}\n" +
+                "}";
+        Request requestInfo = userInstance.requestPassword(strBody).request();
         Assertions.assertEquals(0, requestInfo.headers().names().size());
     }
 
@@ -423,10 +440,13 @@ public class UserUnitTests {
      * Test user class with request password containing query parameters.
      */
     @Test
-    @Order(25)
-    @DisplayName("User's RequestPassword should not contain any parameters")
     void testUserClassWithRequestPasswordContainingQueryParameters() {
-        Request requestInfo = userInstance.requestPassword().request();
+        String strBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"email\": \"john.doe@contentstack.com\"\n" +
+                "\t}\n" +
+                "}";
+        Request requestInfo = userInstance.requestPassword(strBody).request();
         Assertions.assertEquals(0,
                 requestInfo.url().queryParameterNames().size());
     }
@@ -437,14 +457,19 @@ public class UserUnitTests {
      * Test user class with reset password containing all parameters.
      */
     @Test
-    @Order(26)
-    @DisplayName("tests all parameters from ResetPassword method")
     void testUserClassWithResetPasswordContainingAllParameters() {
+        String requestBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"reset_password_token\": \"abcdefghijklmnop\",\n" +
+                "\t\t\"password\": \"Simple@123\",\n" +
+                "\t\t\"password_confirmation\": \"Simple@123\"\n" +
+                "\t}\n" +
+                "}";
         Request requestInfo = userInstance
-                .resetPassword()
+                .resetPassword(requestBody)
                 .request();
 
-        Assertions.assertEquals("PUT", requestInfo.method());
+        Assertions.assertEquals("POST", requestInfo.method());
         Assertions.assertEquals(0, requestInfo.headers().names().size());
         Assertions.assertTrue(isValid(requestInfo.url().toString()));
         Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(), "executes without parameter");
@@ -457,8 +482,15 @@ public class UserUnitTests {
     @Order(27)
     @DisplayName("tests url from ResetPassword method")
     void testUserClassWithResetPasswordContainingHost() {
+        String requestBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"reset_password_token\": \"abcdefghijklmnop\",\n" +
+                "\t\t\"password\": \"Simple@123\",\n" +
+                "\t\t\"password_confirmation\": \"Simple@123\"\n" +
+                "\t}\n" +
+                "}";
         Request requestInfo = userInstance
-                .resetPassword()
+                .resetPassword(requestBody)
                 .request();
         Assertions
                 .assertEquals("api.contentstack.io",
@@ -475,10 +507,17 @@ public class UserUnitTests {
     @Order(28)
     @DisplayName("tests request method from ResetPassword")
     void testUserClassWithResetPasswordContainingMethod() {
+        String requestBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"reset_password_token\": \"abcdefghijklmnop\",\n" +
+                "\t\t\"password\": \"Simple@123\",\n" +
+                "\t\t\"password_confirmation\": \"Simple@123\"\n" +
+                "\t}\n" +
+                "}";
         Request requestInfo = userInstance
-                .resetPassword()
+                .resetPassword(requestBody)
                 .request();
-        Assertions.assertEquals("PUT",
+        Assertions.assertEquals("POST",
                 requestInfo.method());
     }
 
@@ -489,7 +528,14 @@ public class UserUnitTests {
     @Order(29)
     @DisplayName("tests headers from ResetPassword method")
     void testUserClassWithResetPasswordContainingHeaders() {
-        Request requestInfo = userInstance.resetPassword().request();
+        String requestBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"reset_password_token\": \"abcdefghijklmnop\",\n" +
+                "\t\t\"password\": \"Simple@123\",\n" +
+                "\t\t\"password_confirmation\": \"Simple@123\"\n" +
+                "\t}\n" +
+                "}";
+        Request requestInfo = userInstance.resetPassword(requestBody).request();
         Assertions.assertEquals(0,
                 requestInfo.headers().names().size());
     }
@@ -501,7 +547,14 @@ public class UserUnitTests {
     @Order(30)
     @DisplayName("User's ResetPassword should not contain any parameters")
     void testUserClassWithResetPasswordContainingQueryParameters() {
-        Request requestInfo = userInstance.resetPassword().request();
+        String requestBody = "{\n" +
+                "\t\"user\": {\n" +
+                "\t\t\"reset_password_token\": \"abcdefghijklmnop\",\n" +
+                "\t\t\"password\": \"Simple@123\",\n" +
+                "\t\t\"password_confirmation\": \"Simple@123\"\n" +
+                "\t}\n" +
+                "}";
+        Request requestInfo = userInstance.resetPassword(requestBody).request();
         Assertions.assertEquals(0,
                 requestInfo.url().queryParameterNames().size());
     }

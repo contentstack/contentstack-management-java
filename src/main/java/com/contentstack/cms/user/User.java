@@ -1,6 +1,7 @@
 package com.contentstack.cms.user;
 
 import com.contentstack.cms.models.LoginDetails;
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -83,6 +84,9 @@ public class User {
      * account. The information returned includes details of the stacks and
      * organisation owned by and shared with the specified user account.
      *
+     * <ul>
+     * <ul>
+     * <ul>
      * @param query parameters
      * @return {@link UserService}
      */
@@ -100,8 +104,15 @@ public class User {
      *
      * @return {@link UserService}
      */
-    public Call<ResponseBody> updateUser() {
-        return userService.updateUser();
+    public Call<ResponseBody> updateUser(String strBody) {
+        RequestBody body = toBody(strBody);
+        return userService.updateUser(body);
+    }
+
+    private RequestBody toBody(String bodyString) {
+        return RequestBody.
+                create(MediaType.parse("application/json; charset=UTF-8"),
+                        bodyString);
     }
 
     /*
@@ -116,8 +127,8 @@ public class User {
      *                        Example:[activationToken]
      * @return {@link UserService}
      */
-    public Call<ResponseBody> activateUser(@NotNull String activationToken) {
-        return userService.activateUser(activationToken);
+    public Call<ResponseBody> activateUser(@NotNull String activationToken, String requestBody) {
+        return userService.activateUser(activationToken, toBody(requestBody));
     }
 
     /*
@@ -125,12 +136,12 @@ public class User {
      * log in to an account in case a user has forgotten the login password. <br>
      * Using this temporary password, you can log in to your account and set a new
      * password for your Contentstack account. <br>
-     * In the 'Body' section, provide the user's email address in JSON format <br>
+     * <ul> provide the user's email address in JSON format
      *
      * @return {@link UserService}
      */
-    public Call<ResponseBody> requestPassword() {
-        return userService.requestPassword();
+    public Call<ResponseBody> requestPassword(String requestBody) {
+        return userService.requestPassword(toBody(requestBody));
     }
 
     /*
@@ -142,8 +153,8 @@ public class User {
      *
      * @return {@link UserService}
      */
-    public Call<ResponseBody> resetPassword() {
-        return userService.resetPassword();
+    public Call<ResponseBody> resetPassword(@NotNull String requestBody) {
+        return userService.resetPassword(toBody(requestBody));
     }
 
     /*
