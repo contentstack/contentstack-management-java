@@ -6,7 +6,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public interface UserService {
 
@@ -39,6 +39,6 @@ public interface UserService {
 
     @GET("user")
     Call<ResponseBody> getUserOrganization(
-            @QueryMap HashMap<String, Object> options);
+            @QueryMap Map<String, Object> options);
 
 }

@@ -17,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class OrgUnitTests {
 
     private static Organization organization;
-    private static String authtoken;
+    private final static String authtoken = Dotenv.load().get("auth_token");
 
     @BeforeAll
     public static void setUp() {
-        authtoken = Dotenv.load().get("auth_token");
+
         assert authtoken != null;
         organization = new Contentstack.Builder()
                 .setAuthtoken(authtoken)
@@ -48,7 +48,6 @@ public class OrgUnitTests {
     void testConstructorWithRetrofitClientAndAuthtoken() {
         // create retrofit client
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.contentstack.io/v3/").build();
-        Organization organization = new Organization(retrofit);
         assertEquals("https://api.contentstack.io/v3/", retrofit.baseUrl().toString());
     }
 
@@ -120,6 +119,7 @@ public class OrgUnitTests {
     @Test
     void testGetSingleMethod() {
         String organizationUid = Dotenv.load().get("organizations_uid");
+        assert organizationUid != null;
         Request requestInfo = organization.getSingleOrganization(organizationUid).request();
         Assertions.assertEquals("GET",
                 requestInfo.method());
@@ -128,6 +128,7 @@ public class OrgUnitTests {
     @Test
     void testGetSingleBaseUrl() {
         String organizationUid = Dotenv.load().get("organizations_uid");
+        assert organizationUid != null;
         Request requestInfo = organization.getSingleOrganization(organizationUid).request();
         Assertions.assertEquals("api.contentstack.io",
                 requestInfo.url().host());
@@ -136,6 +137,7 @@ public class OrgUnitTests {
     @Test
     void testGetSingleEncodedPath() {
         String organizationUid = Dotenv.load().get("organizations_uid");
+        assert organizationUid != null;
         Request requestInfo = organization.getSingleOrganization(organizationUid).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid,
                 requestInfo.url().encodedPath());
@@ -146,6 +148,7 @@ public class OrgUnitTests {
         String organizationUid = Dotenv.load().get("organizations_uid");
         HashMap<String, Object> mapQuery = new HashMap<>();
         mapQuery.put("include_plan", true);
+        assert organizationUid != null;
         Request requestInfo = organization.getSingleOrganization(organizationUid, mapQuery).request();
         Assertions.assertEquals("include_plan=true",
                 requestInfo.url().query());
@@ -226,29 +229,65 @@ public class OrgUnitTests {
     @Test
     void testInviteUserMethod() {
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
+        Request requestInfo = organization.inviteUser(orgUid, "").request();
         Assertions.assertEquals("POST", requestInfo.method());
     }
 
     @Test
     void testInviteUserBaseUrl() {
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
+        Request requestInfo = organization.inviteUser(orgUid, "").request();
         Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + orgUid + "/share", requestInfo.url().toString());
     }
 
 
     @Test
     void testInviteUserRequestBody() {
+        String requestBody = "{\n" +
+                "\t\"share\": {\n" +
+                "\t\t\"users\": {\n" +
+                "\t\t\t\"abc@sample.com\": [\"{{orgAdminRoleUid}}\"],\n" +
+                "\t\t\t\"xyz@sample.com\": [\"{{orgMemberRoleUid}}\"]\n" +
+                "\t\t},\n" +
+                "\t\t\"stacks\": {\n" +
+                "\t\t\t\"abc@sample.com\": {\n" +
+                "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"xyz@sample.com\": {\n" +
+                "\t\t\t\t\"ekdjnewkdnwndkwendken\": [\"bebdjewbdjewbdjeb\"],\n" +
+                "\t\t\t\t\"udiubdebwdbwedb\": [\"ndenndnwndwbdb\", \"jnjdnwdnwndjw\"]\n" +
+                "\t\t\t}\n" +
+                "\t\t},\n" +
+                "\t\t\"message\": \"Invitation message\"\n" +
+                "\t}\n" +
+                "}";
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
+        Request requestInfo = organization.inviteUser(orgUid, requestBody).request();
         Assertions.assertNull(requestInfo.url().encodedQuery());
     }
 
     @Test
     void testInviteUserRequestParam() {
+        String requestBody = "{\n" +
+                "\t\"share\": {\n" +
+                "\t\t\"users\": {\n" +
+                "\t\t\t\"abc@sample.com\": [\"{{orgAdminRoleUid}}\"],\n" +
+                "\t\t\t\"xyz@sample.com\": [\"{{orgMemberRoleUid}}\"]\n" +
+                "\t\t},\n" +
+                "\t\t\"stacks\": {\n" +
+                "\t\t\t\"abc@sample.com\": {\n" +
+                "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"xyz@sample.com\": {\n" +
+                "\t\t\t\t\"njedjnedjekdn\": [\"ednewjndejkdkend\"],\n" +
+                "\t\t\t\t\"ekjndkendendnje\": [\"kndkwendkendejnd\", \"kedmekdnkedejdn\"]\n" +
+                "\t\t\t}\n" +
+                "\t\t},\n" +
+                "\t\t\"message\": \"Invitation message\"\n" +
+                "\t}\n" +
+                "}";
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
+        Request requestInfo = organization.inviteUser(orgUid, requestBody).request();
         Assertions.assertEquals("/v3/organizations/" + orgUid + "/share",
                 requestInfo.url().encodedPath());
     }
@@ -256,16 +295,26 @@ public class OrgUnitTests {
 
     @Test
     void testRemoveUsersMethod() {
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.removeUsers(orgUid).request();
+        Request requestInfo = organization.removeUsers(orgUid, reqBody).request();
         Assertions.assertEquals("DELETE",
                 requestInfo.method());
     }
 
     @Test
     void testRemoveUsersBaseUrl() {
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.removeUsers(orgUid).request();
+        Request requestInfo = organization.removeUsers(orgUid, reqBody).request();
         Assertions.assertEquals("/v3/organizations/" + orgUid + "/share",
                 requestInfo.url().encodedPath());
     }
@@ -273,9 +322,14 @@ public class OrgUnitTests {
 
     @Test
     void testRemoveUsersCompleteUrl() {
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
         String host = "https://api.contentstack.io";
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.removeUsers(orgUid).request();
+        Request requestInfo = organization.removeUsers(orgUid, reqBody).request();
         Assertions.assertEquals(host + "/v3/organizations/" + orgUid + "/share",
                 requestInfo.url().toString());
     }
@@ -286,10 +340,14 @@ public class OrgUnitTests {
 
     @Test
     void testRemoveUsersRequestBody() {
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
         String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.removeUsers(orgUid).request();
-        Assertions.assertEquals(null,
-                requestInfo.url().query());
+        Request requestInfo = organization.removeUsers(orgUid, reqBody).request();
+        Assertions.assertNull(requestInfo.url().query());
     }
 
     /////////////////////////////////
