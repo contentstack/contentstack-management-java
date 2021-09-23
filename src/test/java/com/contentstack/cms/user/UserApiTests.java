@@ -6,14 +6,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserApiTests {
 
     private static User userInstance;
@@ -31,6 +30,7 @@ public class UserApiTests {
 
 
     @Test
+    @Order(1)
     void testGetUser() throws IOException {
         Response<ResponseBody> userLogin = userInstance.getUser().execute();
         if (userLogin.isSuccessful()) {
@@ -42,6 +42,7 @@ public class UserApiTests {
 
 
     @Test()
+    @Order(2)
     void testUpdateUser() throws IOException {
         String body = "{\n" +
                 "\t\"user\": {\n" +
@@ -58,6 +59,7 @@ public class UserApiTests {
     }
 
     @Test
+    @Order(3)
     void testUserOrg() throws IOException {
         HashMap<String, Object> query = new HashMap<>();
         query.put("limit", 10);
@@ -72,6 +74,7 @@ public class UserApiTests {
     }
 
     @Test
+    @Order(4)
     void testActivateUser() throws IOException {
         String actToken = dotenv.get("userId");
         String body = "{\n" +
@@ -94,6 +97,7 @@ public class UserApiTests {
     }
 
     @Test
+    @Order(5)
     void testRequestPassword() throws IOException {
         String strBody = "{\n" +
                 "\t\"user\": {\n" +
@@ -114,6 +118,7 @@ public class UserApiTests {
     }
 
     @Test
+    @Order(6)
     void testResetPassword() throws IOException {
         String requestBody = "{\n" +
                 "\t\"user\": {\n" +
@@ -135,6 +140,7 @@ public class UserApiTests {
     }
 
     @Test
+    @Order(7)
     void testUserOrgWithAllAvailKeys() throws IOException {
         HashMap<String, Object> map = new HashMap<>();
         map.put("limit", 10);
@@ -173,19 +179,28 @@ public class UserApiTests {
         }
     }
 
-
     @Test
-    void testLogoutWithAuthtoken() throws IOException {
-        String strAuth = dotenv.get("auth_token");
-        Response<ResponseBody> response = userInstance.logoutWithAuthtoken(strAuth).execute();
+    @Order(8)
+    void testLogout() throws IOException {
+        Response<ResponseBody> response = userInstance.logout().execute();
         if (response.isSuccessful()) {
+            JsonObject user = toJson(response);
+            Assertions.assertTrue(user.has("notice"));
+            Assertions.assertEquals("You've logged out successfully.",
+                    user.get("notice").getAsString());
         }
     }
 
     @Test
-    void testLogout() throws IOException {
-        Response<ResponseBody> response = userInstance.logout().execute();
+    @Order(9)
+    void testLogoutWithAuthtoken() throws IOException {
+        String strAuth = dotenv.get("auth_token");
+        Response<ResponseBody> response = userInstance.logoutWithAuthtoken(strAuth).execute();
         if (response.isSuccessful()) {
+            JsonObject user = toJson(response);
+            Assertions.assertTrue(user.has("notice"));
+            Assertions.assertEquals("You've logged out successfully.",
+                    user.get("notice").getAsString());
         }
     }
 

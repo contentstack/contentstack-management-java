@@ -1,5 +1,7 @@
 package com.contentstack.cms.core;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -52,6 +54,13 @@ public class Util {
      */
     public static void assertionError() {
         throw new AssertionError(PRIVATE_CONSTRUCTOR);
+    }
+
+
+    public static RequestBody toRequestBody(String bodyString) {
+        return RequestBody.
+                create(MediaType.parse("application/json; charset=UTF-8"),
+                        bodyString);
     }
 
 }
