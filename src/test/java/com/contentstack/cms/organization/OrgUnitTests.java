@@ -17,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class OrgUnitTests {
 
     private static Organization organization;
-    private static String authtoken;
+    private final static String authtoken = Dotenv.load().get("auth_token");
 
     @BeforeAll
     public static void setUp() {
-        authtoken = Dotenv.load().get("auth_token");
+
         assert authtoken != null;
         organization = new Contentstack.Builder()
                 .setAuthtoken(authtoken)
@@ -48,7 +48,6 @@ public class OrgUnitTests {
     void testConstructorWithRetrofitClientAndAuthtoken() {
         // create retrofit client
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.contentstack.io/v3/").build();
-        Organization organization = new Organization(retrofit);
         assertEquals("https://api.contentstack.io/v3/", retrofit.baseUrl().toString());
     }
 
@@ -119,7 +118,8 @@ public class OrgUnitTests {
 
     @Test
     void testGetSingleMethod() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
+        assert organizationUid != null;
         Request requestInfo = organization.getSingleOrganization(organizationUid).request();
         Assertions.assertEquals("GET",
                 requestInfo.method());
@@ -127,7 +127,8 @@ public class OrgUnitTests {
 
     @Test
     void testGetSingleBaseUrl() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
+        assert organizationUid != null;
         Request requestInfo = organization.getSingleOrganization(organizationUid).request();
         Assertions.assertEquals("api.contentstack.io",
                 requestInfo.url().host());
@@ -135,7 +136,8 @@ public class OrgUnitTests {
 
     @Test
     void testGetSingleEncodedPath() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
+        assert organizationUid != null;
         Request requestInfo = organization.getSingleOrganization(organizationUid).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid,
                 requestInfo.url().encodedPath());
@@ -143,9 +145,10 @@ public class OrgUnitTests {
 
     @Test
     void testGetSingleCompleteUrl() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> mapQuery = new HashMap<>();
         mapQuery.put("include_plan", true);
+        assert organizationUid != null;
         Request requestInfo = organization.getSingleOrganization(organizationUid, mapQuery).request();
         Assertions.assertEquals("include_plan=true",
                 requestInfo.url().query());
@@ -154,7 +157,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetRoleMethod() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getRoles(organizationUid).request();
         Assertions.assertEquals("GET",
                 requestInfo.method());
@@ -162,7 +165,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetRoleBaseUrl() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getRoles(organizationUid).request();
         Assertions.assertEquals("api.contentstack.io",
                 requestInfo.url().host());
@@ -170,7 +173,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetRoleEncodedPath() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getRoles(organizationUid).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/roles",
                 requestInfo.url().encodedPath());
@@ -178,7 +181,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetRoleCompleteUrl() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getRoles(organizationUid).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/roles",
                 requestInfo.url().encodedPath());
@@ -187,7 +190,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetRoleRequestBody() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 4);
         queryParams.put("skip", 4);
@@ -198,7 +201,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetRoleEncodedPathWithOptParams() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 4);
         queryParams.put("skip", 4);
@@ -209,7 +212,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetRoleRequestParam() {
-        String organizationUid = Dotenv.load().get("organizations_uid");
+        String organizationUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 4);
         queryParams.put("skip", 4);
@@ -225,30 +228,66 @@ public class OrgUnitTests {
 
     @Test
     void testInviteUserMethod() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
+        String orgUid = Dotenv.load().get("organizationUid");
+        Request requestInfo = organization.inviteUser(orgUid, "").request();
         Assertions.assertEquals("POST", requestInfo.method());
     }
 
     @Test
     void testInviteUserBaseUrl() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
+        String orgUid = Dotenv.load().get("organizationUid");
+        Request requestInfo = organization.inviteUser(orgUid, "").request();
         Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + orgUid + "/share", requestInfo.url().toString());
     }
 
 
     @Test
     void testInviteUserRequestBody() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
+        String requestBody = "{\n" +
+                "\t\"share\": {\n" +
+                "\t\t\"users\": {\n" +
+                "\t\t\t\"abc@sample.com\": [\"{{orgAdminRoleUid}}\"],\n" +
+                "\t\t\t\"xyz@sample.com\": [\"{{orgMemberRoleUid}}\"]\n" +
+                "\t\t},\n" +
+                "\t\t\"stacks\": {\n" +
+                "\t\t\t\"abc@sample.com\": {\n" +
+                "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"xyz@sample.com\": {\n" +
+                "\t\t\t\t\"ekdjnewkdnwndkwendken\": [\"bebdjewbdjewbdjeb\"],\n" +
+                "\t\t\t\t\"udiubdebwdbwedb\": [\"ndenndnwndwbdb\", \"jnjdnwdnwndjw\"]\n" +
+                "\t\t\t}\n" +
+                "\t\t},\n" +
+                "\t\t\"message\": \"Invitation message\"\n" +
+                "\t}\n" +
+                "}";
+        String orgUid = Dotenv.load().get("organizationUid");
+        Request requestInfo = organization.inviteUser(orgUid, requestBody).request();
         Assertions.assertNull(requestInfo.url().encodedQuery());
     }
 
     @Test
     void testInviteUserRequestParam() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.inviteUser(orgUid).request();
+        String requestBody = "{\n" +
+                "\t\"share\": {\n" +
+                "\t\t\"users\": {\n" +
+                "\t\t\t\"abc@sample.com\": [\"{{orgAdminRoleUid}}\"],\n" +
+                "\t\t\t\"xyz@sample.com\": [\"{{orgMemberRoleUid}}\"]\n" +
+                "\t\t},\n" +
+                "\t\t\"stacks\": {\n" +
+                "\t\t\t\"abc@sample.com\": {\n" +
+                "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"xyz@sample.com\": {\n" +
+                "\t\t\t\t\"njedjnedjekdn\": [\"ednewjndejkdkend\"],\n" +
+                "\t\t\t\t\"ekjndkendendnje\": [\"kndkwendkendejnd\", \"kedmekdnkedejdn\"]\n" +
+                "\t\t\t}\n" +
+                "\t\t},\n" +
+                "\t\t\"message\": \"Invitation message\"\n" +
+                "\t}\n" +
+                "}";
+        String orgUid = Dotenv.load().get("organizationUid");
+        Request requestInfo = organization.inviteUser(orgUid, requestBody).request();
         Assertions.assertEquals("/v3/organizations/" + orgUid + "/share",
                 requestInfo.url().encodedPath());
     }
@@ -256,16 +295,26 @@ public class OrgUnitTests {
 
     @Test
     void testRemoveUsersMethod() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.removeUsers(orgUid).request();
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
+        String orgUid = Dotenv.load().get("organizationUid");
+        Request requestInfo = organization.removeUsers(orgUid, reqBody).request();
         Assertions.assertEquals("DELETE",
                 requestInfo.method());
     }
 
     @Test
     void testRemoveUsersBaseUrl() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.removeUsers(orgUid).request();
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
+        String orgUid = Dotenv.load().get("organizationUid");
+        Request requestInfo = organization.removeUsers(orgUid, reqBody).request();
         Assertions.assertEquals("/v3/organizations/" + orgUid + "/share",
                 requestInfo.url().encodedPath());
     }
@@ -273,9 +322,14 @@ public class OrgUnitTests {
 
     @Test
     void testRemoveUsersCompleteUrl() {
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
         String host = "https://api.contentstack.io";
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.removeUsers(orgUid).request();
+        String orgUid = Dotenv.load().get("organizationUid");
+        Request requestInfo = organization.removeUsers(orgUid, reqBody).request();
         Assertions.assertEquals(host + "/v3/organizations/" + orgUid + "/share",
                 requestInfo.url().toString());
     }
@@ -286,10 +340,14 @@ public class OrgUnitTests {
 
     @Test
     void testRemoveUsersRequestBody() {
-        String orgUid = Dotenv.load().get("organizations_uid");
-        Request requestInfo = organization.removeUsers(orgUid).request();
-        Assertions.assertEquals(null,
-                requestInfo.url().query());
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
+        String orgUid = Dotenv.load().get("organizationUid");
+        Request requestInfo = organization.removeUsers(orgUid, reqBody).request();
+        Assertions.assertNull(requestInfo.url().query());
     }
 
     /////////////////////////////////
@@ -298,7 +356,7 @@ public class OrgUnitTests {
     //////////////////////////////
     @Test
     void testResendInvitationMethod() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.resendInvitation(orgUid,
                 "invitation_uid").request();
         Assertions.assertEquals("GET",
@@ -307,7 +365,7 @@ public class OrgUnitTests {
 
     @Test
     void testResendInvitationBaseUrl() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.resendInvitation(orgUid,
                 "invitation_uid").request();
         Assertions.assertEquals("api.contentstack.io",
@@ -316,7 +374,7 @@ public class OrgUnitTests {
 
     @Test
     void testResendInvitationEncodedPath() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
         Assertions.assertEquals("/v3/organizations/" + orgUid + "/share/invitation_uid/resend_invitation",
                 requestInfo.url().encodedPath());
@@ -325,7 +383,7 @@ public class OrgUnitTests {
 
     @Test
     void testResendInvitationRequestBody() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
         Assertions.assertNull(
                 requestInfo.url().query());
@@ -333,7 +391,7 @@ public class OrgUnitTests {
 
     @Test
     void testResendInvitationsRequestParam() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.resendInvitation(orgUid, "invitation_uid").request();
         Assertions.assertNull(
                 requestInfo.url().encodedQuery());
@@ -342,7 +400,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetAllInvitationMethod() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 4);
         queryParams.put("skip", 4);
@@ -353,7 +411,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetAllInvitationBaseUrl() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getAllInvitations(orgUid).request();
         Assertions.assertEquals("GET",
                 requestInfo.method());
@@ -361,7 +419,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetAllInvitationEncodedPath() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 4);
         queryParams.put("skip", 4);
@@ -373,7 +431,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetAllInvitationsRequestParam() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 4);
         queryParams.put("skip", 4);
@@ -385,7 +443,7 @@ public class OrgUnitTests {
 
     @Test
     void testTransferOwnershipMethod() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         String transferToEmail = "ishaileshmishra@gmail.com";
         Request requestInfo = organization.transferOwnership(orgUid, transferToEmail).request();
         Assertions.assertEquals("POST",
@@ -394,7 +452,7 @@ public class OrgUnitTests {
 
     @Test
     void testTransferOwnershipEncodedPath() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         String transferToEmail = "ishaileshmishra@gmail.com";
         Request requestInfo = organization.transferOwnership(orgUid, transferToEmail).request();
         Assertions.assertEquals("/v3/organizations/" + orgUid + "/transfer-ownership",
@@ -408,7 +466,7 @@ public class OrgUnitTests {
 
     @Test
     void testTransferOwnershipRequestBody() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         String transferToEmail = "ishaileshmishra@gmail.com";
         Request requestInfo = organization.transferOwnership(orgUid, transferToEmail).request();
         Assertions.assertNull(
@@ -418,7 +476,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetStacksMethod() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("limit", 4);
         hashMap.put("skip", 4);
@@ -429,7 +487,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetStacksBaseUrl() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("limit", 4);
         hashMap.put("skip", 4);
@@ -440,7 +498,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetStacksEncodedPath() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("limit", 4);
         hashMap.put("skip", 4);
@@ -456,7 +514,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetStacksHeaders() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("limit", 4);
         hashMap.put("skip", 4);
@@ -464,13 +522,13 @@ public class OrgUnitTests {
         hashMap.put("desc", true);
         Request requestInfo = organization.getStacks(orgUid, hashMap).request();
         Assertions.assertEquals(
-                "/v3/organizations/blt4444c44ea4ddf444/stacks",
+                "/v3/organizations/" + orgUid + "/stacks",
                 requestInfo.url().encodedPath());
     }
 
     @Test
     void testGetStacksRequestBody() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("limit", 4);
         hashMap.put("skip", 4);
@@ -485,7 +543,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetStacksEncodedQueryParam() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("limit", 4);
         hashMap.put("skip", 4);
@@ -502,23 +560,23 @@ public class OrgUnitTests {
     //////////////////////////////
     @Test
     void testGetLogsMethod() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsDetails(orgUid).request();
         Assertions.assertEquals("GET", requestInfo.method());
     }
 
     @Test
     void testGetLogsBaseUrl() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsDetails(orgUid).request();
         Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
     }
 
     @Test
     void testGetLogsEncodedPath() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsDetails(orgUid).request();
-        Assertions.assertEquals("/v3/organizations/blt4444c44ea4ddf444/logs", requestInfo.url().encodedPath());
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/logs", requestInfo.url().encodedPath());
     }
 
     @Test
@@ -527,7 +585,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetLogsRequestBody() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsDetails(orgUid).request();
         Assertions.assertNull(
                 requestInfo.url().encodedQuery());
@@ -535,7 +593,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetLogsRequestParam() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsDetails(orgUid).request();
         Assertions.assertNull(
                 requestInfo.url().query());
@@ -546,29 +604,29 @@ public class OrgUnitTests {
     //////////////////////////////
     @Test
     void testGetLogItemsMethod() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsItem(orgUid, "idlogUid12345").request();
         Assertions.assertEquals("GET", requestInfo.method());
     }
 
     @Test
     void testGetLogItemsBaseUrl() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsDetails(orgUid).request();
         Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
     }
 
     @Test
     void testGetLogItemsEncodedPath() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsItem(orgUid, "idlogUid12345").request();
-        Assertions.assertEquals("/v3/organizations/blt4444c44ea4ddf444/logs/idlogUid12345", requestInfo.url().encodedPath());
+        Assertions.assertEquals("/v3/organizations/" + orgUid + "/logs/idlogUid12345", requestInfo.url().encodedPath());
     }
 
 
     @Test
     void testGetLogItemsRequestBody() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsItem(orgUid, "idLogUid12345").request();
         Assertions.assertNull(
                 requestInfo.url().encodedQuery());
@@ -576,7 +634,7 @@ public class OrgUnitTests {
 
     @Test
     void testGetLogItemsRequestParam() {
-        String orgUid = Dotenv.load().get("organizations_uid");
+        String orgUid = Dotenv.load().get("organizationUid");
         Request requestInfo = organization.getLogsItem(orgUid, "idLogUid12345").request();
         Assertions.assertNull(
                 requestInfo.url().query());

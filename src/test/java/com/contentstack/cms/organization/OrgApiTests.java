@@ -1,253 +1,337 @@
 package com.contentstack.cms.organization;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.core.Error;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrgApiTests {
 
     private Organization organization;
-    String emailId = Dotenv.load().get("username");
-    String password = Dotenv.load().get("password");
-    String authtoken = Dotenv.load().get("authtoken");
+    private final String organizationUid = Dotenv.load().get("organizationUid");
+
+    private JsonObject toJson(Response<ResponseBody> response) throws IOException {
+        assert response.body() != null;
+        return new Gson().fromJson(response.body().string(), JsonObject.class);
+    }
 
     @BeforeAll
     public void setUp() throws IOException {
         Contentstack contentstack = new Contentstack.Builder().build();
+        String emailId = Dotenv.load().get("username");
+        String password = Dotenv.load().get("password");
         contentstack.login(emailId, password);
         organization = contentstack.organization();
     }
 
     @Test
-    @DisplayName("organization fetch all")
-    void testOrganizationFetchAll() throws IOException {
+    void testGetAll() throws IOException {
         Response<ResponseBody> response = organization.getAll().execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("organizations"));
+            JsonArray isJsonArray = respJson.get("organizations").getAsJsonArray();
+            Assertions.assertTrue(isJsonArray.isJsonArray());
+        } else {
+            Assertions.fail("should be passed");
+        }
+
+    }
+
+    @Test
+    void testGetAllWithParams() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("include_plan", true);
+        Response<ResponseBody> response = organization.getAll(query).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("organizations"));
+            JsonElement planId = respJson.get("organizations").getAsJsonArray().get(0);
+            JsonObject jsonPlanId = planId.getAsJsonObject();
+            Assertions.assertTrue(jsonPlanId.has("plan_id"));
+        } else {
+            Assertions.fail("should be passed");
+        }
+    }
+
+    @Test
+    void testGetSingle() throws IOException {
+        String orgUid = Dotenv.load().get("organizationUid");
+        assert orgUid != null;
+        Response<ResponseBody> response = organization.getSingleOrganization(orgUid).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("organization"));
+            JsonObject isJsonObject = respJson.get("organization").getAsJsonObject();
+            Assertions.assertTrue(isJsonObject.isJsonObject());
+        } else {
+            Assertions.fail("should be passed");
+        }
+    }
+
+    @Test
+    void testGetSingleWithInclude() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("include_plan", true);
+        String orgUid = Dotenv.load().get("organizationUid");
+        assert orgUid != null;
+        Response<ResponseBody> response = organization.getSingleOrganization(orgUid, query).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("organization"));
+            JsonObject isJsonObject = respJson.get("organization").getAsJsonObject();
+            Assertions.assertTrue(isJsonObject.has("plan_id"));
+        } else {
+            Assertions.fail("should be passed");
+        }
+    }
+
+    @Test
+    void testRole() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("limit", 2);
+        query.put("skip", 2);
+        query.put("asc", true);
+        query.put("desc", true);
+        query.put("include_count", true);
+        query.put("include_stack_roles", true);
+        String orgUid = Dotenv.load().get("organizationUid");
+        Response<ResponseBody> response = organization.getRoles(orgUid).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("roles"));
+            JsonArray asJsonArray = respJson.get("roles").getAsJsonArray();
+            Assertions.assertTrue(asJsonArray.isJsonArray());
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "You don't have the permission to do this operation.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(316, error.getErrorCode());
+        }
+    }
+
+
+    @Test
+    void testRoleWithQueryPrams() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("limit", 2);
+        query.put("skip", 2);
+        query.put("asc", true);
+        query.put("desc", true);
+        query.put("include_count", true);
+        query.put("include_stack_roles", false);
+        String orgUid = Dotenv.load().get("organizationUid");
+        Response<ResponseBody> response = organization.getRoles(orgUid, query).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("roles"));
+            JsonArray asJsonArray = respJson.get("roles").getAsJsonArray();
+            Assertions.assertTrue(asJsonArray.isJsonArray());
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "You don't have the permission to do this operation.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(316, error.getErrorCode());
+        }
+    }
+
+    @Test
+    void testInviteUser() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("include_plan", true);
+
+        String requestBody = "{\n" +
+                "\t\"share\": {\n" +
+                "\t\t\"users\": {\n" +
+                "\t\t\t\"abc@sample.com\": [\"{{orgAdminRoleUid}}\"],\n" +
+                "\t\t\t\"xyz@sample.com\": [\"{{orgMemberRoleUid}}\"]\n" +
+                "\t\t},\n" +
+                "\t\t\"stacks\": {\n" +
+                "\t\t\t\"abc@sample.com\": {\n" +
+                "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"xyz@sample.com\": {\n" +
+                "\t\t\t\t\"edjnekdnekjdnkejd\": [\"kdnkwendkewdjekwnd\"],\n" +
+                "\t\t\t\t\"dkejndkenjdkejnd\": [\"edekwdnkejndkej\", \"ednekjdnekjndkejnd\"]\n" +
+                "\t\t\t}\n" +
+                "\t\t},\n" +
+                "\t\t\"message\": \"Invitation message\"\n" +
+                "\t}\n" +
+                "}";
+        Response<ResponseBody> response = organization.inviteUser(organizationUid, requestBody).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("shares"));
+            JsonArray asJsonArray = respJson.get("shares").getAsJsonArray();
+            Assertions.assertTrue(asJsonArray.isJsonArray());
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "Unable to share at this moment.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(315, error.getErrorCode());
+        }
+    }
+
+
+    @Test
+    void testRemoveUser() throws IOException {
+        String reqBody = "{\n" +
+                "    \"emails\":[\n" +
+                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
+                "    ]\n" +
+                "}";
+        Response<ResponseBody> response = organization.removeUsers(organizationUid, reqBody).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("notice"));
+            Assertions.assertTrue(respJson.has("shares"));
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "Unable to delete share at this moment.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(323, error.getErrorCode());
+        }
+    }
+
+    @Test
+    void testResendInvitation() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("include_plan", true);
+        String orgUid = Dotenv.load().get("organizationUid");
+        Response<ResponseBody> response = organization.resendInvitation(orgUid, "shareUid").execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("notice"));
+            Assertions.assertTrue(respJson.has("shares"));
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "Unable to resend invitation as the invitation is either not initiated or is already accepted.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(328, error.getErrorCode());
+        }
     }
 
 //    @Test
-//    void testGetAllOrganizastionsUrlRequestHeaders() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//    }
-//
-//    @Test
-//    @DisplayName("Test get all organizations url request for single
-//            organisation")
-//            void testGetAllOrganizationsUrlRequestFewQueryParameters(){
-//            HashMap<String, String>queryParam = new HashMap<>();
-//            queryParam.put("limit", "1");
-//     queryParam.put("skip","1");
-//    Request requestInfo = organization.getAll(queryParam).request();
-//     Assertions.assertEquals(2,requestInfo.url().
-//
-//    queryParameterNames().
-//
-//    size());
-//}
-//
-//    // ======================================================================//
-//    // ======================================================================//
-//
-//    @Test
-//    @DisplayName("Test get single organizations with no query parameters")
-//    void testGetSingleWithoutQueryParameter() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(),
-//                "executes without parameter");
-//    }
-//
-//    @Test
-//    @DisplayName("Test get single organizations with all parameters")
-//    void testGetSingleOrganizationsWithAllParameters() {
-//        // Adding parameters to hashmap
-//        HashMap<String, String> queryParam = new HashMap<>();
-//        queryParam.put("include_plan", "true");
-//        Request requestInfo = organization.getAll(queryParam).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(queryParam.size(),
-//                requestInfo.url().queryParameterNames().size(),
-//                "executes with parameter");
-//        Assertions.assertEquals("include_plan=true",
-//                requestInfo.url().encodedQuery());
-//        Assertions.assertEquals(
-//                "https://" + requestInfo.url().host() + "/v3/organizations/" +
-//                        DEFAULT_ORG_UID + "?include_plan=true",
-//                requestInfo.url().toString());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get single organizations url host")
-//    void testGetSingleOrganizationsUrlHost() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get single organizations url request method")
-//    void testGetSingleOrganizationsUrlRequestMethod() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get single organizations url request")
-//    void testGetSingleOrganizationsUrlRequestHeaders() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get single organizations relative url")
-//    void testGetSingleOrganizationsRelativeUrl() {
-//        Request requestInfo = organization.getAll(new HashMap<>()).request();
-//        Assertions.assertEquals("https://" + requestInfo.url().host() +
-//                        "/v3/organizations/" + DEFAULT_ORG_UID,
-//                requestInfo.url().toString());
-//    }
-//
-//    // ======================================================================//
-//    // ======================================================================//
-//
-//    @Test
-//    @DisplayName("Test get organizations role with no query parameters")
-//    void testGetRoleWithoutQueryParameter() {
-//        Request requestInfo = organization.getRoles(DEFAULT_ORG_UID, new
-//                HashMap<>()).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(),
-//                "executes without parameter");
-//    }
-//
-//    @Test
-//    @DisplayName("Test get organizations role with all parameters")
-//    void testGetRoleOrganizationsWithAllParameters() {
-//        // Adding parameters to hashmap
-//        HashMap<String, String> queryParam = new HashMap<>();
-//        queryParam.put("include_plan", "true");
-//        Request requestInfo = organization.getRoles(DEFAULT_ORG_UID,
-//                queryParam).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(queryParam.size(),
-//                requestInfo.url().queryParameterNames().size(),
-//                "executes with parameter");
-//        Assertions.assertEquals("include_plan=true",
-//                requestInfo.url().encodedQuery());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get organizations role url host")
-//    void testGetRoleOrganizationsUrlHost() {
-//        Request requestInfo = organization.getRoles(DEFAULT_AUTHTOKEN, new
-//                HashMap<>()).request();
-//        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get organizations role url request method")
-//    void testGetRoleOrganizationsUrlRequestMethod() {
-//        Request requestInfo = organization.getRoles("org_uid", new
-//                HashMap<>()).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get organizations role url request")
-//    void testGetRoleOrganizationsUrlRequestHeaders() {
-//        Request requestInfo = organization.getRoles("org_uid", new
-//                HashMap<>()).request();
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//    }
-//
-//    @Test
-//    @DisplayName("Tests get organizations role relative url")
-//    void testGetRoleOrganizationsRelativeUrl() {
-//        Request requestInfo = organization.getRoles("org_uid", new
-//                HashMap<>()).request();
-//        Assertions.assertEquals(
-//                "https://" + requestInfo.url().host() + "/v3/organizations/" +
-//                        DEFAULT_ORG_UID + "/roles",
-//                requestInfo.url().toString());
-//    }
-//
-//    @Test
-//    @DisplayName("Test get role with query parameters")
-//    void testGetRoleWithQueryParameter() {
-//        Map<String, String> mapQueryParam = new HashMap<>();
-//        mapQueryParam.putIfAbsent("limit", "10");
-//        mapQueryParam.putIfAbsent("skip", "2");
-//        Request requestInfo = organization.getRoles("org_uid",
-//                mapQueryParam).request();
-//        Assertions.assertEquals("GET", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(2, requestInfo.url().queryParameterNames().size(),
-//                "executes with query parameter");
-//    }
-//
-//    // Class<T> type
-//
-//    // ======================================================================//
-//    // ======================================================================//
-//
-//    @Test
-//    @DisplayName("Test Invite user with no query parameters")
-//    void testInviteUserWithNoParameter() {
-//
-//        Request requestInfo = organization.inviteUser(DEFAULT_ORG_UID).request();
-//
-//        Assertions.assertEquals("POST", requestInfo.method());
-//        Assertions.assertEquals(1, requestInfo.headers().names().size());
-//        Assertions.assertTrue(requestInfo.isHttps(), "contentstack works with https
-//                only");
-//                Assertions.assertTrue(isValid(requestInfo.url().toString()));
-//        Assertions.assertEquals(0, requestInfo.url().queryParameterNames().size(),
-//                "executes without parameter");
-//        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" +
-//                        DEFAULT_ORG_UID + "/share",
-//                requestInfo.url().toString());
-//
-//        try {
-//            Response<ResponseBody> response =
-//                    organization.inviteUser(DEFAULT_ORG_UID).execute();
-//            boolean isAvail = response.isSuccessful();
-//            if (isAvail) {
-//                System.out.println(" response: " + response.body());
-//            } else {
-//                System.out.println(" response: " + response.errorBody());
-//            }
-//        } catch (IOException e) {
-//
-//            e.printStackTrace();
+//    void testAllInvitation() throws IOException {
+//        HashMap<String, Object> query = new HashMap<>();
+//        query.put("include_plan", true);
+//        Response<ResponseBody> response = organization.getAllInvitations(organizationUid).execute();
+//        if (response.isSuccessful()) {
+//            JsonObject respJson = toJson(response);
+//            Assertions.assertTrue(respJson.has("notice"));
+//            Assertions.assertTrue(respJson.has("shares"));
+//        } else {
+//            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+//            Assertions.assertEquals(
+//                    "Couldn't find the organization. Please check input parameters.",
+//                    error.getErrorMessage());
+//            Assertions.assertEquals(309, error.getErrorCode());
 //        }
-//
 //    }
+
+//    @Test
+//    void testAllInvitationWithQuery() throws IOException {
+//        HashMap<String, Object> query = new HashMap<>();
+//        query.put("include_plan", true);
+//        Response<ResponseBody> response = organization.getAllInvitations(organizationUid).execute();
+//    }
+
+    @Test
+    void testTransferOwnership() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("include_plan", true);
+        String orgUid = Dotenv.load().get("organizationUid");
+        String strBody = "{\n" +
+                "\t\"transfer_to\": \"ishaileshmishra@gmail.com\"\n" +
+                "}";
+        Response<ResponseBody> response =
+                organization.transferOwnership(orgUid, strBody)
+                        .execute();
+
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("notice"));
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "You don't have the permission to do this operation.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(316, error.getErrorCode());
+        }
+    }
+
+    @Test
+    void testStacks() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("limit", 2);
+        query.put("skip", 2);
+        query.put("asc", true);
+        query.put("desc", true);
+        query.put("include_count", true);
+        query.put("typeahead", "contentstack");
+        String orgUid = Dotenv.load().get("organizationUid");
+        Response<ResponseBody> response = organization.getStacks(orgUid, query).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("stacks"));
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "You don't have the permission to do this operation.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(316, error.getErrorCode());
+        }
+    }
+
+    @Test
+    void testLogDetails() throws IOException {
+        String orgUid = Dotenv.load().get("organizationUid");
+        Response<ResponseBody> response = organization.getLogsDetails(orgUid).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("logs"));
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "You don't have the permission to do this operation.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(316, error.getErrorCode());
+        }
+    }
+
+    @Test
+    void testLogsItem() throws IOException {
+        String orgUid = Dotenv.load().get("organizationUid");
+        Response<ResponseBody> response = organization.getLogsItem(orgUid, "fake@loguid").execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("stacks"));
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
+            Assertions.assertEquals(
+                    "Organization log entry doesn't exists.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(141, error.getErrorCode());
+        }
+    }
 
 }

@@ -134,11 +134,15 @@ public class ContentstackAPITest {
             Assertions.assertNotNull(csrStr);
             Assertions.assertNotNull(csrStrOne);
             Assertions.assertNotNull(csrStrTwo);
-            //Assertions.assertNull(userModel.getUser());
             Assertions.assertEquals(dotenv.get("userId"), srJson.getUser().uid.toString());
-//            Assertions.assertEquals(dotenv.get("userId"), csrResp.getUser().uid.toString());
         }
-
     }
+
+//    @Test
+//    void testCallback() throws IOException {
+//        User client = new Contentstack.Builder().setAuthtoken("notnull@fake").build().user();
+//        Response<LoginDetails> response = client.login("ishaileshmishra@gmail.com", "password").execute();
+//        System.out.println(response);
+//    }
 
 }
