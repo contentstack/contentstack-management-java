@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class OrgApiTests {
 
     private Organization organization;
-    private final String organizationUid = Dotenv.load().get("organizations_uid");
+    private final String organizationUid = Dotenv.load().get("organizationUid");
 
     private JsonObject toJson(Response<ResponseBody> response) throws IOException {
         assert response.body() != null;
@@ -183,9 +183,9 @@ public class OrgApiTests {
         } else {
             Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
             Assertions.assertEquals(
-                    "Couldn't find the organization. Please check input parameters.",
+                    "Unable to share at this moment.",
                     error.getErrorMessage());
-            Assertions.assertEquals(309, error.getErrorCode());
+            Assertions.assertEquals(315, error.getErrorCode());
         }
     }
 
@@ -205,9 +205,9 @@ public class OrgApiTests {
         } else {
             Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
             Assertions.assertEquals(
-                    "Couldn't find the organization. Please check input parameters.",
+                    "Unable to delete share at this moment.",
                     error.getErrorMessage());
-            Assertions.assertEquals(309, error.getErrorCode());
+            Assertions.assertEquals(323, error.getErrorCode());
         }
     }
 
@@ -224,9 +224,9 @@ public class OrgApiTests {
         } else {
             Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
             Assertions.assertEquals(
-                    "You don't have the permission to do this operation.",
+                    "Unable to resend invitation as the invitation is either not initiated or is already accepted.",
                     error.getErrorMessage());
-            Assertions.assertEquals(316, error.getErrorCode());
+            Assertions.assertEquals(328, error.getErrorCode());
         }
     }
 

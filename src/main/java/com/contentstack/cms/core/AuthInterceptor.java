@@ -1,6 +1,5 @@
 package com.contentstack.cms.core;
 
-import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -9,27 +8,20 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 /**
- * The type Header interceptor that extends Interceptor
+ * <b>The type Header interceptor that extends Interceptor</b>
  * <p>
- * Interceptor: Observes, modifies, and potentially short-circuits requests
- * going out and the corresponding responses coming back in. Typically,
- * interceptors add, remove, or transform headers on the request or response.
+ * Interceptors are a powerful way to customize requests with Retrofit. A common use-case where you want to intercept
+ * the actual request is to observe, modifies, and potentially short-circuits requests going out and the corresponding
+ * responses coming back in. Typically, interceptors add, remove, or transform headers on the request. Depending on the
+ * API implementation, you’ll want to pass the auth token as the value for the Authorization header.
  */
 public class AuthInterceptor implements Interceptor {
 
     public AuthInterceptor() {
     }
 
-    /**
-     * The Authtoken.
-     */
-    String authtoken;
+    protected String authtoken;
 
-    /**
-     * Instantiates a new Header interceptor.
-     *
-     * @param authtoken the authtoken
-     */
     public AuthInterceptor(String authtoken) {
         this.authtoken = authtoken;
     }
@@ -41,24 +33,15 @@ public class AuthInterceptor implements Interceptor {
     @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {
-        // Adding User agent properties
-        final String X_USER_AGENT_KEY = "X-User-Agent";
-        final String User_AGENT = "User-Agent";
-        final String CONTENT_TYPE = "Content-Type";
-        final String APPLICATION_JSON = "application/json";
-        String xUserAgent = Util.SDK_NAME + "/" + Util.SDK_VERSION;
-
-        Headers headers = new Headers.Builder()
-                .add(X_USER_AGENT_KEY, xUserAgent)
-                .add(User_AGENT, Util.defaultUserAgent())
-                .add(CONTENT_TYPE, APPLICATION_JSON)
-                .build();
-        Request.Builder request = chain.request().newBuilder()
-                .headers(headers);
+        final String xUserAgent = Util.SDK_NAME + "/" + Util.SDK_VERSION;
+        Request.Builder request = chain.
+                request().newBuilder()
+                .header("X-User-Agent", xUserAgent)
+                .header("User-Agent", Util.defaultUserAgent())
+                .header("Content-Type", "application/json");
 
         if (this.authtoken != null) {
-            String AUTHTOKEN = "authtoken";
-            request.addHeader(AUTHTOKEN, this.authtoken);
+            request.addHeader("authtoken", this.authtoken);
         }
         return chain.proceed(request.build());
     }

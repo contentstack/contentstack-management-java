@@ -68,7 +68,7 @@ public class ContentstackUnitTest {
     @Test
     void testCredentialsOrganizationUid() {
         Assertions.assertNotNull(
-                dotenv.get("organizations_uid"), "organization uid is not null");
+                dotenv.get("organizationUid"), "organization uid is not null");
     }
 
     @Test

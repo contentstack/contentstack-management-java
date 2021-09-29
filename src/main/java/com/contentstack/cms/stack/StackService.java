@@ -31,8 +31,8 @@ public interface StackService {
 
     @POST("stacks")
     Call<ResponseBody> create(
-            @Header("organization_uid") String organizationUid,
-            @Body RequestBody body);
+            @Body RequestBody body,
+            @Header("organization_uid") String orgUid);
 
     @PUT("stacks")
     Call<ResponseBody> update(
