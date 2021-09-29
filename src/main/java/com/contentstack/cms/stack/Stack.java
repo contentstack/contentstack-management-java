@@ -17,14 +17,18 @@ import java.util.Map;
 public class Stack {
 
     private final StackService stackService;
+    protected String apiKey;
 
     /**
      * Instantiates a new Stack.
      *
      * @param client
      *         the client
+     * @param apiKey
+     *         the api key
      */
-    public Stack(@NotNull Retrofit client) {
+    public Stack(@NotNull Retrofit client, String apiKey) {
+        this.apiKey = apiKey;
         this.stackService = client.create(StackService.class);
     }
 
@@ -37,12 +41,10 @@ public class Stack {
      * <b>Note:</b> For SSO-enabled organizations,
      * it is mandatory to pass the organization UID in the header.
      *
-     * @param apiKey
-     *         the api key
      * @return the stack
      */
-    public Call<ResponseBody> fetch(@NotNull String apiKey) {
-        return this.stackService.fetch(apiKey);
+    public Call<ResponseBody> fetch() {
+        return this.stackService.fetch(this.apiKey);
     }
 
 
@@ -54,36 +56,13 @@ public class Stack {
      * <b>Note:</b> For SSO-enabled organizations,
      * it is mandatory to pass the organization UID in the header.
      *
-     * @param apiKey
-     *         the api key
-     * @param query
-     *         the query param
-     * @return the stack
-     */
-    public Call<ResponseBody> fetch(
-            @NotNull String apiKey,
-            @NotNull Map<String, Boolean> query) {
-        return this.stackService.fetch(apiKey, query);
-    }
-
-    /**
-     * <b>Get a single stack</b>
-     * <br>
-     * The Get a single stack call fetches comprehensive details of a specific stack
-     * <br>
-     * <b>Note:</b> For SSO-enabled organizations,
-     * it is mandatory to pass the organization UID in the header.
-     *
-     * @param apiKey
-     *         the api key
      * @param organizationUid
      *         the organization uid
      * @return the stack
      */
     public Call<ResponseBody> fetch(
-            @NotNull String apiKey,
             @NotNull String organizationUid) {
-        return this.stackService.fetch(apiKey, organizationUid);
+        return this.stackService.fetch(this.apiKey, organizationUid);
     }
 
 
@@ -95,8 +74,6 @@ public class Stack {
      * <b>Note:</b> For SSO-enabled organizations,
      * it is mandatory to pass the organization UID in the header.
      *
-     * @param apiKey
-     *         the api key
      * @param orgUID
      *         the organization uid
      * @param query
@@ -104,10 +81,9 @@ public class Stack {
      * @return the stack
      */
     public Call<ResponseBody> fetch(
-            @NotNull String apiKey,
             @NotNull String orgUID,
             @NotNull Map<String, Boolean> query) {
-        return this.stackService.fetch(apiKey, orgUID, query);
+        return this.stackService.fetch(this.apiKey, orgUID, query);
     }
 
 
@@ -126,11 +102,9 @@ public class Stack {
      *         the body string
      * @return the stack
      */
-    public Call<ResponseBody> create(
-            @NotNull String organizationUid,
-            @NotNull String bodyString) {
+    public Call<ResponseBody> create(@NotNull String organizationUid, @NotNull String bodyString) {
         RequestBody body = Util.toRequestBody(bodyString);
-        return stackService.create(organizationUid, body);
+        return stackService.create(body, organizationUid);
     }
 
     /**
@@ -143,15 +117,13 @@ public class Stack {
      * <b>Note</b> Warning: The master locale cannot be changed once it is set
      * while stack creation. So, you cannot use this call to change/update the master language.
      *
-     * @param apiKey
-     *         the api key
      * @param bodyString
      *         the body string
      * @return the stack
      */
-    public Call<ResponseBody> update(@NotNull String apiKey, String bodyString) {
+    public Call<ResponseBody> update(String bodyString) {
         RequestBody body = Util.toRequestBody(bodyString);
-        return stackService.update(apiKey, body);
+        return stackService.update(this.apiKey, body);
     }
 
     /**
@@ -174,16 +146,13 @@ public class Stack {
      *
      * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#transfer-stack-ownership-to-other-users">
      * (Read more) </a>
-     *
-     * @param apiKey
-     *         the api key
      * @param bodyString
      *         the body string
      * @return the stack
      */
-    public Call<ResponseBody> transferOwnership(@NotNull String apiKey, String bodyString) {
+    public Call<ResponseBody> transferOwnership(String bodyString) {
         RequestBody body = Util.toRequestBody(bodyString);
-        return stackService.transferOwnership(apiKey, body);
+        return stackService.transferOwnership(this.apiKey, body);
     }
 
 
@@ -203,15 +172,13 @@ public class Stack {
      *
      * @param ownershipToken
      *         the ownership token received via email by another user.
-     * @param apiKey
-     *         the stack API key.
      * @param uid
      *         the user uid.
      * @return the stack
      */
-    public Call<ResponseBody> acceptOwnership(@NotNull String ownershipToken, @NotNull String apiKey, @NotNull String uid) {
+    public Call<ResponseBody> acceptOwnership(@NotNull String ownershipToken, @NotNull String uid) {
         Map<String, String> queryMap = new HashMap<>();
-        queryMap.put("api_key", apiKey);
+        queryMap.put("api_key", this.apiKey);
         queryMap.put("uid", uid);
         return stackService.acceptOwnership(ownershipToken, queryMap);
     }
@@ -226,12 +193,10 @@ public class Stack {
      * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#stack-settings">
      * *(Read more)</a>
      *
-     * @param apiKey
-     *         the api key
      * @return the call
      */
-    public Call<ResponseBody> setting(@NotNull String apiKey) {
-        return stackService.setting(apiKey);
+    public Call<ResponseBody> setting() {
+        return stackService.setting(this.apiKey);
     }
 
     /**
@@ -263,16 +228,13 @@ public class Stack {
      * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#add-stack-settings">
      * *(Read more)</a>
      *
-     * @param apiKey
-     *         the api key
      * @param requestBody
      *         the request body
      * @return the call
      */
-    public Call<ResponseBody> updateSetting(
-            @NotNull String apiKey, String requestBody) {
+    public Call<ResponseBody> updateSetting(String requestBody) {
         RequestBody body = Util.toRequestBody(requestBody);
-        return stackService.updateSetting(apiKey, body);
+        return stackService.updateSetting(this.apiKey, body);
     }
 
     /**
@@ -294,15 +256,13 @@ public class Stack {
      * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#reset-stack-settings">
      * (Read more)</a>
      *
-     * @param apiKey
-     *         the api key
      * @param requestBody
      *         the request body
      * @return the call
      */
-    public Call<ResponseBody> resetSetting(@NotNull String apiKey, String requestBody) {
+    public Call<ResponseBody> resetSetting(String requestBody) {
         RequestBody body = Util.toRequestBody(requestBody);
-        return stackService.updateSetting(apiKey, body);
+        return stackService.updateSetting(this.apiKey, body);
     }
 
     /**
@@ -327,15 +287,13 @@ public class Stack {
      * }
      * </pre>
      *
-     * @param apiKey
-     *         the api key
      * @param requestBody
      *         the request body
      * @return the call
      */
-    public Call<ResponseBody> share(@NotNull String apiKey, String requestBody) {
+    public Call<ResponseBody> share(String requestBody) {
         RequestBody body = Util.toRequestBody(requestBody);
-        return stackService.share(apiKey, body);
+        return stackService.share(this.apiKey, body);
     }
 
 
@@ -354,15 +312,13 @@ public class Stack {
      * }
      * </pre>
      *
-     * @param apiKey
-     *         the api key
      * @param requestBody
      *         the request body
      * @return the call
      */
-    public Call<ResponseBody> unshare(@NotNull String apiKey, String requestBody) {
+    public Call<ResponseBody> unshare(String requestBody) {
         RequestBody body = Util.toRequestBody(requestBody);
-        return stackService.unshare(apiKey, body);
+        return stackService.unshare(this.apiKey, body);
     }
 
     /**
@@ -371,12 +327,10 @@ public class Stack {
      * <p>The Get all users of a stack call fetches
      * the list of all users of a particular stack</p>
      *
-     * @param apiKey
-     *         the api key
      * @return the call
      */
-    public Call<ResponseBody> allUsers(@NotNull String apiKey) {
-        return stackService.allUsers(apiKey);
+    public Call<ResponseBody> allUsers() {
+        return stackService.allUsers(this.apiKey);
     }
 
     /**
@@ -401,14 +355,12 @@ public class Stack {
      * }
      * </pre>
      *
-     * @param apiKey
-     *         the api key
      * @param requestBody
      *         the request body
      * @return the {@link okhttp3.Call}
      */
-    public Call<ResponseBody> roles(@NotNull String apiKey, String requestBody) {
+    public Call<ResponseBody> roles(String requestBody) {
         RequestBody body = Util.toRequestBody(requestBody);
-        return stackService.updateUserRoles(apiKey, body);
+        return stackService.updateUserRoles(this.apiKey, body);
     }
 }
