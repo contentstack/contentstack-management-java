@@ -80,7 +80,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <surefire-report-plugin.version>2.22.0</surefire-report-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <dotenv-source.version>5.2.2</dotenv-source.version>
         <rxjava-source.version>3.0.10</rxjava-source.version>
         <retrofit-source.version>2.9.0</retrofit-source.version>
@@ -199,6 +199,7 @@
                 </executions>
             </plugin>
 
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -209,20 +210,24 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                        <configuration>
-                            <additionalOptions>-Xdoclint:none</additionalOptions>
-                            <use>false</use>
-                            <use>false</use>
-                            <source>1.8</source>
-                            <links>
-                                <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                                <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                            </links>
-                            <doclint>none</doclint>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <docletArtifact>
+                        <groupId>com.contentstack</groupId>
+                        <artifactId>cms</artifactId>
+                        <version>${sdk.version.snapshot}</version>
+                    </docletArtifact>
+                    <additionalOptions>
+                        <additionalOption>-warning 101</additionalOption>
+                    </additionalOptions>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+                    <additionalJOption>-J-Xmx1024m</additionalJOption>
+                    <doclint>none</doclint>
+                </configuration>
             </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
