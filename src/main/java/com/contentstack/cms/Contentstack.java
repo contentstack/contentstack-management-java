@@ -1,5 +1,6 @@
 package com.contentstack.cms;
 
+import com.contentstack.cms.contenttype.ContentType;
 import com.contentstack.cms.core.AuthInterceptor;
 import com.contentstack.cms.core.Error;
 import com.contentstack.cms.core.Util;
@@ -256,11 +257,30 @@ public class Contentstack {
         return new Stack(this.instance, apiKey);
     }
 
+
     /**
-     * Instantiates a new Contentstack.
+     * <b>Content type</b>
+     * <p>
+     * Content type defines the structure or schema of a page or a section of your web or mobile property. To create
+     * content for your application, you are required to first create a content type, and then create entries using the
+     * content type.
+     * <p>
      *
-     * @param builder the builder class instance
+     * <b>Additional Resource</b>
+     * <p>
+     * To get an idea of building your content type as per webpage’s layout, we recommend you to check out our Content
+     * Modeling guide
+     *
+     * @param apiKey
+     *         the api key
+     * @return the content type
      */
+    public ContentType contentType(@NotNull String apiKey) {
+        if (this.authtoken == null)
+            throw new NullPointerException("Please Login to access ContentType instance");
+        return new ContentType(this.instance, apiKey);
+    }
+
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
         this.port = builder.port;
@@ -272,6 +292,7 @@ public class Contentstack {
         this.proxy = builder.proxy;
         this.interceptor = builder.authInterceptor;
     }
+
 
     public static class Builder {
 
