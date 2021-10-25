@@ -11,7 +11,7 @@ class RetryTest {
 
 
     @Test
-    public void testRetryPolicy() {
+    void testRetryPolicy() {
         Contentstack client = new Contentstack.Builder()
                 .setAuthtoken("fake@authtoken")
                 .build();

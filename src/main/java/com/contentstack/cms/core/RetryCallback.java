@@ -13,7 +13,6 @@ import java.util.logging.Logger;
  */
 public abstract class RetryCallback<T> implements Callback<T> {
 
-    //private static final String TAG = CallbackWithRetry.class.getSimpleName();
     private final Logger log = Logger.getLogger(RetryCallback.class.getName());
     private static final int TOTAL_RETRIES = 3;
     private final Call<T> call;
@@ -24,7 +23,7 @@ public abstract class RetryCallback<T> implements Callback<T> {
      *
      * @param call the call
      */
-    public RetryCallback(Call<T> call) {
+    protected RetryCallback(Call<T> call) {
         this.call = call;
     }
 
@@ -32,7 +31,6 @@ public abstract class RetryCallback<T> implements Callback<T> {
     public void onFailure(@NotNull Call<T> call, Throwable t) {
         log.info(t.getLocalizedMessage());
         if (retryCount++ < TOTAL_RETRIES) {
-            log.fine("Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
             retry();
         }
     }

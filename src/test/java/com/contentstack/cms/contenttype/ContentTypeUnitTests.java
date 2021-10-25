@@ -1,9 +1,10 @@
 package com.contentstack.cms.contenttype;
 
 import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.core.RetryCallback;
+import com.contentstack.cms.Utils;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,142 +16,449 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ContentTypeUnitTests {
+class ContentTypeUnitTests {
 
-    private final String TAG = ContentTypeUnitTests.class.getSimpleName();
-    private final Logger log = Logger.getLogger(RetryCallback.class.getName());
-    private Dotenv dotenv;
+    private final Logger logger = Logger.getLogger(ContentTypeUnitTests.class.getName());
+    JSONObject requestBody = Utils.readJson("mockcontenttype/update.json");
     ContentType contentType;
     private final String contentTypeUid = "product";
+    String apiKey = Dotenv.load().get("api_key");
+    String authtoken = Dotenv.load().get("authToken");
+    String managementToken = Dotenv.load().get("auth_token");
 
 
     @BeforeAll
     public void setUp() {
-        log.info("Started unit tests for contentType");
-        dotenv = Dotenv.load();
-        String apiKey = dotenv.get("api_key");
-        String authtoken = dotenv.get("auth_token");
-        assert apiKey != null;
-        contentType = new Contentstack.Builder().setAuthtoken(authtoken).build().contentType(apiKey);
+        contentType = new Contentstack.Builder().setAuthtoken(authtoken).build().contentType(apiKey, managementToken);
+    }
+
+    @Test
+    void testFetch() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request request = contentType.fetch(mapQuery).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertEquals("include_count=true&include_global_field_schema=true", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true", request.url().toString());
+    }
+
+    @Test
+    void testGetAllContentTypesIncludeCount() {
+        Map<String, Object> query = new HashMap<>();
+        query.put("include_count", true);
+        query.put("include_global_field_schema", true);
+        Request response = contentType.fetch(query).request();
+        Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_count"));
+    }
+
+    @Test
+    void testGetAllContentTypesIncludeQuery() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.fetch(mapQuery).request();
+        Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
+    }
+
+    @Test
+    void testGetAllContentTypesEncodedPath() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.fetch(mapQuery).request();
+        Assertions.assertEquals("/v3/content_types", response.url().encodedPath());
+    }
+
+    @Test
+    void testGetAllContentTypesEncodedUrl() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.fetch(mapQuery).request();
+        Assertions.assertEquals("include_count=true&include_global_field_schema=true", response.url().encodedQuery());
+    }
+
+    @Test
+    void testGetAllContentTypesUrl() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.fetch(mapQuery).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true", response.url().toString());
+    }
+
+    @Test
+    void testGetAllContentTypesAuth() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.fetch(mapQuery).request();
+        Assertions.assertEquals(managementToken, response.header("authorization"));
+    }
+
+    @Test
+    void testGetSingleQueryIncludeGlobalFieldSchema() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
+    }
+
+    @Test
+    void testGetSingleEncodedPath() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Assertions.assertEquals("/v3/content_types/product", response.url().encodedPath());
     }
 
 
     @Test
-    void testGetAllContentTypes() {
-        String apiKey = dotenv.get("api_key");
-        String authtoken = dotenv.get("auth_token");
-        Map<String, Boolean> mapQuery = new HashMap<>();
+    void testGetSingleEncodedQuery() {
+        Map<String, Object> mapQuery = new HashMap<>();
         mapQuery.put("include_count", true);
         mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.fetch(
-                "managementToken@fake", mapQuery).request();
-        Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_count"));
-        Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
-        Assertions.assertEquals("/v3/content_types", response.url().encodedPath());
+        Request response = contentType.single(contentTypeUid, mapQuery).request();
         Assertions.assertEquals("include_count=true&include_global_field_schema=true", response.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true", response.url().toString());
+    }
+
+    @Test
+    void testGetSingleCompleteUrl() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product?include_count=true&include_global_field_schema=true", response.url().toString());
+    }
+
+    @Test
+    void testGetSingleMethod() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.single(contentTypeUid, mapQuery).request();
         Assertions.assertEquals("GET", response.method());
-//        Assertions.assertEquals(apiKey, response.header("api_key"));
-        Assertions.assertEquals("managementToken@fake", response.header("authorization"));
-//        Assertions.assertEquals(authtoken, response.header("authtoken"));
     }
 
 
     @Test
-    void testGetSingle() {
-        String apiKey = dotenv.get("api_key");
-        String authtoken = dotenv.get("auth_token");
-        Map<String, Boolean> mapQuery = new HashMap<>();
+    void testGetSingleHeader() {
+        Map<String, Object> mapQuery = new HashMap<>();
         mapQuery.put("include_count", true);
         mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.single(contentTypeUid,
-                "managementToken@fake", mapQuery).request();
-        Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_count"));
-        Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
-        Assertions.assertEquals("/v3/content_types", response.url().encodedPath());
-        Assertions.assertEquals("include_count=true&include_global_field_schema=true", response.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true", response.url().toString());
-        Assertions.assertEquals("GET", response.method());
+        Request response = contentType.single(contentTypeUid, mapQuery).request();
         Assertions.assertEquals(apiKey, response.header("api_key"));
-        Assertions.assertEquals("managementToken@fake", response.header("authorization"));
-        Assertions.assertEquals(authtoken, response.header("authtoken"));
     }
 
     @Test
-    void testCreate() {
-        String bodyStr = "";
-        Request response = contentType.create(
-                "authorization",
-                bodyStr).request();
+    void testGetSingleAuthorization() {
+        Map<String, Object> mapQuery = new HashMap<>();
+        mapQuery.put("include_count", true);
+        mapQuery.put("include_global_field_schema", true);
+        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Assertions.assertEquals(managementToken, response.header("authorization"));
+
     }
 
     @Test
-    void testUpdate() {
-        String bodyStr = "";
-        Request response = contentType.update(
-                "contentTypeUid",
-                "authorization",
-                bodyStr).request();
+    void testCreateMethod() {
+        Request request = contentType.create(requestBody).request();
+        Assertions.assertEquals("POST", request.method());
+        logger.info(request.url().toString());
+    }
+
+
+    @Test
+    void testCreateHeaders() {
+        Request request = contentType.create(requestBody).request();
+        Assertions.assertEquals(apiKey, request.headers().get("api_key"));
+        Assertions.assertEquals(managementToken, request.headers().get("authorization"));
+    }
+
+    @Test
+    void testCreateQuery() {
+        Request request = contentType.create(requestBody).request();
+        Assertions.assertEquals("/v3/content_types", request.url().encodedPath());
+    }
+
+    @Test
+    void testUpdateCompleteUrl() {
+        Request request = contentType.update(contentTypeUid,
+                requestBody).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product",
+                request.url().toString());
+    }
+
+    @Test
+    void testUpdateMethod() {
+        Request request = contentType.update(contentTypeUid,
+                requestBody).request();
+        Assertions.assertEquals("PUT", request.method());
+    }
+
+    @Test
+    void testUpdateHeader() {
+        Request request = contentType.update(contentTypeUid, new JSONObject()).request();
+        Assertions.assertEquals(managementToken, request.header("authorization"));
+        Assertions.assertEquals(apiKey, request.header("api_key"));
+    }
+
+    @Test
+    void testUpdateHeaderSize() {
+        Request request = contentType.update(contentTypeUid, new JSONObject()).request();
+        Assertions.assertEquals(2, request.headers().size());
+    }
+
+    @Test
+    void testUpdateRequestBody() {
+        Request request = contentType.update(contentTypeUid, new JSONObject()).request();
+        assert request.body() != null;
+        Assertions.assertEquals("application/json; charset=UTF-8",
+                Objects.requireNonNull(request.body().contentType()).toString());
+    }
+
+    @Test
+    void testUpdateIsHttps() {
+
+        Request request = contentType.update(contentTypeUid, new JSONObject()).request();
+        Assertions.assertTrue(request.isHttps());
+    }
+
+
+    @Test
+    void testFieldVisibilityRuleIsHttps() {
+
+        Request request = contentType.fieldVisibilityRule(contentTypeUid, requestBody).request();
+        Assertions.assertTrue(request.isHttps());
+    }
+
+    @Test
+    void testFieldVisibilityRuleCompleteUrl() {
+
+        Request request = contentType.fieldVisibilityRule(contentTypeUid, requestBody).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product", request.url().toString());
     }
 
     @Test
     void testFieldVisibilityRule() {
-        String bodyStr = "";
-        Request response = contentType.fieldVisibilityRule(
-                contentTypeUid,
-                "auth",
-                bodyStr).request();
+        Request request = contentType.fieldVisibilityRule(contentTypeUid, requestBody).request();
+        Assertions.assertEquals("PUT", request.method());
     }
 
     @Test
-    void testDelete() {
-        Request response = contentType.delete(
-                "auth").request();
+    void testFieldVisibilityRuleHeaders() {
+        Request request = contentType.fieldVisibilityRule(contentTypeUid, requestBody).request();
+        Assertions.assertEquals(apiKey, request.header("api_key"));
+        Assertions.assertEquals(managementToken, request.header("authorization"));
     }
 
     @Test
-    void testDeleteByForce() {
-        Request response = contentType.delete(
-                "auth", true).request();
+    void testFieldVisibilityRuleHeadersSize() {
+        Request request = contentType.fieldVisibilityRule(contentTypeUid, requestBody).request();
+        Assertions.assertEquals(2, request.headers().size());
     }
+
+    @Test
+    void testDeleteHeaderSize() {
+        Request request = contentType.delete(contentTypeUid).request();
+        Assertions.assertEquals(2, request.headers().size());
+    }
+
+    @Test
+    void testDeleteHeaderMethod() {
+        Request request = contentType.delete(contentTypeUid).request();
+        Assertions.assertEquals("DELETE", request.method());
+    }
+
+    @Test
+    void testDeleteHeaderCompleteUrl() {
+        Request request = contentType.delete(contentTypeUid).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product", request.url().toString());
+    }
+
+    @Test
+    void testDeleteHeaderCheckHeaders() {
+        Request request = contentType.delete(contentTypeUid).request();
+        Assertions.assertEquals(apiKey, request.headers().get("api_key"));
+        Assertions.assertEquals(managementToken, request.headers().get("authorization"));
+    }
+
+
+    @Test
+    void testDeleteWithIsForceHeaders() {
+        Request request = contentType.delete(contentTypeUid, true).request();
+        Assertions.assertEquals(apiKey, request.headers().get("api_key"));
+        Assertions.assertEquals(managementToken, request.headers().get("authorization"));
+    }
+
+    @Test
+    void testDeleteWithIsForce() {
+        Request request = contentType.delete(contentTypeUid, true).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product?force=true", request.url().toString());
+
+    }
+
+    @Test
+    void testDeleteWithIsForceMethod() {
+        Request request = contentType.delete(contentTypeUid, true).request();
+        Assertions.assertEquals("DELETE", request.method());
+
+    }
+
 
     @Test
     void testReference() {
-        Request response = contentType.reference(
-                contentTypeUid, "auth").request();
+        Request request = contentType.reference(contentTypeUid).request();
+        Assertions.assertEquals("GET", request.method());
     }
 
     @Test
-    void testReferenceIncludeGlobalField() {
-        Request response = contentType.reference(
-                contentTypeUid,
-                "auth",
-                true).request();
+    void testReferenceCompleteUrl() {
+        Request request = contentType.reference(contentTypeUid).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/references", request.url().toString());
+    }
+
+
+    @Test
+    void testReferenceCompleteUrlIsHTTPS() {
+        Request request = contentType.reference(contentTypeUid).request();
+        Assertions.assertTrue(request.isHttps());
     }
 
     @Test
-    void testExport() {
-        Request response = contentType.export(
-                "auth").request();
+    void testReferenceEncodedPath() {
+        Request request = contentType.reference(contentTypeUid).request();
+        Assertions.assertEquals("/v3/content_types/product/references", request.url().encodedPath());
     }
 
     @Test
-    void testExportIncludeVersion() {
-        Request response = contentType.export(
-                "auth", 1).request();
+    void testReferenceQueryExpectedNull() {
+        Request request = contentType.reference(contentTypeUid).request();
+        Assertions.assertNull(request.url().encodedQuery());
     }
+
+
+    @Test
+    void testReferenceQuery() {
+        Request request = contentType.reference(contentTypeUid).request();
+        Assertions.assertNull(request.url().encodedQuery());
+    }
+
+
+    @Test
+    void testReferenceIncludeGlobalFieldEncodedPath() {
+        Request request = contentType.referenceIncludeGlobalField(
+                contentTypeUid).request();
+        Assertions.assertEquals("/v3/content_types/product/references", request.url().encodedPath());
+    }
+
+
+    @Test
+    void testReferenceIncludeGlobalFieldQuery() {
+        Request request = contentType.referenceIncludeGlobalField(contentTypeUid).request();
+        Assertions.assertEquals("include_global_fields=true", request.url().encodedQuery());
+    }
+
+    @Test
+    void testExportQueryShouldBeNUll() {
+        Request request = contentType.export(contentTypeUid).request();
+        Assertions.assertNull(request.url().encodedQuery());
+    }
+
+    @Test
+    void testExportMethod() {
+        Request request = contentType.export(contentTypeUid).request();
+        Assertions.assertEquals("GET", request.method());
+    }
+
+    @Test
+    void testExportUrl() {
+        Request request = contentType.export(contentTypeUid).request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/export", request.url().toString());
+    }
+
+    @Test
+    void testExportUrlEncodeQuery() {
+        Request request = contentType.export(contentTypeUid, 1).request();
+        Assertions.assertEquals("version=1", request.url().encodedQuery());
+    }
+
+    @Test
+    void testExportIsHttps() {
+        Request request = contentType.export(contentTypeUid, 1).request();
+        Assertions.assertTrue(request.isHttps());
+    }
+
+    @Test
+    void testExportHeaderSize() {
+        Request request = contentType.export(contentTypeUid, 1).request();
+        Assertions.assertEquals(2, request.headers().size());
+    }
+
+    @Test
+    void testExportHeaderAPIKeyAuth() {
+        Request request = contentType.export(contentTypeUid, 1).request();
+        Assertions.assertEquals(apiKey, request.header("api_key"));
+        Assertions.assertEquals(managementToken, request.header("authorization"));
+    }
+
 
     @Test
     void testImport() {
-        Request response = contentType.imports(
-                "auth"
-        ).request();
+        Request request = contentType.imports().request();
+        Assertions.assertEquals(apiKey, request.header("api_key"));
+        Assertions.assertEquals(managementToken, request.header("authorization"));
     }
 
     @Test
+    void testImportMethod() {
+        Request request = contentType.imports().request();
+        Assertions.assertEquals("POST", request.method());
+    }
+
+    @Test
+    void testImportIsHttp() {
+        Request request = contentType.imports().request();
+        Assertions.assertTrue(request.isHttps());
+    }
+
+    @Test
+    void testImportUrl() {
+        Request request = contentType.imports().request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import", request.url().toString());
+    }
+
+
+    @Test
     void testImportIncludeOverwrite() {
-        Request response = contentType.imports(
-                "auth", true
-        ).request();
+        Request request = contentType.importOverwrite().request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true", request.url().toString());
+    }
+
+    @Test
+    void testImportIncludeOverwriteIncludedQuery() {
+        Request request = contentType.importOverwrite().request();
+        Assertions.assertEquals("overwrite=true", request.url().encodedQuery());
+    }
+
+    @Test
+    void testImportIncludeOverwriteIncludedPath() {
+        Request request = contentType.importOverwrite().request();
+        Assertions.assertEquals("/v3/content_types/import", request.url().encodedPath());
+    }
+
+
+    @Test
+    void testImportIncludeOverwriteFalse() {
+        Request request = contentType.importOverwrite().request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true", request.url().toString());
     }
 }

@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type User.
@@ -94,7 +95,7 @@ public class User {
      *         parameters
      * @return {@link UserService}
      */
-    public Call<ResponseBody> getUserOrganizations(@NotNull HashMap<String, Object> query) {
+    public Call<ResponseBody> getUserOrganizations(@NotNull Map<String, Object> query) {
         return this.userService.getUserOrganization(query);
     }
 

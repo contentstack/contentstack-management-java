@@ -1,4 +1,11 @@
 package com.contentstack.cms.global;
 
-public class GlobalFieldsAPITest {
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+class GlobalFieldsAPITest {
+    @Test
+    void testSomething() {
+        Assertions.assertTrue(true);
+    }
 }

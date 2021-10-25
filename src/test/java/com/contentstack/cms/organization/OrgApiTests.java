@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class OrgApiTests {
+class OrgApiTests {
 
     private Organization organization;
     private final String organizationUid = Dotenv.load().get("organizationUid");

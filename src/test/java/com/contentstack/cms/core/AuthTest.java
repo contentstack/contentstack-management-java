@@ -6,21 +6,21 @@ import org.junit.jupiter.api.Test;
 class AuthTest {
 
     @Test
-    public void testAuthNotNull() {
+    void testAuthNotNull() {
         AuthInterceptor authInterceptor =
                 new AuthInterceptor();
         Assertions.assertNotNull(authInterceptor);
     }
 
     @Test
-    public void testAuthtokenNotNull() {
+    void testAuthtokenNotNull() {
         AuthInterceptor authInterceptor =
                 new AuthInterceptor("fake@authtoken");
         Assertions.assertNotNull(authInterceptor.authtoken);
     }
 
     @Test
-    public void testAuthtoken() {
+    void testAuthtoken() {
         AuthInterceptor authInterceptor =
                 new AuthInterceptor("fake@authtoken");
         Assertions.assertEquals("fake@authtoken",
