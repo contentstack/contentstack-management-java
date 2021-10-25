@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class StackAPITest {
+class StackAPITest {
 
     private static final String TAG = StackAPITest.class.getSimpleName();
     private final Logger log = Logger.getLogger(RetryCallback.class.getName());

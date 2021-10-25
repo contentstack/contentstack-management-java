@@ -1,21 +1,39 @@
 package com.contentstack.cms.contenttype;
 
-import com.contentstack.cms.core.Util;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
+import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Content type.
+ */
 public class ContentType {
-    protected ContentTypeService contentTypeService;
-    protected String apiKey;
 
-    public ContentType(@NotNull Retrofit instance, @NotNull String apiKey) {
-        this.apiKey = apiKey;
-        this.contentTypeService = instance.create(ContentTypeService.class);
+    protected ContentTypeService service;
+    protected Map<String, String> headers;
+
+    /**
+     * Instantiates a new Content type.
+     *
+     * @param instance
+     *         the {@link Retrofit} instance
+     * @param apiKey
+     *         the api key
+     * @param authorization
+     *         the management token
+     */
+    public ContentType(@NotNull Retrofit instance, @NotNull String apiKey, String authorization) {
+        headers = new HashMap<>();
+        headers.put("api_key", apiKey);
+        if (authorization != null && !authorization.isEmpty()) {
+            headers.put("authorization", authorization);
+        }
+        this.service = instance.create(ContentTypeService.class);
     }
 
 
@@ -26,23 +44,18 @@ public class ContentType {
      * <p>
      * <b>Note:</b>
      * <p>
-     * You need to use either the stack’s Management Token or the user Authtoken (any one is mandatory), along with the
+     * You need to use either the stack's Management Token or the user Authtoken (any one is mandatory), along with the
      * stack API key, to make a valid Content Management API request.
      * <p>
      * Read more about authentication. https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types
      *
-     * @param authorization
-     *         the authorization
      * @param queryParam
      *         the query param
      * @return the call
      */
-    public Call<ResponseBody> fetch(
-            @NotNull String authorization,
-            Map<String, Boolean> queryParam) {
-        return contentTypeService.fetch(
-                this.apiKey,
-                authorization,
+    public Call<ResponseBody> fetch(Map<String, Object> queryParam) {
+        return service.fetch(
+                headers,
                 queryParam);
     }
 
@@ -67,30 +80,22 @@ public class ContentType {
      *
      * @param contentTypeUid
      *         the content type uid of which you want to retrieve the details. The UID is generated based on the title
-     *         of the content type. The unique ID of a content type is unique across a stack.
-     *         <p>
+     *                     of the content type. The unique ID of a content type is unique across a stack.         <p>
      *         <b>Example: </b>product
-     * @param authorization
-     *         the authorization
      * @param queryParam
-     *         Query Parameters
-     *         <b>include_global_field_schema</b> <p> the query param Tip: If any of your content types contains a
-     *         Global field and you wish to fetch the content schema of the Global field, then you need to pass the
-     *         include_global_field_schema:true parameter. This parameter helps return the Global field's schema along
-     *         with the content type schema.
-     *         <p>
-     *         <b>version</b> <p>version of the content type of which you want to retrieve the details. If no version
-     *         is specified, you will get the latest version of the content type.
-     * @return retrofit2.Call<ResponseBody> call
+     *         Query Parameters         <b>include_global_field_schema</b> <p> the query param Tip: If any of your
+     *           content types contains a         Global field, and you wish to fetch the content schema of the Global
+     *               field, then you need to pass the         include_global_field_schema:true parameter. This parameter
+     *         helps         return the Global field's schema along         with the content type schema.         <p>
+     *              <b>version</b> <p>version of the content type of which you want to retrieve the details. If no
+     *         version         is specified, you will get the latest version of the content type.
+     * @return retrofit2.Call
      */
-    public Call<ResponseBody> single(
-            @NotNull String contentTypeUid,
-            @NotNull String authorization,
-            Map<String, Boolean> queryParam) {
-        return contentTypeService.single(
-                this.apiKey,
+    public Call<ResponseBody> single(@NotNull String contentTypeUid,
+                                     Map<String, Object> queryParam) {
+        return service.single(
+                headers,
                 contentTypeUid,
-                authorization,
                 queryParam);
     }
 
@@ -100,9 +105,7 @@ public class ContentType {
      * The <b>Create a content type</b> call creates a new content type in a particular stack of your Contentstack
      * account
      * <p>
-     * <p>
      * In the <b>Body</b> section, you need to provide the complete schema of the content type. You can refer the
-     * <p>
      * <p>
      * See <a href=https://www.contentstack.com/docs/developers/create-content-types/json-schema-for-creating-a-content-type>JSON
      * schema for creating a content type</a>
@@ -114,18 +117,19 @@ public class ContentType {
      * <a href=https://www.contentstack.com/docs/developers/apis/content-management-api/#create-content-type>Read
      * more</a>
      *
-     * @param authorization
-     *         the authorization
+     * <b> Example: </b>
+     * <pre>
+     *     String bodyStr = "";
+     *     <br>
+     *     {@link Call} response = contentType.create(managementToken, bodyStr).execute();
+     * </pre>
+     *
      * @param requestBody
      *         the request body
-     * @return Call<ResponseBody> call
+     * @return retrofit2.Call
      */
-    public Call<ResponseBody> create(
-            @NotNull String authorization,
-            String requestBody) {
-        RequestBody body = Util.toRequestBody(requestBody);
-        return contentTypeService.create
-                (this.apiKey, authorization, body);
+    public Call<ResponseBody> create(JSONObject requestBody) {
+        return service.create(headers, requestBody);
     }
 
     /**
@@ -138,70 +142,176 @@ public class ContentType {
      * <a href=https://www.contentstack.com/docs/developers/apis/content-management-api/#update-content-type>Read
      * more</a>
      *
-     * @return call
+     * @param contentTypeUid
+     *         the content type uid
+     * @param requestBody
+     *         the request body
+     * @return {@link Call} call
      */
-    public Call<ResponseBody> update(
-            @NotNull String contentTypeUid,
-            @NotNull String authorization,
-            String requestBody) {
-        RequestBody body = Util.toRequestBody(requestBody);
-        return contentTypeService.update(this.apiKey, contentTypeUid, authorization, body);
+    public Call<ResponseBody> update(@NotNull String contentTypeUid,
+                                     JSONObject requestBody) {
+        return service.update(contentTypeUid, headers, requestBody);
     }
 
-    public Call<ResponseBody> fieldVisibilityRule(
-            @NotNull String contentTypeUid,
-            @NotNull String authorization,
-            String bodyString) {
-        RequestBody body = Util.toRequestBody(bodyString);
-        return contentTypeService.visibilityRule(contentTypeUid, this.apiKey, authorization, body);
+    /**
+     * <b>Field visibility rule.</b>
+     * <p>
+     * The Set Field Visibility Rule for Content Type API request lets you add Field Visibility Rules to existing
+     * content types. These rules allow you to show and hide fields based on the state or value of certain fields.
+     *
+     * <p>
+     * <a href=https://www.contentstack.com/docs/developers/apis/content-management-api/#create-content-type>Field
+     * Visibility Rules</a> can be set while creating your content type (via UI, only after you've added all the
+     * required fields to the content type and saved it) or while editing a content type (both via UI and API).
+     *
+     * @param contentTypeUid
+     *         the content type uid
+     * @param requestBody
+     *         the request body JSONBody
+     * @return the call
+     */
+    public Call<ResponseBody> fieldVisibilityRule(@NotNull String contentTypeUid,
+                                                  JSONObject requestBody) {
+        return service.visibilityRule(contentTypeUid, headers, requestBody);
     }
 
-    public Call<ResponseBody> delete(
-            @NotNull String authorization) {
-        return contentTypeService.delete(this.apiKey, authorization);
+    /**
+     * <b>Delete Content Type</b>.
+     * <p>
+     * To Delete Content Type call deletes an existing content type and all the entries within it. When executing the
+     * API call, in the <b>URI Parameters</b> section, provide the UID of your content type
+     * <b>Note:</b>
+     * Note: You need to use either the stack's Management Token or the user Authtoken (anyone is mandatory), along with
+     * the stack API key, to make a valid Content Management API request. Read more about Authentication.
+     *
+     * @param contentTypeUid
+     *         the content type uid
+     * @return the call
+     */
+    public Call<ResponseBody> delete(@NotNull String contentTypeUid) {
+        return service.delete(contentTypeUid, headers);
     }
 
-    public Call<ResponseBody> delete(
-            @NotNull String authorization,
-            @NotNull Boolean isForce) {
-        return contentTypeService
-                .delete(this.apiKey, authorization, isForce);
+    /**
+     * <b>Delete Content Type</b>.
+     *
+     * <p>
+     * To Delete Content Type call deletes an existing content type and all the entries within it. When executing the
+     * API call, in the <b>URI Parameters</b> section, provide the UID of your content type
+     * <b>Note:</b>
+     * Note: You need to use either the stack's Management Token or the user Authtoken (anyone is mandatory), along with
+     * the stack API key, to make a valid Content Management API request. Read more about Authentication.
+     *
+     * @param contentTypeUid
+     *         the content type uid
+     * @param isForce
+     *         the is force
+     * @return the call
+     */
+    public Call<ResponseBody> delete(@NotNull String contentTypeUid,
+                                     @NotNull Boolean isForce) {
+        return service.delete(contentTypeUid, headers, isForce);
     }
 
-    public Call<ResponseBody> reference(
-            @NotNull String contentTypeUid,
-            @NotNull String authorization) {
-        return contentTypeService.reference(contentTypeUid,
-                this.apiKey, authorization);
+    /**
+     * <b>Content Type References.</b>
+     * <p>
+     * The Get all references of content type call will fetch all the content types in which a specified content type is
+     * referenced.
+     *
+     * <p>
+     * <b>Note:</b> You need to use either the stack's Management Token or the user Authtoken (anyone is
+     * mandatory),along with the stack API key, to make a valid Content Management API request. Read more about
+     * authentication. You need to use either the stack's Management Token or the user Authtoken (any one is mandatory),
+     * along with the stack API key, to make a valid Content Management API request. Read more about authentication.
+     *
+     * @param contentTypeUid
+     *         the content type uid
+     * @return the call
+     */
+    public Call<ResponseBody> reference(@NotNull String contentTypeUid) {
+        return service.reference(contentTypeUid, headers);
     }
 
-    public Call<ResponseBody> reference(
-            @NotNull String contentTypeUid,
-            @NotNull String authorization,
-            @NotNull boolean includeGlobalField) {
-        return contentTypeService.reference(contentTypeUid,
-                this.apiKey, authorization, includeGlobalField);
+    /**
+     * <b>Content Type References</b>.
+     * <p>
+     * The Get all references of content type call will fetch all the content types in which a specified content type is
+     * referenced.
+     * <p>
+     * <b>Note:</b> You need to use either the stack's Management Token or the user Authtoken (anyone is
+     * mandatory),along with the stack API key, to make a valid Content Management API request. Read more about
+     * authentication. You need to use either the stack's Management Token or the user Authtoken (anyone is mandatory),
+     * along with the stack API key, to make a valid Content Management API request. Read more about authentication.
+     *
+     * @param contentTypeUid
+     *         the content type uid
+     * @return the call
+     */
+    public Call<ResponseBody> referenceIncludeGlobalField(@NotNull String contentTypeUid) {
+        return service.referenceIncludeGlobalField(contentTypeUid, headers);
     }
 
-    public Call<ResponseBody> export(
-            @NotNull String authorization) {
-        return contentTypeService.export(this.apiKey, authorization);
+    /**
+     * <b>Export Content Type</b>.
+     * <p>
+     * This call is used to export a specific content type and its schema. The data is exported in JSON format. However,
+     * please note that the entries of the specified content type are not exported through this call. The schema of the
+     * content type returned will depend on the version number provided.
+     *
+     *
+     * <b>Note: </b> You need to use either the stack's Management Token or the user Authtoken (anyone is mandatory),
+     * along with the stack API key, to make a valid Content Management API request. Read more about authentication.
+     *
+     * @param contentTypeUid
+     *         the content type uid
+     * @return the call
+     */
+    public Call<ResponseBody> export(@NotNull String contentTypeUid) {
+        return service.export(contentTypeUid, headers);
     }
 
-    public Call<ResponseBody> export
-            (@NotNull String authorization,
-             @NotNull int version) {
-        return contentTypeService.export(this.apiKey, authorization, version);
+    /**
+     * <b>Export Content Type</b>.
+     * <p>
+     * This call is used to export a specific content type and its schema. The data is exported in JSON format. However,
+     * please note that the entries of the specified content type are not exported through this call. The schema of the
+     * content type returned will depend on the version number provided.
+     *
+     *
+     * <b>Note: </b> You need to use either the stack's Management Token or the user Authtoken (anyone is mandatory),
+     * along with the stack API key, to make a valid Content Management API request. Read more about authentication.
+     *
+     * @param contentTypeUid
+     *         the content type uid
+     * @param version
+     *         the version
+     * @return the call
+     */
+    public Call<ResponseBody> export(@NotNull String contentTypeUid, int version) {
+        return service.export(contentTypeUid, headers, version);
     }
 
-    public Call<ResponseBody> imports(
-            @NotNull String authorization) {
-        return contentTypeService.imports(this.apiKey, authorization);
+    /**
+     * Imports call.
+     *
+     * @return the call
+     */
+    public Call<ResponseBody> imports() {
+        return service.imports(headers);
     }
 
-    public Call<ResponseBody> imports(
-            @NotNull String authorization,
-            @NotNull boolean isOverwrite) {
-        return contentTypeService.imports(this.apiKey, authorization, isOverwrite);
+    /**
+     * <b>Import content type</b>
+     * <p>
+     * The Import a content type call imports a content type into a stack by uploading JSON file.
+     * <p>
+     * <b>Note:</b>  You need to use either the stack's Management Token or the user Authtoken (any one is mandatory),
+     * along with the stack API key, to make a valid Content Management API request. Read more about authentication.
+     *
+     * @return the call
+     */
+    public Call<ResponseBody> importOverwrite() {
+        return service.importOverwrite(headers);
     }
 }

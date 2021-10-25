@@ -10,14 +10,14 @@ import java.lang.annotation.Target;
 /**
  * The type Test utils.
  */
-public class TestOSBasedUtils {
+ class TestOSBasedUtils {
 
     /**
      * Check version.
      */
     @Test
     @EnabledOnOs(OS.MAC)
-    public void checkVersion(){
+     void checkVersion(){
         String defaultUserAgent = Util.defaultUserAgent();
         Assertions.assertEquals("Java1.8.0_261 OS: MAC OS X", defaultUserAgent);
     }
@@ -27,7 +27,7 @@ public class TestOSBasedUtils {
      */
     @Test
     @DisabledOnJre(JRE.OTHER)
-    public void thisTestOnlyRunsWithUpToDateJREs() {
+     void thisTestOnlyRunsWithUpToDateJREs() {
         // this test will only run on Java 8, 9, 10, and 11.
     }
 

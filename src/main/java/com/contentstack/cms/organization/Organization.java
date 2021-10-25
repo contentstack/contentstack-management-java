@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -64,7 +65,7 @@ public class Organization {
      *         you need to mention 'true'.         <br>         <li> typehead(optional) = "contentstack"         </ul>
      * @return the all organizations
      */
-    public Call<ResponseBody> getAll(HashMap<String, Object> queryParams) {
+    public Call<ResponseBody> getAll(Map<String, Object> queryParams) {
         return this.orgService.getAll(queryParams);
     }
 
@@ -100,7 +101,7 @@ public class Organization {
      */
     public Call<ResponseBody> getSingleOrganization(
             @NotNull String organizationUid,
-            HashMap<String, Object> query) {
+            Map<String, Object> query) {
 
         return orgService.getSingle(organizationUid, query);
     }
@@ -143,7 +144,7 @@ public class Organization {
      * @return the organization role
      */
     public Call<ResponseBody> getRoles(String organizationUid,
-                                       HashMap<String, Object> queryParams) {
+                                       Map<String, Object> queryParams) {
         return orgService.getRoles(organizationUid, queryParams);
     }
 
@@ -200,8 +201,8 @@ public class Organization {
      *         the share uid
      * @return the {@link okhttp3.Call}
      */
-    public Call<ResponseBody> resendInvitation(String organizationUid, String share_uid) {
-        return orgService.resendInvitation(organizationUid, share_uid);
+    public Call<ResponseBody> resendInvitation(String organizationUid, String shareUid) {
+        return orgService.resendInvitation(organizationUid, shareUid);
     }
 
 
@@ -260,7 +261,7 @@ public class Organization {
      * @return the {@link okhttp3.Call}
      */
     public Call<ResponseBody> getAllInvitations(String organizationUid,
-                                                HashMap<String, Object> queryParam) {
+                                                Map<String, Object> queryParam) {
         return orgService.getAllInvitations(organizationUid, queryParam);
     }
 
@@ -306,7 +307,7 @@ public class Organization {
      *         </ul>
      * @return the all stacks in an organizations
      */
-    public Call<ResponseBody> getStacks(String organizationUid, HashMap<String, Object> queryParam) {
+    public Call<ResponseBody> getStacks(String organizationUid, Map<String, Object> queryParam) {
         return orgService.getStacks(organizationUid, queryParam);
     }
 

@@ -1,4 +1,12 @@
 package com.contentstack.cms.contenttype;
 
-public class ContentTypeMockTest {
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+class ContentTypeMockTest {
+
+    @Test
+    void testSomething() {
+        Assertions.assertTrue(true);
+    }
 }
