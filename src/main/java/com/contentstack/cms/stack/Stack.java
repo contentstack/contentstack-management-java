@@ -227,6 +227,25 @@ public class Stack {
      *
      * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#add-stack-settings">
      * *(Read more)</a>
+     * <br>
+     * <br>
+     * <b>Reset stack settings</b>
+     * <p>The Reset stack settings call resets your stack to default settings, and additionally, lets you add
+     * parameters to or modify the settings of an existing stack.</p>
+     * <br>
+     * <b>Here is a sample of the Request Body:</b>
+     * <pre>
+     *
+     * {
+     *     "stack_settings":{
+     *         "discrete_variables":{},
+     *         "stack_variables":{}
+     *     }
+     * }
+     * </pre>
+     *
+     * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#reset-stack-settings">
+     * (Read more)</a>
      *
      * @param requestBody
      *         the request body

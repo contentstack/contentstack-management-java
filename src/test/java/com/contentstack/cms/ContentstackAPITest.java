@@ -5,6 +5,7 @@ import com.contentstack.cms.core.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.models.UserDetail;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;

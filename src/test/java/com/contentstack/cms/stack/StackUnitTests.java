@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class StackUnitTests {
+class StackUnitTests {
 
     protected Stack stack;
     private Dotenv env;
@@ -165,6 +165,7 @@ public class StackUnitTests {
                 "}";
         assert orgId != null;
         stack.create(orgId, bodyString).request();
+        Assertions.assertTrue(true);
     }
 
 

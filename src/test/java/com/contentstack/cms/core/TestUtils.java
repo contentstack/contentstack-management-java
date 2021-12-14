@@ -19,7 +19,7 @@ public class TestUtils {
 
 
     @Test
-    public void testUtilConstructor() {
+    void testUtilConstructor() {
         try {
             new Util();
         } catch (IllegalAccessException e) {
@@ -30,13 +30,13 @@ public class TestUtils {
 
     @Test
     @TestOSBasedUtils.TestOnMac
-    public void testDefaultUserAgent() {
+    void testDefaultUserAgent() {
         String result = Util.defaultUserAgent();
         Assertions.assertEquals("Java1.8.0_261 OS: MAC OS X", result);
     }
 
     @Test
-    public void testNullEmptyThrowsException() {
+    void testNullEmptyThrowsException() {
         try {
             Util.nullEmptyThrowsException("customField");
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class TestUtils {
     }
 
     @Test
-    public void testAssertionError() {
+    void testAssertionError() {
         try {
             Util.assertionError();
         } catch (AssertionError e) {
