@@ -2,11 +2,12 @@ package com.contentstack.cms.global;
 
 import com.contentstack.cms.Contentstack;
 import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.Request;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
- class GlobalFiledUnitTests {
+class GlobalFiledUnitTests {
 
     protected String globalFiledUid = "just@fake";
     protected static String globalAuthtoken = Dotenv.load().get("authToken");
@@ -24,9 +25,9 @@ import org.junit.jupiter.api.Test;
 
 
     @Test
-    void globalFetch() {
-        globalField.fetch();
-        Assertions.assertTrue(true);
+    void testGlobalFetch() {
+        Request response = globalField.fetch().request();
+        Assertions.assertEquals(apiKey, response.headers().get("api_key"));
     }
 //
 //    @Test
@@ -38,25 +39,5 @@ import org.junit.jupiter.api.Test;
 //    void globalCreate() {
 //        globalField.create(globalFiledUid);
 //    }
-//
-//    @Test
-//    void globalUpdate() {
-//        globalField.update(globalFiledUid, "");
-//    }
-//
-//    @Test
-//    void globalDelete() {
-//        globalField.delete(globalFiledUid);
-//    }
-//
-//
-//    @Test
-//    void globalImport() {
-//        globalField.imports();
-//    }
-//
-//    @Test
-//    void globalExport() {
-//        globalField.export(globalFiledUid);
-//    }
+
 }
