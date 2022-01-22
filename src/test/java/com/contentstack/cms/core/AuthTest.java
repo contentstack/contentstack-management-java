@@ -7,22 +7,19 @@ class AuthTest {
 
     @Test
     void testAuthNotNull() {
-        AuthInterceptor authInterceptor =
-                new AuthInterceptor();
+        AuthInterceptor authInterceptor = new AuthInterceptor();
         Assertions.assertNotNull(authInterceptor);
     }
 
     @Test
     void testAuthtokenNotNull() {
-        AuthInterceptor authInterceptor =
-                new AuthInterceptor("fake@authtoken");
+        AuthInterceptor authInterceptor = new AuthInterceptor("fake@authtoken");
         Assertions.assertNotNull(authInterceptor.authtoken);
     }
 
     @Test
     void testAuthtoken() {
-        AuthInterceptor authInterceptor =
-                new AuthInterceptor("fake@authtoken");
+        AuthInterceptor authInterceptor = new AuthInterceptor("fake@authtoken");
         Assertions.assertEquals("fake@authtoken",
                 authInterceptor.authtoken);
     }

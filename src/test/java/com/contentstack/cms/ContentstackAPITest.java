@@ -15,7 +15,6 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
-
 /*
  @author  ishaileshmishra@gmail.com
  @since   CMS v0.0.1
@@ -32,8 +31,7 @@ public class ContentstackAPITest {
     @Test
     void testContentstackUserLogin() throws IOException {
         String authToken = dotenv.get("auth_token");
-        Contentstack contentstack = new Contentstack
-                .Builder()
+        Contentstack contentstack = new Contentstack.Builder()
                 .setAuthtoken(authToken)
                 .build();
         Response<ResponseBody> user = contentstack.user().getUser().execute();
@@ -50,7 +48,6 @@ public class ContentstackAPITest {
         Assertions.assertNotNull(authToken);
         Assertions.assertEquals(authToken, contentstack.authtoken);
     }
-
 
     @Test
     void testContentstackUserLoginWithNullAuthtoken() {
@@ -77,22 +74,21 @@ public class ContentstackAPITest {
         Assertions.assertNull(contentstack.authtoken);
     }
 
-
     @Test
     void testContentstackUserLoginWhenAlreadyLoggedIn() throws IOException {
         String authToken = dotenv.get("auth_token");
         Contentstack contentstack = new Contentstack.Builder()
                 .setAuthtoken(null)
                 .build();
-        Response<LoginDetails> response = contentstack.login("invalid@credentials.com", "invalid@password", "invalid_tfa_token");
+        Response<LoginDetails> response = contentstack.login("invalid@credentials.com", "invalid@password",
+                "invalid_tfa_token");
         Assertions.assertEquals(422, response.code());
     }
 
     @Test
     void testLogoutWithAuthtoken() throws IOException {
         String authToken = dotenv.get("auth_token");
-        Contentstack contentstack = new Contentstack
-                .Builder()
+        Contentstack contentstack = new Contentstack.Builder()
                 .setAuthtoken(authToken)
                 .build();
         Response<ResponseBody> status = contentstack.logoutWithAuthtoken(authToken);
@@ -139,11 +135,13 @@ public class ContentstackAPITest {
         }
     }
 
-//    @Test
-//    void testCallback() throws IOException {
-//        User client = new Contentstack.Builder().setAuthtoken("notnull@fake").build().user();
-//        Response<LoginDetails> response = client.login("ishaileshmishra@gmail.com", "password").execute();
-//        System.out.println(response);
-//    }
+    // @Test
+    // void testCallback() throws IOException {
+    // User client = new
+    // Contentstack.Builder().setAuthtoken("notnull@fake").build().user();
+    // Response<LoginDetails> response = client.login("ishaileshmishra@gmail.com",
+    // "password").execute();
+    // System.out.println(response);
+    // }
 
 }

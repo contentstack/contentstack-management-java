@@ -147,7 +147,6 @@ class StackAPITest {
         }
     }
 
-
     @Test
     void testUpdate() {
         try {
@@ -186,7 +185,8 @@ class StackAPITest {
                 int errCode = error.getErrorCode();
                 String errMessage = error.getErrorMessage();
                 Assertions.assertEquals(141, errCode);
-                Assertions.assertEquals("Sorry about that. Provided email is not a part of the organization.", errMessage);
+                Assertions.assertEquals("Sorry about that. Provided email is not a part of the organization.",
+                        errMessage);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -206,13 +206,11 @@ class StackAPITest {
             Assertions.assertTrue(jsonResp.has("notice"));
         } else {
             Assertions.assertEquals("/v3/stacks/accept_ownership/" + ownershipToken,
-                    response.raw().
-                            request()
+                    response.raw().request()
                             .url()
                             .encodedPath().toString());
             Assertions.assertTrue(
-                    response.raw().
-                            request()
+                    response.raw().request()
                             .url()
                             .queryParameterNames()
                             .contains("uid"));
@@ -223,7 +221,8 @@ class StackAPITest {
                             .contains("api_key"));
             Assertions.assertEquals(
                     "uid=" + userId + "&api_key=" +
-                            apiKey, response.raw()
+                            apiKey,
+                    response.raw()
                             .request()
                             .url()
                             .query());
@@ -406,6 +405,5 @@ class StackAPITest {
             e.printStackTrace();
         }
     }
-
 
 }

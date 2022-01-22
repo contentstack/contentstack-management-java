@@ -10,35 +10,35 @@ import java.util.Map;
 
 public interface UserService {
 
-    @POST("user-session")
-    Call<LoginDetails> login(@Body RequestBody body);
+        @POST("user-session")
+        Call<LoginDetails> login(@Body RequestBody body);
 
-    @GET("user")
-    Call<ResponseBody> getUser();
+        @GET("user")
+        Call<ResponseBody> getUser();
 
-    @PUT("user")
-    Call<ResponseBody> updateUser(@Body RequestBody body);
+        @PUT("user")
+        Call<ResponseBody> updateUser(@Body RequestBody body);
 
-    @POST("user/activate/{user_activation_token}")
-    Call<ResponseBody> activateUser(
-            @Path("user_activation_token") String activationToken,
-            @Body RequestBody body);
+        @POST("user/activate/{user_activation_token}")
+        Call<ResponseBody> activateUser(
+                        @Path("user_activation_token") String activationToken,
+                        @Body RequestBody body);
 
-    @POST("user/forgot_password")
-    Call<ResponseBody> requestPassword(@Body RequestBody body);
+        @POST("user/forgot_password")
+        Call<ResponseBody> requestPassword(@Body RequestBody body);
 
-    @POST("user/reset_password")
-    Call<ResponseBody> resetPassword(@Body RequestBody body);
+        @POST("user/reset_password")
+        Call<ResponseBody> resetPassword(@Body RequestBody body);
 
-    @DELETE("user-session")
-    Call<ResponseBody> logout(
-            @Header("authtoken") String authtoken);
+        @DELETE("user-session")
+        Call<ResponseBody> logout(
+                        @Header("authtoken") String authtoken);
 
-    @DELETE("user-session")
-    Call<ResponseBody> logout();
+        @DELETE("user-session")
+        Call<ResponseBody> logout();
 
-    @GET("user")
-    Call<ResponseBody> getUserOrganization(
-            @QueryMap Map<String, Object> options);
+        @GET("user")
+        Call<ResponseBody> getUserOrganization(
+                        @QueryMap Map<String, Object> options);
 
 }

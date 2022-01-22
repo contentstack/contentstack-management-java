@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 
-
 public class TestUtils {
 
     public static boolean isValid(String url) {
@@ -17,7 +16,6 @@ public class TestUtils {
         }
     }
 
-
     @Test
     void testUtilConstructor() {
         try {
@@ -26,7 +24,6 @@ public class TestUtils {
             Assertions.assertEquals("private=modifier", e.getMessage());
         }
     }
-
 
     @Test
     @TestOSBasedUtils.TestOnMac
@@ -56,6 +53,5 @@ public class TestUtils {
                     e.getMessage());
         }
     }
-
 
 }

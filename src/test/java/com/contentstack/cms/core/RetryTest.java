@@ -9,7 +9,6 @@ import retrofit2.Response;
 
 class RetryTest {
 
-
     @Test
     void testRetryPolicy() {
         Contentstack client = new Contentstack.Builder()

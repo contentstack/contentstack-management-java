@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
-
 public class ContentstackUnitTest {
-
 
     private static Dotenv dotenv;
 
@@ -128,7 +126,6 @@ public class ContentstackUnitTest {
         Assertions.assertNotNull(defaultHeaders);
     }
 
-
     @Test
     void testDefaultClientInstanceWithoutAuthtoken() {
         Contentstack contentstack = new Contentstack.Builder().build();
@@ -170,7 +167,6 @@ public class ContentstackUnitTest {
                 .build();
         Assertions.assertEquals(10, contentstack.timeout);
     }
-
 
     @Test
     void setProxy() {
@@ -218,8 +214,7 @@ public class ContentstackUnitTest {
 
     @Test
     void setTimeout() {
-        Contentstack contentstack = new Contentstack
-                .Builder()
+        Contentstack contentstack = new Contentstack.Builder()
                 .setTimeout(3)
                 .build();
         Assertions.assertEquals(3, contentstack.timeout);
@@ -227,8 +222,7 @@ public class ContentstackUnitTest {
 
     @Test
     void testSetAuthtoken() {
-        Contentstack contentstack = new Contentstack
-                .Builder()
+        Contentstack contentstack = new Contentstack.Builder()
                 .setAuthtoken("authtoken_dummy")
                 .build();
         Assertions.assertEquals("authtoken_dummy", contentstack.authtoken);
@@ -236,8 +230,7 @@ public class ContentstackUnitTest {
 
     @Test
     void testSetOrganizations() {
-        Contentstack client = new Contentstack
-                .Builder()
+        Contentstack client = new Contentstack.Builder()
                 .setAuthtoken(null)
                 .build();
         Assertions.assertNull(client.authtoken);
@@ -274,6 +267,5 @@ public class ContentstackUnitTest {
         }
         Assertions.assertEquals("fake@authtoken", client.authtoken);
     }
-
 
 }

@@ -10,10 +10,14 @@ import java.io.IOException;
 /**
  * <b>The type Header interceptor that extends Interceptor</b>
  * <p>
- * Interceptors are a powerful way to customize requests with Retrofit. A common use-case where you want to intercept
- * the actual request is to observe, modifies, and potentially short-circuits requests going out and the corresponding
- * responses coming back in. Typically, interceptors add, remove, or transform headers on the request. Depending on the
- * API implementation, you'll want to pass the auth token as the value for the Authorization header.
+ * Interceptors are a powerful way to customize requests with Retrofit. A common
+ * use-case where you want to intercept
+ * the actual request is to observe, modifies, and potentially short-circuits
+ * requests going out and the corresponding
+ * responses coming back in. Typically, interceptors add, remove, or transform
+ * headers on the request. Depending on the
+ * API implementation, you'll want to pass the auth token as the value for the
+ * Authorization header.
  */
 public class AuthInterceptor implements Interceptor {
 
@@ -34,8 +38,7 @@ public class AuthInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         final String xUserAgent = Util.SDK_NAME + "/" + Util.SDK_VERSION;
-        Request.Builder request = chain.
-                request().newBuilder()
+        Request.Builder request = chain.request().newBuilder()
                 .header("X-User-Agent", xUserAgent)
                 .header("User-Agent", Util.defaultUserAgent())
                 .header("Content-Type", "application/json");
@@ -45,6 +48,5 @@ public class AuthInterceptor implements Interceptor {
         }
         return chain.proceed(request.build());
     }
-
 
 }

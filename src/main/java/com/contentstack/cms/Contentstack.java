@@ -29,19 +29,19 @@ import java.util.logging.Logger;
 public class Contentstack {
 
     public static final Logger logger = Logger.getLogger(Contentstack.class.getName());
-    protected String host;
+    protected final String host;
     /**
      * The Port.
      */
-    protected String port;
+    protected final String port;
     /**
      * The Version.
      */
-    protected String version;
+    protected final String version;
     /**
      * The Timeout.
      */
-    protected int timeout;
+    protected final int timeout;
     /**
      * The Authtoken.
      */
@@ -53,11 +53,11 @@ public class Contentstack {
     /**
      * The Retry on failure.
      */
-    protected Boolean retryOnFailure;
+    protected final Boolean retryOnFailure;
     /**
      * The Proxy.
      */
-    protected Proxy proxy;
+    protected final Proxy proxy;
     /**
      * The Interceptor.
      */
@@ -67,9 +67,9 @@ public class Contentstack {
      */
     protected User user;
 
-
     /**
-     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can
+     * have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -101,12 +101,14 @@ public class Contentstack {
 
     /**
      * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The authtoken is returned to the 'Response' body of
+     * authenticating yourself via the Log in call of User Session. The authtoken is
+     * returned to the 'Response' body of
      * the Log in call and is mandatory in all the calls.
      * <p>
      * <b>Example:</b>
      * <p>
-     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can
+     * have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -130,12 +132,12 @@ public class Contentstack {
      * <p>
      *
      * @param emailId
-     *         the email id
+     *                 the email id
      * @param password
-     *         the password
+     *                 the password
      * @return response the Response type of @{@link LoginDetails}
      * @throws IOException
-     *         the io exception
+     *                     the io exception
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
@@ -148,12 +150,14 @@ public class Contentstack {
 
     /**
      * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The authtoken is returned to the 'Response' body of
+     * authenticating yourself via the Log in call of User Session. The authtoken is
+     * returned to the 'Response' body of
      * the Log in call and is mandatory in all the calls.
      * <p>
      * <b>Example:</b>
      * <p>
-     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can
+     * have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -177,14 +181,15 @@ public class Contentstack {
      * <p>
      *
      * @param emailId
-     *         the email id
+     *                 the email id
      * @param password
-     *         the password
+     *                 the password
      * @param tfaToken
-     *         the tfa token
-     * @return response the Response type of @{@link LoginDetails} throws         {@link IOException}
+     *                 the tfa token
+     * @return response the Response type of @{@link LoginDetails} throws
+     *         {@link IOException}
      * @throws IOException
-     *         the io exception
+     *                     the io exception
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
         if (this.authtoken != null)
@@ -210,7 +215,8 @@ public class Contentstack {
     }
 
     /**
-     * The Log out of your account call is used to sign out the user of Contentstack account
+     * The Log out of your account call is used to sign out the user of Contentstack
+     * account
      *
      * <b> Example </b>
      *
@@ -222,7 +228,7 @@ public class Contentstack {
      *
      * @return the response
      * @throws IOException
-     *         the io exception
+     *                     the io exception
      */
     Response<ResponseBody> logout() throws IOException {
         user = new User(this.instance);
@@ -230,7 +236,8 @@ public class Contentstack {
     }
 
     /**
-     * The Log out of your account using authtoken is used to sign out the user of Contentstack account
+     * The Log out of your account using authtoken is used to sign out the user of
+     * Contentstack account
      *
      * <b> Example </b>
      *
@@ -241,10 +248,10 @@ public class Contentstack {
      * <p>
      *
      * @param authtoken
-     *         the authtoken
+     *                  the authtoken
      * @return the response
      * @throws IOException
-     *         the io exception
+     *                     the io exception
      */
     Response<ResponseBody> logoutWithAuthtoken(String authtoken) throws IOException {
         user = new User(this.instance);
@@ -256,8 +263,10 @@ public class Contentstack {
     }
 
     /**
-     * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources,
-     * and users. Organization allows easy management of projects as well as users within the Organization.
+     * Organization is the top-level entity in the hierarchy of Contentstack,
+     * consisting of stacks and stack resources,
+     * and users. Organization allows easy management of projects as well as users
+     * within the Organization.
      *
      * <b> Example </b>
      *
@@ -275,8 +284,11 @@ public class Contentstack {
     }
 
     /**
-     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
-     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
+     * A stack is
+     * a space that stores the content of a project (a web or mobile property).
+     * Within a stack, you can create content
      * structures, content entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
@@ -287,7 +299,7 @@ public class Contentstack {
      * </pre>
      *
      * @param apiKey
-     *         the apiKey for the stack
+     *               the apiKey for the stack
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey) {
@@ -296,19 +308,21 @@ public class Contentstack {
         return new Stack(this.instance, apiKey);
     }
 
-
     /**
-     * A Global field is a reusable field (or group of fields) that you can define once and reuse in any content type
-     * within your stack. This eliminates the need (and thereby time and efforts) to create the same set of fields
+     * A Global field is a reusable field (or group of fields) that you can define
+     * once and reuse in any content type
+     * within your stack. This eliminates the need (and thereby time and efforts) to
+     * create the same set of fields
      * repeatedly in multiple content types.
      * <p>
-     * <b>Additional Resource:</b> You can create a dynamic and flexible Global field either by nesting Global field
+     * <b>Additional Resource:</b> You can create a dynamic and flexible Global
+     * field either by nesting Global field
      * within the Modular Block or Group field within Global field
      *
      * @param apiKey
-     *         the api key
+     *                      the api key
      * @param authorization
-     *         the management token
+     *                      the management token
      * @return global field
      */
     public GlobalField globalField(@NotNull String apiKey, @NotNull String authorization) {
@@ -320,18 +334,21 @@ public class Contentstack {
     /**
      * <b>Content type</b>
      * <p>
-     * Content type defines the structure or schema of a page or a section of your web or mobile property. To create
-     * content for your application, you are required to first create a content type, and then create entries using the
+     * Content type defines the structure or schema of a page or a section of your
+     * web or mobile property. To create
+     * content for your application, you are required to first create a content
+     * type, and then create entries using the
      * content type.
      * <p>
      *
      * <b>Additional Resource</b>
      * <p>
-     * To get an idea of building your content type as per webpage's layout, we recommend you to check out our Content
+     * To get an idea of building your content type as per webpage's layout, we
+     * recommend you to check out our Content
      * Modeling guide
      *
      * @param apiKey
-     *         the api key
+     *               the api key
      * @return the content type
      */
     public ContentType contentType(
@@ -341,24 +358,26 @@ public class Contentstack {
         return new ContentType(this.instance, apiKey, null);
     }
 
-
     /**
      * <b>Content type</b>
      * <p>
-     * Content type defines the structure or schema of a page or a section of your web or mobile property. To create
-     * content for your application, you are required to first create a content type, and then create entries using the
+     * Content type defines the structure or schema of a page or a section of your
+     * web or mobile property. To create
+     * content for your application, you are required to first create a content
+     * type, and then create entries using the
      * content type.
      * <p>
      *
      * <b>Additional Resource</b>
      * <p>
-     * To get an idea of building your content type as per webpage's layout, we recommend you to check out our Content
+     * To get an idea of building your content type as per webpage's layout, we
+     * recommend you to check out our Content
      * Modeling guide
      *
      * @param apiKey
-     *         the api key
+     *                      the api key
      * @param authorization
-     *         the management token
+     *                      the management token
      * @return the content type
      */
     public ContentType contentType(
@@ -369,43 +388,29 @@ public class Contentstack {
         return new ContentType(this.instance, apiKey, authorization);
     }
 
-
     /**
-     * An entry is the actual piece of content created using one of the defined content types.
+     * An entry is the actual piece of content created using one of the defined
+     * [content
+     * types](https://www.contentstack.com/docs/developers/create-content-types/about-content-types/).
      *
      * @param apiKey
-     *         the api key
-     * @param authorization
-     *         the management token
+     *                        the api key
+     * @param managementToken
+     *                        the management token
      * @return {@link Entry} Entry instance
      */
-    public Entry entry(
-            @NotNull String apiKey,
-            @NotNull String authorization) {
+    public Entry entry(@NotNull String apiKey, @NotNull String managementToken) {
         if (this.authtoken == null)
             throw new IllegalStateException("Please Login to access Entry instance");
-        return new Entry(this.instance, apiKey, authorization);
-    }
-
-
-    /**
-     * An entry is the actual piece of content created using one of the defined content types.
-     *
-     * @param apiKey
-     *         the api key
-     * @return {@link Entry} Entry instance
-     */
-    public Entry entry(@NotNull String apiKey) {
-        if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access Entry instance");
-        return new Entry(this.instance, apiKey, null);
+        // return new Entry(this.instance, apiKey, managementToken);
+        return new Entry(this.instance, apiKey, managementToken, "product");
     }
 
     /**
      * Instantiates a new Contentstack.
      *
      * @param builder
-     *         the builder
+     *                the builder
      */
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
@@ -418,7 +423,6 @@ public class Contentstack {
         this.proxy = builder.proxy;
         this.interceptor = builder.authInterceptor;
     }
-
 
     /**
      * The type Builder.
@@ -446,14 +450,16 @@ public class Contentstack {
         }
 
         /**
-         * Sets proxy. (Setting proxy to the OkHttpClient) Proxy proxy = new Proxy(Proxy.Type.HTTP, new
+         * Sets proxy. (Setting proxy to the OkHttpClient) Proxy proxy = new
+         * Proxy(Proxy.Type.HTTP, new
          * InetSocketAddress(proxyHost, proxyPort));
          * <p>
-         * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433)); Contentstack contentstack =
+         * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname",
+         * 433)); Contentstack contentstack =
          * new Contentstack.Builder().setProxy(proxy).build();
          *
          * @param proxy
-         *         the proxy
+         *              the proxy
          * @return the Builder instance
          */
         public Builder setProxy(@NotNull Proxy proxy) {
@@ -465,7 +471,7 @@ public class Contentstack {
          * Sets retry on failure.
          *
          * @param retry
-         *         if retry is true
+         *              if retry is true
          * @return the retry on failure
          */
         public Builder setRetry(@NotNull Boolean retry) {
@@ -477,7 +483,7 @@ public class Contentstack {
          * Set host for client instance
          *
          * @param hostname
-         *         host for the Contentstack Client
+         *                 host for the Contentstack Client
          * @return Client host
          */
         public Builder setHost(@NotNull String hostname) {
@@ -489,7 +495,7 @@ public class Contentstack {
          * Set port for client instance
          *
          * @param port
-         *         - port for the Contentstack Client
+         *             - port for the Contentstack Client
          * @return Client port
          */
         public Builder setPort(@NotNull String port) {
@@ -501,7 +507,7 @@ public class Contentstack {
          * Set version for client instance
          *
          * @param version
-         *         for the Contentstack Client
+         *                for the Contentstack Client
          * @return Client version
          */
         public Builder setVersion(@NotNull String version) {
@@ -513,7 +519,7 @@ public class Contentstack {
          * Set timeout for client instance
          *
          * @param timeout
-         *         for the Contentstack Client
+         *                for the Contentstack Client
          * @return Client timeout
          */
         public Builder setTimeout(int timeout) {
@@ -525,7 +531,7 @@ public class Contentstack {
          * Sets authtoken for the client
          *
          * @param authtoken
-         *         for the client
+         *                  for the client
          * @return Contentstack authtoken
          */
         public Builder setAuthtoken(String authtoken) {

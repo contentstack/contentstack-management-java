@@ -39,4 +39,3 @@ public abstract class RetryCallback<T> implements Callback<T> {
         call.clone().enqueue(this);
     }
 }
-
