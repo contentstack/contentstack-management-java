@@ -19,7 +19,6 @@ public class Utils {
         return new Gson().fromJson(response.body().string(), JsonObject.class);
     }
 
-
     public static JSONObject createJSONObject(String jsonString) {
         JSONObject jsonObject = new JSONObject();
         JSONParser jsonParser = new JSONParser();
@@ -33,7 +32,6 @@ public class Utils {
         return jsonObject;
     }
 
-
     public static JSONObject readJson(String file) {
         JSONObject mockJsonObject = null;
         String path = "src/test/resources/" + file;
@@ -45,6 +43,5 @@ public class Utils {
         }
         return mockJsonObject;
     }
-
 
 }

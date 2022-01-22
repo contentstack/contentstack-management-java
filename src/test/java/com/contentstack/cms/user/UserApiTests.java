@@ -67,7 +67,7 @@ public class UserApiTests {
         if (response.isSuccessful()) {
             JsonObject user = toJson(response);
             Assertions.assertTrue(user.getAsJsonObject("user").has("organizations"));
-            Assertions.assertEquals(7,
+            Assertions.assertEquals(8,
                     user.getAsJsonObject("user")
                             .getAsJsonArray("organizations").size());
         }

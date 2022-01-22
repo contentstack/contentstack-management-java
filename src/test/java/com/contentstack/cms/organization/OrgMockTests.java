@@ -7,14 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import retrofit2.Retrofit;
 
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrgMockTests {
 
     private Organization organization;
     private String DEFAULT_AUTHTOKEN;
     private String DEFAULT_ORG_UID;
-
 
     @BeforeAll
     public void setUp() {
@@ -25,7 +23,8 @@ public class OrgMockTests {
         organization = new Organization(retrofit);
     }
 
-    @Test void testInit(){
+    @Test
+    void testInit() {
         Assertions.assertTrue(true);
     }
 

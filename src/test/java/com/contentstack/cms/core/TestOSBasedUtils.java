@@ -1,4 +1,5 @@
 package com.contentstack.cms.core;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.*;
@@ -10,14 +11,14 @@ import java.lang.annotation.Target;
 /**
  * The type Test utils.
  */
- class TestOSBasedUtils {
+class TestOSBasedUtils {
 
     /**
      * Check version.
      */
     @Test
     @EnabledOnOs(OS.MAC)
-     void checkVersion(){
+    void checkVersion() {
         String defaultUserAgent = Util.defaultUserAgent();
         Assertions.assertEquals("Java1.8.0_261 OS: MAC OS X", defaultUserAgent);
     }
@@ -27,7 +28,7 @@ import java.lang.annotation.Target;
      */
     @Test
     @DisabledOnJre(JRE.OTHER)
-     void thisTestOnlyRunsWithUpToDateJREs() {
+    void thisTestOnlyRunsWithUpToDateJREs() {
         // this test will only run on Java 8, 9, 10, and 11.
     }
 
@@ -75,6 +76,5 @@ import java.lang.annotation.Target;
     @EnabledOnOs(OS.MAC)
     @interface TestOnMac {
     }
-
 
 }

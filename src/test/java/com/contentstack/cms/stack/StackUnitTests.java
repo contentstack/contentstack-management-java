@@ -18,7 +18,6 @@ class StackUnitTests {
     protected Stack stack;
     private Dotenv env;
 
-
     @BeforeAll
     public void setUp() {
         env = Dotenv.load();
@@ -152,7 +151,6 @@ class StackUnitTests {
         Assertions.assertEquals(2, request.headers().size());
     }
 
-
     @Test
     void testCreateStackMethod() {
         String orgId = env.get("organizationUid");
@@ -168,7 +166,6 @@ class StackUnitTests {
         Assertions.assertTrue(true);
     }
 
-
     @Test
     void testCreateStackHeader() {
         String orgId = env.get("organizationUid");
@@ -183,7 +180,6 @@ class StackUnitTests {
         Request request = stack.create(orgId, bodyString).request();
         Assertions.assertEquals(orgId, request.headers().get("organization_uid"));
     }
-
 
     @Test
     void testCreateStackUrl() {
@@ -213,9 +209,9 @@ class StackUnitTests {
         assert orgId != null;
         Request request = stack.create(orgId, bodyString).request();
         assert request.body() != null;
-        Assertions.assertEquals("application/json; charset=UTF-8", Objects.requireNonNull(request.body().contentType()).toString());
+        Assertions.assertEquals("application/json; charset=UTF-8",
+                Objects.requireNonNull(request.body().contentType()).toString());
     }
-
 
     @Test
     void testUpdateStackMethod() {
@@ -253,7 +249,6 @@ class StackUnitTests {
         Assertions.assertEquals("/v3/stacks", request.url().encodedPath());
     }
 
-
     @Test
     void testUpdateStackPort() {
         String bodyString = "{\n" +
@@ -265,7 +260,6 @@ class StackUnitTests {
         Request request = stack.update(bodyString).request();
         Assertions.assertEquals(443, request.url().port());
     }
-
 
     @Test
     void testUpdateStackBodyContentType() {
@@ -281,7 +275,6 @@ class StackUnitTests {
                 "application/json; charset=UTF-8",
                 Objects.requireNonNull(request.body().contentType()).toString());
     }
-
 
     @Test
     void testTransferOwnership() {
@@ -326,7 +319,6 @@ class StackUnitTests {
                 Objects.requireNonNull(request.body().contentType()).toString());
     }
 
-
     @Test
     void testStackSetting() {
         Request request = stack.setting().request();
@@ -341,7 +333,6 @@ class StackUnitTests {
         Assertions.assertEquals("GET", request.method());
         Assertions.assertEquals(443, request.url().port());
     }
-
 
     @Test
     void testStackSettingEncodedPath() {
@@ -375,7 +366,6 @@ class StackUnitTests {
         Assertions.assertEquals(443, request.url().port());
     }
 
-
     @Test
     void testUpdateSettings() {
         String reqStr = "{\n" +
@@ -396,7 +386,6 @@ class StackUnitTests {
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks/settings", request.url().url().toString());
 
     }
-
 
     @Test
     void testUpdateSettingMethod() {
@@ -465,9 +454,8 @@ class StackUnitTests {
                 "  }\n" +
                 "}";
         Request request = stack.updateSetting(reqStr).request();
-        Assertions.
-                assertEquals(
-                        "https://api.contentstack.io/v3/stacks/settings", request.url().url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/settings", request.url().url().toString());
 
     }
 
@@ -486,7 +474,6 @@ class StackUnitTests {
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks/settings", request.url().url().toString());
 
     }
-
 
     @Test
     void testResetStackSettingMethod() {
@@ -556,7 +543,6 @@ class StackUnitTests {
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks/share", request.url().url().toString());
     }
 
-
     @Test
     void testShareMethod() {
         String strBody = "{\n" +
@@ -588,7 +574,6 @@ class StackUnitTests {
         Request request = stack.share(strBody).request();
         Assertions.assertEquals(443, request.url().port());
     }
-
 
     @Test
     void testShareStackEncodedUrl() {
@@ -678,7 +663,8 @@ class StackUnitTests {
         Assertions.assertEquals("GET", request.method());
         Assertions.assertEquals(443, request.url().port());
         Assertions.assertEquals("/v3/stacks", request.url().encodedPath());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks?include_collaborators=true", request.url().url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/stacks?include_collaborators=true",
+                request.url().url().toString());
 
     }
 
@@ -703,7 +689,8 @@ class StackUnitTests {
     @Test
     void testGetAllUserCompleteUrl() {
         Request request = stack.allUsers().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks?include_collaborators=true", request.url().url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/stacks?include_collaborators=true",
+                request.url().url().toString());
 
     }
 
@@ -721,7 +708,6 @@ class StackUnitTests {
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks/users/roles", request.url().url().toString());
 
     }
-
 
     @Test
     void testUpdateUserRolesMethod() {
@@ -778,7 +764,9 @@ class StackUnitTests {
         Assertions.assertEquals(443, request.url().port());
         Assertions.assertEquals("/v3/stacks/accept_ownership/" + ownershipToken, request.url().encodedPath());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/accept_ownership/" + ownershipToken + "?uid=" + userId + "&api_key=" + stack.apiKey + "", request.url().url().toString());
+                "https://api.contentstack.io/v3/stacks/accept_ownership/" + ownershipToken + "?uid=" + userId
+                        + "&api_key=" + stack.apiKey + "",
+                request.url().url().toString());
 
     }
 
@@ -820,8 +808,9 @@ class StackUnitTests {
         assert userId != null;
         Request request = stack.acceptOwnership(ownershipToken, userId).request();
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/accept_ownership/" + ownershipToken + "?uid=" + userId + "&api_key=" + stack.apiKey + "", request.url().url().toString());
+                "https://api.contentstack.io/v3/stacks/accept_ownership/" + ownershipToken + "?uid=" + userId
+                        + "&api_key=" + stack.apiKey + "",
+                request.url().url().toString());
     }
-
 
 }

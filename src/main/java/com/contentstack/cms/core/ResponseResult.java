@@ -26,23 +26,16 @@ public class ResponseResult<T> {
     }
 }
 
-
-//class BaseCallBack<T> implements Callback<T> {
-//
-//    @Override
-//    public void onResponse(Call<T> call, Response<T> response) {
-//        if (!response.isSuccessful()) {
-//            System.out.println("Response Fail");
-//        }
-//    }
-//
-//    @Override
-//    public void onFailure(Call<T> call, Throwable t) {
-//        System.out.println("Response Fail" + t.toString());
-//    }
-//}
-//
-//
-//interface CustomCallListener<T> {
-//    public void getResult(T object);
-//}
+/*
+ * class BaseCallBack<T> implements Callback<T> {
+ * 
+ * @Override public void onResponse(Call<T> call, Response<T> response) { if
+ * (!response.isSuccessful()) {
+ * System.out.println("Response Fail"); } }
+ * 
+ * @Override public void onFailure(Call<T> call, Throwable t) {
+ * System.out.println("Response Fail" + t.toString()); } }
+ * <p>
+ * <p>
+ * interface CustomCallListener<T> { public void getResult(T object); }
+ */
