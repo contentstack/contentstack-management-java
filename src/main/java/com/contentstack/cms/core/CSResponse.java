@@ -11,6 +11,7 @@ public class CSResponse {
     private static final String MODEL_NULL_CHECK = "model class == null";
     private static final String RESPONSE_NULL = "response == null";
     private final Response<ResponseBody> response;
+
     public CSResponse(Response<ResponseBody> response) {
         this.response = response;
     }

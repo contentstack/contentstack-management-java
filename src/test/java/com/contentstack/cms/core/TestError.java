@@ -42,7 +42,6 @@ class TestError {
         Assertions.assertEquals(141, error.errorCode);
     }
 
-
     /**
      * Test gson error message.
      */

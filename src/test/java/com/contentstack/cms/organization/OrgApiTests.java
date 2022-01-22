@@ -17,7 +17,6 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.HashMap;
 
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OrgApiTests {
 
@@ -125,7 +124,6 @@ class OrgApiTests {
         }
     }
 
-
     @Test
     void testRoleWithQueryPrams() throws IOException {
         HashMap<String, Object> query = new HashMap<>();
@@ -189,7 +187,6 @@ class OrgApiTests {
         }
     }
 
-
     @Test
     void testRemoveUser() throws IOException {
         String reqBody = "{\n" +
@@ -230,30 +227,33 @@ class OrgApiTests {
         }
     }
 
-//    @Test
-//    void testAllInvitation() throws IOException {
-//        HashMap<String, Object> query = new HashMap<>();
-//        query.put("include_plan", true);
-//        Response<ResponseBody> response = organization.getAllInvitations(organizationUid).execute();
-//        if (response.isSuccessful()) {
-//            JsonObject respJson = toJson(response);
-//            Assertions.assertTrue(respJson.has("notice"));
-//            Assertions.assertTrue(respJson.has("shares"));
-//        } else {
-//            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-//            Assertions.assertEquals(
-//                    "Couldn't find the organization. Please check input parameters.",
-//                    error.getErrorMessage());
-//            Assertions.assertEquals(309, error.getErrorCode());
-//        }
-//    }
+    // @Test
+    // void testAllInvitation() throws IOException {
+    // HashMap<String, Object> query = new HashMap<>();
+    // query.put("include_plan", true);
+    // Response<ResponseBody> response =
+    // organization.getAllInvitations(organizationUid).execute();
+    // if (response.isSuccessful()) {
+    // JsonObject respJson = toJson(response);
+    // Assertions.assertTrue(respJson.has("notice"));
+    // Assertions.assertTrue(respJson.has("shares"));
+    // } else {
+    // Error error = new Gson().fromJson(response.errorBody().string(),
+    // Error.class);
+    // Assertions.assertEquals(
+    // "Couldn't find the organization. Please check input parameters.",
+    // error.getErrorMessage());
+    // Assertions.assertEquals(309, error.getErrorCode());
+    // }
+    // }
 
-//    @Test
-//    void testAllInvitationWithQuery() throws IOException {
-//        HashMap<String, Object> query = new HashMap<>();
-//        query.put("include_plan", true);
-//        Response<ResponseBody> response = organization.getAllInvitations(organizationUid).execute();
-//    }
+    // @Test
+    // void testAllInvitationWithQuery() throws IOException {
+    // HashMap<String, Object> query = new HashMap<>();
+    // query.put("include_plan", true);
+    // Response<ResponseBody> response =
+    // organization.getAllInvitations(organizationUid).execute();
+    // }
 
     @Test
     void testTransferOwnership() throws IOException {
@@ -263,9 +263,8 @@ class OrgApiTests {
         String strBody = "{\n" +
                 "\t\"transfer_to\": \"ishaileshmishra@gmail.com\"\n" +
                 "}";
-        Response<ResponseBody> response =
-                organization.transferOwnership(orgUid, strBody)
-                        .execute();
+        Response<ResponseBody> response = organization.transferOwnership(orgUid, strBody)
+                .execute();
 
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);

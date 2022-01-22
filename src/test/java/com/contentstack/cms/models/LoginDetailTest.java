@@ -77,7 +77,6 @@ public class LoginDetailTest {
                 userModel.getFailedAttempts());
     }
 
-
     @Test
     void getterSetterUserModelFirstName() {
         UserModel userModel = new UserModel();
@@ -110,7 +109,6 @@ public class LoginDetailTest {
                 userModel.getUid());
     }
 
-
     @Test
     void getterSetterUserModelOrganizations() {
         UserModel userModel = new UserModel();
@@ -125,26 +123,23 @@ public class LoginDetailTest {
                 userModel.getOrganizations().get(0));
     }
 
-
     @Test
     void getterSetterUserModelOrgUid() {
         UserModel userModel = new UserModel();
-        String[] strings = {"uidramesh", "uidforjohn", "uidforshailesh", "uidforuttam"};
+        String[] strings = { "uidramesh", "uidforjohn", "uidforshailesh", "uidforuttam" };
         userModel.setOrgUid(strings);
         Assertions.assertEquals("uidramesh",
                 Arrays.stream(userModel.getOrgUid()).findFirst().get());
     }
 
-
     @Test
     void getterSetterUserModelSharedOrgUid() {
         UserModel userModel = new UserModel();
-        String[] strings = {"shareduidramesh", "shareduidforjohn", "shareduidforshailesh", "shareduidforuttam"};
+        String[] strings = { "shareduidramesh", "shareduidforjohn", "shareduidforshailesh", "shareduidforuttam" };
         userModel.setSharedOrgUid(strings);
         Assertions.assertEquals("shareduidramesh",
                 Arrays.stream(userModel.getSharedOrgUid()).findFirst().get());
     }
-
 
     @Test
     void getterSetterUserModelProfileType() {
@@ -167,6 +162,5 @@ public class LoginDetailTest {
         Assertions.assertEquals("roleAbc",
                 userModel.getRoles().get(0).toString());
     }
-
 
 }
