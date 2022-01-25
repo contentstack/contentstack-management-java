@@ -45,7 +45,8 @@ public class Entry {
      * section to retrieve all your entries in
      * paginated form. Also, to include the publishing details in the response, make
      * use of the include_publish_details
-     * parameter and set its value to ‘true’. This query will return the publishing
+     * parameter and set its value to <b>true</b>. This query will return the
+     * publishing
      * details of the entry in every
      * environment along with the version number that is published in each of the
      * environment.
@@ -56,7 +57,7 @@ public class Entry {
      *                       -locale={language_code}<br>
      *                       -include_workflow={boolean_value}<br>
      *                       -include_publish_details={boolean_value}
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> fetch(Map<String, Object> queryParameter) {
         return this.service.fetch(headers, this.contentTypeUid, queryParameter);
@@ -70,6 +71,8 @@ public class Entry {
      * environment and locale of which you
      * wish to retrieve the entries.
      *
+     * @param entryUid
+     *                       Entry uid
      * @param queryParameter
      *                       The Query Parameters are <br>
      *                       - version={version_number} <br>
@@ -77,7 +80,7 @@ public class Entry {
      *                       -
      *                       include_workflow={boolean_value} <br>
      *                       - include_publish_details={boolean_value}
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> single(@NotNull String entryUid, Map<String, Object> queryParameter) {
         return this.service.single(headers, this.contentTypeUid, entryUid, queryParameter);
@@ -96,7 +99,7 @@ public class Entry {
      * <br>
      * <b>Scenario 1:</b> If you have a reference
      * field in your content type, here's the format you need to follow to add the
-     * data in the ‘Body’ section
+     * data in the "Body" section
      * <br>
      * <b>[Read
      * more](https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry)</b>
@@ -108,7 +111,7 @@ public class Entry {
      * @param queryParameter
      *                       locale: Enter the code of the language in which you
      *                       want your entry to be localized in.
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> create(JSONObject requestBody, @Nullable Map<String, Object> queryParameter) {
         if (queryParameter == null) {
@@ -139,7 +142,7 @@ public class Entry {
      * @param requestBody
      *                       request body for the entry update ```json{ "entry": {
      *                       "title": "example", "url": "/example" } }```
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> update(String entryUId, JSONObject requestBody, Map<String, Object> queryParameter) {
         return this.service.update(this.headers, this.contentTypeUid, entryUId, requestBody, queryParameter);
@@ -150,7 +153,7 @@ public class Entry {
      * collaborators to overwrite data. Though it
      * works efficiently for singular fields, these operations come handy especially
      * in case of fields that are marked
-     * as “Multiple”.
+     * as "Multiple".
      * <br>
      * <p>
      * To achieve data atomicity, we have provided support for following atomic
@@ -164,34 +167,96 @@ public class Entry {
      * @param requestBody
      *                    request body <br>
      *                    <b>PUSH operation:</b> The PUSH operation allows you to
-     *                    “push” (or append) data into an
-     *                    array without overriding an existing value. ```json{
-     *                    "entry": { "multiple_group": { "PUSH": { "data": {
-     *                    "demo_field": "abc" } } } } }```
+     *                    "push" (or append) data into an array without overriding
+     *                    an existing value.
+     *                    ```
+     *
+     *                    {
+     *                    "entry":
+     *                    {
+     *                    "multiple_group":
+     *                    {
+     *                    "PUSH":
+     *                    { "data": { "demo_field":
+     *                    "abc" }
+     *                    }
+     *                    }}
+     *                    }
+     *                    <p>
+     *                    ```
      *                    <br>
      *                    <b>PULL operation:</b> The PULL operation allows you to
-     *                    pull data from an array field based on a query
-     *                    passed. ```json{ "entry": { "multiple_number": { "PULL": {
-     *                    "query": { "$in": [ 2, 3 ] } } } } } ```json
+     *                    pull data from an array field based on a query passed.
+     *                    ```
+     *                    { "entry":
+     *                    {
+     *                    "multiple_number": {
+     *                    "PULL": {
+     *                    "query":
+     *                    { "$in": [ 2, 3 ] } } }
+     *                    } }
+     *                    ```
      *                    <p>
      *
      *                    <br>
      *                    <b>UPDATE Operation: </b> The UPDATE operation allows you
-     *                    to update data at a specific index. This
-     *                    operation works for both singular fields and fields marked
-     *                    “Multiple”. ```json { "entry": {
-     *                    "multiple_number": { "UPDATE": { "index": 0, "data": 1 } }
-     *                    } } ```
-     *                    <p>
+     *                    to update data at a specific index. This operation works
+     *                    for both singular fields and fields marked
+     *                    "Multiple".
+     *                    """
+     *                    {
+     *                    "entry":
+     *                    {
+     *                    "multiple_number":
+     *                    {
+     *                    "UPDATE": { "index": 0, "data": 1 } } } }
+     *                    """
      *                    <p>
      *                    Add, SUB and Delete will be executed like the above. for
      *                    more details [read
      *                    here](https://www.contentstack.com/docs/developers/apis/content-management-api/#atomic-updates-to-entries)
      *                    </p>
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> atomicOperation(String entryUId, JSONObject requestBody) {
         return this.service.atomicOperations(this.headers, this.contentTypeUid, entryUId, requestBody);
+    }
+
+    /**
+     * To Delete an entry request allows you to delete a specific entry from a
+     * content type. This API request also
+     * allows you to delete single and/or multiple localized entries.
+     * <br>
+     * <p>
+     * <b>Note:</b> In the Header, you need to use either the stack Management Token
+     * (recommended) or the user Authtoken, along with the stack API key, to make
+     * valid Content Management API requests.
+     * For more information, refer to Authentication.
+     * </p>
+     *
+     * @param entryUId
+     *                       The entry you want to update
+     * @param queryParameter
+     *                       - Delete specific localized entry: <br>
+     *                       <p>
+     *                       For this request, you need to only specify the locale
+     *                       code of the language in the locale query parameter.
+     *                       If the locale parameter is not been specified, by
+     *                       default, the master language entry will be deleted.
+     *                       </p>
+     *                       <br>
+     *                       <b>Delete master language along with all its localized:
+     *                       </b>For this request, instead of the locale
+     *                       query parameter, you need to pass the
+     *                       delete_all_localized:true query parameter
+     *                       <br>
+     * @return the retrofit2.Call
+     *         <p>
+     *         [Read
+     *         More]{https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry}
+     */
+    public Call<ResponseBody> delete(String entryUId, Map<String, Object> queryParameter) {
+        return this.service.delete(this.headers, this.contentTypeUid, entryUId, new JSONObject(), queryParameter);
     }
 
     /**
@@ -228,13 +293,23 @@ public class Entry {
      *                       you can delete specific localized entries by
      *                       passing the locale codes in the Request body using the
      *                       locales key as follows:
-     * @return @{@link Call}<ResponseBody>
+     * @param requestBody    you can delete specific localized entries by passing
+     *                       the locale codes in the Request body using the locales
+     *                       key as follows
+     *                       ```
+     *                       {
+     *                       "entry": {
+     *                       "locales": ["hi-in", "mr-in", "es"]
+     *                       }
+     *                       }
+     *                       ```
+     * @return the retrofit2.Call
      *         <p>
      *         [Read
      *         More]{https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry}
      */
-    public Call<ResponseBody> delete(String entryUId, Map<String, Object> queryParameter, JSONObject requestBody) {
-        return this.service.delete(this.headers, this.contentTypeUid, entryUId, queryParameter, requestBody);
+    public Call<ResponseBody> delete(String entryUId, JSONObject requestBody, Map<String, Object> queryParameter) {
+        return this.service.delete(this.headers, this.contentTypeUid, entryUId, requestBody, queryParameter);
     }
 
     /**
@@ -249,14 +324,84 @@ public class Entry {
      *                    Enter the version number of the entry to which you want to
      *                    assign a name.
      * @param requestBody
-     *                    RequestBody like below. ```{ "entry": { "_version_name":
+     *                    RequestBody like below.
+     *                    ```
+     *                    { "entry": { "_version_name":
      *                    "Test version", "locale": "fr-fr", "force": true
-     *                    } } ```
-     * @return @{@link Call}<ResponseBody>
+     *                    }
+     *                    }
+     *                    ```
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> versionName(String entryUId, int version, JSONObject requestBody) {
         return this.service.versionName(this.headers, this.contentTypeUid, entryUId, String.valueOf(version),
                 requestBody);
+    }
+
+    /**
+     * The Get Details of All Versions of an Entry request allows you to retrieve
+     * the details of all the versions of an
+     * entry.
+     * <p>
+     * The version details returned include the actual version number of the entry;
+     * the version name along with details
+     * such as the assigned version name, the UID of the user who assigned the name,
+     * and the time when the version was
+     * assigned a name; and the locale of the entry.
+     * <p>
+     *
+     * <b>Note:</b> If an entry is unlocalized, the version details of entries
+     * published in the master locale will be
+     * returned.
+     *
+     * @param entryUId::
+     *                       The UID of the entry to which you want to assign a
+     *                       specific
+     *                       version name.
+     * @param queryParameter
+     *                       - skip(optional) Enter the number of version details to
+     *                       be
+     *                       skipped.
+     *                       - limit(optional): Enter the maximum number of version
+     *                       details to be returned.
+     *                       - named(optional): Set to ‘true’ if you want to
+     *                       retrieve
+     *                       only the named versions of your entry.
+     *                       - include_count(optional): Enter 'true' to get the
+     *                       total
+     *                       count of the entry version details.
+     *                       - locale(optional): Enter the code of the language of
+     *                       which
+     *                       the entries need to
+     *                       be included. Only the version details of entries
+     *                       published
+     *                       in this locale will be displayed
+     *
+     *
+     * @return the retrofit2.Call
+     */
+    public Call<ResponseBody> detailOfAllVersion(String entryUId, Map<String, Object> queryParameter) {
+        return this.service.detailOfAllVersion(this.headers, this.contentTypeUid, entryUId, queryParameter);
+    }
+
+    /**
+     *
+     * @param entryUId       The UID of the entry of which you want to delete the
+     *                       version name.
+     * @param versionNumber: Enter the version number of the entry that you want to
+     *                       delete.
+     * @param requestBody    Request body for the delete operation
+     *                       ```
+     *                       {
+     *                       "entry": {
+     *                       "locale": "en-us"
+     *                       }
+     *                       }
+     *                       ```
+     * @return the retrofit2.Call
+     */
+    public Call<ResponseBody> deleteVersionName(String entryUId, int versionNumber, JSONObject requestBody) {
+        return this.service.deleteVersionName(this.headers, this.contentTypeUid, entryUId, versionNumber, requestBody);
     }
 
     /**
@@ -272,7 +417,7 @@ public class Entry {
      *                       language of which the entries need to be included.
      *                       Only the entries published in this locale will be
      *                       displayed
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> getReference(String entryUId, Map<String, Object> queryParameter) {
         return this.service.reference(this.headers, this.contentTypeUid, entryUId, queryParameter);
@@ -289,7 +434,7 @@ public class Entry {
      *                       the code of the language of which the entries need
      *                       to be included. Only the entries published in this
      *                       locale will be displayed
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> getLanguage(String entryUId, Map<String, Object> queryParameter) {
         return this.service.language(this.headers, this.contentTypeUid, entryUId, queryParameter);
@@ -317,7 +462,7 @@ public class Entry {
      * @param localeCode
      *                    Enter the code of the language to localize the entry of
      *                    that particular language
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> localize(@NotNull String entryUId, @NotNull JSONObject requestBody,
             @NotNull String localeCode) {
@@ -333,7 +478,7 @@ public class Entry {
      * @param localeCode
      *                   Enter the code of the language to localize the entry of
      *                   that particular language
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> unLocalize(@NotNull String entryUId, @NotNull String localeCode) {
         return this.service.unLocalize(this.headers, this.contentTypeUid, entryUId, localeCode);
@@ -349,7 +494,7 @@ public class Entry {
      * @param queryParameter
      *                       Locale: Enter the code of the language to localize the
      *                       entry of that particular language
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> export(@NotNull String entryUId, Map<String, Object> queryParameter) {
         return this.service.export(this.headers, this.contentTypeUid, entryUId, queryParameter);
@@ -376,7 +521,7 @@ public class Entry {
      *                       overwrite (optional): Select 'true' to replace an
      *                       existing entry with the imported entry file.
      *                       language
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> imports(Map<String, Object> queryParameter) {
         return this.service.imports(this.headers, this.contentTypeUid, queryParameter);
@@ -398,9 +543,9 @@ public class Entry {
      *                       overwrite (optional): Select 'true' to replace an
      *                       existing entry with the imported entry file.
      *                       language
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
-    public Call<ResponseBody> importWithUid(@NotNull String entryUId, Map<String, Object> queryParameter) {
+    public Call<ResponseBody> importExisting(@NotNull String entryUId, Map<String, Object> queryParameter) {
         return this.service.importExisting(this.headers, this.contentTypeUid, entryUId, queryParameter);
     }
 
@@ -425,7 +570,7 @@ public class Entry {
      * operation.
      * </p>
      * <br>
-     * The locale and environment details should be specified in the ‘entry’
+     * The locale and environment details should be specified in the <b>entry</b>
      * parameter. However, if you do not specify
      * any source locale(s), it will be published in the master locale
      * automatically.
@@ -438,7 +583,7 @@ public class Entry {
      *                    The entry uid
      * @param requestBody
      *                    The requestBody in JSONObject
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> publish(@NotNull String entryUId, @NotNull JSONObject requestBody) {
         return this.service.publish(this.headers, this.contentTypeUid, entryUId, requestBody);
@@ -453,14 +598,15 @@ public class Entry {
      *                       The request body in JSONObject format
      * @param queryParameter
      *                       Below are the query parameters <br>
-     *                       - approvals:Set this to “true” to publish the entries
+     *                       - approvals:Set this to <b>true</b> to publish the
+     *                       entries
      *                       that do not
      *                       require an approval to be published.<br>
-     *                       skip_workflow_stage_check - Set this to “true” to
+     *                       skip_workflow_stage_check - Set this to <b>true</b> to
      *                       publish the
      *                       entries that are at a workflow stage where they satisfy
      *                       the applied to publish rules.
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> publishWithReference(@NotNull JSONObject requestBody,
             Map<String, Object> queryParameter) {
@@ -474,14 +620,14 @@ public class Entry {
      * <p>
      * In the 'Body' section, you can specify the locales and environments from
      * which you want to unpublish the entry.
-     * These details should be specified in the ‘entry’ parameter. However, if you
-     * do not specify a locale, it will be
-     * unpublished from the master locale automatically.
+     * These details should be specified in the <b>entry</b> parameter. However, if
+     * you do not specify a locale, it will
+     * be unpublished from the master locale automatically.
      * <p>
      * You also need to mention the master locale and the version number of your
      * entry that you want to publish.
      * <p>
-     * In case of Scheduled Unpublishing, add the scheduled_at key and provide the
+     * In case of Scheduled Unpublished, add the scheduled_at key and provide the
      * date/time in the ISO format as its
      * value. Example: "scheduled_at":"2016-10-07T12:34:36.000Z"
      *
@@ -489,7 +635,7 @@ public class Entry {
      *                    The entry uid
      * @param requestBody
      *                    The requestBody in JSONObject
-     * @return @{@link Call}<ResponseBody>
+     * @return the retrofit2.Call
      */
     public Call<ResponseBody> unpublish(@NotNull String entryUid, @NotNull JSONObject requestBody) {
         return this.service.unpublish(this.headers, this.contentTypeUid, entryUid, requestBody);
