@@ -620,7 +620,9 @@ public class Entry {
      * <p>
      * In the 'Body' section, you can specify the locales and environments from
      * which you want to unpublish the entry.
-     * These details should be specified in the <b>entry</b> parameter. However, if
+     * These details should be specified in the
+     * <p>
+     * <b>entry</b> parameter. However, if
      * you do not specify a locale, it will
      * be unpublished from the master locale automatically.
      * <p>
