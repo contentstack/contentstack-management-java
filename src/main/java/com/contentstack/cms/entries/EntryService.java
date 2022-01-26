@@ -18,43 +18,42 @@ public interface EntryService {
         @Headers("Content-Type: application/json")
         @GET("content_types/{content_type_uid}/entries/{entry_uid}")
         Call<ResponseBody> single(
-                @HeaderMap Map<String, String> headers,
-                @Path("content_type_uid") String contentTypeUid,
-                @Path("entry_uid") String entryUid,
-                @QueryMap(encoded = true) Map<String, Object> queryParameter);
+                        @HeaderMap Map<String, String> headers,
+                        @Path("content_type_uid") String contentTypeUid,
+                        @Path("entry_uid") String entryUid,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
         @Headers("Content-Type: application/json")
         @POST("content_types/{content_type_uid}/entries")
         Call<ResponseBody> create(
-                @HeaderMap Map<String, String> headers,
-                @Path("content_type_uid") String contentTypeUid,
-                @Body JSONObject requestBody,
-                @QueryMap(encoded = true) Map<String, Object> queryParameter);
+                        @HeaderMap Map<String, String> headers,
+                        @Path("content_type_uid") String contentTypeUid,
+                        @Body JSONObject requestBody,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
         @PUT("content_types/{content_type_uid}/entries/{entry_uid}")
         Call<ResponseBody> update(
-                @HeaderMap Map<String, String> headers,
-                @Path("content_type_uid") String contentTypeUid,
-                @Path("entry_uid") String entryUid,
-                @Body JSONObject requestBody,
-                @QueryMap(encoded = true) Map<String, Object> queryParameter);
+                        @HeaderMap Map<String, String> headers,
+                        @Path("content_type_uid") String contentTypeUid,
+                        @Path("entry_uid") String entryUid,
+                        @Body JSONObject requestBody,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
         // Push, Pull, Add, Sub Operations
         @PUT("content_types/{content_type_uid}/entries/{entry_uid}")
         Call<ResponseBody> atomicOperations(
-                @HeaderMap Map<String, String> headers,
-                @Path("content_type_uid") String contentTypeUid,
-                @Path("entry_uid") String entryUid,
-                @Body JSONObject body);
+                        @HeaderMap Map<String, String> headers,
+                        @Path("content_type_uid") String contentTypeUid,
+                        @Path("entry_uid") String entryUid,
+                        @Body JSONObject body);
 
         @HTTP(method = "DELETE", path = "content_types/{content_type_uid}/entries/{entry_uid}", hasBody = true)
         Call<ResponseBody> delete(
-                @HeaderMap Map<String, String> headers,
-                @Path("content_type_uid") String contentTypeUid,
-                @Path("entry_uid") String entryUid,
-                @Body JSONObject requestBody,
-                @QueryMap(encoded = true) Map<String, Object> queryParameter
-        );
+                        @HeaderMap Map<String, String> headers,
+                        @Path("content_type_uid") String contentTypeUid,
+                        @Path("entry_uid") String entryUid,
+                        @Body JSONObject requestBody,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
         @POST("content_types/{content_type_uid}/entries/{entry_uid}/versions/{version_number}/name")
         Call<ResponseBody> versionName(
