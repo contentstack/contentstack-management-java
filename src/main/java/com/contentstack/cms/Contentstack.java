@@ -1,5 +1,6 @@
 package com.contentstack.cms;
 
+import com.contentstack.cms.assets.Asset;
 import com.contentstack.cms.contenttype.ContentType;
 import com.contentstack.cms.core.AuthInterceptor;
 import com.contentstack.cms.core.Error;
@@ -404,6 +405,27 @@ public class Contentstack {
             throw new IllegalStateException("Please Login to access Entry instance");
         // return new Entry(this.instance, apiKey, managementToken);
         return new Entry(this.instance, apiKey, managementToken, "product");
+    }
+
+    /**
+     * <b>Assets</b><br>
+     * Assets refer to all the media files (images, videos, PDFs, audio files, and
+     * so on) uploaded in your Contentstack
+     * repository for future use.
+     * <p>
+     * These files can be attached and used in multiple entries.
+     *
+     * @param apiKey
+     *                        the api key
+     * @param managementToken
+     *                        the management token
+     * @return {@link com.contentstack.cms.assets.Asset} Asset instance
+     */
+    public Asset asset(@NotNull String apiKey, @NotNull String managementToken) {
+        if (this.authtoken == null)
+            throw new IllegalStateException("Please Login to access Asset instance");
+        // return new Entry(this.instance, apiKey, managementToken);
+        return new Asset(this.instance, apiKey, managementToken);
     }
 
     /**

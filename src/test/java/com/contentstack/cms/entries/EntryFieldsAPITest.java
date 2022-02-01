@@ -14,10 +14,8 @@ import java.util.HashMap;
 
 class EntryFieldsAPITest {
 
-    protected String globalFiledUid = "description";
-    protected static String GLOBAL_AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String API_KEY = Dotenv.load().get("apiKey1");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("managementToken1");
     static Entry entry;
 
     @BeforeAll

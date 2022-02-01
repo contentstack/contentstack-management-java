@@ -338,7 +338,7 @@ public class Stack {
      * 	],
      * 	"roles": {
      * 		"manager@example.com": [
-     * 			"abcdefhgi1234567890"
+     * 			"some_example_s"
      * 		]
      *        }
      * }
