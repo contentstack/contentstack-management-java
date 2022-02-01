@@ -15,6 +15,7 @@ bin/
 coverage/
 docs/
 tmp/
+report/
 *.tmp
 *.bak
 *.swp
@@ -23,6 +24,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+.docache
 
 # External tool builders
 .externalToolBuilders/
