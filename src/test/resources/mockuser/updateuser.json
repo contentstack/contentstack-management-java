@@ -1,0 +1,27 @@
+{
+    "notice": "Profile updated successfully.",
+    "user": {
+        "uid": "its_just_a_fake_uid",
+        "created_at": "2015-03-13T07:37:03.494Z",
+        "updated_at": "2015-03-13T07:37:03.494Z",
+        "email": "developer@example.com",
+        "username": "john.the_fake_uid",
+        "first_name": "John",
+        "last_name": "Doe",
+        "company": "company name inc.",
+        "org_uid": [
+            "the_fake_uid"
+        ],
+        "shared_org_uid": [
+            "the_fake_uid",
+            "the_fake_uid",
+            "the_fake_uid"
+        ],
+        "mobile_number": "9898989898",
+        "country_code": "91",
+        "tfa_status": "verified",
+        "authy_id": "123123123",
+        "active": true,
+        "failed_attempts": 0
+    }
+}

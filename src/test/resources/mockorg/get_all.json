@@ -1,0 +1,55 @@
+{
+    "organizations": [{
+            "uid": "the_fake_uid",
+            "name": "Sample",
+            "plan_id": "cms_plan",
+            "owner_uid": "the_fake_uid",
+            "expires_on": "2029-12-31T00:00:00.000Z",
+            "enabled": true,
+            "is_over_usage_allowed": true,
+            "created_at": "2016-05-31T06:30:40.993Z",
+            "updated_at": "2019-05-24T10:26:41.861Z",
+            "settings": {
+                "sso": {
+                    "id": "sample-sso",
+                    "strict": true,
+                    "session_timeout": 12,
+                    "sso_roles": {
+                        "enabled": false
+                    },
+                    "saml": {
+                        "acs_url": "https://app.contentstack.com/api/sso/saml2/sample-sso",
+                        "entity_id": "https://app.contentstack.com",
+                        "version": 2,
+                        "name_id_format": "Email Address",
+                        "attributes": [
+                            "email",
+                            "first_name",
+                            "last_name"
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "uid": "the_fake_uid",
+            "name": "Sample2",
+            "plan_id": "testing",
+            "owner_uid": "the_fake_uid",
+            "is_transfer_set": false,
+            "expires_on": "2020-01-31T00:00:00.000Z",
+            "enabled": true,
+            "is_over_usage_allowed": true,
+            "created_at": "2016-09-30T05:08:10.076Z",
+            "updated_at": "2019-04-18T08:45:57.936Z",
+            "settings": {
+                "sso": {
+                    "sso_roles": {
+                        "enabled": false
+                    }
+                }
+            },
+            "owner": true
+        }
+    ]
+}
