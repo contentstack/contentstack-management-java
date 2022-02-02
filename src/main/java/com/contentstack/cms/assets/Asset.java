@@ -21,6 +21,7 @@ public class Asset {
 
     public Asset(Retrofit instance, @NotNull String apiKey, @NotNull String managementToken) {
         headers = new HashMap<>();
+        // Adding headers to request
         headers.put("Content-Type", "application/json");
         headers.put("api_key", apiKey);
         headers.put("authorization", managementToken);
