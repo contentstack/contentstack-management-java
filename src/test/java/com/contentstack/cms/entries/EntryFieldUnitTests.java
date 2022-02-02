@@ -78,7 +78,6 @@ class EntryFieldUnitTests {
         Assertions.assertEquals("GET", resp.method());
     }
 
-    // --------------------[Single]----------------
 
     @Test
     void testSingleEntryQuery() {
@@ -155,6 +154,7 @@ class EntryFieldUnitTests {
         queryParams.put("locale", "en-us");
         Request resp = entryInstance.create(new JSONObject(), queryParams).request();
         Assertions.assertEquals(2, resp.headers().size());
+
     }
 
     @Test
@@ -758,7 +758,6 @@ class EntryFieldUnitTests {
         requestBody.put("entry", content);
         requestBody.put("skip_workflow_stage_check", 1);
         requestBody.put("publish_with_reference", "2019-02-14T18:30:00.000Z");
-
         // Unpublished Reference
         Request resp = entryInstance.unpublish(_uid, requestBody).request(); // sending request body and query parameter
         Assertions.assertEquals("POST", resp.method());
@@ -775,6 +774,7 @@ class EntryFieldUnitTests {
         Assertions.assertNull(resp.url().query());
         Assertions.assertNotNull(resp.body());
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid + "/unpublish",
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + API_KEY,
                 resp.url().toString());
     }
 

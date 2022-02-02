@@ -15,10 +15,6 @@ public class Entry {
 
     protected final HashMap<String, String> headers;
     protected final EntryService service;
-    // Enter the unique ID of the content type of which you wish to retrieve the
-    // details.
-    // The uid is generated based on the title of the content type, and it is unique
-    // across a stack.
     protected final String contentTypeUid;
 
     public Entry(Retrofit instance, @NotNull String apiKey, String managementToken, String contentTypeUid) {
@@ -196,6 +192,15 @@ public class Entry {
      *                    { "$in": [ 2, 3 ] } } }
      *                    } }
      *                    ```
+     *                    “push” (or append) data into an
+     *                    array without overriding an existing value. ```json{
+     *                    "entry": { "multiple_group": { "PUSH": { "data": {
+     *                    "demo_field": "abc" } } } } }```
+     *                    <br>
+     *                    <b>PULL operation:</b> The PULL operation allows you to
+     *                    pull data from an array field based on a query
+     *                    passed. ```json{ "entry": { "multiple_number": { "PULL": {
+     *                    "query": { "$in": [ 2, 3 ] } } } } } ```json
      *                    <p>
      *
      *                    <br>
@@ -211,6 +216,12 @@ public class Entry {
      *                    {
      *                    "UPDATE": { "index": 0, "data": 1 } } } }
      *                    """
+     *                    to update data at a specific index. This
+     *                    operation works for both singular fields and fields marked
+     *                    “Multiple”. ```json { "entry": {
+     *                    "multiple_number": { "UPDATE": { "index": 0, "data": 1 } }
+     *                    } } ```
+     *                    <p>
      *                    <p>
      *                    Add, SUB and Delete will be executed like the above. for
      *                    more details [read
@@ -545,7 +556,7 @@ public class Entry {
      *                       language
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> importExisting(@NotNull String entryUId, Map<String, Object> queryParameter) {
+    public Call<ResponseBody> importWithUid(@NotNull String entryUId, Map<String, Object> queryParameter) {
         return this.service.importExisting(this.headers, this.contentTypeUid, entryUId, queryParameter);
     }
 
@@ -606,7 +617,14 @@ public class Entry {
      *                       publish the
      *                       entries that are at a workflow stage where they satisfy
      *                       the applied to publish rules.
-     * @return the retrofit2.Call
+     *                       - approvals:Set this to “true” to publish the entries
+     *                       that do not
+     *                       require an approval to be published.<br>
+     *                       skip_workflow_stage_check - Set this to “true” to
+     *                       publish the
+     *                       entries that are at a workflow stage where they satisfy
+     *                       the applied to publish rules.
+     * @return @{@link Call}<ResponseBody>
      */
     public Call<ResponseBody> publishWithReference(@NotNull JSONObject requestBody,
             Map<String, Object> queryParameter) {
@@ -625,11 +643,16 @@ public class Entry {
      * <b>entry</b> parameter. However, if
      * you do not specify a locale, it will
      * be unpublished from the master locale automatically.
+     * These details should be specified in the ‘entry’ parameter. However, if you
+     * do not specify a locale, it will be
+     * unpublished from the master locale automatically.
      * <p>
      * You also need to mention the master locale and the version number of your
      * entry that you want to publish.
      * <p>
+
      * In case of Scheduled Unpublished, add the scheduled_at key and provide the
+     * In case of Scheduled Unpublishing, add the scheduled_at key and provide the
      * date/time in the ISO format as its
      * value. Example: "scheduled_at":"2016-10-07T12:34:36.000Z"
      *

@@ -414,6 +414,114 @@ public class Contentstack {
      * repository for future use.
      * <p>
      * These files can be attached and used in multiple entries.
+     * <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
+     * A stack is
+     * a space that stores the content of a project (a web or mobile property).
+     * Within a stack, you can create content
+     * structures, content entries, users, etc. related to the project
+     * <p>
+     * <b> Example </b>
+     *
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * Stack org = client.stack();
+     * </pre>
+     *
+     * @param apiKey
+     *               the apiKey for the stack
+     * @return the stack instance
+     */
+    public Stack stack(@NotNull String apiKey) {
+        if (this.authtoken == null)
+            throw new IllegalStateException("Please Login to access stack instance");
+        return new Stack(this.instance, apiKey);
+    }
+
+    /**
+     * A Global field is a reusable field (or group of fields) that you can define
+     * once and reuse in any content type
+     * within your stack. This eliminates the need (and thereby time and efforts) to
+     * create the same set of fields
+     * repeatedly in multiple content types.
+     * <p>
+     * <b>Additional Resource:</b> You can create a dynamic and flexible Global
+     * field either by nesting Global field
+     * within the Modular Block or Group field within Global field
+     *
+     * @param apiKey
+     *                      the api key
+     * @param authorization
+     *                      the management token
+     * @return global field
+     */
+    public GlobalField globalField(@NotNull String apiKey, @NotNull String authorization) {
+        if (this.authtoken == null)
+            throw new IllegalStateException("Please Login to access GlobalField instance");
+        return new GlobalField(this.instance, apiKey, authorization);
+    }
+
+    /**
+     * <b>Content type</b>
+     * <p>
+     * Content type defines the structure or schema of a page or a section of your
+     * web or mobile property. To create
+     * content for your application, you are required to first create a content
+     * type, and then create entries using the
+     * content type.
+     * <p>
+     *
+     * <b>Additional Resource</b>
+     * <p>
+     * To get an idea of building your content type as per webpage's layout, we
+     * recommend you to check out our Content
+     * Modeling guide
+     *
+     * @param apiKey
+     *               the api key
+     * @return the content type
+     */
+    public ContentType contentType(
+            @NotNull String apiKey) {
+        if (this.authtoken == null)
+            throw new IllegalStateException("Please Login to access ContentType instance");
+        return new ContentType(this.instance, apiKey, null);
+    }
+
+    /**
+     * <b>Content type</b>
+     * <p>
+     * Content type defines the structure or schema of a page or a section of your
+     * web or mobile property. To create
+     * content for your application, you are required to first create a content
+     * type, and then create entries using the
+     * content type.
+     * <p>
+     *
+     * <b>Additional Resource</b>
+     * <p>
+     * To get an idea of building your content type as per webpage's layout, we
+     * recommend you to check out our Content
+     * Modeling guide
+     *
+     * @param apiKey
+     *                      the api key
+     * @param authorization
+     *                      the management token
+     * @return the content type
+     */
+    public ContentType contentType(
+            @NotNull String apiKey,
+            @NotNull String authorization) {
+        if (this.authtoken == null)
+            throw new IllegalStateException("Please Login to access ContentType instance");
+        return new ContentType(this.instance, apiKey, authorization);
+    }
+
+    /**
+     * An entry is the actual piece of content created using one of the defined
+     * [content
+     * types](https://www.contentstack.com/docs/developers/create-content-types/about-content-types/).
      *
      * @param apiKey
      *                        the api key
@@ -426,6 +534,14 @@ public class Contentstack {
             throw new IllegalStateException("Please Login to access Asset instance");
         // return new Entry(this.instance, apiKey, managementToken);
         return new Asset(this.instance, apiKey, managementToken);
+
+     * @return {@link Entry} Entry instance
+     */
+    public Entry entry(@NotNull String apiKey, @NotNull String managementToken) {
+        if (this.authtoken == null)
+            throw new IllegalStateException("Please Login to access Entry instance");
+        // return new Entry(this.instance, apiKey, managementToken);
+        return new Entry(this.instance, apiKey, managementToken, "product");
     }
 
     /**
@@ -486,6 +602,18 @@ public class Contentstack {
          */
         public Builder setProxy(@NotNull Proxy proxy) {
             this.proxy = proxy;
+            return this;
+        }
+
+        /**
+         * Sets retry on failure.
+         *
+         * @param retry
+         *              if retry is true
+         * @return the retry on failure
+         */
+        public Builder setRetry(@NotNull Boolean retry) {
+            this.retry = retry;
             return this;
         }
 

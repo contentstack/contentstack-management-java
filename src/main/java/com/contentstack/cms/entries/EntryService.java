@@ -15,7 +15,6 @@ public interface EntryService {
                         @Path("content_type_uid") String contentTypeUid,
                         @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
-        @Headers("Content-Type: application/json")
         @GET("content_types/{content_type_uid}/entries/{entry_uid}")
         Call<ResponseBody> single(
                         @HeaderMap Map<String, String> headers,
@@ -23,7 +22,7 @@ public interface EntryService {
                         @Path("entry_uid") String entryUid,
                         @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
-        @Headers("Content-Type: application/json")
+
         @POST("content_types/{content_type_uid}/entries")
         Call<ResponseBody> create(
                         @HeaderMap Map<String, String> headers,
@@ -101,11 +100,16 @@ public interface EntryService {
                         @Body JSONObject body);
 
         @POST("content_types/{content_type_uid}/entries/{entry_uid}")
+                        @Path("locale") String localeCode,
+                        @Body JSONObject body);
+
+        @POST("content_types/{content_type_uid}/entries/{entry_uid}?unlocalize={locale}")
         Call<ResponseBody> unLocalize(
                         @HeaderMap Map<String, String> headers,
                         @Path("content_type_uid") String contentTypeUid,
                         @Path("entry_uid") String entryUid,
                         @Query("unlocalize") String localeCode);
+                        @Path("locale") String localeCode);
 
         @GET("content_types/{content_type_uid}/entries/{entry_uid}/export")
         Call<ResponseBody> export(

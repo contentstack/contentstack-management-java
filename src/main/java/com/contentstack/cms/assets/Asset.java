@@ -11,6 +11,10 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.io.File;
+import com.contentstack.cms.entries.EntryService;
+import org.jetbrains.annotations.NotNull;
+import retrofit2.Retrofit;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +25,6 @@ public class Asset {
 
     public Asset(Retrofit instance, @NotNull String apiKey, @NotNull String managementToken) {
         headers = new HashMap<>();
-        // Adding headers to request
         headers.put("Content-Type", "application/json");
         headers.put("api_key", apiKey);
         headers.put("authorization", managementToken);

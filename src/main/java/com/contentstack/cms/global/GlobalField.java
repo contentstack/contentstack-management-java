@@ -167,8 +167,23 @@ public class GlobalField {
      * (any one is mandatory), along with the
      * stack API key, to make a valid Content Management API request.
      *
-     * @param jsonGlobalField
-     *                        The Json object to pass as body
+     * @param jsonGlobalField The Json object to pass as body
+     * The <b>Import global field</b> call imports global fields into <b>Stack</b>
+     * <b>
+     * <b>[Note]</b>
+     * <p>
+     * You need to use either the stack's Management Token or the user Authtoken
+     * (any one is
+     * mandatory), along with the stack API key, to make a valid Content Management
+     * API request.
+     * </p>
+     * </b>
+     * <p>
+     * To import, you need to provide/upload a JSON file that contains the schema of
+     * the global field that you wish
+     * to import.
+     * </p>
+     *
      * @return retrofit2.Call
      */
     public Call<ResponseBody> imports(@NotNull Map<String, Object> jsonGlobalField) {
