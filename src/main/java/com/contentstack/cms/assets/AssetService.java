@@ -11,6 +11,8 @@ import java.util.Map;
 
 public interface AssetService {
 
+
+
         @GET("assets")
         Call<ResponseBody> fetch(
                         @HeaderMap Map<String, String> headers,
