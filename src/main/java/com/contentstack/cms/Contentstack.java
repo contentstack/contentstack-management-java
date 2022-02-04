@@ -204,7 +204,7 @@ public class Contentstack {
     private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
         if (loginResponse.isSuccessful()) {
             assert loginResponse.body() != null;
-            logger.info("logged in successfully");
+            logger.info(loginResponse.body().getNotice());
             this.authtoken = loginResponse.body().getUser().getAuthtoken();
             this.interceptor.setAuthtoken(this.authtoken);
         } else {
@@ -352,8 +352,7 @@ public class Contentstack {
      *               the api key
      * @return the content type
      */
-    public ContentType contentType(
-            @NotNull String apiKey) {
+    public ContentType contentType(@NotNull String apiKey) {
         if (this.authtoken == null)
             throw new IllegalStateException("Please Login to access ContentType instance");
         return new ContentType(this.instance, apiKey, null);
@@ -377,16 +376,16 @@ public class Contentstack {
      *
      * @param apiKey
      *                      the api key
-     * @param authorization
+     * @param managementToken
      *                      the management token
      * @return the content type
      */
     public ContentType contentType(
             @NotNull String apiKey,
-            @NotNull String authorization) {
+            @NotNull String managementToken) {
         if (this.authtoken == null)
             throw new IllegalStateException("Please Login to access ContentType instance");
-        return new ContentType(this.instance, apiKey, authorization);
+        return new ContentType(this.instance, apiKey, managementToken);
     }
 
     /**
@@ -403,7 +402,6 @@ public class Contentstack {
     public Entry entry(@NotNull String apiKey, @NotNull String managementToken) {
         if (this.authtoken == null)
             throw new IllegalStateException("Please Login to access Entry instance");
-        // return new Entry(this.instance, apiKey, managementToken);
         return new Entry(this.instance, apiKey, managementToken, "product");
     }
 
@@ -424,7 +422,6 @@ public class Contentstack {
     public Asset asset(@NotNull String apiKey, @NotNull String managementToken) {
         if (this.authtoken == null)
             throw new IllegalStateException("Please Login to access Asset instance");
-        // return new Entry(this.instance, apiKey, managementToken);
         return new Asset(this.instance, apiKey, managementToken);
     }
 

@@ -1,5 +1,6 @@
 package com.contentstack.cms.core;
 
+import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +18,7 @@ public class TestUtils {
     }
 
     @Test
+    @Contract(value = " -> fail", pure = true)
     void testUtilConstructor() {
         try {
             new Util();
@@ -26,7 +28,6 @@ public class TestUtils {
     }
 
     @Test
-    @TestOSBasedUtils.TestOnMac
     void testDefaultUserAgent() {
         String result = Util.defaultUserAgent();
         String version = System.getProperty("java.version");

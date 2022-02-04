@@ -7,10 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.Ignore;
+import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -46,7 +44,7 @@ class StackAPITest {
     }
 
     @Test
-    void testFetch() {
+    void testStackFetchAll() {
         try {
             assert apiKey != null;
             Response<ResponseBody> response = stackInstance.fetch().execute();
@@ -122,10 +120,10 @@ class StackAPITest {
         }
     }
 
+    @Disabled("Avoid creation of stack everytime testcases run")
     @Test
-    void testCreate() {
+    void testCreateStack() {
         try {
-
             String strBody = "{\n" +
                     "  \"stack\": {\n" +
                     "    \"name\": \"stack@create\",\n" +
@@ -136,6 +134,7 @@ class StackAPITest {
             assert organizationUid != null;
             Response<ResponseBody> response = stackInstance.create(organizationUid, strBody).execute();
             if (response.isSuccessful()) {
+                log.info("Stack Created");
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -148,7 +147,7 @@ class StackAPITest {
     }
 
     @Test
-    void testUpdate() {
+    void testStackUpdate() {
         try {
             String strBody = "{\n" +
                     "\t\"stack\": {\n" +
@@ -170,7 +169,7 @@ class StackAPITest {
     }
 
     @Test
-    void testTransferOwnership() {
+    void testStackTransferOwnership() {
         try {
             String strBody = "{\n" +
                     "\t\"transfer_to\": \"manager@example.com\"\n" +
@@ -181,6 +180,7 @@ class StackAPITest {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
             } else {
+                assert response.errorBody() != null;
                 Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
                 int errCode = error.getErrorCode();
                 String errMessage = error.getErrorMessage();
@@ -194,7 +194,7 @@ class StackAPITest {
     }
 
     @Test
-    void testAcceptOwnership() throws IOException {
+    void testStackAcceptOwnership() throws IOException {
         assert apiKey != null;
         assert userId != null;
         assert ownershipToken != null;
@@ -206,7 +206,7 @@ class StackAPITest {
             Assertions.assertEquals("/v3/stacks/accept_ownership/" + ownershipToken,
                     response.raw().request()
                             .url()
-                            .encodedPath().toString());
+                            .encodedPath());
             Assertions.assertTrue(
                     response.raw().request()
                             .url()
@@ -232,7 +232,7 @@ class StackAPITest {
     }
 
     @Test
-    void testSetting() {
+    void testStackSetting() {
         try {
             assert apiKey != null;
             assert userId != null;
@@ -250,7 +250,7 @@ class StackAPITest {
     }
 
     @Test
-    void testUpdateSetting() {
+    void testStackUpdateSetting() {
         String strBody = "{\n" +
                 "  \"stack_settings\":{\n" +
                 "    \"stack_variables\":{\n" +
@@ -280,7 +280,7 @@ class StackAPITest {
     }
 
     @Test
-    void testResetSetting() {
+    void testStackResetSetting() {
         String strBody = "{\n" +
                 "    \"stack_settings\":{\n" +
                 "        \"discrete_variables\":{},\n" +
@@ -305,7 +305,7 @@ class StackAPITest {
     }
 
     @Test
-    void testShare() {
+    void testStackShare() {
         String strBody = "{\n" +
                 "\t\"emails\": [\n" +
                 "\t\t\"manager@example.com\"\n" +
@@ -336,7 +336,7 @@ class StackAPITest {
     }
 
     @Test
-    void testUnshare() {
+    void testStackUnshare() {
         String strBody = "{\n" +
                 "\t\"email\": \"shailesh.mishra@contentstack.com\"\n" +
                 "}";
@@ -360,7 +360,7 @@ class StackAPITest {
     }
 
     @Test
-    void testAllUsers() throws IOException {
+    void testStackAllUsers() throws IOException {
 
         assert apiKey != null;
         assert userId != null;
@@ -378,7 +378,7 @@ class StackAPITest {
     }
 
     @Test
-    void testRole() {
+    void testStackRole() {
         String strBody = "{\n" +
                 "\t\"users\": {\n" +
                 "\t\t\"user_uid\": [\"role_uid1\", \"role_uid2\"]\n" +
