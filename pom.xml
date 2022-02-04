@@ -7,9 +7,8 @@
     <artifactId>cms</artifactId>
     <name>contentstack-management-java</name>
     <version>0.0.1-SNAPSHOT</version>
-    <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
-        API-first
-        approach
+    <description>Contentstack Java Management SDK for Content Management API,
+        Contentstack is a headless CMS with an API-first approach
     </description>
     <url>https://github.com/contentstack/contentstack-management-java/</url>
 
@@ -72,8 +71,6 @@
     </distributionManagement>
 
     <properties>
-        <!--Keep all dependencies' version updated before pushing to git-->
-        <!--update sdk version before every release push for SNAPSHOT/RELEASE-->
         <sdk.version>0.0.1</sdk.version>
         <sdk.version.snapshot>${sdk.version}-SNAPSHOT</sdk.version.snapshot>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -166,7 +163,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
@@ -238,11 +234,6 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>${maven-site-plugin.version}</version>
             </plugin>
-            <!--
-            Signs all of a project's attached artifacts with GnuPG.
-            You need to have previously configured the default key.
-            gpg also needs to be on the search path.
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -257,13 +248,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--
-            Sometimes when you may need to compile a certain project to a different
-            version than what you are currently using. The javac can accept such command
-            using -source and -target. The Compiler Plugin can also be configured to
-            provide these options during compilation
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -287,10 +271,6 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
-            <!--
-            This plugin is used to release a project with Maven, saving a lot of repetitive, manual work.
-            Releasing a project is made in two steps: prepare and perform.
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>

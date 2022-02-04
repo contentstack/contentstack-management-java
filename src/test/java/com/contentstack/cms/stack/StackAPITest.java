@@ -20,7 +20,8 @@ import java.util.logging.Logger;
 class StackAPITest {
 
     private static final String TAG = StackAPITest.class.getSimpleName();
-    private final Logger log = Logger.getLogger(RetryCallback.class.getName());
+    private final static Logger log = Logger.getLogger(StackAPITest.class.getName());
+    // log.warning(e.getLocalizedMessage().toString());
 
     private Stack stackInstance;
     private final String organizationUid = Dotenv.load().get("organizationUid");
@@ -56,7 +57,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -73,7 +74,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -94,7 +95,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -116,7 +117,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -142,7 +143,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -164,7 +165,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -189,7 +190,7 @@ class StackAPITest {
                         errMessage);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -245,7 +246,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -275,7 +276,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -300,7 +301,7 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -331,7 +332,7 @@ class StackAPITest {
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -355,7 +356,7 @@ class StackAPITest {
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
@@ -400,7 +401,7 @@ class StackAPITest {
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
     }
 
