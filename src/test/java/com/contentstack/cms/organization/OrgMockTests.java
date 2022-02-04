@@ -8,7 +8,7 @@ import org.junit.jupiter.api.TestInstance;
 import retrofit2.Retrofit;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class OrgMockTests {
+class OrgMockTests {
 
     private Organization organization;
     private String DEFAULT_AUTHTOKEN;
