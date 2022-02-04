@@ -41,7 +41,7 @@ class UserMockTests {
             Object obj = new JSONParser().parse(new FileReader(new File(path).getPath()));
             mockJsonObject = (JSONObject) obj;
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            logger.warning(e.getLocalizedMessage());
         }
         logger.fine(mockJsonObject.toJSONString());
         return mockJsonObject;
@@ -59,10 +59,8 @@ class UserMockTests {
      * Mock test get user.
      */
     @Test
-    @DisplayName("Mock testcase for get user to check with all available keys")
     @Order(1)
-    @TestFactory
-    void mock_test_get_user() {
+    void mockTestGetUser() {
         JSONObject getUserJSONObj = readJson("getuser.json");
         mockJsonObject = (JSONObject) getUserJSONObj.get("user");
         Set allKeys = mockJsonObject.keySet();
@@ -101,7 +99,6 @@ class UserMockTests {
      * Test mock testcase update user.
      */
     @Test
-    @DisplayName("Mock testcase for update user")
     @Order(2)
     void test_mock_testcase_update_user() {
         mockJsonObject = readJson("updateuser.json");
@@ -134,7 +131,6 @@ class UserMockTests {
      * Test mock testcase activate user.
      */
     @Test
-    @DisplayName("Mock test notice message for activate user")
     @Order(3)
     void test_mock_testcase_activate_user() {
         mockJsonObject = readJson("activateuser.json");

@@ -11,8 +11,11 @@ import retrofit2.Response;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class Utils {
+
+    private final static Logger log = Logger.getLogger(Utils.class.getName());
 
     public static JsonObject toJson(Response<ResponseBody> response) throws IOException {
         assert response.body() != null;
@@ -26,7 +29,7 @@ public class Utils {
             try {
                 jsonObject = (JSONObject) jsonParser.parse(jsonString);
             } catch (org.json.simple.parser.ParseException e) {
-                e.printStackTrace();
+                log.warning(e.getLocalizedMessage().toString());
             }
         }
         return jsonObject;
@@ -39,7 +42,7 @@ public class Utils {
             Object obj = new JSONParser().parse(new FileReader(new File(path).getPath()));
             mockJsonObject = (JSONObject) obj;
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            log.warning(e.getLocalizedMessage().toString());
         }
         return mockJsonObject;
     }
