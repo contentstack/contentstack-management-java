@@ -9,7 +9,7 @@ Contentstack is a headless CMS with an API-first approach. It is a CMS that deve
 
 - [Prerequisite](#prerequisite)
 - [Installation](#installation)
-- [Initialization](initialization)
+- [Initialization](#initialization)
 - [Authentication](#authentication)
 - [Users](#users)
 - [Organizations](#organizations)
