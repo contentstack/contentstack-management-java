@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
  */
 class TestError {
 
+    static CMSLogger logger = new CMSLogger(TestError.class);
+
     /**
      * Test gson mapper not null.
      */
@@ -18,6 +20,7 @@ class TestError {
     void testGSONMapperNotNull() {
         String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
         Error error = new Gson().fromJson(jsonInput, Error.class);
+        logger.fine(error.errorMessage);
         Assertions.assertNotNull(error);
     }
 
