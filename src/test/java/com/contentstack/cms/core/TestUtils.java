@@ -8,9 +8,12 @@ import java.net.URL;
 
 public class TestUtils {
 
+    static CMSLogger logger = new CMSLogger(TestUtils.class);
+
     public static boolean isValid(String url) {
         try {
             new URL(url).toURI();
+            logger.fine("uri is valid");
             return true;
         } catch (Exception e) {
             return false;
@@ -45,8 +48,7 @@ public class TestUtils {
         try {
             Util.nullEmptyThrowsException("customField");
         } catch (Exception e) {
-            Assertions.assertEquals(
-                    "customField cannot take in an empty String or null value",
+            Assertions.assertEquals("customField cannot take in an empty String or null value",
                     e.getMessage());
         }
     }
