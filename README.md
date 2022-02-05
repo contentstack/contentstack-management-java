@@ -40,27 +40,23 @@ To use the Contentstack management sdk for Java, you must have:
 
 To include the SDK your project, use one of the following methods depending on your build system or IDE:
 
-- **Apache Maven** - If you use Apache Maven, you can specify dependency in the dependencies section in your project
-
-  - _Install using maven_
+_Install using maven [Apache Maven](https://maven.apache.org/) --- If you use Apache Maven, you can specify dependency in the dependencies section in your project_
 
 ```java
 <dependency>
-<groupId>com.contentstack</groupId>
-<artifactId>cms</artifactId>
-<version>{version}</version>
+ <groupId>com.contentstack</groupId>
+ <artifactId>cms</artifactId>
+ <version>{version}</version>
 </dependency>
 ```
 
-- **Gradle** - If you use Gradle, you can import the Maven Bill of Materials (BOM) in your Gradle project to automatically manage SDK dependencies
-
-  - _Install it via gradle_
+_Install using maven [Gradle](https://gradle.org/) --- If you use Gradle, you can import the Maven Bill of Materials (BOM) in your Gradle project to automatically manage SDK dependencies_
 
 ```java
 implementation 'com.contentstack.cms:{version}'
 ```
 
-_Get the latest version from_ [HERE](https://search.maven.org/artifact/com.contentstack.cma) (_Install letest version always_)
+- _Get the latest version_ [HERE](https://search.maven.org/artifact/com.contentstack.cma)
 
 ## Initialization
 
