@@ -63,7 +63,7 @@ class UserMockTests {
     void mockTestGetUser() {
         JSONObject getUserJSONObj = readJson("getuser.json");
         mockJsonObject = (JSONObject) getUserJSONObj.get("user");
-        Set allKeys = mockJsonObject.keySet();
+        Set<String> allKeys = mockJsonObject.keySet();
         String authtoken = (String) mockJsonObject.get("authtoken");
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
