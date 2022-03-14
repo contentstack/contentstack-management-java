@@ -1,7 +1,7 @@
 {
   "content_type": {
-    "title": "Page",
-    "uid": "page",
+    "title": "fake_content_type",
+    "uid": "fake_content_type",
     "schema": [{
       "display_name": "Title",
       "uid": "title",

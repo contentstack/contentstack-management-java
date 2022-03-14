@@ -39,12 +39,12 @@ public class AuthInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         final String xUserAgent = Util.SDK_NAME + "/" + Util.SDK_VERSION;
         Request.Builder request = chain.request().newBuilder()
-                .header("X-User-Agent", xUserAgent)
-                .header("User-Agent", Util.defaultUserAgent())
-                .header("Content-Type", "application/json");
+                .header(Util.X_USER_AGENT, xUserAgent)
+                .header(Util.USER_AGENT, Util.defaultUserAgent())
+                .header(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
 
         if (this.authtoken != null) {
-            request.addHeader("authtoken", this.authtoken);
+            request.addHeader(Util.AUTHTOKEN, this.authtoken);
         }
         return chain.proceed(request.build());
     }
