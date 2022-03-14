@@ -5,7 +5,6 @@ import com.contentstack.cms.core.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.models.UserDetail;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
@@ -55,7 +54,8 @@ public class ContentstackAPITest {
         try {
             contentstack.user().getUser().execute();
         } catch (Exception e) {
-            Assertions.assertEquals("Please login to access user instance",
+            Assertions.assertEquals(
+                    "Please login to access user instance",
                     e.getLocalizedMessage());
         }
         Assertions.assertNull(contentstack.authtoken);

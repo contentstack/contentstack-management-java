@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 public class CMSLogger {
 
-    private Logger logger;
+    private final Logger logger;
 
     public Logger getLOGGER() {
         return logger;
