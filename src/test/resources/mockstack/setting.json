@@ -1,0 +1,11 @@
+{
+  "stack_settings":{
+    "stack_variables":{
+      "enforce_unique_urls":true,
+      "sys_rte_allowed_tags":"style, figure, script"
+    },
+    "rte":{
+      "ishaileshmishra":true
+    }
+  }
+}

@@ -1,13 +1,14 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.Utils;
 import com.contentstack.cms.core.Error;
-import com.contentstack.cms.core.RetryCallback;
+import com.contentstack.cms.core.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
-import org.junit.Ignore;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
@@ -41,7 +42,9 @@ class StackAPITest {
         String password = Dotenv.load().get("password");
         contentstack.login(emailId, password);
         assert apiKey != null;
-        stackInstance = contentstack.stack(apiKey);
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put(Util.API_KEY, apiKey);
+        stackInstance = contentstack.stack(headers);
     }
 
     @Test
@@ -53,11 +56,9 @@ class StackAPITest {
                 JsonObject jsonResp = toJson(response);
                 log.fine(jsonResp.get("stack").getAsJsonObject().toString());
                 Assertions.assertTrue(jsonResp.has("stack"));
-            } else {
-                Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
@@ -70,11 +71,9 @@ class StackAPITest {
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
-            } else {
-                Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
@@ -91,11 +90,9 @@ class StackAPITest {
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
-            } else {
-                Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
@@ -113,11 +110,9 @@ class StackAPITest {
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
-            } else {
-                Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
@@ -125,15 +120,10 @@ class StackAPITest {
     @Test
     void testCreateStack() {
         try {
-            String strBody = "{\n" +
-                    "  \"stack\": {\n" +
-                    "    \"name\": \"stack@create\",\n" +
-                    "    \"description\": \"My new test stack\",\n" +
-                    "    \"master_locale\": \"en-us\"\n" +
-                    "  }\n" +
-                    "}";
+            JSONObject requestBody = Utils.readJson("mockstack/create_stack.json");
             assert organizationUid != null;
-            Response<ResponseBody> response = stackInstance.create(organizationUid, strBody).execute();
+            Contentstack client = new Contentstack.Builder().build();
+            Response<ResponseBody> response = client.stack().create(organizationUid, requestBody).execute();
             if (response.isSuccessful()) {
                 log.info("Stack Created");
                 JsonObject jsonResp = toJson(response);
@@ -143,40 +133,31 @@ class StackAPITest {
                 Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
     @Test
     void testStackUpdate() {
         try {
-            String strBody = "{\n" +
-                    "\t\"stack\": {\n" +
-                    "\t\t\"name\": \"ishaileshmishra@Update\",\n" +
-                    "\t\t\"description\": \"My new test stack\"\n" +
-                    "\t}\n" +
-                    "}";
-            Response<ResponseBody> response = stackInstance.update(strBody).execute();
+            JSONObject requestBody = Utils.readJson("mockstack/update.json");
+            Response<ResponseBody> response = stackInstance.update(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
                 Assertions.assertTrue(jsonResp.has("notice"));
-            } else {
-                Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(TAG + ": " + e.getLocalizedMessage());
         }
     }
 
     @Test
     void testStackTransferOwnership() {
         try {
-            String strBody = "{\n" +
-                    "\t\"transfer_to\": \"manager@example.com\"\n" +
-                    "}";
+            JSONObject requestBody = Utils.readJson("mockstack/ownership.json");
             assert apiKey != null;
-            Response<ResponseBody> response = stackInstance.transferOwnership(strBody).execute();
+            Response<ResponseBody> response = stackInstance.transferOwnership(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -186,11 +167,12 @@ class StackAPITest {
                 int errCode = error.getErrorCode();
                 String errMessage = error.getErrorMessage();
                 Assertions.assertEquals(141, errCode);
-                Assertions.assertEquals("Sorry about that. Provided email is not a part of the organization.",
+                Assertions.assertEquals(
+                        "Sorry about that. Provided email is not a part of the organization.",
                         errMessage);
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
@@ -242,86 +224,56 @@ class StackAPITest {
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack_settings"));
-            } else {
-                Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
     @Test
     void testStackUpdateSetting() {
-        String strBody = "{\n" +
-                "  \"stack_settings\":{\n" +
-                "    \"stack_variables\":{\n" +
-                "      \"enforce_unique_urls\":true,\n" +
-                "      \"sys_rte_allowed_tags\":\"style | figure | script\"\n" +
-                "    },\n" +
-                "    \"rte\":{\n" +
-                "      \"cs_only_breakline\":true\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
+        JSONObject requestBody = Utils.readJson("mockstack/setting.json");
         try {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.updateSetting(strBody).execute();
+            Response<ResponseBody> response = stackInstance.updateSetting(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
                 Assertions.assertTrue(jsonResp.has("stack_settings"));
-            } else {
-                Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
     @Test
     void testStackResetSetting() {
-        String strBody = "{\n" +
-                "    \"stack_settings\":{\n" +
-                "        \"discrete_variables\":{},\n" +
-                "        \"stack_variables\":{}\n" +
-                "    }\n" +
-                "}";
+        JSONObject requestBody = Utils.readJson("mockstack/setting.json");
         try {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.updateSetting(strBody).execute();
+            Response<ResponseBody> response = stackInstance.updateSetting(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
                 Assertions.assertTrue(jsonResp.has("stack_settings"));
-            } else {
-                Assertions.fail();
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
     @Test
     void testStackShare() {
-        String strBody = "{\n" +
-                "\t\"emails\": [\n" +
-                "\t\t\"manager@example.com\"\n" +
-                "\t],\n" +
-                "\t\"roles\": {\n" +
-                "\t\t\"manager@example.com\": [\n" +
-                "\t\t\t\"abcdefhgi1234567890\"\n" +
-                "\t\t]\n" +
-                "\t}\n" +
-                "}";
+        JSONObject requestBody = Utils.readJson("mockstack/share_stack.json");
         try {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.share(strBody).execute();
+            Response<ResponseBody> response = stackInstance.share(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -332,20 +284,18 @@ class StackAPITest {
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
     @Test
     void testStackUnshare() {
-        String strBody = "{\n" +
-                "\t\"email\": \"shailesh.mishra@contentstack.com\"\n" +
-                "}";
+        JSONObject requestBody = Utils.readJson("mockstack/unshare.json");
         try {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.unshare(strBody).execute();
+            Response<ResponseBody> response = stackInstance.unshare(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -356,7 +306,7 @@ class StackAPITest {
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 
@@ -380,16 +330,12 @@ class StackAPITest {
 
     @Test
     void testStackRole() {
-        String strBody = "{\n" +
-                "\t\"users\": {\n" +
-                "\t\t\"user_uid\": [\"role_uid1\", \"role_uid2\"]\n" +
-                "\t}\n" +
-                "}";
+        JSONObject requestBody = Utils.readJson("mockstack/update_user_role.json");
         try {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.roles(strBody).execute();
+            Response<ResponseBody> response = stackInstance.roles(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -401,7 +347,7 @@ class StackAPITest {
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
     }
 

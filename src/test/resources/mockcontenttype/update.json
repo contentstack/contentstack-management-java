@@ -1,10 +1,10 @@
 {
   "content_type": {
-    "title": "Page",
-    "uid": "page",
+    "title": "Hello.. testing to update the content type",
+    "uid": "fake_content_type",
     "schema": [{
-      "display_name": "Title",
-      "uid": "title",
+      "display_name": "Just for deletion",
+      "uid": "updated",
       "data_type": "text",
       "field_metadata": {
         "_default": true
