@@ -1,8 +1,10 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.Utils;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,23 +18,25 @@ import java.util.Set;
 class StackUnitTests {
 
     protected Stack stack;
-    private Dotenv env;
+    protected Dotenv env = Dotenv.load();
+    String orgId = env.get("organizationUid");
+    protected String apiKey = env.get("api_key");
+    protected String authtoken = env.get("auth_token");
+    protected JSONObject requestBody = Utils.readJson("mockstack/create_stack.json");
 
     @BeforeAll
     public void setUp() {
-        env = Dotenv.load();
-        String apiKey = env.get("api_key");
-        String authtoken = env.get("auth_token");
-        assert apiKey != null;
-        stack = new Contentstack.Builder().setAuthtoken(authtoken).build().stack(apiKey);
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put("api_key", apiKey);
+        stack = new Contentstack.Builder().setAuthtoken(authtoken).build().stack(headers);
     }
 
     @Test
     void testStackWithoutAuthtokenExceptionExpected() {
         try {
-            String apiKey = env.get("api_key");
-            assert apiKey != null;
-            new Contentstack.Builder().build().stack(apiKey);
+            HashMap<String, Object> headers = new HashMap<>();
+            headers.put("api_key", apiKey);
+            new Contentstack.Builder().build().stack(headers);
         } catch (Exception e) {
             String STACK_EXCEPTION = "Please Login to access stack instance";
             Assertions.assertEquals(STACK_EXCEPTION,
@@ -50,7 +54,7 @@ class StackUnitTests {
     void testSingleStackHeaders() {
         Request request = stack.fetch().request();
         Assertions.assertEquals(1, request.headers().size());
-        Assertions.assertEquals(stack.apiKey, request.headers("api_key").get(0));
+        Assertions.assertEquals(stack.headers.get("api_key").toString(), request.headers("api_key").get(0));
     }
 
     @Test
@@ -76,9 +80,7 @@ class StackUnitTests {
     @Test
     void testSingleStackPathSegment() {
         Request request = stack.fetch().request();
-        Assertions.assertEquals(
-                "/v3/stacks",
-                request.url().encodedPath());
+        Assertions.assertEquals("/v3/stacks", request.url().encodedPath());
     }
 
     @Test
@@ -86,9 +88,7 @@ class StackUnitTests {
         String orgId = env.get("organizationUid");
         assert orgId != null;
         Request request = stack.fetch(orgId).request();
-        Assertions.assertEquals(
-                2,
-                request.headers().size());
+        Assertions.assertEquals(2, request.headers().size());
     }
 
     @Test
@@ -153,61 +153,31 @@ class StackUnitTests {
 
     @Test
     void testCreateStackMethod() {
-        String orgId = env.get("organizationUid");
-        String bodyString = "{\n" +
-                "  \"stack\": {\n" +
-                "    \"name\": \"My New Stack\",\n" +
-                "    \"description\": \"My new test stack\",\n" +
-                "    \"master_locale\": \"en-us\"\n" +
-                "  }\n" +
-                "}";
         assert orgId != null;
-        stack.create(orgId, bodyString).request();
+        stack.create(orgId, requestBody).request();
         Assertions.assertTrue(true);
     }
 
     @Test
     void testCreateStackHeader() {
-        String orgId = env.get("organizationUid");
-        String bodyString = "{\n" +
-                "  \"stack\": {\n" +
-                "    \"name\": \"My New Stack\",\n" +
-                "    \"description\": \"My new test stack\",\n" +
-                "    \"master_locale\": \"en-us\"\n" +
-                "  }\n" +
-                "}";
         assert orgId != null;
-        Request request = stack.create(orgId, bodyString).request();
+        Request request = stack.create(orgId, requestBody).request();
         Assertions.assertEquals(orgId, request.headers().get("organization_uid"));
     }
 
     @Test
     void testCreateStackUrl() {
-        String orgId = env.get("organizationUid");
-        String bodyString = "{\n" +
-                "  \"stack\": {\n" +
-                "    \"name\": \"My New Stack\",\n" +
-                "    \"description\": \"My new test stack\",\n" +
-                "    \"master_locale\": \"en-us\"\n" +
-                "  }\n" +
-                "}";
+
+
         assert orgId != null;
-        Request request = stack.create(orgId, bodyString).request();
+        Request request = stack.create(orgId, requestBody).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks", request.url().toString());
     }
 
     @Test
     void testCreateStackRequestBodyCharset() {
-        String orgId = env.get("organizationUid");
-        String bodyString = "{\n" +
-                "  \"stack\": {\n" +
-                "    \"name\": \"My New Stack\",\n" +
-                "    \"description\": \"My new test stack\",\n" +
-                "    \"master_locale\": \"en-us\"\n" +
-                "  }\n" +
-                "}";
         assert orgId != null;
-        Request request = stack.create(orgId, bodyString).request();
+        Request request = stack.create(orgId, requestBody).request();
         assert request.body() != null;
         Assertions.assertEquals("application/json; charset=UTF-8",
                 Objects.requireNonNull(request.body().contentType()).toString());
@@ -215,61 +185,36 @@ class StackUnitTests {
 
     @Test
     void testUpdateStackMethod() {
-        String bodyString = "{\n" +
-                "\t\"stack\": {\n" +
-                "\t\t\"name\": \"My New Stack\",\n" +
-                "\t\t\"description\": \"My new test stack\"\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.update(bodyString).request();
+        JSONObject updateRequestBody = Utils.readJson("mockstack/update.json");
+        Request request = stack.update(updateRequestBody).request();
         Assertions.assertEquals("PUT", request.method());
     }
 
     @Test
     void testUpdateStackUrl() {
-        String bodyString = "{\n" +
-                "\t\"stack\": {\n" +
-                "\t\t\"name\": \"My New Stack\",\n" +
-                "\t\t\"description\": \"My new test stack\"\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.update(bodyString).request();
+        JSONObject updateRequestBody = Utils.readJson("mockstack/update.json");
+        Request request = stack.update(updateRequestBody).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks", request.url().toString());
     }
 
     @Test
     void testUpdateStackUrlEncodedPath() {
-        String bodyString = "{\n" +
-                "\t\"stack\": {\n" +
-                "\t\t\"name\": \"My New Stack\",\n" +
-                "\t\t\"description\": \"My new test stack\"\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.update(bodyString).request();
+        JSONObject updateRequestBody = Utils.readJson("mockstack/update.json");
+        Request request = stack.update(updateRequestBody).request();
         Assertions.assertEquals("/v3/stacks", request.url().encodedPath());
     }
 
     @Test
     void testUpdateStackPort() {
-        String bodyString = "{\n" +
-                "\t\"stack\": {\n" +
-                "\t\t\"name\": \"My New Stack\",\n" +
-                "\t\t\"description\": \"My new test stack\"\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.update(bodyString).request();
+        JSONObject updateRequestBody = Utils.readJson("mockstack/update.json");
+        Request request = stack.update(updateRequestBody).request();
         Assertions.assertEquals(443, request.url().port());
     }
 
     @Test
     void testUpdateStackBodyContentType() {
-        String bodyString = "{\n" +
-                "\t\"stack\": {\n" +
-                "\t\t\"name\": \"My New Stack\",\n" +
-                "\t\t\"description\": \"My new test stack\"\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.update(bodyString).request();
+        JSONObject updateRequestBody = Utils.readJson("mockstack/update.json");
+        Request request = stack.update(updateRequestBody).request();
         assert request.body() != null;
         Assertions.assertEquals(
                 "application/json; charset=UTF-8",
@@ -278,21 +223,15 @@ class StackUnitTests {
 
     @Test
     void testTransferOwnership() {
-        String bodyString = "{\n" +
-                "\t\"transfer_to\": \"manager@example.com\"\n" +
-                "}";
-        Request request = stack.transferOwnership(bodyString).request();
-        Assertions.assertEquals(
-                "POST",
-                request.method());
+        JSONObject ownershipBody = Utils.readJson("mockstack/ownership.json");
+        Request request = stack.transferOwnership(ownershipBody).request();
+        Assertions.assertEquals("POST", request.method());
     }
 
     @Test
     void testTransferOwnershipUrl() {
-        String bodyString = "{\n" +
-                "\t\"transfer_to\": \"manager@example.com\"\n" +
-                "}";
-        Request request = stack.transferOwnership(bodyString).request();
+        JSONObject ownershipBody = Utils.readJson("mockstack/ownership.json");
+        Request request = stack.transferOwnership(ownershipBody).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks/transfer_ownership",
                 request.url().toString());
@@ -300,20 +239,16 @@ class StackUnitTests {
 
     @Test
     void testTransferOwnershipHeaders() {
-        String bodyString = "{\n" +
-                "\t\"transfer_to\": \"manager@example.com\"\n" +
-                "}";
-        Request request = stack.transferOwnership(bodyString).request();
-        Assertions.assertEquals(stack.apiKey,
+        JSONObject ownershipBody = Utils.readJson("mockstack/ownership.json");
+        Request request = stack.transferOwnership(ownershipBody).request();
+        Assertions.assertEquals(stack.headers.get("api_key").toString(),
                 request.headers().get("api_key"));
     }
 
     @Test
     void testTransferOwnershipRequestBody() {
-        String bodyString = "{\n" +
-                "\t\"transfer_to\": \"manager@example.com\"\n" +
-                "}";
-        Request request = stack.transferOwnership(bodyString).request();
+        JSONObject ownershipBody = Utils.readJson("mockstack/ownership.json");
+        Request request = stack.transferOwnership(ownershipBody).request();
         assert request.body() != null;
         Assertions.assertEquals("application/json; charset=UTF-8",
                 Objects.requireNonNull(request.body().contentType()).toString());
@@ -368,18 +303,8 @@ class StackUnitTests {
 
     @Test
     void testUpdateSettings() {
-        String reqStr = "{\n" +
-                "  \"stack_settings\":{\n" +
-                "    \"stack_variables\":{\n" +
-                "      \"enforce_unique_urls\":true,\n" +
-                "      \"sys_rte_allowed_tags\":\"style | figure | script\"\n" +
-                "    },\n" +
-                "    \"rte\":{\n" +
-                "      \"***REMOVED***\":true\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
-        Request request = stack.updateSetting(reqStr).request();
+        JSONObject settingBody = Utils.readJson("mockstack/setting.json");
+        Request request = stack.updateSetting(settingBody).request();
         Assertions.assertEquals("POST", request.method());
         Assertions.assertEquals(443, request.url().port());
         Assertions.assertEquals("/v3/stacks/settings", request.url().encodedPath());
@@ -389,71 +314,31 @@ class StackUnitTests {
 
     @Test
     void testUpdateSettingMethod() {
-        String reqStr = "{\n" +
-                "  \"stack_settings\":{\n" +
-                "    \"stack_variables\":{\n" +
-                "      \"enforce_unique_urls\":true,\n" +
-                "      \"sys_rte_allowed_tags\":\"style | figure | script\"\n" +
-                "    },\n" +
-                "    \"rte\":{\n" +
-                "      \"***REMOVED***\":true\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
-        Request request = stack.updateSetting(reqStr).request();
+        JSONObject settingBody = Utils.readJson("mockstack/setting.json");
+        Request request = stack.updateSetting(settingBody).request();
         Assertions.assertEquals("POST", request.method());
     }
 
     @Test
     void testUpdateSettingPort() {
-        String reqStr = "{\n" +
-                "  \"stack_settings\":{\n" +
-                "    \"stack_variables\":{\n" +
-                "      \"enforce_unique_urls\":true,\n" +
-                "      \"sys_rte_allowed_tags\":\"style | figure | script\"\n" +
-                "    },\n" +
-                "    \"rte\":{\n" +
-                "      \"***REMOVED***\":true\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
-        Request request = stack.updateSetting(reqStr).request();
+        JSONObject settingBody = Utils.readJson("mockstack/setting.json");
+        Request request = stack.updateSetting(settingBody).request();
         Assertions.assertEquals(443, request.url().port());
 
     }
 
     @Test
     void testUpdateSettingEncodedPath() {
-        String reqStr = "{\n" +
-                "  \"stack_settings\":{\n" +
-                "    \"stack_variables\":{\n" +
-                "      \"enforce_unique_urls\":true,\n" +
-                "      \"sys_rte_allowed_tags\":\"style | figure | script\"\n" +
-                "    },\n" +
-                "    \"rte\":{\n" +
-                "      \"***REMOVED***\":true\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
-        Request request = stack.updateSetting(reqStr).request();
+        JSONObject settingBody = Utils.readJson("mockstack/setting.json");
+        Request request = stack.updateSetting(settingBody).request();
         Assertions.assertEquals("/v3/stacks/settings", request.url().encodedPath());
 
     }
 
     @Test
     void testUpdateSettingRequestUrl() {
-        String reqStr = "{\n" +
-                "  \"stack_settings\":{\n" +
-                "    \"stack_variables\":{\n" +
-                "      \"enforce_unique_urls\":true,\n" +
-                "      \"sys_rte_allowed_tags\":\"style | figure | script\"\n" +
-                "    },\n" +
-                "    \"rte\":{\n" +
-                "      \"***REMOVED***\":true\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
-        Request request = stack.updateSetting(reqStr).request();
+        JSONObject settingBody = Utils.readJson("mockstack/setting.json");
+        Request request = stack.updateSetting(settingBody).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks/settings", request.url().url().toString());
 
@@ -461,13 +346,8 @@ class StackUnitTests {
 
     @Test
     void testResetStackSettings() {
-        String strBody = "{\n" +
-                "    \"stack_settings\":{\n" +
-                "        \"discrete_variables\":{},\n" +
-                "        \"stack_variables\":{}\n" +
-                "    }\n" +
-                "}";
-        Request request = stack.resetSetting(strBody).request();
+        JSONObject resetSettingBody = Utils.readJson("mockstack/reset_setting.json");
+        Request request = stack.resetSetting(resetSettingBody).request();
         Assertions.assertEquals("POST", request.method());
         Assertions.assertEquals(443, request.url().port());
         Assertions.assertEquals("/v3/stacks/settings", request.url().encodedPath());
@@ -477,66 +357,37 @@ class StackUnitTests {
 
     @Test
     void testResetStackSettingMethod() {
-        String strBody = "{\n" +
-                "    \"stack_settings\":{\n" +
-                "        \"discrete_variables\":{},\n" +
-                "        \"stack_variables\":{}\n" +
-                "    }\n" +
-                "}";
-        Request request = stack.resetSetting(strBody).request();
+        JSONObject resetSettingBody = Utils.readJson("mockstack/reset_setting.json");
+        Request request = stack.resetSetting(resetSettingBody).request();
         Assertions.assertEquals("POST", request.method());
     }
 
     @Test
     void testResetPort() {
-        String strBody = "{\n" +
-                "    \"stack_settings\":{\n" +
-                "        \"discrete_variables\":{},\n" +
-                "        \"stack_variables\":{}\n" +
-                "    }\n" +
-                "}";
-        Request request = stack.resetSetting(strBody).request();
+        JSONObject resetSettingBody = Utils.readJson("mockstack/reset_setting.json");
+        Request request = stack.resetSetting(resetSettingBody).request();
         Assertions.assertEquals(443, request.url().port());
     }
 
     @Test
     void testResetEncodedPath() {
-        String strBody = "{\n" +
-                "    \"stack_settings\":{\n" +
-                "        \"discrete_variables\":{},\n" +
-                "        \"stack_variables\":{}\n" +
-                "    }\n" +
-                "}";
-        Request request = stack.resetSetting(strBody).request();
+        JSONObject resetSettingBody = Utils.readJson("mockstack/reset_setting.json");
+        Request request = stack.resetSetting(resetSettingBody).request();
         Assertions.assertEquals("/v3/stacks/settings", request.url().encodedPath());
     }
 
     @Test
     void testResetRequestUrl() {
-        String strBody = "{\n" +
-                "    \"stack_settings\":{\n" +
-                "        \"discrete_variables\":{},\n" +
-                "        \"stack_variables\":{}\n" +
-                "    }\n" +
-                "}";
-        Request request = stack.resetSetting(strBody).request();
+        JSONObject resetSettingBody = Utils.readJson("mockstack/reset_setting.json");
+        Request request = stack.resetSetting(resetSettingBody).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks/settings", request.url().url().toString());
 
     }
 
     @Test
     void testShareStack() {
-        String strBody = "{\n" +
-                "\t\"emails\": [\n" +
-                "\t\t\"manager@example.com\"\n" +
-                "\t],\n" +
-                "\t\"roles\": {\n" +
-                "\t\t\"manager@example.com\": [\n" +
-                "\t\t\t\"***REMOVED***\"\n" +
-                "\t\t]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.share(strBody).request();
+        JSONObject shareStackBody = Utils.readJson("mockstack/share_stack.json");
+        Request request = stack.share(shareStackBody).request();
         Assertions.assertEquals("POST", request.method());
         Assertions.assertEquals(443, request.url().port());
         Assertions.assertEquals("/v3/stacks/share", request.url().encodedPath());
@@ -545,74 +396,36 @@ class StackUnitTests {
 
     @Test
     void testShareMethod() {
-        String strBody = "{\n" +
-                "\t\"emails\": [\n" +
-                "\t\t\"manager@example.com\"\n" +
-                "\t],\n" +
-                "\t\"roles\": {\n" +
-                "\t\t\"manager@example.com\": [\n" +
-                "\t\t\t\"***REMOVED***\"\n" +
-                "\t\t]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.share(strBody).request();
+        JSONObject shareStackBody = Utils.readJson("mockstack/share_stack.json");
+        Request request = stack.share(shareStackBody).request();
         Assertions.assertEquals("POST", request.method());
     }
 
     @Test
     void testShareStackPort() {
-        String strBody = "{\n" +
-                "\t\"emails\": [\n" +
-                "\t\t\"manager@example.com\"\n" +
-                "\t],\n" +
-                "\t\"roles\": {\n" +
-                "\t\t\"manager@example.com\": [\n" +
-                "\t\t\t\"***REMOVED***\"\n" +
-                "\t\t]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.share(strBody).request();
+        JSONObject shareStackBody = Utils.readJson("mockstack/share_stack.json");
+        Request request = stack.share(shareStackBody).request();
         Assertions.assertEquals(443, request.url().port());
     }
 
     @Test
     void testShareStackEncodedUrl() {
-        String strBody = "{\n" +
-                "\t\"emails\": [\n" +
-                "\t\t\"manager@example.com\"\n" +
-                "\t],\n" +
-                "\t\"roles\": {\n" +
-                "\t\t\"manager@example.com\": [\n" +
-                "\t\t\t\"***REMOVED***\"\n" +
-                "\t\t]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.share(strBody).request();
+        JSONObject shareStackBody = Utils.readJson("mockstack/share_stack.json");
+        Request request = stack.share(shareStackBody).request();
         Assertions.assertEquals("/v3/stacks/share", request.url().encodedPath());
     }
 
     @Test
     void testShareStackCompleteUrl() {
-        String strBody = "{\n" +
-                "\t\"emails\": [\n" +
-                "\t\t\"manager@example.com\"\n" +
-                "\t],\n" +
-                "\t\"roles\": {\n" +
-                "\t\t\"manager@example.com\": [\n" +
-                "\t\t\t\"***REMOVED***\"\n" +
-                "\t\t]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.share(strBody).request();
+        JSONObject shareStackBody = Utils.readJson("mockstack/share_stack.json");
+        Request request = stack.share(shareStackBody).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks/share", request.url().url().toString());
     }
 
     @Test
     void testUnshareStack() {
-        String strBody = "{\n" +
-                "\t\"email\": \"***REMOVED***@example.com\"\n" +
-                "}";
-        Request request = stack.unshare(strBody).request();
+        JSONObject unshareRequestBody = Utils.readJson("mockstack/unshare.json");
+        Request request = stack.unshare(unshareRequestBody).request();
         Assertions.assertEquals("POST", request.method());
         Assertions.assertEquals(443, request.url().port());
         Assertions.assertEquals("/v3/stacks/unshare", request.url().encodedPath());
@@ -622,38 +435,29 @@ class StackUnitTests {
 
     @Test
     void testUnshareStackMethod() {
-        String strBody = "{\n" +
-                "\t\"email\": \"***REMOVED***@example.com\"\n" +
-                "}";
-        Request request = stack.unshare(strBody).request();
+        JSONObject unshareRequestBody = Utils.readJson("mockstack/unshare.json");
+        Request request = stack.unshare(unshareRequestBody).request();
         Assertions.assertEquals("POST", request.method());
     }
 
     @Test
     void testUnshareStackPort() {
-        String strBody = "{\n" +
-                "\t\"email\": \"***REMOVED***@example.com\"\n" +
-                "}";
-        Request request = stack.unshare(strBody).request();
-
+        JSONObject unshareRequestBody = Utils.readJson("mockstack/unshare.json");
+        Request request = stack.unshare(unshareRequestBody).request();
         Assertions.assertEquals(443, request.url().port());
     }
 
     @Test
     void testUnshareStackEncodedUrl() {
-        String strBody = "{\n" +
-                "\t\"email\": \"***REMOVED***@example.com\"\n" +
-                "}";
-        Request request = stack.unshare(strBody).request();
+        JSONObject unshareRequestBody = Utils.readJson("mockstack/unshare.json");
+        Request request = stack.unshare(unshareRequestBody).request();
         Assertions.assertEquals("/v3/stacks/unshare", request.url().encodedPath());
     }
 
     @Test
     void testUnshareStackCompleteUrl() {
-        String strBody = "{\n" +
-                "\t\"email\": \"***REMOVED***@example.com\"\n" +
-                "}";
-        Request request = stack.unshare(strBody).request();
+        JSONObject unshareRequestBody = Utils.readJson("mockstack/unshare.json");
+        Request request = stack.unshare(unshareRequestBody).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks/unshare", request.url().url().toString());
     }
 
@@ -696,12 +500,8 @@ class StackUnitTests {
 
     @Test
     void testUpdateUserRoles() {
-        String strBody = "{\n" +
-                "\t\"users\": {\n" +
-                "\t\t\"user_uid\": [\"role_uid1\", \"role_uid2\"]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.roles(strBody).request();
+        JSONObject updateUserRole = Utils.readJson("mockstack/update_user_role.json");
+        Request request = stack.roles(updateUserRole).request();
         Assertions.assertEquals("POST", request.method());
         Assertions.assertEquals(443, request.url().port());
         Assertions.assertEquals("/v3/stacks/users/roles", request.url().encodedPath());
@@ -711,45 +511,29 @@ class StackUnitTests {
 
     @Test
     void testUpdateUserRolesMethod() {
-        String strBody = "{\n" +
-                "\t\"users\": {\n" +
-                "\t\t\"user_uid\": [\"role_uid1\", \"role_uid2\"]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.roles(strBody).request();
+        JSONObject updateUserRole = Utils.readJson("mockstack/update_user_role.json");
+        Request request = stack.roles(updateUserRole).request();
         Assertions.assertEquals("POST", request.method());
     }
 
     @Test
     void testUpdateUserRolesPort() {
-        String strBody = "{\n" +
-                "\t\"users\": {\n" +
-                "\t\t\"user_uid\": [\"role_uid1\", \"role_uid2\"]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.roles(strBody).request();
+        JSONObject updateUserRole = Utils.readJson("mockstack/update_user_role.json");
+        Request request = stack.roles(updateUserRole).request();
         Assertions.assertEquals(443, request.url().port());
     }
 
     @Test
     void testUpdateUserRolesEncodedUrl() {
-        String strBody = "{\n" +
-                "\t\"users\": {\n" +
-                "\t\t\"user_uid\": [\"role_uid1\", \"role_uid2\"]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.roles(strBody).request();
+        JSONObject updateUserRole = Utils.readJson("mockstack/update_user_role.json");
+        Request request = stack.roles(updateUserRole).request();
         Assertions.assertEquals("/v3/stacks/users/roles", request.url().encodedPath());
     }
 
     @Test
     void testUpdateUserRolesCompleteUrl() {
-        String strBody = "{\n" +
-                "\t\"users\": {\n" +
-                "\t\t\"user_uid\": [\"role_uid1\", \"role_uid2\"]\n" +
-                "\t}\n" +
-                "}";
-        Request request = stack.roles(strBody).request();
+        JSONObject updateUserRole = Utils.readJson("mockstack/update_user_role.json");
+        Request request = stack.roles(updateUserRole).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/stacks/users/roles", request.url().url().toString());
     }
 
@@ -765,7 +549,7 @@ class StackUnitTests {
         Assertions.assertEquals("/v3/stacks/accept_ownership/" + ownershipToken, request.url().encodedPath());
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks/accept_ownership/" + ownershipToken + "?uid=" + userId
-                        + "&api_key=" + stack.apiKey + "",
+                        + "&api_key=" + stack.headers.get("api_key").toString() + "",
                 request.url().url().toString());
 
     }
@@ -809,7 +593,7 @@ class StackUnitTests {
         Request request = stack.acceptOwnership(ownershipToken, userId).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks/accept_ownership/" + ownershipToken + "?uid=" + userId
-                        + "&api_key=" + stack.apiKey + "",
+                        + "&api_key=" + stack.headers.get("api_key").toString() + "",
                 request.url().url().toString());
     }
 

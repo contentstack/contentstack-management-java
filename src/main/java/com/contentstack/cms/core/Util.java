@@ -20,10 +20,24 @@ public class Util {
     public static final int TIMEOUT = 30; // default timeout in seconds
     public static final String SDK_NAME = "contentstack-management-java";
     public static final String SDK_VERSION = "0.0.1";
-
+    public static final String ILLEGAL_USER = "Please Login to access stack instance";
     public static final String USER_ALREADY_LOGGED_IN = "User is already loggedIn, "
             + "Please logout then try to login again";
     public static final String LOGIN_FLAG = "Please login to access user instance";
+    public static final String PLEASE_LOGIN = "Please Login to access stack instance";
+
+
+    // KEYS
+    public static final String API_KEY = "api_key";
+    public static final String AUTHORIZATION = "authorization";
+    public static final String AUTHTOKEN = "authtoken";
+    public static final String BRANCH = "branch";
+    public static final String X_USER_AGENT = "X-User-Agent";
+    public static final String USER_AGENT = "User-Agent";
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_TYPE_VALUE = "application/json";
+
+
 
     Util() throws IllegalAccessException {
         throw new IllegalAccessException("private=modifier");

@@ -1,12 +1,8 @@
 package com.contentstack.cms;
 
-import com.contentstack.cms.assets.Asset;
-import com.contentstack.cms.contenttype.ContentType;
 import com.contentstack.cms.core.AuthInterceptor;
 import com.contentstack.cms.core.Error;
 import com.contentstack.cms.core.Util;
-import com.contentstack.cms.entries.Entry;
-import com.contentstack.cms.global.GlobalField;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
@@ -22,7 +18,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.net.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
+
+import static com.contentstack.cms.core.Util.*;
 
 /**
  * The type Contentstack.
@@ -31,41 +31,14 @@ public class Contentstack {
 
     public static final Logger logger = Logger.getLogger(Contentstack.class.getName());
     protected final String host;
-    /**
-     * The Port.
-     */
     protected final String port;
-    /**
-     * The Version.
-     */
     protected final String version;
-    /**
-     * The Timeout.
-     */
     protected final int timeout;
-    /**
-     * The Authtoken.
-     */
     protected String authtoken;
-    /**
-     * The Instance.
-     */
     protected Retrofit instance;
-    /**
-     * The Retry on failure.
-     */
     protected final Boolean retryOnFailure;
-    /**
-     * The Proxy.
-     */
     protected final Proxy proxy;
-    /**
-     * The Interceptor.
-     */
     protected AuthInterceptor interceptor;
-    /**
-     * The User.
-     */
     protected User user;
 
     /**
@@ -124,7 +97,7 @@ public class Contentstack {
      * </pre>
      *
      * <br>
-     * <b>OR: </b>
+     * <b>OR</b>
      *
      * <pre>
      * Contentstack client = new Contentstack.Builder().build();
@@ -285,11 +258,8 @@ public class Contentstack {
     }
 
     /**
-     * <a href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
-     * A stack is
-     * a space that stores the content of a project (a web or mobile property).
-     * Within a stack, you can create content
+     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
+     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
      * structures, content entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
@@ -299,137 +269,101 @@ public class Contentstack {
      * Stack org = client.stack();
      * </pre>
      *
-     * @param apiKey
-     *               the apiKey for the stack
      * @return the stack instance
      */
-    public Stack stack(@NotNull String apiKey) {
+    public Stack stack() {
         if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access stack instance");
-        return new Stack(this.instance, apiKey);
+            throw new IllegalStateException(ILLEGAL_USER);
+        return new Stack(this.instance);
     }
 
+
     /**
-     * A Global field is a reusable field (or group of fields) that you can define
-     * once and reuse in any content type
-     * within your stack. This eliminates the need (and thereby time and efforts) to
-     * create the same set of fields
-     * repeatedly in multiple content types.
+     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
+     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * structures, content entries, users, etc. related to the project
      * <p>
-     * <b>Additional Resource:</b> You can create a dynamic and flexible Global
-     * field either by nesting Global field
-     * within the Modular Block or Group field within Global field
+     * <b> Example </b>
      *
-     * @param apiKey
-     *                      the api key
-     * @param authorization
-     *                      the management token
-     * @return global field
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * Stack org = client.stack();
+     * </pre>
+     *
+     * @param header
+     *         the headers for the stack
+     * @return the stack instance
      */
-    public GlobalField globalField(@NotNull String apiKey, @NotNull String authorization) {
+    public Stack stack(@NotNull Map<String, Object> header) {
         if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access GlobalField instance");
-        return new GlobalField(this.instance, apiKey, authorization);
+            throw new IllegalStateException(PLEASE_LOGIN);
+        return new Stack(this.instance, header);
     }
 
-    /**
-     * <b>Content type</b>
-     * <p>
-     * Content type defines the structure or schema of a page or a section of your
-     * web or mobile property. To create
-     * content for your application, you are required to first create a content
-     * type, and then create entries using the
-     * content type.
-     * <p>
-     *
-     * <b>Additional Resource</b>
-     * <p>
-     * To get an idea of building your content type as per webpage's layout, we
-     * recommend you to check out our Content
-     * Modeling guide
-     *
-     * @param apiKey
-     *               the api key
-     * @return the content type
-     */
-    public ContentType contentType(@NotNull String apiKey) {
-        if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access ContentType instance");
-        return new ContentType(this.instance, apiKey, null);
-    }
 
     /**
-     * <b>Content type</b>
+     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
+     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * structures, content entries, users, etc. related to the project
      * <p>
-     * Content type defines the structure or schema of a page or a section of your
-     * web or mobile property. To create
-     * content for your application, you are required to first create a content
-     * type, and then create entries using the
-     * content type.
-     * <p>
+     * <b> Example </b>
      *
-     * <b>Additional Resource</b>
-     * <p>
-     * To get an idea of building your content type as per webpage's layout, we
-     * recommend you to check out our Content
-     * Modeling guide
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * Stack org = client.stack();
+     * </pre>
      *
-     * @param apiKey
-     *                      the api key
      * @param managementToken
-     *                      the management token
-     * @return the content type
-     */
-    public ContentType contentType(
-            @NotNull String apiKey,
-            @NotNull String managementToken) {
-        if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access ContentType instance");
-        return new ContentType(this.instance, apiKey, managementToken);
-    }
-
-    /**
-     * An entry is the actual piece of content created using one of the defined
-     * [content
-     * types](https://www.contentstack.com/docs/developers/create-content-types/about-content-types/).
-     *
+     *         the authorization for the stack
      * @param apiKey
-     *                        the api key
-     * @param managementToken
-     *                        the management token
-     * @return {@link Entry} Entry instance
+     *         the apiKey for the stack
+     * @return the stack instance
      */
-    public Entry entry(@NotNull String apiKey, @NotNull String managementToken) {
+    public Stack stack(@NotNull String apiKey, @NotNull String managementToken) {
         if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access Entry instance");
-        return new Entry(this.instance, apiKey, managementToken, "product");
+            throw new IllegalStateException(PLEASE_LOGIN);
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put(API_KEY, apiKey);
+        headers.put(AUTHORIZATION, managementToken);
+        return new Stack(this.instance, headers);
     }
 
     /**
-     * <b>Assets</b><br>
-     * Assets refer to all the media files (images, videos, PDFs, audio files, and
-     * so on) uploaded in your Contentstack
-     * repository for future use.
+     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
+     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * structures, content entries, users, etc. related to the project
      * <p>
-     * These files can be attached and used in multiple entries.
+     * <b> Example </b>
      *
-     * @param apiKey
-     *                        the api key
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * Stack org = client.stack();
+     * </pre>
+     *
      * @param managementToken
-     *                        the management token
-     * @return {@link com.contentstack.cms.assets.Asset} Asset instance
+     *         the authorization for the stack
+     * @param apiKey
+     *         the apiKey for the stack
+     * @param branch
+     *      the branch that include branching in the response
+     * @return the stack instance
      */
-    public Asset asset(@NotNull String apiKey, @NotNull String managementToken) {
+    public Stack stack(@NotNull String apiKey, @NotNull String managementToken, @NotNull String branch) {
         if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access Asset instance");
-        return new Asset(this.instance, apiKey, managementToken);
+            throw new IllegalStateException(PLEASE_LOGIN);
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put(API_KEY, apiKey);
+        headers.put(AUTHORIZATION, managementToken);
+        headers.put(BRANCH, branch);
+        return new Stack(this.instance, headers);
     }
+
 
     /**
      * Instantiates a new Contentstack.
      *
      * @param builder
-     *                the builder
+     *         the builder
      */
     public Contentstack(Builder builder) {
         this.host = builder.hostname;

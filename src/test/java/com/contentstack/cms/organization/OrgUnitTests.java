@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 
-import static com.contentstack.cms.user.UserUnitTests.isValid;
+import static com.contentstack.cms.user.LocaleUnitTests.isValid;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
