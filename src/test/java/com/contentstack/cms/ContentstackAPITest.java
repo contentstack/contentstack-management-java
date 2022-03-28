@@ -1,7 +1,7 @@
 package com.contentstack.cms;
 
 import com.contentstack.cms.core.CSResponse;
-import com.contentstack.cms.core.Error;
+import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.models.UserDetail;
 import com.google.gson.Gson;

@@ -12,7 +12,7 @@ public class CMSLogger {
         return logger;
     }
 
-    public CMSLogger(@NotNull Class className) {
+    public CMSLogger(@NotNull Class<?> className) {
         logger = Logger.getLogger(className.getSimpleName());
     }
 
@@ -28,9 +28,7 @@ public class CMSLogger {
         logger.finer(message);
     }
 
-    public void warning(@NotNull String message) {
-        logger.warning(message);
-    }
+    public void warning(@NotNull String message) { logger.warning(message);}
 
     public void severe(@NotNull String message) {
         logger.severe(message);

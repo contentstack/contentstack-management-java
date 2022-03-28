@@ -1,5 +1,6 @@
 package com.contentstack.cms.core;
 
+import com.contentstack.cms.models.Error;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -55,35 +56,33 @@ class TestError {
         Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
     }
 
-    /**
-     * Test set gson error message.
-     */
-    @Test
-    void testSetGsonErrorMessage() {
-        String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
-        Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
-    }
-
-    /**
-     * Test set gson error code.
-     */
-    @Test
-    void testSetGsonErrorCode() {
-        String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
-        Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
-    }
-
-    /**
-     * Test set gson errors.
-     */
-    @Test
-    void testSetGsonErrors() {
-        String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
-        Error error = new Gson().fromJson(jsonInput, Error.class);
-        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
-    }
+//
+//    @Test
+//    void testSetGsonErrorMessage() {
+//        String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
+//        Error error = new Gson().fromJson(jsonInput, Error.class);
+//        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
+//    }
+//
+//    /**
+//     * Test set gson error code.
+//     */
+//    @Test
+//    void testSetGsonErrorCode() {
+//        String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
+//        Error error = new Gson().fromJson(jsonInput, Error.class);
+//        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
+//    }
+//
+//    /**
+//     * Test set gson errors.
+//     */
+//    @Test
+//    void testSetGsonErrors() {
+//        String jsonInput = "{\"error_message\":\"Failed to fetch entries. Please try again with valid parameters.\",\"error_code\":141,\"errors\":{\"environment\":[\"is required.\"]}}";
+//        Error error = new Gson().fromJson(jsonInput, Error.class);
+//        Assertions.assertEquals("Failed to fetch entries. Please try again with valid parameters.", error.errorMessage);
+//    }
 
     /**
      * Test error all args constructor.

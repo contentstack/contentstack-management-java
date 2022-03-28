@@ -1,7 +1,7 @@
 package com.contentstack.cms.organization;
 
 import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.core.Error;
+import com.contentstack.cms.models.Error;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

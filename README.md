@@ -29,18 +29,16 @@ Contentstack is a headless CMS with an API-first approach. It is a CMS that deve
 
 To use the Contentstack management sdk for Java, you must have:
 
-- a suitable [Java Development Environment](http://www.oracle.com/technetwork/java/javase/downloads/).
-- an [Contentstack](https://www.contentstack.com) account.
-- login your account
-- get the [Contentstack](https://www.contentstack.com) credentials (API keys and Management Token) set in your stack token section.
-- should be Java 1.8 or above installed.
-- make sure java environment is set on your machine
+- The suitable [Java Development Environment](http://www.oracle.com/technetwork/java/javase/downloads/).
+- The [Contentstack](https://www.contentstack.com) account.
+- Login your account
+- Get the [Contentstack](https://www.contentstack.com) credentials (API keys and Management Token) set in your stack token section.
+- Should be Java 1.8 or above installed.
 
-## Installation
+## Setup
 
-To include the SDK your project, use one of the following methods depending on your build system or IDE:
+To use Contentstack management sdk in our Maven project, we'll need to add the following dependency to our pom.xml:
 
-_Install using maven [Apache Maven](https://maven.apache.org/) --- If you use Apache Maven, you can specify dependency in the dependencies section in your project_
 
 ```java
 <dependency>
@@ -50,13 +48,13 @@ _Install using maven [Apache Maven](https://maven.apache.org/) --- If you use Ap
 </dependency>
 ```
 
-_Install using maven [Gradle](https://gradle.org/) --- If you use Gradle, you can import the Maven Bill of Materials (BOM) in your Gradle project to automatically manage SDK dependencies_
+Or, for a Gradle project:
 
 ```java
 implementation 'com.contentstack.cms:{version}'
 ```
 
-- _Get the latest version_ [HERE](https://search.maven.org/artifact/com.contentstack.cma)
+- Download the latest version [HERE](https://search.maven.org/artifact/com.contentstack.cma)
 
 ## Initialization
 
@@ -124,7 +122,7 @@ Response<ResponseBody> response = organization.getAll().execute();
 
 ## Stacks
 
-A [stack](https://www.contentstack.com/docs/developers/set-up-stack/about-stack) is a space that stores the content of a project (a web or mobile property). Within a stack, you can create content structures, content entries, users, etc. related to the project.
+A [Stack](https://www.contentstack.com/docs/developers/set-up-stack/about-stack) is a space that stores the content of a project (a web or mobile property). Within a stack, you can create content structures, content entries, users, etc. related to the project.
 
 ```java
 Contentstack client = new Contentstack.Builder().build();
