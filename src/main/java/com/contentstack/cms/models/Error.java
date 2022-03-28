@@ -1,4 +1,4 @@
-package com.contentstack.cms.core;
+package com.contentstack.cms.models;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;

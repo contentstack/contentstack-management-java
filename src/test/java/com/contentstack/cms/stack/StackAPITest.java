@@ -2,7 +2,7 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.Utils;
-import com.contentstack.cms.core.Error;
+import com.contentstack.cms.models.Error;
 import com.contentstack.cms.core.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

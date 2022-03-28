@@ -33,30 +33,30 @@ public class EnvironmentUnitTest {
         queryParam.put("asc", "created_at");
         queryParam.put("desc", "updated_at");
         Request request = environment.fetch(queryParam).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(2, request.url().pathSegments().size());
-        Assertions.assertEquals("locales", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_count=true", request.url().encodedQuery());
+        Assertions.assertEquals("environments", request.url().pathSegments().get(1));
+        Assertions.assertEquals("asc=created_at&include_count=false&desc=updated_at", request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales?include_count=true",
+                "https://api.contentstack.io/v3/environments?asc=created_at&include_count=false&desc=updated_at",
                 request.url().toString());
     }
 
     @Test
     void addLocale() {
         Request request = environment.get("development").request();
-        Assertions.assertEquals(2, request.headers().names().size());
-        Assertions.assertEquals("POST", request.method());
+        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
-        Assertions.assertEquals("locales", request.url().pathSegments().get(1));
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("environments", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales",
+                "https://api.contentstack.io/v3/environments/development",
                 request.url().toString());
     }
 
@@ -69,11 +69,11 @@ public class EnvironmentUnitTest {
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
-        Assertions.assertEquals("locales", request.url().pathSegments().get(1));
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("environments", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales/en-us",
+                "https://api.contentstack.io/v3/environments",
                 request.url().toString());
     }
 
@@ -86,25 +86,25 @@ public class EnvironmentUnitTest {
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(3, request.url().pathSegments().size());
-        Assertions.assertEquals("locales", request.url().pathSegments().get(1));
+        Assertions.assertEquals("environments", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales/en-us",
+                "https://api.contentstack.io/v3/environments/development",
                 request.url().toString());
     }
 
     @Test
     void deleteLocale() {
         Request request = environment.delete("development").request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(3, request.url().pathSegments().size());
-        Assertions.assertEquals("locales", request.url().pathSegments().get(1));
+        Assertions.assertEquals("environments", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales/en-us",
+                "https://api.contentstack.io/v3/environments/development",
                 request.url().toString());
     }
 

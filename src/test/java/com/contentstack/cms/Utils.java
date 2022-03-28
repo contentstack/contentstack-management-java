@@ -29,7 +29,7 @@ public class Utils {
             try {
                 jsonObject = (JSONObject) jsonParser.parse(jsonString);
             } catch (org.json.simple.parser.ParseException e) {
-                log.warning(e.getLocalizedMessage().toString());
+                log.warning(e.getLocalizedMessage());
             }
         }
         return jsonObject;
@@ -42,9 +42,10 @@ public class Utils {
             Object obj = new JSONParser().parse(new FileReader(new File(path).getPath()));
             mockJsonObject = (JSONObject) obj;
         } catch (IOException | ParseException e) {
-            log.warning(e.getLocalizedMessage().toString());
+            log.warning(e.getLocalizedMessage());
         }
         return mockJsonObject;
     }
+
 
 }
