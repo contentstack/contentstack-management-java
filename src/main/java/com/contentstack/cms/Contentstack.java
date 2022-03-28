@@ -1,7 +1,7 @@
 package com.contentstack.cms;
 
 import com.contentstack.cms.core.AuthInterceptor;
-import com.contentstack.cms.core.Error;
+import com.contentstack.cms.models.Error;
 import com.contentstack.cms.core.Util;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.organization.Organization;

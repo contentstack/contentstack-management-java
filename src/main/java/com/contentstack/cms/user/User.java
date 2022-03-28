@@ -92,6 +92,7 @@ public class User {
         return this.userService.getUser();
     }
 
+
     /**
      * The Get user call returns comprehensive information of an existing user
      * account. The information returned

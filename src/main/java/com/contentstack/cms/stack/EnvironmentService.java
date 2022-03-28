@@ -26,12 +26,12 @@ public interface EnvironmentService {
 
     @PUT("environments/{environment_name}")
     Call<ResponseBody> update(
-            Map<String, Object> headers,
+            @HeaderMap Map<String, Object> headers,
             @Path("environment_name") String environment,
-            JSONObject requestBody);
+            @Body JSONObject requestBody);
 
     @DELETE("environments/{environment_name}")
     Call<ResponseBody> delete(
-            Map<String, Object> headers,
+            @HeaderMap Map<String, Object> headers,
             @Path("environment_name") String environment);
 }

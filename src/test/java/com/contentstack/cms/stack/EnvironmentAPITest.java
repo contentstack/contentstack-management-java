@@ -7,6 +7,7 @@ import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
@@ -29,6 +30,7 @@ public class EnvironmentAPITest {
     }
 
     @Test
+    @Order(1)
     void fetchLocales() {
         Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("include_count", false);
@@ -44,6 +46,7 @@ public class EnvironmentAPITest {
     }
 
     @Test
+    @Order(2)
     void addLocale() {
         try {
             Response<ResponseBody> response = environment.get("development").execute();
@@ -54,6 +57,7 @@ public class EnvironmentAPITest {
     }
 
     @Test
+    @Order(3)
     void getLocale() {
         //add_env.json
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
@@ -67,6 +71,7 @@ public class EnvironmentAPITest {
     }
 
     @Test
+    @Order(4)
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
@@ -79,6 +84,7 @@ public class EnvironmentAPITest {
     }
 
     @Test
+    @Order(5)
     void deleteLocale() {
         try {
             Response<ResponseBody> response = environment

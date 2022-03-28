@@ -13,11 +13,11 @@ public class Util {
 
     static final String PRIVATE_CONSTRUCTOR = "private constructor can't be accessed outside the class";
     public static final Boolean RETRY_ON_FAILURE = true;
-    public static final String PROTOCOL = "https"; // protocol
-    public static final String HOST = "api.contentstack.io"; // host of the url
-    public static final String PORT = "443"; // https port
-    public static final String VERSION = "v3"; // api version
-    public static final int TIMEOUT = 30; // default timeout in seconds
+    public static final String PROTOCOL = "https";
+    public static final String HOST = "api.contentstack.io";
+    public static final String PORT = "443";
+    public static final String VERSION = "v3";
+    public static final int TIMEOUT = 30;
     public static final String SDK_NAME = "contentstack-management-java";
     public static final String SDK_VERSION = "0.0.1";
     public static final String ILLEGAL_USER = "Please Login to access stack instance";
@@ -59,7 +59,11 @@ public class Util {
      */
     public static void nullEmptyThrowsException(@NotNull String field) {
         Objects.requireNonNull(field);
-        throw new RuntimeException(field + " cannot take in an empty String or null value");
+        try {
+            throw new CMSRuntimeException(field + " cannot take in an empty String or null value");
+        } catch (CMSRuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
