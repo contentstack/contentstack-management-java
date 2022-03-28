@@ -1,5 +1,6 @@
 package com.contentstack.cms.core;
 
+import com.contentstack.cms.models.Error;
 import com.google.gson.Gson;
 import retrofit2.Call;
 import retrofit2.Response;

@@ -28,7 +28,6 @@ public interface OrganizationService {
                         @Path("organization_uid") String uid,
                         @Body RequestBody body);
 
-        // @DELETE("organizations/{organization_uid}/share")
         @HTTP(method = "DELETE", path = "organizations/{organization_uid}/share", hasBody = true)
         Call<ResponseBody> removeUser(
                         @Path("organization_uid") String uid,

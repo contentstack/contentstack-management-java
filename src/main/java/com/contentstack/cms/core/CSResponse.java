@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class CSResponse {
+
     private static final String MODEL_NULL_CHECK = "model class == null";
     private static final String RESPONSE_NULL = "response == null";
     private final Response<ResponseBody> response;
