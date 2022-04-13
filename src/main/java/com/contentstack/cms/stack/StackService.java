@@ -20,8 +20,8 @@ public interface StackService {
 
         @GET("stacks")
         Call<ResponseBody> fetch(
-                        @Header("api_key") String apiKey,
-                        @QueryMap Map<String, Boolean> queryParams);
+                @Header("api_key") String apiKey,
+                @QueryMap Map<String, Boolean> queryParams);
 
         @GET("stacks")
         Call<ResponseBody> fetch(
