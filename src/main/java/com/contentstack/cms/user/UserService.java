@@ -21,8 +21,8 @@ public interface UserService {
 
         @POST("user/activate/{user_activation_token}")
         Call<ResponseBody> activateUser(
-                        @Path("user_activation_token") String activationToken,
-                        @Body RequestBody body);
+                @Path("user_activation_token") String activationToken,
+                @Body RequestBody body);
 
         @POST("user/forgot_password")
         Call<ResponseBody> requestPassword(@Body RequestBody body);
@@ -31,14 +31,12 @@ public interface UserService {
         Call<ResponseBody> resetPassword(@Body RequestBody body);
 
         @DELETE("user-session")
-        Call<ResponseBody> logout(
-                        @Header("authtoken") String authtoken);
+        Call<ResponseBody> logout(@Header("authtoken") String authtoken);
 
         @DELETE("user-session")
         Call<ResponseBody> logout();
 
         @GET("user")
-        Call<ResponseBody> getUserOrganization(
-                        @QueryMap Map<String, Object> options);
+        Call<ResponseBody> getUserOrganization(@QueryMap Map<String, Object> options);
 
 }
