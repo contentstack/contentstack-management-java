@@ -67,7 +67,7 @@ public class LocaleApiTests {
         if (response.isSuccessful()) {
             JsonObject user = toJson(response);
             Assertions.assertTrue(user.getAsJsonObject("user").has("organizations"));
-            Assertions.assertEquals(9,
+            Assertions.assertEquals(10,
                     user.getAsJsonObject("user")
                             .getAsJsonArray("organizations").size());
         }
