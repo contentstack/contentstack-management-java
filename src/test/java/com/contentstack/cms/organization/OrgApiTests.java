@@ -7,11 +7,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -227,33 +230,6 @@ class OrgApiTests {
         }
     }
 
-    // @Test
-    // void testAllInvitation() throws IOException {
-    // HashMap<String, Object> query = new HashMap<>();
-    // query.put("include_plan", true);
-    // Response<ResponseBody> response =
-    // organization.getAllInvitations(organizationUid).execute();
-    // if (response.isSuccessful()) {
-    // JsonObject respJson = toJson(response);
-    // Assertions.assertTrue(respJson.has("notice"));
-    // Assertions.assertTrue(respJson.has("shares"));
-    // } else {
-    // Error error = new Gson().fromJson(response.errorBody().string(),
-    // Error.class);
-    // Assertions.assertEquals(
-    // "Couldn't find the organization. Please check input parameters.",
-    // error.getErrorMessage());
-    // Assertions.assertEquals(309, error.getErrorCode());
-    // }
-    // }
-
-    // @Test
-    // void testAllInvitationWithQuery() throws IOException {
-    // HashMap<String, Object> query = new HashMap<>();
-    // query.put("include_plan", true);
-    // Response<ResponseBody> response =
-    // organization.getAllInvitations(organizationUid).execute();
-    // }
 
     @Test
     void testTransferOwnership() throws IOException {
@@ -331,6 +307,49 @@ class OrgApiTests {
                     error.getErrorMessage());
             Assertions.assertEquals(141, error.getErrorCode());
         }
+    }
+
+    @Test
+    void testAllInvitation() throws IOException {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("include_plan", true);
+        Response<ResponseBody> response =
+                organization.getAllInvitations(organizationUid).execute();
+        if (response.isSuccessful()) {
+            JsonObject respJson = toJson(response);
+            Assertions.assertTrue(respJson.has("notice"));
+            Assertions.assertTrue(respJson.has("shares"));
+        } else {
+            Error error = new Gson().fromJson(response.errorBody().string(),
+                    Error.class);
+            Assertions.assertEquals(
+                    "Couldn't find the organization. Please check input parameters.",
+                    error.getErrorMessage());
+            Assertions.assertEquals(309, error.getErrorCode());
+        }
+    }
+
+    @Test
+    void testAllInvitationWithQuery() {
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("include_plan", true);
+
+       // Java Code
+        Call<ResponseBody> response = organization.getAllInvitations(organizationUid);
+
+
+        // Android Code
+        organization.getAllInvitations(organizationUid).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // This is android thing
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // This is android thing
+            }
+        });
     }
 
 }
