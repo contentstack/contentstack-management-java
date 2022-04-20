@@ -42,8 +42,7 @@ public class Contentstack {
     protected User user;
 
     /**
-     * All accounts registered with Contentstack are known as Users. A stack can
-     * have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -75,14 +74,12 @@ public class Contentstack {
 
     /**
      * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The authtoken is
-     * returned to the 'Response' body of
+     * authenticating yourself via the Log in call of User Session. The authtoken is returned to the 'Response' body of
      * the Log in call and is mandatory in all the calls.
      * <p>
      * <b>Example:</b>
      * <p>
-     * All accounts registered with Contentstack are known as Users. A stack can
-     * have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -106,12 +103,12 @@ public class Contentstack {
      * <p>
      *
      * @param emailId
-     *                 the email id
+     *         the email id
      * @param password
-     *                 the password
+     *         the password
      * @return response the Response type of @{@link LoginDetails}
      * @throws IOException
-     *                     the io exception
+     *         the io exception
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
@@ -124,14 +121,12 @@ public class Contentstack {
 
     /**
      * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The authtoken is
-     * returned to the 'Response' body of
+     * authenticating yourself via the Log in call of User Session. The authtoken is returned to the 'Response' body of
      * the Log in call and is mandatory in all the calls.
      * <p>
      * <b>Example:</b>
      * <p>
-     * All accounts registered with Contentstack are known as Users. A stack can
-     * have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -155,15 +150,14 @@ public class Contentstack {
      * <p>
      *
      * @param emailId
-     *                 the email id
+     *         the email id
      * @param password
-     *                 the password
+     *         the password
      * @param tfaToken
-     *                 the tfa token
-     * @return response the Response type of @{@link LoginDetails} throws
-     *         {@link IOException}
+     *         the tfa token
+     * @return response the Response type of @{@link LoginDetails} throws {@link IOException}
      * @throws IOException
-     *                     the io exception
+     *         the io exception
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
         if (this.authtoken != null)
@@ -189,8 +183,7 @@ public class Contentstack {
     }
 
     /**
-     * The Log out of your account call is used to sign out the user of Contentstack
-     * account
+     * The Log out of your account call is used to sign out the user of Contentstack account
      *
      * <b> Example </b>
      *
@@ -202,7 +195,7 @@ public class Contentstack {
      *
      * @return the response
      * @throws IOException
-     *                     the io exception
+     *         the io exception
      */
     Response<ResponseBody> logout() throws IOException {
         user = new User(this.instance);
@@ -210,8 +203,7 @@ public class Contentstack {
     }
 
     /**
-     * The Log out of your account using authtoken is used to sign out the user of
-     * Contentstack account
+     * The Log out of your account using authtoken is used to sign out the user of Contentstack account
      *
      * <b> Example </b>
      *
@@ -222,10 +214,10 @@ public class Contentstack {
      * <p>
      *
      * @param authtoken
-     *                  the authtoken
+     *         the authtoken
      * @return the response
      * @throws IOException
-     *                     the io exception
+     *         the io exception
      */
     Response<ResponseBody> logoutWithAuthtoken(String authtoken) throws IOException {
         user = new User(this.instance);
@@ -237,10 +229,8 @@ public class Contentstack {
     }
 
     /**
-     * Organization is the top-level entity in the hierarchy of Contentstack,
-     * consisting of stacks and stack resources,
-     * and users. Organization allows easy management of projects as well as users
-     * within the Organization.
+     * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources,
+     * and users. Organization allows easy management of projects as well as users within the Organization.
      *
      * <b> Example </b>
      *
@@ -286,8 +276,10 @@ public class Contentstack {
      * <b> Example </b>
      *
      * <pre>
+     * ```
      * Contentstack client = new Contentstack.Builder().build();
      * Stack org = client.stack();
+     * ```
      * </pre>
      *
      * @param header
@@ -345,7 +337,7 @@ public class Contentstack {
      * @param apiKey
      *         the apiKey for the stack
      * @param branch
-     *      the branch that include branching in the response
+     *         the branch that include branching in the response
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken, @NotNull String branch) {
@@ -399,20 +391,17 @@ public class Contentstack {
          * Instantiates a new Builder.
          */
         public Builder() {
-            // Builder constructor initialises the Builder class.
         }
 
         /**
-         * Sets proxy. (Setting proxy to the OkHttpClient) Proxy proxy = new
-         * Proxy(Proxy.Type.HTTP, new
+         * Sets proxy. (Setting proxy to the OkHttpClient) Proxy proxy = new Proxy(Proxy.Type.HTTP, new
          * InetSocketAddress(proxyHost, proxyPort));
          * <p>
-         * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname",
-         * 433)); Contentstack contentstack =
+         * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433)); Contentstack contentstack =
          * new Contentstack.Builder().setProxy(proxy).build();
          *
          * @param proxy
-         *              the proxy
+         *         the proxy
          * @return the Builder instance
          */
         public Builder setProxy(@NotNull Proxy proxy) {
@@ -424,7 +413,7 @@ public class Contentstack {
          * Sets retry on failure.
          *
          * @param retry
-         *              if retry is true
+         *         if retry is true
          * @return the retry on failure
          */
         public Builder setRetry(@NotNull Boolean retry) {
@@ -436,7 +425,7 @@ public class Contentstack {
          * Set host for client instance
          *
          * @param hostname
-         *                 host for the Contentstack Client
+         *         host for the Contentstack Client
          * @return Client host
          */
         public Builder setHost(@NotNull String hostname) {
@@ -448,7 +437,7 @@ public class Contentstack {
          * Set port for client instance
          *
          * @param port
-         *             - port for the Contentstack Client
+         *         - port for the Contentstack Client
          * @return Client port
          */
         public Builder setPort(@NotNull String port) {
@@ -460,7 +449,7 @@ public class Contentstack {
          * Set version for client instance
          *
          * @param version
-         *                for the Contentstack Client
+         *         for the Contentstack Client
          * @return Client version
          */
         public Builder setVersion(@NotNull String version) {
@@ -472,7 +461,7 @@ public class Contentstack {
          * Set timeout for client instance
          *
          * @param timeout
-         *                for the Contentstack Client
+         *         for the Contentstack Client
          * @return Client timeout
          */
         public Builder setTimeout(int timeout) {
@@ -484,7 +473,7 @@ public class Contentstack {
          * Sets authtoken for the client
          *
          * @param authtoken
-         *                  for the client
+         *         for the client
          * @return Contentstack authtoken
          */
         public Builder setAuthtoken(String authtoken) {
@@ -514,17 +503,18 @@ public class Contentstack {
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
             this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
+            HttpLoggingInterceptor level = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
             return new OkHttpClient.Builder()
                     .addInterceptor(this.authInterceptor)
-                    .addInterceptor(logger())
+                    .addInterceptor(level)
                     .proxy(this.proxy)
                     .retryOnConnectionFailure(retryOnFailure)
                     .build();
         }
 
-        private HttpLoggingInterceptor logger() {
-            return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE);
-        }
+//        private HttpLoggingInterceptor setLoggerLevel(HttpLoggingInterceptor.Level level) {
+//            return new HttpLoggingInterceptor().setLevel(level);
+//        }
 
     }
 }
