@@ -1,6 +1,8 @@
 package com.contentstack.cms.core;
 
 import com.google.gson.Gson;
+import okhttp3.Call;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -48,6 +50,10 @@ public class CSResponse {
         Objects.requireNonNull(response, RESPONSE_NULL);
         String body = this.response.body() != null ? this.response.body().string() : null;
         return new Gson().fromJson(body, tClass);
+    }
+
+    public Request requestBody(Call callInstance){
+        return callInstance.request();
     }
 
 }

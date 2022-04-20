@@ -19,6 +19,7 @@ public abstract class RetryCallback<T> implements Callback<T> {
     private int retryCount = 0;
 
     /**
+     *
      * Instantiates a new Callback with retry.
      *
      * @param call the call
