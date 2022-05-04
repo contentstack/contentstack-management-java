@@ -1,6 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.core.CMSRuntimeException;
+import com.contentstack.cms.core.Util;
+
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +65,7 @@ public class Extensions {
     public Call<ResponseBody> get(@NotNull String customFieldUid, Map<String, Object> queryParam) {
         if (queryParam == null) {
             queryParam = new HashMap<>();
-            this.headers.put("Content-Type", "multipart/form-data");
+            this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
         }
         return this.service.getSingle(this.headers, customFieldUid, queryParam);
     }
@@ -95,7 +97,7 @@ public class Extensions {
         if (queryParam == null) {
             queryParam = new HashMap<>();
         }
-        this.headers.put("Content-Type", "multipart/form-data");
+        this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
         return this.service.uploadCustomField(this.headers, body, queryParam);
     }
 
@@ -125,8 +127,8 @@ public class Extensions {
     public Call<ResponseBody> uploadCustomField(Map<String, Object> queryParam, JSONObject body) {
         if (queryParam != null) {
             queryParam = new HashMap<>();
-            if (!this.headers.containsKey("Content-Type")) {
-                this.headers.put("Content-Type", "application/json");
+            if (!this.headers.containsKey(Util.CONTENT_TYPE)) {
+                this.headers.put(Util.CONTENT_TYPE, "application/json");
             }
         }
         return this.service.uploadCustomField(this.headers, queryParam, body);
