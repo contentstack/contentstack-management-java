@@ -317,7 +317,6 @@ class OrgApiTests {
                 organization.getAllInvitations(organizationUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("notice"));
             Assertions.assertTrue(respJson.has("shares"));
         } else {
             Error error = new Gson().fromJson(response.errorBody().string(),

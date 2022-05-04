@@ -1,6 +1,5 @@
 package com.contentstack.cms.stack;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
@@ -11,11 +10,11 @@ import java.util.Map;
 public interface LabelService {
 
     @GET("labels")
-    Call<RequestBody> get(
+    Call<ResponseBody> get(
             @HeaderMap Map<String, Object> headers);
 
     @GET("labels")
-    Call<RequestBody> get(
+    Call<ResponseBody> get(
             @HeaderMap Map<String, Object> headers,
             @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
