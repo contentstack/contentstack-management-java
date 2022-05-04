@@ -3,7 +3,6 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
 import io.github.cdimascio.dotenv.Dotenv;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -37,7 +36,7 @@ class LabelAPITest {
 
     @Test
     void getAllLabels() throws IOException {
-        Response<RequestBody> response = label.get().execute();
+        Response<ResponseBody> response = label.get().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -46,7 +45,7 @@ class LabelAPITest {
         Map<String, Object> jsonJson = new HashMap<>();
         jsonJson.put("include_count", false);
         jsonJson.put("include_branch", false);
-        Response<RequestBody> response = label.get(jsonJson).execute();
+        Response<ResponseBody> response = label.get(jsonJson).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -55,7 +54,7 @@ class LabelAPITest {
         Map<String, Object> jsonJson = new HashMap<>();
         jsonJson.put("include_count", false);
         jsonJson.put("include_branch", false);
-        Response<RequestBody> response = label.addBranch("main").get(jsonJson).execute();
+        Response<ResponseBody> response = label.addBranch("main").get(jsonJson).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 

@@ -168,6 +168,23 @@ public class Stack {
         return new Label(client, this.headers);
     }
 
+
+    /**
+     * Extensions let you create custom fields and custom widgets that lets you customize Contentstack's default UI and
+     * behavior. Read more about Extensions.
+     * <p>
+     * You can now pass the branch header in the API request to fetch or manage modules located within specific branches
+     * of the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch
+     * top-level key in the response. This key specifies the unique ID of the branch where the concerned Contentstack
+     * module resides.
+     * <p>
+     *
+     * @return instance of  {@link Extensions}
+     */
+    public Extensions extensions() {
+        return new Extensions(client, this.headers);
+    }
+
     /**
      * <b>Get a single stack</b>
      * <br>

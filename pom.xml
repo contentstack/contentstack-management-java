@@ -83,7 +83,7 @@
         <rxjava-source.version>3.1.4</rxjava-source.version>
         <retrofit-source.version>2.9.0</retrofit-source.version>
         <converter-gson-version>2.9.0</converter-gson-version>
-        <loggin.version>4.9.3</loggin.version>
+        <logging.version>4.9.3</logging.version>
         <jococo-plugin.version>0.8.5</jococo-plugin.version>
         <lombok-source.version>1.18.24</lombok-source.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
@@ -127,20 +127,14 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>logging-interceptor</artifactId>
-            <version>${loggin.version}</version>
-            <scope>runtime</scope>
+            <version>${logging.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>23.0.0</version>
             <scope>provided</scope>
-        </dependency>
-        <!--com.squareup.okhttp3:logging-interceptor:4.7.2-->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>logging-interceptor</artifactId>
-            <version>4.7.2</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
