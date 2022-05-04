@@ -10,11 +10,11 @@ import com.contentstack.cms.user.User;
 import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.io.IOException;
 import java.net.Proxy;
@@ -503,14 +503,16 @@ public class Contentstack {
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
             this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
             return new OkHttpClient.Builder()
                     .addInterceptor(this.authInterceptor)
-                    .addInterceptor(logging)
+                    .addInterceptor(logger())
                     .proxy(this.proxy)
                     .retryOnConnectionFailure(retryOnFailure)
                     .build();
+        }
+
+        private HttpLoggingInterceptor logger() {
+            return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE);
         }
 
     }

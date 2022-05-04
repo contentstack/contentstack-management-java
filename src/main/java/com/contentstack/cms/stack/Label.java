@@ -59,7 +59,7 @@ public class Label {
      *
      * @return Call
      */
-    public Call<RequestBody> get() {
+    public Call<ResponseBody> get() {
         return this.service.get(this.headers);
     }
 
@@ -77,7 +77,7 @@ public class Label {
      *
      * @return Call
      */
-    public Call<RequestBody> get(@NotNull Map<String, Object> jsonRequest) {
+    public Call<ResponseBody> get(@NotNull Map<String, Object> jsonRequest) {
         return this.service.get(this.headers, jsonRequest);
     }
 

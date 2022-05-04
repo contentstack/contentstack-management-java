@@ -166,7 +166,7 @@ class StackAPITest {
                 Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
                 int errCode = error.getErrorCode();
                 String errMessage = error.getErrorMessage();
-                Assertions.assertEquals(141, errCode);
+                Assertions.assertEquals(109, errCode);
                 Assertions.assertEquals(
                         "Sorry about that. Provided email is not a part of the organization.",
                         errMessage);
