@@ -503,18 +503,15 @@ public class Contentstack {
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
             this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
-            HttpLoggingInterceptor level = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
             return new OkHttpClient.Builder()
                     .addInterceptor(this.authInterceptor)
-                    .addInterceptor(level)
+                    .addInterceptor(logging)
                     .proxy(this.proxy)
                     .retryOnConnectionFailure(retryOnFailure)
                     .build();
         }
-
-//        private HttpLoggingInterceptor setLoggerLevel(HttpLoggingInterceptor.Level level) {
-//            return new HttpLoggingInterceptor().setLevel(level);
-//        }
 
     }
 }

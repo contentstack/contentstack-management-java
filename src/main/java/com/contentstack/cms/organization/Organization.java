@@ -27,7 +27,7 @@ public class Organization {
      * @param client
      *         the client
      */
-    public Organization(@NotNull Retrofit client) {
+    public Organization(Retrofit client) {
         this.orgService = client.create(OrganizationService.class);
     }
 
