@@ -185,6 +185,23 @@ public class Stack {
         return new Extensions(client, this.headers);
     }
 
+
+    /**
+     * Contentstack provides different types of tokens to authorize API requests. You can use Delivery Tokens to
+     * authenticate Content Delivery API (CDA) requests and retrieve the published content of an environment. To
+     * authenticate Content Management API (CMA) requests over your stack content, you can use Management Tokens.
+     * <p>
+     * Delivery tokens provide read-only access to the associated environments, while management tokens provide
+     * read-write access to the content of your stack. Use these tokens along with the stack API key to make authorized
+     * API requests
+     * <p>
+     *
+     * @return Tokens
+     */
+    public Tokens tokens() {
+        return new Tokens(client, this.headers);
+    }
+
     /**
      * <b>Get a single stack</b>
      * <br>
