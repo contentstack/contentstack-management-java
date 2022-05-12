@@ -1,6 +1,5 @@
 package com.contentstack.cms.stack;
 
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
