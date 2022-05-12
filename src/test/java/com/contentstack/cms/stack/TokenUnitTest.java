@@ -3,16 +3,14 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
 import io.github.cdimascio.dotenv.Dotenv;
-import okhttp3.MediaType;
 import okhttp3.Request;
-import okhttp3.RequestBody;
-import okio.BufferedSink;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +22,39 @@ class TokenUnitTest {
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Tokens tokens;
+
+    // Create a JSONObject, JSONObject could be created in multiple ways.
+    // We choose JSONParser that converts string to JSONObject
+    String stringToParse = "{\n" +
+            "    \"module\":\"branch\",\n" +
+            "    \"branches\":[\n" +
+            "        \"main\",\n" +
+            "        \"development\"\n" +
+            "    ],\n" +
+            "    \"acl\":{\n" +
+            "        \"read\":true\n" +
+            "    }\n" +
+            "},\n" +
+            "{\n" +
+            "    \"module\":\"branch_alias\",\n" +
+            "    \"branch_aliases\":[\n" +
+            "        \"deploy\",\n" +
+            "        \"release\"\n" +
+            "    ],\n" +
+            "    \"acl\":{\n" +
+            "        \"read\":true\n" +
+            "    }\n" +
+            "}";
+    JSONParser parser = new JSONParser();
+    JSONObject body;
+
+    {
+        try {
+            body = (JSONObject) parser.parse(stringToParse);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @BeforeAll
     static void setup() {
@@ -54,9 +85,6 @@ class TokenUnitTest {
 
     @Test
     void singleDeliveryToken() {
-        Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("include_count", false);
-        queryParam.put("include_branch", false);
         Request request = tokens.getDeliveryToken(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -72,18 +100,6 @@ class TokenUnitTest {
 
     @Test
     void createDeliveryToken() {
-        Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("include_count", false);
-        queryParam.put("include_branch", false);
-
-        JSONObject body = new JSONObject();
-        JSONObject innerBody = new JSONObject();
-        innerBody.put("tags", Arrays.asList("tag1", "tag2"));
-        innerBody.put("data_type", "text");
-        innerBody.put("title", "Old Extension");
-        innerBody.put("src", "Enter either the source code");
-        body.put("extension", innerBody);
-
         Request request = tokens.createDeliveryToken(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
@@ -100,7 +116,7 @@ class TokenUnitTest {
 
     @Test
     void updateDeliveryToken() {
-        Request request = tokens.updateDeliveryToken(_uid, new JSONObject()).request();
+        Request request = tokens.updateDeliveryToken(_uid, body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -113,8 +129,6 @@ class TokenUnitTest {
 
     @Test
     void deleteDeliveryToken() {
-        Map<String, Object> theQuery = new HashMap<>();
-        theQuery.put("include_branch", false);
         Request request = tokens.deleteDeliveryToken(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -129,8 +143,6 @@ class TokenUnitTest {
 
     @Test
     void deleteDeliveryTokenForcefully() {
-        Map<String, Object> theQuery = new HashMap<>();
-        theQuery.put("include_branch", false);
         Request request = tokens.deleteDeliveryToken(_uid, true).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -174,7 +186,7 @@ class TokenUnitTest {
 
     @Test
     void createManagementToken() {
-        Request request = tokens.createManagementToken(new JSONObject()).request();
+        Request request = tokens.createManagementToken(body).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());
@@ -188,7 +200,7 @@ class TokenUnitTest {
 
     @Test
     void updateManagementToken() {
-        Request request = tokens.updateManagementToken(_uid, new JSONObject()).request();
+        Request request = tokens.updateManagementToken(_uid, body).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());
