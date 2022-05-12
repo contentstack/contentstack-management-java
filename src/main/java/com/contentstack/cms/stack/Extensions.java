@@ -87,10 +87,10 @@ public class Extensions {
      * @param body
      *         In the ‘Body’ section, you need to provide the following ‘Body’ parameters under ‘form-data’
      *         <pre>
-     *         Use like: Map<String, RequestBody> params = new HashMap<>();
-     *         //prepare RequestBody RequestBody someDataBody = ....;
-     *         //add it Map object params.put("DYNAMIC_PARAM_NAME", someDataBody);
-     *         </pre>
+     *                                 Use like: Map<String, RequestBody> params = new HashMap<>();
+     *                                 prepare RequestBody RequestBody someDataBody = ....;
+     *                                 add it Map object params.put("DYNAMIC_PARAM_NAME", someDataBody);
+     *                                 </pre>
      * @return Call
      */
     public Call<ResponseBody> uploadCustomField(Map<String, RequestBody> body, Map<String, Object> queryParam) {
@@ -118,10 +118,10 @@ public class Extensions {
      * @param body
      *         In the ‘Body’ section, you need to provide the following ‘Body’ parameters under ‘form-data’
      *         <pre>
-     *                                                                                                                                                 Use like: Map<String, RequestBody> params = new HashMap<>();
-     *                                                                                                                                                 //prepare RequestBody RequestBody someDataBody = ....;
-     *                                                                                                                                                 //add it Map object params.put("DYNAMIC_PARAM_NAME", someDataBody);
-     *                                                                                                                                          </pre>
+     *                                                                                                                                                                         Use like: Map<String, RequestBody> params = new HashMap<>();
+     *                                                                                                                                                                         //prepare RequestBody RequestBody someDataBody = ....;
+     *                                                                                                                                                                         //add it Map object params.put("DYNAMIC_PARAM_NAME", someDataBody);
+     *                                                                                                                                                                  </pre>
      * @return Call
      */
     public Call<ResponseBody> uploadCustomField(Map<String, Object> queryParam, JSONObject body) {
