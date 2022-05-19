@@ -19,8 +19,7 @@ import java.util.Map;
  * <p>
  * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
  * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
- * key in the response.
- * This key specifies the unique ID of the branch where the concerned Contentstack module resides.
+ * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
  *
  * @author ***REMOVED***
  * @version 1.0.0
@@ -58,7 +57,7 @@ public class Extensions {
      *         Set this to 'true' to include the '_branch' top-level key in the response. This key states the unique ID
      *         of the branch where the concerned Contentstack module resides.
      *         <b>Example:false</b>
-     * @return @{@link Call}
+     * @return Call
      */
     public Call<ResponseBody> getAll(@NotNull String query, boolean isIncludeBranch) {
         return this.service.getAll(this.headers, query, isIncludeBranch);
@@ -97,16 +96,12 @@ public class Extensions {
      *         of the branch where the concerned Contentstack module resides.
      *         <p>
      *         <b>Example:false</b>
-     * @param body
-     *         In the ‘Body’ section, you need to provide the following ‘Body’ parameters under ‘form-data’
-     *         <pre>
-     *                                                 Use like: Map<String, RequestBody> params = new HashMap<>();
-     *                                                 prepare RequestBody RequestBody someDataBody = ....;
-     *                                                 add it Map object params.put("DYNAMIC_PARAM_NAME", someDataBody);
-     *                                                 </pre>
+     * @param body the request body
+     *
      * @return Call
      */
     public Call<ResponseBody> uploadCustomField(Map<String, RequestBody> body, Map<String, Object> queryParam) {
+        //TODO: Could be improved:
         if (queryParam == null) {
             queryParam = new HashMap<>();
         }
@@ -129,12 +124,7 @@ public class Extensions {
      *         <p>
      *         <b>Example:false</b>
      * @param body
-     *         In the ‘Body’ section, you need to provide the following ‘Body’ parameters under ‘form-data’
-     *         <pre>
-     *                                                                                                                                                                                         Use like: Map<String, RequestBody> params = new HashMap<>();
-     *                                                                                                                                                                                         //prepare RequestBody RequestBody someDataBody = ....;
-     *                                                                                                                                                                                         //add it Map object params.put("DYNAMIC_PARAM_NAME", someDataBody);
-     *                                                                                                                                                                                  </pre>
+     *         the request body
      * @return Call
      */
     public Call<ResponseBody> uploadCustomField(Map<String, Object> queryParam, JSONObject body) {
