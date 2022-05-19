@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.contentstack</groupId>
     <artifactId>cms</artifactId>
     <name>contentstack-management-java</name>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <description>Contentstack Java Management SDK for Content Management API,
         Contentstack is a headless CMS with an API-first approach
     </description>
@@ -22,7 +21,7 @@
         <connection>scm:git:git://github.com/contentstack/contentstack-management-java.git</connection>
         <developerConnection>scm:git:ssh://github.com:contentstack/contentstack-management-java.git
         </developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.0.1-alpha</tag>
     </scm>
 
     <issueManagement>
@@ -343,7 +342,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
