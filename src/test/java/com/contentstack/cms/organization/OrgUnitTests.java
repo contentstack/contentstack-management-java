@@ -5,6 +5,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import retrofit2.Retrofit;
 
@@ -14,6 +15,7 @@ import static com.contentstack.cms.user.LocaleUnitTests.isValid;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("unit")
 public class OrgUnitTests {
 
     private static Organization organization;

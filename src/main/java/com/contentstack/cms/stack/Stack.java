@@ -114,7 +114,9 @@ public class Stack {
     }
 
     /**
-     * Instantiates a new Global field.
+     * A Global field is a reusable field (or group of fields) that you can define once and reuse in any content type
+     * within your stack. This eliminates the need (and thereby time and efforts) to create the same set of fields
+     * repeatedly in multiple content types.
      */
     public GlobalField globalField() {
         return new GlobalField(this.client, this.headers);
@@ -131,7 +133,7 @@ public class Stack {
      * @see <a href="https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
      */
     public Locale locale() {
-        return new Locale(client, headers);
+        return new Locale(this.client, headers);
     }
 
 
@@ -145,7 +147,7 @@ public class Stack {
      * @see <a href="https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
      */
     public Environment environment() {
-        return new Environment(client, this.headers);
+        return new Environment(this.client, this.headers);
     }
 
 
@@ -165,7 +167,7 @@ public class Stack {
      * <p>
      */
     public Label label() {
-        return new Label(client, this.headers);
+        return new Label(this.client, this.headers);
     }
 
 
@@ -182,7 +184,7 @@ public class Stack {
      * @return instance of  {@link Extensions}
      */
     public Extensions extensions() {
-        return new Extensions(client, this.headers);
+        return new Extensions(this.client, this.headers);
     }
 
 
@@ -199,7 +201,7 @@ public class Stack {
      * @return Tokens
      */
     public Tokens tokens() {
-        return new Tokens(client, this.headers);
+        return new Tokens(this.client, this.headers);
     }
 
     /**

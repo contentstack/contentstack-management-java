@@ -7,11 +7,12 @@ import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
-
+@Tag("api")
 public class LocaleAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");

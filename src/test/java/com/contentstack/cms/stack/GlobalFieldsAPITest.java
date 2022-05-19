@@ -6,12 +6,13 @@ import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import retrofit2.Call;
 
 import java.util.HashMap;
 
-class GlobalFieldsAPITest {
+@Tag("api") class GlobalFieldsAPITest {
 
     protected String GlobalFiledUid = "description";
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");

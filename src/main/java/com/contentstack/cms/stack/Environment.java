@@ -9,6 +9,14 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A publishing environment corresponds to one or more deployment servers or a content delivery destination where the
+ * entries need to be published.
+ *
+ * @author ***REMOVED***
+ * @version 1.0.0
+ * @since 2022-05-19
+ */
 public class Environment {
 
     protected final Map<String, Object> headers;

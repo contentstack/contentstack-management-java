@@ -52,7 +52,7 @@ public class CSResponse {
         return new Gson().fromJson(body, tClass);
     }
 
-    public Request requestBody(Call callInstance){
+    public Request requestBody(Call callInstance) {
         return callInstance.request();
     }
 

@@ -8,6 +8,13 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+/**
+ * The Contentstack ResponseResult class that accepts different types of Models
+ *
+ * @author ***REMOVED***
+ * @version 1.0.0
+ * @since 2022-05-19
+ */
 public class ResponseResult<T> {
 
     public T execute(Call<T> call) throws IOException {
@@ -22,18 +29,17 @@ public class ResponseResult<T> {
                 data = new Gson().fromJson(result.errorBody().string(), (Type) Error.class);
             }
         }
-
         return data;
     }
 }
 
 /*
  * class BaseCallBack<T> implements Callback<T> {
- * 
+ *
  * @Override public void onResponse(Call<T> call, Response<T> response) { if
  * (!response.isSuccessful()) {
  * System.out.println("Response Fail"); } }
- * 
+ *
  * @Override public void onFailure(Call<T> call, Throwable t) {
  * System.out.println("Response Fail" + t.toString()); } }
  * <p>

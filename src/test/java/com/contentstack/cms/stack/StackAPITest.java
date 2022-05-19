@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@Tag("api")
 class StackAPITest {
 
     private static final String TAG = StackAPITest.class.getSimpleName();
