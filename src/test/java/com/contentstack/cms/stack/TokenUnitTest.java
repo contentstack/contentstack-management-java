@@ -10,7 +10,6 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @Tag("unit")
 class TokenUnitTest {
