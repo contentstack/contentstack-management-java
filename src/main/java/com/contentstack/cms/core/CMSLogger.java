@@ -4,6 +4,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Logger;
 
+/**
+ * The Contentstack Logger
+ *
+ * @author Shailesh Mishra
+ * @version 1.0.0
+ * @since 2022-05-19
+ */
 public class CMSLogger {
 
     private final Logger logger;
@@ -28,7 +35,9 @@ public class CMSLogger {
         logger.finer(message);
     }
 
-    public void warning(@NotNull String message) { logger.warning(message);}
+    public void warning(@NotNull String message) {
+        logger.warning(message);
+    }
 
     public void severe(@NotNull String message) {
         logger.severe(message);

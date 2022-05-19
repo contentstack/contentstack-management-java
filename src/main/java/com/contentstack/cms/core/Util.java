@@ -6,8 +6,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+
 /**
  * The Utility class that contains utility common functions
+ *
+ * @author Shailesh Mishra
+ * @version 1.0.0
+ * @since 2022-05-19
  */
 public class Util {
 
@@ -38,7 +43,6 @@ public class Util {
     public static final String CONTENT_TYPE_VALUE = "application/json";
 
 
-
     Util() throws IllegalAccessException {
         throw new IllegalAccessException("private=modifier");
     }
@@ -55,7 +59,8 @@ public class Util {
     }
 
     /**
-     * @param field throws an exception for not providing a valid input
+     * @param field
+     *         throws an exception for not providing a valid input
      */
     public static void nullEmptyThrowsException(@NotNull String field) {
         Objects.requireNonNull(field);

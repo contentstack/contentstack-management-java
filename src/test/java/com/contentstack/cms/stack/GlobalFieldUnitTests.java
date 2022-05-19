@@ -9,11 +9,12 @@ import org.apiguardian.api.API;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-class GlobalFieldUnitTests {
+@Tag("unit") class GlobalFieldUnitTests {
 
     protected String globalFiledUid = "description";
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");

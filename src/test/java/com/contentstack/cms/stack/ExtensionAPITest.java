@@ -11,6 +11,7 @@ import okio.BufferedSink;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
@@ -20,6 +21,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+
+@Tag("api")
 class ExtensionAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
