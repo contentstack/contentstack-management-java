@@ -267,10 +267,12 @@ public class ContentType {
      *
      * @param contentTypeUid
      *         the content type uid
+     * @param isIncludeGlobalField
+     *         Include Global Field true/false
      * @return the call
      */
-    public Call<ResponseBody> reference(@NotNull String contentTypeUid, Boolean includeGlobalField) {
-        return service.reference(contentTypeUid, this.headers, includeGlobalField);
+    public Call<ResponseBody> reference(@NotNull String contentTypeUid, Boolean isIncludeGlobalField) {
+        return service.reference(contentTypeUid, this.headers, isIncludeGlobalField);
     }
 
     /**

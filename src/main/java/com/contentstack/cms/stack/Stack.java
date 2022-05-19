@@ -104,8 +104,8 @@ public class Stack {
 
     /**
      * An entry is the actual piece of content created using one of the defined
-     *
-     * @return {@link Entry} Entry instance
+     * @param contentTypeUid content type uid for the entry
+     * @return Entry instance
      * @see <a href="https://www.contentstack.com/docs/developers/create-content-types/about-content-types">Content
      * Type</a>
      */
@@ -117,6 +117,8 @@ public class Stack {
      * A Global field is a reusable field (or group of fields) that you can define once and reuse in any content type
      * within your stack. This eliminates the need (and thereby time and efforts) to create the same set of fields
      * repeatedly in multiple content types.
+     *
+     * @return GlobalField
      */
     public GlobalField globalField() {
         return new GlobalField(this.client, this.headers);
@@ -155,16 +157,12 @@ public class Stack {
      * Labels allow you to group a collection of content within a stack. Using labels you can group content types that
      * need to work together. Read more about
      *
-     * @return @{@link Label}
-     * <p>
-     * @see <a href="https://www.contentstack.com/docs/developers/create-content-types/manage-labels">Labels</a>
+     * @return Label
      *
-     * <p>
      * You can now pass the branch header in the API request to fetch or manage modules located within specific branches
      * of the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch
      * top-level key in the response. This key specifies the unique ID of the branch where the concerned Contentstack
      * module resides.
-     * <p>
      */
     public Label label() {
         return new Label(this.client, this.headers);
