@@ -5,7 +5,7 @@
     <groupId>com.contentstack</groupId>
     <artifactId>cms</artifactId>
     <name>contentstack-management-java</name>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <description>Contentstack Java Management SDK for Content Management API,
         Contentstack is a headless CMS with an API-first approach
     </description>
@@ -172,15 +172,7 @@
                 <artifactId>maven-jxr-plugin</artifactId>
                 <version>3.0.0</version>
             </plugin>
-            <!--
-            # Run tests and generate .xml reports
-            mvn test
-            # Convert .xml reports into .html report, but without the CSS or images
-            mvn surefire-report:report-only
-            # Put the CSS and images where they need to be without the rest of the
-            # time-consuming stuff
-            mvn surefire-report:report site -DgenerateReports=false
-            -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -207,36 +199,13 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-javadoc-plugin</artifactId>-->
-            <!--                <version>${maven-javadoc-plugin.version}</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>attach-javadocs</id>-->
-            <!--                        <goals>-->
-            <!--                            <goal>jar</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--                <configuration>-->
-            <!--                    <docletArtifact>-->
-            <!--                        <groupId>com.contentstack</groupId>-->
-            <!--                        <artifactId>cms</artifactId>-->
-            <!--                        <version>${sdk.version.snapshot}</version>-->
-            <!--                    </docletArtifact>-->
-            <!--                    <additionalOptions>-->
-            <!--                        <additionalOption>-warning 101</additionalOption>-->
-            <!--                    </additionalOptions>-->
-            <!--                    <useStandardDocletOptions>false</useStandardDocletOptions>-->
-            <!--                    <additionalJOption>-J-Xmx1024m</additionalJOption>-->
-            <!--                    <doclint>none</doclint>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -245,11 +214,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <additionalOptions>
-                        <additionalOption>-Xdoclint:none</additionalOption>
-                    </additionalOptions>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -310,36 +274,6 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jococo-plugin.version}</version>
             </plugin>
-
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
-            <!--                <version>2.22.2</version>-->
-            <!--                <configuration>-->
-            <!--                    <properties>-->
-            <!--                        <configurationParameters>-->
-            <!--                            junit.jupiter.extensions.autodetection.enabled = true-->
-            <!--                            junit.jupiter.testinstance.lifecycle.default = per_class-->
-            <!--                            junit.jupiter.execution.parallel.enabled = true-->
-            <!--                            junit.jupiter.execution.parallel.mode.default = concurrent-->
-            <!--                            junit.jupiter.execution.parallel.config.fixed.parallelism-->
-            <!--                        </configurationParameters>-->
-            <!--                    </properties>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
-            <!--                <version>3.0.0-M3</version>-->
-            <!--                <configuration>-->
-            <!--                    &lt;!&ndash; include tags &ndash;&gt;-->
-            <!--                    <groups>unit, api</groups>-->
-            <!--                    &lt;!&ndash; exclude tags &ndash;&gt;-->
-            <!--                    <excludedGroups>dontrun</excludedGroups>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-
         </plugins>
 
         <pluginManagement>
