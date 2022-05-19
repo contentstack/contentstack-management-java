@@ -7,9 +7,11 @@ import retrofit2.Callback;
 import java.util.logging.Logger;
 
 /**
- * The type Callback with retry.
+ * The Contentstack RetryCallback
  *
- * @param <T> the type parameter
+ * @author Shailesh Mishra
+ * @version 1.0.0
+ * @since 2022-05-19
  */
 public abstract class RetryCallback<T> implements Callback<T> {
 
@@ -19,10 +21,10 @@ public abstract class RetryCallback<T> implements Callback<T> {
     private int retryCount = 0;
 
     /**
-     *
      * Instantiates a new Callback with retry.
      *
-     * @param call the call
+     * @param call
+     *         the call
      */
     protected RetryCallback(Call<T> call) {
         this.call = call;

@@ -5,17 +5,14 @@ import com.contentstack.cms.Utils;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class StackUnitTests {
+@Tag("unit") class StackUnitTests {
 
     protected Stack stack;
     protected Dotenv env = Dotenv.load();

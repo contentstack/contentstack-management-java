@@ -1,8 +1,11 @@
 package com.contentstack.cms.core;
 
+import org.junit.jupiter.api.Tag;
+
 /**
  * The type Test utils.
  */
+@Tag("unit")
 class TestOSBasedUtils {
 
 //    /**

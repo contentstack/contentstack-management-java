@@ -1,6 +1,5 @@
 package com.contentstack.cms.stack;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -10,6 +9,18 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Labels allow you to group a collection of content within a stack. Using labels you can group content types that need
+ * to work together. Read more about Labels.
+ * <p>
+ * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
+ * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
+ * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
+ *
+ * @author Shailesh Mishra
+ * @version 1.0.0
+ * @since 2022-05-19
+ */
 public class Label {
 
     protected final LabelService service;

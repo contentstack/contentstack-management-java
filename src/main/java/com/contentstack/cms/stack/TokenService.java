@@ -11,46 +11,56 @@ public interface TokenService {
 
     // Delivery Tokens
     @GET("delivery_tokens")
-    Call<ResponseBody> getDeliveryToken(@HeaderMap Map<String, Object> headers);
+    Call<ResponseBody> getDeliveryToken(
+            @HeaderMap Map<String, Object> headers);
 
     @GET("delivery_tokens/{token_uid}")
-    Call<ResponseBody> getDeliveryToken(@HeaderMap Map<String, Object> headers,
-                                        @Path("token_uid") String tokenUid);
+    Call<ResponseBody> getDeliveryToken(
+            @HeaderMap Map<String, Object> headers,
+            @Path("token_uid") String tokenUid);
 
     @POST("delivery_tokens")
-    Call<ResponseBody> createDeliveryToken(@HeaderMap Map<String, Object> headers,
-                                           @Body JSONObject body);
+    Call<ResponseBody> createDeliveryToken(
+            @HeaderMap Map<String, Object> headers,
+            @Body JSONObject body);
 
     @PUT("delivery_tokens/{token_uid}")
-    Call<ResponseBody> updateDeliveryToken(@HeaderMap Map<String, Object> headers,
-                                           @Path("token_uid") String tokenUid,
-                                           @Body JSONObject body);
+    Call<ResponseBody> updateDeliveryToken(
+            @HeaderMap Map<String, Object> headers,
+            @Path("token_uid") String tokenUid,
+            @Body JSONObject body);
 
     @DELETE("delivery_tokens/{token_uid}")
-    Call<ResponseBody> deleteDeliveryToken(@HeaderMap Map<String, Object> headers,
-                                           @Path("token_uid") String tokenUid,
-                                           @Query("force") Boolean force);
+    Call<ResponseBody> deleteDeliveryToken(
+            @HeaderMap Map<String, Object> headers,
+            @Path("token_uid") String tokenUid,
+            @Query("force") Boolean force);
 
 
     // Management Tokens
     @GET("management_tokens")
-    Call<ResponseBody> getManagementToken(@HeaderMap Map<String, Object> headers);
+    Call<ResponseBody> getManagementToken(
+            @HeaderMap Map<String, Object> headers);
 
     @GET("management_tokens/{token_uid}")
-    Call<ResponseBody> getManagementToken(@HeaderMap Map<String, Object> headers,
-                                          @Path("token_uid") String tokenUid);
+    Call<ResponseBody> getManagementToken(
+            @HeaderMap Map<String, Object> headers,
+            @Path("token_uid") String tokenUid);
 
     @POST("management_tokens")
-    Call<ResponseBody> createManagementToken(@HeaderMap Map<String, Object> headers,
-                                             @Body JSONObject body);
+    Call<ResponseBody> createManagementToken(
+            @HeaderMap Map<String, Object> headers,
+            @Body JSONObject body);
 
 
-    @POST("management_tokens/{token_uid}")
-    Call<ResponseBody> updateManagementToken(@HeaderMap Map<String, Object> headers,
-                                             @Path("token_uid") String tokenUid, @Body JSONObject body);
+    @PUT("management_tokens/{token_uid}")
+    Call<ResponseBody> updateManagementToken(
+            @HeaderMap Map<String, Object> headers,
+            @Path("token_uid") String tokenUid, @Body JSONObject body);
 
     @DELETE("management_tokens/{token_uid}")
-    Call<ResponseBody> deleteManagementToken(@HeaderMap Map<String, Object> headers,
-                                             @Path("token_uid") String tokenUid);
+    Call<ResponseBody> deleteManagementToken(
+            @HeaderMap Map<String, Object> headers,
+            @Path("token_uid") String tokenUid);
 
 }

@@ -10,8 +10,19 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
- * The type Global field.
+ * A Global field is a reusable field (or group of fields) that you can define once and reuse in any content type within
+ * your stack. This eliminates the need (and thereby time and efforts) to create the same set of fields repeatedly in
+ * multiple content types.
+ * <p>
+ * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
+ * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
+ * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
+ *
+ * @author Shailesh Mishra
+ * @version 1.0.0
+ * @since 2022-05-19
  */
 public class GlobalField {
 

@@ -10,8 +10,10 @@ import java.io.IOException;
 /**
  * The ContentstackResponse is the response when we execute the API Response, ContentstackResponse contains different
  * response type
- * <p>
- * Since: 1.0.0
+ *
+ * @author Shailesh Mishra
+ * @version 1.0.0
+ * @since 2022-05-19
  */
 public class ContentstackResponse<T> {
 
@@ -22,7 +24,7 @@ public class ContentstackResponse<T> {
         try {
             return response.execute();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getLocalizedMessage());
         }
     }
 
@@ -39,7 +41,5 @@ public class ContentstackResponse<T> {
     ResponseBody getResponseBody() {
         return null;
     }
-
-    // Synchronously send the request and return its response
 
 }

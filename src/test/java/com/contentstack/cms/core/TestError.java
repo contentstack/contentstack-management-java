@@ -4,11 +4,13 @@ import com.contentstack.cms.models.Error;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 /**
  * The type Test error.
  */
+@Tag("unit")
 class TestError {
 
     static CMSLogger logger = new CMSLogger(TestError.class);

@@ -5,16 +5,15 @@ import com.contentstack.cms.Utils;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
+@Tag("api")
 public class EnvironmentAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
