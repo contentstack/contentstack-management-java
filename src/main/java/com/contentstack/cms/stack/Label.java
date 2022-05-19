@@ -86,6 +86,8 @@ public class Label {
      * <p>
      * To learn more about the queries, refer to the Query section of the Content Delivery API doc.
      *
+     * @param jsonRequest
+     *         request parameters
      * @return Call
      */
     public Call<ResponseBody> get(@NotNull Map<String, Object> jsonRequest) {
@@ -143,6 +145,7 @@ public class Label {
      *
      * @param labelUid
      *         the label uid
+     * @param body request body
      * @return Call
      */
     public Call<ResponseBody> update(@NotNull String labelUid, @NotNull JSONObject body) {

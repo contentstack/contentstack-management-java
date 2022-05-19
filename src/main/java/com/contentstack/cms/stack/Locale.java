@@ -114,7 +114,9 @@ public class Locale {
      * <p>
      * Fallback Languages
      *
-     * @return the retrofit2.Call
+     * @param localeCode
+     *         locale code you want to delete
+     * @return Call
      */
     public Call<ResponseBody> deleteLocale(String localeCode) {
         return localeService.deleteLocale(this.headers, localeCode);

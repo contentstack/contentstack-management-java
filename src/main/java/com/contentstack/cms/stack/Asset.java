@@ -46,37 +46,36 @@ public class Asset {
      * @param query
      *         query params for the assets older(optional) Enter either the UID of a specific folder to get the assets
      *         of that folder, or enter ‘cs_root’ to get all assets and their folder details from the root folder.
-     *         <p>
+     *
      *         <p>
      *         include_folders(optional) Set this parameter to ‘true’ to include the details of the created folders
      *         along with the details of the assets.
-     *         <p>
+     *
      *         <p>
      *         environment(optional) Enter the name of the environment to retrieve the assets published on them. You can
      *         enter multiple environments.
-     *         <p>
+     *
      *         <p>
      *         version(optional) Specify the version number of the asset that you want to retrieve. If the version is
      *         not specified, the details of the latest version will be retrieved.
      *         <p>
-     *         <p>
      *         include_publish_details(optional) Enter 'true' to include the publishing details of the entry.
-     *         <p>
+     *
      *         <p>
      *         include_count(optional) Set this parameter to 'true' to include the total number of assets available in
      *         your stack in the response body.
-     *         <p>
+     *
      *         <p>
      *         relative_urls(optional) Set this to 'true' to display the relative URL of the asset.
-     *         <p>
+     *
      *         <p>
      *         asc_field_uid(optional) Enter the unique ID of the field for sorting the assets in ascending order by
      *         that field. Example:created_at
-     *         <p>
+     *
      *         <p>
      *         desc_field_uid(optional) Enter the unique ID of the field for sorting the assets in descending order by
      *         that field.
-     *         <p>
+     *
      *         <p>
      *         Example:file_size
      * @return the retrofit2.Call
@@ -142,6 +141,8 @@ public class Asset {
      * To upload assets from your local system to Contentstack and manage their details, you need to use the following
      * "form-data" parameters:
      *
+     * @param filePath
+     *         the file path
      * @param requestBody
      *         Request body for the asset file
      *         <p>
@@ -284,6 +285,8 @@ public class Asset {
      *         asset uid
      * @param versionNumber
      *         asset version number
+     * @param requestBody
+     *         the request body of {@link JSONObject}
      * @return the retrofit2.Call
      */
     public Call<ResponseBody> setVersionName(@NotNull String assetUid, int versionNumber,
