@@ -52,7 +52,7 @@ public class Tokens {
     /**
      * The Get all delivery tokens request returns the details of all the delivery tokens created in a stack.
      *
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> getDeliveryTokens() {
         return this.service.getDeliveryToken(this.headers);
@@ -63,7 +63,7 @@ public class Tokens {
      *
      * @param tokenUid
      *         the UID of the token that you want to retrieve
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> getDeliveryToken(@NotNull String tokenUid) {
         return this.service.getDeliveryToken(this.headers, tokenUid);
@@ -77,7 +77,7 @@ public class Tokens {
      *
      * @param requestBody
      *         details of the delivery token in @{@link JSONObject} format
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> createDeliveryToken(@NotNull JSONObject requestBody) {
         return this.service.createDeliveryToken(this.headers, requestBody);
@@ -96,7 +96,7 @@ public class Tokens {
      *         the UID of the token that you want to retrieve
      * @param requestBody
      *         the body should be of @{@link JSONObject} type
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> updateDeliveryToken(@NotNull String tokenUid, @NotNull JSONObject requestBody) {
         return this.service.updateDeliveryToken(this.headers, tokenUid, requestBody);
@@ -107,7 +107,7 @@ public class Tokens {
      *
      * @param tokenUid
      *         the UID of the token that you want to retrieve
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> deleteDeliveryToken(@NotNull String tokenUid) {
         return this.service.deleteDeliveryToken(this.headers, tokenUid, false);
@@ -120,7 +120,7 @@ public class Tokens {
      *         the UID of the token that you want to retrieve
      * @param isForce
      *         provide ‘true’ to force delete a delivery token
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> deleteDeliveryToken(@NotNull String tokenUid, @NotNull Boolean isForce) {
         return this.service.deleteDeliveryToken(this.headers, tokenUid, isForce);
@@ -130,7 +130,7 @@ public class Tokens {
      * The Get all management tokens request returns the details of all the management tokens generated in a stack and
      * NOT the actual management tokens.
      *
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> getManagementTokens() {
         return this.service.getManagementToken(this.headers);
@@ -142,7 +142,7 @@ public class Tokens {
      *
      * @param tokenUid
      *         the UID of the token that you want to retrieve
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> getManagementToken(@NotNull String tokenUid) {
         return this.service.getManagementToken(this.headers, tokenUid);
@@ -154,7 +154,7 @@ public class Tokens {
      *
      * @param requestBody
      *         details of the management token in @{@link JSONObject} format
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> createManagementToken(@NotNull JSONObject requestBody) {
         return this.service.createManagementToken(this.headers, requestBody);
@@ -174,7 +174,7 @@ public class Tokens {
      *         the UID of the token that you want to retrieve
      * @param requestBody
      *         details of the management token in @{@link JSONObject} format
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> updateManagementToken(@NotNull String tokenUid, @NotNull JSONObject requestBody) {
         return this.service.updateManagementToken(this.headers, tokenUid, requestBody);
@@ -185,7 +185,7 @@ public class Tokens {
      *
      * @param tokenUid
      *         the UID of the token that you want to retrieve
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> deleteManagementToken(@NotNull String tokenUid) {
         return this.service.deleteManagementToken(this.headers, tokenUid);

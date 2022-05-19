@@ -37,7 +37,7 @@ public class Environment {
      *
      * @param query
      *         query parameter
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> fetch(Map<String, Object> query) {
         if (query == null) {
@@ -55,7 +55,7 @@ public class Environment {
      *
      * @param environment
      *         name of the environment
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> get(@NotNull String environment) {
         return this.service.getEnv(this.headers, environment);
@@ -73,7 +73,7 @@ public class Environment {
      *
      * @param requestBody
      *         request body of type @{@link JSONObject}
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> add(@NotNull JSONObject requestBody) {
         return this.service.add(this.headers, requestBody);
@@ -94,7 +94,7 @@ public class Environment {
      *         name of the environment
      * @param requestBody
      *         request body of type @{@link JSONObject}
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> update(@NotNull String environmentName, @NotNull JSONObject requestBody) {
         return this.service.update(this.headers, environmentName, requestBody);
@@ -109,7 +109,7 @@ public class Environment {
      *
      * @param environmentName
      *         name of the environment
-     * @return Call<ResponseBody>
+     * @return Call
      */
     public Call<ResponseBody> delete(@NotNull String environmentName) {
         return this.service.delete(this.headers, environmentName);
