@@ -2,13 +2,14 @@ package com.contentstack.cms.models;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LoginDetailTest {
+@Tag("unit") public class LoginDetailTest {
 
     private static LoginDetails loginDetails;
 

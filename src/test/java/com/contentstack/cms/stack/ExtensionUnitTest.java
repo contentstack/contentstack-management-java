@@ -10,6 +10,7 @@ import okio.BufferedSink;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag("unit")
 class ExtensionUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");

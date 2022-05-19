@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-
+@Tag("api")
 class ContentTypeAPITest {
 
     protected static String API_KEY = Dotenv.load().get("apiKey1");

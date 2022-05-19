@@ -7,16 +7,14 @@ import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.apiguardian.api.API;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+@Tag("unit")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContentTypeUnitTests {
 

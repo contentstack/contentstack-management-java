@@ -7,6 +7,7 @@ import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-class LabelAPITest {
+@Tag("api") class LabelAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("api_key");

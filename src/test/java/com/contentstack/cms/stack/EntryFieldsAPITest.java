@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import static com.contentstack.cms.Utils.toJson;
 
+@Tag("api")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EntryFieldsAPITest {
 

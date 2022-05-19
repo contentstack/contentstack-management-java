@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#organizations">Organization</a>
- * is the top-level entity in the hierarchy of Contentstack, consisting of stacks and <a href=
- * "https://www.contentstack.com/docs/developers/set-up-stack/about-stack">stack</a> resources, and users.
- * <p>
  * Organization allows easy management of projects as well as users within the Organization.
+ *
+ * @author Shailesh Mishra
+ * @version 1.0.0
+ * @since 2022-05-19
  */
 public class Organization {
 

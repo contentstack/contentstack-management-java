@@ -10,6 +10,7 @@ import okhttp3.RequestBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag("unit")
 class AssetUnitTest {
 
         protected static String AUTHTOKEN = Dotenv.load().get("authToken");
