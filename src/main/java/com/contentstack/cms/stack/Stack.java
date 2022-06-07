@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
+import javax.management.relation.Role;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,7 +105,9 @@ public class Stack {
 
     /**
      * An entry is the actual piece of content created using one of the defined
-     * @param contentTypeUid content type uid for the entry
+     *
+     * @param contentTypeUid
+     *         content type uid for the entry
      * @return Entry instance
      * @see <a href="https://www.contentstack.com/docs/developers/create-content-types/about-content-types">Content
      * Type</a>
@@ -158,7 +161,7 @@ public class Stack {
      * need to work together. Read more about
      *
      * @return Label
-     *
+     * <p>
      * You can now pass the branch header in the API request to fetch or manage modules located within specific branches
      * of the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch
      * top-level key in the response. This key specifies the unique ID of the branch where the concerned Contentstack
@@ -200,6 +203,27 @@ public class Stack {
      */
     public Tokens tokens() {
         return new Tokens(this.client, this.headers);
+    }
+
+
+    /**
+     * A role is a collection of permissions that will be applicable to all the users who are assigned this role
+     *
+     * @return Role
+     */
+    public Roles roles() {
+        return new Roles(this.client, this.headers);
+    }
+
+    /**
+     * You can pin a set of entries and assets (along with the deploy action, i.e., publish/unpublish) to a ‘release’,
+     * and then deploy this release to an environment. This will publish/unpublish all the the items of the release to
+     * the specified environment. Read more about Releases.
+     *
+     * @return Release
+     */
+    public Release releases() {
+        return new Release(this.client, this.headers);
     }
 
     /**

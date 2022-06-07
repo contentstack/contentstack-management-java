@@ -52,7 +52,6 @@ public interface TokenService {
             @HeaderMap Map<String, Object> headers,
             @Body JSONObject body);
 
-
     @PUT("management_tokens/{token_uid}")
     Call<ResponseBody> updateManagementToken(
             @HeaderMap Map<String, Object> headers,

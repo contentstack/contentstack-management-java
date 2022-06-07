@@ -1,0 +1,16 @@
+{
+  "module":"locale",
+  "locales":[
+    "uid_1234_fake_it"
+  ],
+  "acl":{
+    "read":true,
+    "sub_acl":{
+      "read":false,
+      "create":false,
+      "update":true,
+      "delete":false
+    }
+  },
+  "restrict":true
+}
