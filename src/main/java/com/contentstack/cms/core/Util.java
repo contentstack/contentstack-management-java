@@ -24,7 +24,7 @@ public class Util {
     public static final String VERSION = "v3";
     public static final int TIMEOUT = 30;
     public static final String SDK_NAME = "contentstack-management-java";
-    public static final String SDK_VERSION = "0.0.1";
+    public static final String SDK_VERSION = "1.0.0";
     public static final String ILLEGAL_USER = "Please Login to access stack instance";
     public static final String USER_ALREADY_LOGGED_IN = "User is already loggedIn, "
             + "Please logout then try to login again";
