@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
-import javax.management.relation.Role;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -216,14 +216,54 @@ public class Stack {
     }
 
     /**
-     * You can pin a set of entries and assets (along with the deploy action, i.e., publish/unpublish) to a ‘release’,
-     * and then deploy this release to an environment. This will publish/unpublish all the the items of the release to
-     * the specified environment. Read more about Releases.
+     * You can pin a set of entries and assets (along with the deploy action, i.e., publish/unpublish) to a
+     * <b>release</b>, and then deploy this release to an environment. This will publish/unpublish all the the items of
+     * the release to the specified environment. Read more about Releases.
      *
      * @return Release
      */
     public Release releases() {
         return new Release(this.client, this.headers);
+    }
+
+
+    /**
+     * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#workflows">Workflow</a> is a
+     * tool that allows you to streamline the process of content creation and publishing, and lets you manage the
+     * content lifecycle of your project smoothly.
+     *
+     * @return Workflow
+     */
+    public Workflow workflow() {
+        return new Workflow(this.client, this.headers);
+    }
+
+
+    /**
+     * Audit log displays a record of all the activities performed in a stack and helps you keep a track of all
+     * published items, updates, deletes, and current status of the existing content. Read more about <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">AuditLog</a>.
+     *
+     * @return AuditLog
+     */
+    public AuditLog auditLog() {
+        return new AuditLog(this.client, this.headers);
+    }
+
+
+    /**
+     * The Publish Queue displays the historical and current details of activities such as publish, unpublish, or delete
+     * that can be performed on entries and/or assets. It also shows details of Release deployments. These details
+     * include time, entry, content type, version, language, user, environment, and status.
+     * <p>
+     * For more details, refer the <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">Publish Queue</a>
+     * documentation.
+     *
+     * @return PublishQueue
+     */
+    public PublishQueue publishQueue() {
+        return new PublishQueue(this.client, this.headers);
     }
 
     /**
