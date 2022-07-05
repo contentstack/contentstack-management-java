@@ -86,6 +86,11 @@ public class Workflow {
     }
 
 
+    protected void clearParams() {
+        this.params.clear();
+    }
+
+
     /**
      * Get a Single Workflow request retrieves the comprehensive details of a specific Workflow of a stack.
      *
@@ -146,8 +151,7 @@ public class Workflow {
      * Note: Workflow superusers, organization owners, and stack owners/admins can edit or delete the entry in any
      * workflow stage, irrespective of the stage access rules set for that stage.
      *
-     * <p>Read more about <a
-     * *
+     * <br>Read more about <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#add-or-update-workflow-details">Update-Workflow</a>
      *
      * @param workflowUid
@@ -196,53 +200,53 @@ public class Workflow {
     }
 
 
-    /**
-     * The Set Entry Workflow Stage request allows you to either set a particular workflow stage of an entry or update
-     * the workflow stage details of an entry.
-     * <p>
-     * In the <b>Body</b> section, you need to provide the details of the workflow stage. Enter a comment for the
-     * assigned user, if needed; provide the due date; set notification settings to <b>true</b>, so that the specified
-     * user will be notified of it; enter the UID of the workflow stage; and finally, enter the user details, such as
-     * UID, name, and email address of the user.
-     * <pre>
-     *     {
-     * 	"workflow": {
-     * 		"workflow_stage": {
-     * 			"comment": "Workflow Comment",
-     * 			"due_date": "Thu Dec 01 2018",
-     * 			"notify": false,
-     * 			"uid": "workflow_stage_uid",
-     * 			"assigned_to": [{
-     * 					"uid": "user_uid",
-     * 					"name": "Username",
-     * 					"email": "user_email_id"
-     *                                        }],
-     * 			"assigned_by_roles": [{
-     * 				"uid": "role_uid",
-     * 				"name": "Role name"
-     *            }]
-     *        }
-     *    }
-     * }
-     * </pre>
-     * <p>
-     * <p>
-     * <b>Note:</b> To set or update the workflow stage details of an entry, you need to pass the Authtoken in the
-     * header. This API request does not support the use of the Management Token.
-     *
-     * @param contentTypeUid
-     *         the content type UID of the entry of which you want to change the workflow stage
-     * @param entryUid
-     *         The the UID of the entry of which you want to change the workflow stage
-     * @param requestBody
-     *         The requestBody of type @JSONObject
-     * @return Call
-     */
-    public Call<ResponseBody> updateWorkflowStage(@NotNull String contentTypeUid,
-                                                  @NotNull String entryUid,
-                                                  @NotNull JSONObject requestBody) {
-        return this.service.updateWorkflowStage(this.headers, contentTypeUid, entryUid, this.params, requestBody);
-    }
+//    /**
+//     * The Set Entry Workflow Stage request allows you to either set a particular workflow stage of an entry or update
+//     * the workflow stage details of an entry.
+//     * <p>
+//     * In the <b>Body</b> section, you need to provide the details of the workflow stage. Enter a comment for the
+//     * assigned user, if needed; provide the due date; set notification settings to <b>true</b>, so that the specified
+//     * user will be notified of it; enter the UID of the workflow stage; and finally, enter the user details, such as
+//     * UID, name, and email address of the user.
+//     * <pre>
+//     *     {
+//     * 	"workflow": {
+//     * 		"workflow_stage": {
+//     * 			"comment": "Workflow Comment",
+//     * 			"due_date": "Thu Dec 01 2018",
+//     * 			"notify": false,
+//     * 			"uid": "workflow_stage_uid",
+//     * 			"assigned_to": [{
+//     * 					"uid": "user_uid",
+//     * 					"name": "Username",
+//     * 					"email": "user_email_id"
+//     *                                        }],
+//     * 			"assigned_by_roles": [{
+//     * 				"uid": "role_uid",
+//     * 				"name": "Role name"
+//     *            }]
+//     *        }
+//     *    }
+//     * }
+//     * </pre>
+//     * <p>
+//     * <p>
+//     * <b>Note:</b> To set or update the workflow stage details of an entry, you need to pass the Authtoken in the
+//     * header. This API request does not support the use of the Management Token.
+//     *
+//     * @param contentTypeUid
+//     *         the content type UID of the entry of which you want to change the workflow stage
+//     * @param entryUid
+//     *         The the UID of the entry of which you want to change the workflow stage
+//     * @param requestBody
+//     *         The requestBody of type @JSONObject
+//     * @return Call
+//     */
+//    public Call<ResponseBody> updateWorkflowStage(@NotNull String contentTypeUid,
+//                                                  @NotNull String entryUid,
+//                                                  @NotNull JSONObject requestBody) {
+//        return this.service.updateWorkflowStage(this.headers, contentTypeUid, entryUid, this.params, requestBody);
+//    }
 
 
     /**
@@ -344,35 +348,35 @@ public class Workflow {
     }
 
 
-    /**
-     * This multipurpose request allows you to either send a publish request or accept/reject a received publish
-     * request.
-     * <p>
-     * When executing the API request, in the <b>Header</b> section, you need to provide the API Key of your stack and
-     * the authtoken that you receive after logging into your account.
-     * <p>
-     * In the <b>Body</b> section, you need to provide the details of the publish rule, such as its UID, action
-     * <b>publish, unpublish, or both</b>, status (this could be <b>0</b> for Approval Requested, <b>1</b> for
-     * <b>Approval
-     * Accepted</b>, and <b>-1</b> for <b>Approval Rejected</b>), notification setting, and comment for the approver.
-     *
-     * @param authtoken
-     *         authtoken for the request
-     * @param contentTypeUid
-     *         The unique ID of the content type to which the entry belongs
-     * @param entryUid
-     *         The unique ID of the entry on which the Publishing Rule is applicable
-     * @param requestBody
-     *         The request body
-     * @return Call
-     */
-    public Call<ResponseBody> publishRequestApproval(@NotNull String authtoken,
-                                                     @NotNull String contentTypeUid,
-                                                     @NotNull String entryUid,
-                                                     @NotNull JSONObject requestBody) {
-        this.headers.put("authtoken", authtoken);
-        return this.service.publishRequestApproval(this.headers, contentTypeUid, entryUid, this.params, requestBody);
-    }
+//    /**
+//     * This multipurpose request allows you to either send a publish request or accept/reject a received publish
+//     * request.
+//     * <p>
+//     * When executing the API request, in the <b>Header</b> section, you need to provide the API Key of your stack and
+//     * the authtoken that you receive after logging into your account.
+//     * <p>
+//     * In the <b>Body</b> section, you need to provide the details of the publish rule, such as its UID, action
+//     * <b>publish, unpublish, or both</b>, status (this could be <b>0</b> for Approval Requested, <b>1</b> for
+//     * <b>Approval
+//     * Accepted</b>, and <b>-1</b> for <b>Approval Rejected</b>), notification setting, and comment for the approver.
+//     *
+//     * @param authtoken
+//     *         authtoken for the request
+//     * @param contentTypeUid
+//     *         The unique ID of the content type to which the entry belongs
+//     * @param entryUid
+//     *         The unique ID of the entry on which the Publishing Rule is applicable
+//     * @param requestBody
+//     *         The request body
+//     * @return Call
+//     */
+//    public Call<ResponseBody> publishRequestApproval(@NotNull String authtoken,
+//                                                     @NotNull String contentTypeUid,
+//                                                     @NotNull String entryUid,
+//                                                     @NotNull JSONObject requestBody) {
+//        this.headers.put("authtoken", authtoken);
+//        return this.service.publishRequestApproval(this.headers, contentTypeUid, entryUid, this.params, requestBody);
+//    }
 
 
     /**
@@ -382,8 +386,11 @@ public class Workflow {
      * authtoken that you receive after logging into your account.
      *
      * @param authtoken
-     *         authtoken for the request
+     *         The authtoken
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-tasks">Get all
+     * Tasks</a>
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetchTasks(@NotNull String authtoken) {
         this.headers.put("authtoken", authtoken);

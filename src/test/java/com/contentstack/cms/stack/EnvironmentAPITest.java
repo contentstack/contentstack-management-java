@@ -32,11 +32,11 @@ public class EnvironmentAPITest {
     @Order(1)
     void fetchLocales() {
         Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("include_count", false);
-        queryParam.put("asc", "created_at");
-        queryParam.put("desc", "updated_at");
+        environment.addParam("include_count", false);
+        environment.addParam("asc", "created_at");
+        environment.addParam("desc", "updated_at");
         try {
-            Response<ResponseBody> response = environment.fetch(queryParam).execute();
+            Response<ResponseBody> response = environment.fetch().execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();

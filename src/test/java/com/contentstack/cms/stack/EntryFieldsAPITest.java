@@ -38,7 +38,7 @@ class EntryFieldsAPITest {
         headers.put("authorization", MANAGEMENT_TOKEN);
         Stack stack = client.stack(headers);
         // Get all content types
-        Response<ResponseBody> response = stack.contentType(MANAGEMENT_TOKEN).fetch(new HashMap<>()).execute();
+        Response<ResponseBody> response = stack.contentType(MANAGEMENT_TOKEN).fetch().execute();
         JsonObject jsonResp = toJson(response);
         JsonArray allCT = jsonResp.getAsJsonArray("content_types");
         // find first content type from the stack
@@ -53,17 +53,15 @@ class EntryFieldsAPITest {
     @Test
     @Order(1)
     void testGetAllCT() throws IOException {
-        Response<ResponseBody> response = entry.fetch(new HashMap<>()).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
 
     @Test
     void testFetch() {
-        HashMap<String, Object> queryParams = new HashMap<>();
-
         try {
-            Response<ResponseBody> response = entry.fetch(queryParams).execute();
+            Response<ResponseBody> response = entry.fetch().execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,127 +71,109 @@ class EntryFieldsAPITest {
 
     @Test
     void testSingle() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testCreate() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testUpdate() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testAtomicOperation() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testDelete() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testVersionName() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testDetailOfAllVersion() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testDeleteVersionName() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testReference() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testLanguage() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testLocalise() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testUnLocalise() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testExport() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testImport() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testImportExisting() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testPublish() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testPublishWithReference() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testUnpublish() throws IOException {
-        HashMap<String, Object> queryParams = new HashMap<>();
-        Response<ResponseBody> response = entry.fetch(queryParams).execute();
+        Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
