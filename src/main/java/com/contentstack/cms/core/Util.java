@@ -40,6 +40,7 @@ public class Util {
     public static final String X_USER_AGENT = "X-User-Agent";
     public static final String USER_AGENT = "User-Agent";
     public static final String CONTENT_TYPE = "Content-Type";
+    public static final String MULTIPART = "multipart/form-data";
     public static final String CONTENT_TYPE_VALUE = "application/json";
 
 

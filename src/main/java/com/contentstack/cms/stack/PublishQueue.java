@@ -78,6 +78,14 @@ public class PublishQueue {
 
 
     /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
+
+
+    /**
      * The Get publish queue request returns comprehensive information on activities such as publish, unpublish, and
      * delete that have performed on entries and/or assets. This request also includes the details of the release
      * deployments in the response body.

@@ -43,28 +43,39 @@ public class Roles {
      * @param value
      *         header value for the request
      */
-    public void addHeader(@NotNull String key, @NotNull String value) {
+    public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
     }
 
     /**
+     * Sets header for the request
+     *
      * @param key
-     *         query param key
+     *         header key for the request
      * @param value
-     *         query param value against above key
+     *         header value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
     }
 
+
     /**
-     * Remove specified param by key
+     * Sets header for the request
      *
      * @param key
-     *         key for the param want to remove
+     *         header key for the request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
     }
 
     /**

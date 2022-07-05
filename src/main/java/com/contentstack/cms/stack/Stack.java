@@ -3,7 +3,6 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.core.Util;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -17,9 +16,10 @@ import java.util.Map;
  */
 public class Stack {
 
-    private final StackService stackService;
+    private final StackService service;
     protected Retrofit client;
     protected HashMap<String, Object> headers;
+    protected HashMap<String, Object> params;
 
 
     /**
@@ -31,22 +31,76 @@ public class Stack {
     public Stack(@NotNull Retrofit client) {
         this.headers = new HashMap<>();
         this.client = client;
-        this.stackService = client.create(StackService.class);
+        this.params = new HashMap<>();
+        this.service = client.create(StackService.class);
     }
+
+
+    /**
+     * Sets header for the request
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     * @author shaileshmishra
+     * @since 1.0.0
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     * @author shaileshmishra
+     * @since 1.0.0
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @author shaileshmishra
+     * @since 1.0.0
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     *
+     * @apiNote Use {@link #clearParams()} . to clear all the parameters
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
+
 
     /**
      * Instantiates a new Stack.
      *
      * @param client
-     *         the client
-     * @param stackHeaders
-     *         the headers
+     *         the contentstack client
+     * @param headers
+     *         Required headers to get the {@link Stack} information
      */
-    public Stack(@NotNull Retrofit client, @NotNull Map<String, Object> stackHeaders) {
-        headers = new HashMap<>();
+    public Stack(@NotNull Retrofit client, @NotNull Map<String, Object> headers) {
+        this.headers = new HashMap<>();
         this.client = client;
-        headers.putAll(stackHeaders);
-        this.stackService = client.create(StackService.class);
+        this.headers.putAll(headers);
+        this.params = new HashMap<>();
+        this.service = client.create(StackService.class);
     }
 
 
@@ -173,7 +227,7 @@ public class Stack {
 
 
     /**
-     * Extensions let you create custom fields and custom widgets that lets you customize Contentstack's default UI and
+     * Extensions let you create custom fields and custom widgets that lets you customize Contentment's default UI and
      * behavior. Read more about Extensions.
      * <p>
      * You can now pass the branch header in the API request to fetch or manage modules located within specific branches
@@ -217,7 +271,7 @@ public class Stack {
 
     /**
      * You can pin a set of entries and assets (along with the deploy action, i.e., publish/unpublish) to a
-     * <b>release</b>, and then deploy this release to an environment. This will publish/unpublish all the the items of
+     * <b>release</b>, and then deploy this release to an environment. This will publish/unpublish all the items of
      * the release to the specified environment. Read more about Releases.
      *
      * @return Release
@@ -252,9 +306,9 @@ public class Stack {
 
 
     /**
-     * The Publish Queue displays the historical and current details of activities such as publish, unpublish, or delete
-     * that can be performed on entries and/or assets. It also shows details of Release deployments. These details
-     * include time, entry, content type, version, language, user, environment, and status.
+     * The Publishing Queue displays the historical and current details of activities such as publish, unpublish, or
+     * delete that can be performed on entries and/or assets. It also shows details of Release deployments. These
+     * details include time, entry, content type, version, language, user, environment, and status.
      * <p>
      * For more details, refer the <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">Publish Queue</a>
@@ -266,63 +320,70 @@ public class Stack {
         return new PublishQueue(this.client, this.headers);
     }
 
+
     /**
-     * <b>Get a single stack</b>
-     * <br>
-     * The Get a single stack call fetches comprehensive details of a specific stack
-     * <br>
-     * <b>Note:</b> For SSO-enabled organizations,
-     * it is mandatory to pass the organization UID in the header.
+     * A webhook is a mechanism that sends real-time information to any third-party app or service to keep your
+     * application in sync with your Contentstack account. Webhooks allow you to specify a URL to which you would like
+     * Contentstack to post data when an event happens. Read more about <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#webhooks">Webhooks</a>
      *
-     * @return the stack
+     * <p>
+     * <b>Note:</b> If any key name in the response data sent to a notification URL begins with a dollar sign ($), it
+     * will be prefixed with the acronym "cs" as a wildcard. For example, the key named "$success" would be replaced
+     * with "cs$success." For more information, refer to our API Change Log documentation. The option to define
+     * stack-level scope for webhooks is not available when using the classic Contentstack interface.
+     *
+     * @return Webhook
+     */
+    public Webhook webhook() {
+        return new Webhook(this.client, this.headers);
+    }
+
+    /**
+     * <b>Get stacks</b>
+     * <br>
+     * <b>All Stack:- </b>authtoken is required and organization_uid is optional to fetch all the stacks
+     * <br>
+     * <br>
+     * <b>Single Stack:- </b> : api_key and authtoken is required and organization_uid is optional
+     * <br>
+     * <br> <b>Example:</b>
+     *
+     * <pre>
+     * {@code
+     * Stack stack = new Contentstack.Builder().setAuthtoken("authtoken").build().stack();
+     * stack.addParam("include_collaborators", true);
+     * stack.addParam("include_stack_variables", true);
+     * stack.addParam("include_discrete_variables", true);
+     * stack.addParam("include_count", true);
+     * stack.addHeader("organization_uid", orgId);
+     * Request request = stack.fetch().request();
+     * }
+     * </pre>
+     *
+     * @return Call
+     * @author shaileshmishra
+     * @apiNote For SSO-enabled organizations, it is mandatory to pass the organization UID in the header.
+     * @implNote Add headers using {@link #addHeader(String, Object)} <br> Add params using
+     * {@link #addParam(String, Object)}
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-stacks">Get all
+     * Stacks</a>
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-stack">Get
+     * single Stack</a>
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetch() {
-        return this.stackService.fetch(this.headers);
+        return this.service.fetch(this.headers, this.params);
     }
 
-    /**
-     * <b>Get a single stack</b>
-     * <br>
-     * The Get a single stack call fetches comprehensive details of a specific stack
-     * <br>
-     * <b>Note:</b> For SSO-enabled organizations,
-     * it is mandatory to pass the organization UID in the header.
-     *
-     * @param organizationUid
-     *         the organization uid
-     * @return the stack
-     */
-    public Call<ResponseBody> fetch(@NotNull String organizationUid) {
-        return this.stackService.fetch(this.headers, organizationUid);
-    }
-
-    /**
-     * <b>Get a single stack</b>
-     * <br>
-     * The Get a single stack call fetches comprehensive details of a specific stack
-     * <br>
-     * <b>Note:</b> For SSO-enabled organizations,
-     * it is mandatory to pass the organization UID in the header.
-     *
-     * @param orgUID
-     *         the organization uid
-     * @param query
-     *         the query param
-     * @return the stack
-     */
-    public Call<ResponseBody> fetch(@NotNull String orgUID,
-                                    @Nullable Map<String, Boolean> query) {
-        if (query == null) query = new HashMap<>();
-        return this.stackService.fetch(this.headers, orgUID, query);
-    }
 
     /**
      * <b>Create stack.</b>
-     * <p>
+     * <br>
      * The Create stack call creates a new stack in your Contentstack account.
-     * <p>
+     * <br>
      * In the 'Body' section, provide the schema of the stack in JSON format
-     * <p>
+     * <br>
      * <b>Note:</b>At any given point of time, an organization can create only one
      * stack per minute.
      *
@@ -334,7 +395,7 @@ public class Stack {
      */
     public Call<ResponseBody> create(
             @NotNull String organizationUid, @NotNull JSONObject requestBody) {
-        return stackService.create(organizationUid, requestBody);
+        return service.create(organizationUid, requestBody);
     }
 
     /**
@@ -352,7 +413,7 @@ public class Stack {
      * @return the stack
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
-        return stackService.update(this.headers, requestBody);
+        return service.update(this.headers, requestBody);
     }
 
     /**
@@ -378,12 +439,12 @@ public class Stack {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#transfer-stack-ownership-to-other-users">
      * (Read more) </a>
      *
-     * @param requestBody
+     * @param body
      *         The request body as JSONObject
      * @return the stack
      */
-    public Call<ResponseBody> transferOwnership(@NotNull JSONObject requestBody) {
-        return stackService.transferOwnership(this.headers, requestBody);
+    public Call<ResponseBody> transferOwnership(@NotNull JSONObject body) {
+        return service.transferOwnership(this.headers, body);
     }
 
     /**
@@ -409,11 +470,9 @@ public class Stack {
      */
     public Call<ResponseBody> acceptOwnership(
             @NotNull String ownershipToken, @NotNull String uid) {
-        Map<String, String> queryMap = new HashMap<>();
-
-        queryMap.put("api_key", this.headers.get(Util.API_KEY).toString());
-        queryMap.put("uid", uid);
-        return stackService.acceptOwnership(ownershipToken, queryMap);
+        this.params.put("api_key", this.headers.get(Util.API_KEY));
+        this.params.put("uid", uid);
+        return service.acceptOwnership(this.headers, ownershipToken, this.params);
     }
 
     /**
@@ -428,7 +487,7 @@ public class Stack {
      * @return the call
      */
     public Call<ResponseBody> setting() {
-        return stackService.setting(this.headers);
+        return service.setting(this.headers);
     }
 
     /**
@@ -496,7 +555,7 @@ public class Stack {
      * @return the call
      */
     public Call<ResponseBody> updateSetting(@NotNull JSONObject requestBody) {
-        return stackService.updateSetting(this.headers, requestBody);
+        return service.updateSetting(this.headers, requestBody);
     }
 
     /**
@@ -526,7 +585,7 @@ public class Stack {
      * @return the call
      */
     public Call<ResponseBody> resetSetting(@NotNull JSONObject requestBody) {
-        return stackService.updateSetting(this.headers, requestBody);
+        return service.updateSetting(this.headers, requestBody);
     }
 
     /**
@@ -559,7 +618,7 @@ public class Stack {
      * @return the call
      */
     public Call<ResponseBody> share(@NotNull JSONObject requestBody) {
-        return stackService.share(this.headers, requestBody);
+        return service.share(this.headers, requestBody);
     }
 
     /**
@@ -585,7 +644,7 @@ public class Stack {
      * @return the call
      */
     public Call<ResponseBody> unshare(@NotNull JSONObject requestBody) {
-        return stackService.unshare(this.headers, requestBody);
+        return service.unshare(this.headers, requestBody);
     }
 
     /**
@@ -598,7 +657,7 @@ public class Stack {
      * @return the call
      */
     public Call<ResponseBody> allUsers() {
-        return stackService.allUsers(this.headers);
+        return service.allUsers(this.headers);
     }
 
     /**
@@ -624,13 +683,12 @@ public class Stack {
      * }
      * </pre>
      *
-     * @param requestBody
+     * @param body
      *         the request body
      * @return the {@link okhttp3.Call}
      */
-    public Call<ResponseBody> roles(@NotNull JSONObject requestBody) {
-        return stackService.updateUserRoles(this.headers, requestBody);
+    public Call<ResponseBody> roles(@NotNull JSONObject body) {
+        return service.updateUserRoles(this.headers, body);
     }
-
 
 }

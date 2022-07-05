@@ -32,10 +32,10 @@ public class EnvironmentUnitTest {
     @Test
     void fetchLocales() {
         Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("include_count", false);
-        queryParam.put("asc", "created_at");
-        queryParam.put("desc", "updated_at");
-        Request request = environment.fetch(queryParam).request();
+        environment.addParam("include_count", false);
+        environment.addParam("asc", "created_at");
+        environment.addParam("desc", "updated_at");
+        Request request = environment.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

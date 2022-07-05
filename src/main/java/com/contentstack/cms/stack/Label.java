@@ -25,23 +25,56 @@ public class Label {
 
     protected final LabelService service;
     protected HashMap<String, Object> headers;
+    protected HashMap<String, Object> params;
 
     protected Label(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
+        this.params = new HashMap<>();
         this.headers.putAll(stackHeaders);
         this.service = retrofit.create(LabelService.class);
     }
 
     /**
+     * Sets header for the request
+     *
      * @param key
-     *         header key
+     *         header key for the request
      * @param value
-     *         header value
-     * @return Label
+     *         header value for the request
      */
-    public Label addHeader(@NotNull String key, @NotNull String value) {
+    public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
-        return this;
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
     }
 
     /**
@@ -51,29 +84,11 @@ public class Label {
      *         branch unique ID
      * @return Label
      */
-
     public Label addBranch(@NotNull String value) {
         this.headers.put("branch", value);
         return this;
     }
 
-    /**
-     * This call fetches all the existing labels of the stack.
-     * <p>
-     * When executing the API call, under the <b>Header</b> section, you need to enter the API key of your stack and the
-     * authtoken that you receive after logging into your account.
-     * <p>
-     * You can add queries to extend the functionality of this API call. Under the URI Parameters section, insert a
-     * parameter named query and provide a query in JSON format as the value.
-     * <p>
-     * To learn more about the queries, refer to the <b>Queries</b> section of the Content Delivery API doc.
-     *
-     * @return Call
-     */
-    public Call<ResponseBody> get() {
-        return this.service.get(this.headers);
-    }
-
 
     /**
      * This call fetches all the existing labels of the stack.
@@ -81,36 +96,27 @@ public class Label {
      * When executing the API call, under the <b>Header</b> section, you need to enter the API key of your stack and the
      * authtoken that you receive after logging into your account.
      * <p>
-     * You can add queries to extend the functionality of this API call. Under the URI Parameters section, insert a
-     * parameter named query and provide a query in JSON format as the value.
+     * Using {@link #addParam(String, Object)} you can add queries to extend the functionality of this API call. Under
+     * the URI Parameters section, insert a parameter named query and provide a query in JSON format as the value.
      * <p>
      * To learn more about the queries, refer to the Query section of the Content Delivery API doc.
      *
-     * @param jsonRequest
-     *         request parameters
      * @return Call
      */
-    public Call<ResponseBody> get(@NotNull Map<String, Object> jsonRequest) {
-        return this.service.get(this.headers, jsonRequest);
+    public Call<ResponseBody> fetch() {
+        return this.service.get(this.headers, this.params);
     }
 
     /**
      * The Get label call returns information about a particular label of a stack.
-     * <p>
-     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
-     * logging into your account.
      * <p>
      *
      * @param labelUid
      *         Provide the unique ID of the label that you want to retrieve
      * @return Call
      */
-    public Call<ResponseBody> get(@NotNull String labelUid) {
-        return this.service.get(this.headers, labelUid);
-    }
-
-    public Call<ResponseBody> get(String uid, Map<String, Object> queryParams) {
-        return this.service.get(this.headers, uid, queryParams);
+    public Call<ResponseBody> single(@NotNull String labelUid) {
+        return this.service.get(this.headers, labelUid, this.params);
     }
 
 
@@ -144,8 +150,9 @@ public class Label {
      * <p>
      *
      * @param labelUid
-     *         the label uid
-     * @param body request body
+     *         The unique ID of the label that you want to retrieve.
+     * @param body
+     *         the request body to update the {@link Label}
      * @return Call
      */
     public Call<ResponseBody> update(@NotNull String labelUid, @NotNull JSONObject body) {
@@ -160,7 +167,7 @@ public class Label {
      * <p>
      *
      * @param labelUid
-     *         the label uid
+     *         The unique ID of the label that you want to retrieve.
      * @return Call
      */
     public Call<ResponseBody> delete(@NotNull String labelUid) {

@@ -35,6 +35,49 @@ public class Tokens {
         this.service = retrofit.create(TokenService.class);
     }
 
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
     /**
      * Sets header for the request
      *

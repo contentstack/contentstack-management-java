@@ -15,10 +15,6 @@ public class CSResponse {
     private static final String RESPONSE_NULL = "response == null";
     private final Response<ResponseBody> response;
 
-    //Request request;
-    //ResponseBody response; // JSONResponse/ JSON/ String / model
-
-
     public CSResponse(Response<ResponseBody> response) {
         this.response = response;
     }

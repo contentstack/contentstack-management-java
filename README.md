@@ -42,7 +42,7 @@ To use Contentstack management sdk in our Maven project, we'll need to add the f
 
 ```java
 <dependency>
- <groupId>com.contentstack</groupId>
+ <groupId>com.contentstack.sdk</groupId>
  <artifactId>cms</artifactId>
  <version>{version}</version>
 </dependency>

@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -24,6 +25,8 @@ public class Locale {
 
     protected final LocaleService localeService;
     protected Map<String, Object> headers;
+    protected Map<String, Object> params;
+
 
     /**
      * Instantiates a new Language
@@ -34,8 +37,54 @@ public class Locale {
      *         the headers
      */
     public Locale(Retrofit client, Map<String, Object> headers) {
-        this.headers = headers;
+        this.headers = new HashMap<>();
+        this.headers.putAll(headers);
+        this.params = new HashMap<>();
         this.localeService = client.create(LocaleService.class);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
     }
 
     /**
