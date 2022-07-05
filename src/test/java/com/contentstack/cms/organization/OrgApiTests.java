@@ -7,8 +7,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
-import okhttp3.Request;
 import okhttp3.ResponseBody;
+import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,10 +21,22 @@ import java.io.IOException;
 import java.util.HashMap;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("api") class OrgApiTests {
+@Tag("api")
+class OrgApiTests {
 
     private Organization organization;
     private final String organizationUid = Dotenv.load().get("organizationUid");
+
+
+    private JSONObject theJSONBody(@NotNull String _body) {
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject body = (JSONObject) parser.parse(_body);
+        } catch (ParseException e) {
+            return null;
+        }
+        return null;
+    }
 
     private JsonObject toJson(Response<ResponseBody> response) throws IOException {
         assert response.body() != null;
@@ -39,7 +54,7 @@ import java.util.HashMap;
 
     @Test
     void testGetAll() throws IOException {
-        Response<ResponseBody> response = organization.getAll().execute();
+        Response<ResponseBody> response = organization.fetch().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organizations"));
@@ -53,9 +68,8 @@ import java.util.HashMap;
 
     @Test
     void testGetAllWithParams() throws IOException {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("include_plan", true);
-        Response<ResponseBody> response = organization.getAll(query).execute();
+        organization.addParam("include_plan", true);
+        Response<ResponseBody> response = organization.fetch().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organizations"));
@@ -71,7 +85,7 @@ import java.util.HashMap;
     void testGetSingle() throws IOException {
         String orgUid = Dotenv.load().get("organizationUid");
         assert orgUid != null;
-        Response<ResponseBody> response = organization.getSingleOrganization(orgUid).execute();
+        Response<ResponseBody> response = organization.single(orgUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organization"));
@@ -84,11 +98,10 @@ import java.util.HashMap;
 
     @Test
     void testGetSingleWithInclude() throws IOException {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("include_plan", true);
+        organization.addParam("include_plan", true);
         String orgUid = Dotenv.load().get("organizationUid");
         assert orgUid != null;
-        Response<ResponseBody> response = organization.getSingleOrganization(orgUid, query).execute();
+        Response<ResponseBody> response = organization.single(orgUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organization"));
@@ -101,15 +114,14 @@ import java.util.HashMap;
 
     @Test
     void testRole() throws IOException {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("limit", 2);
-        query.put("skip", 2);
-        query.put("asc", true);
-        query.put("desc", true);
-        query.put("include_count", true);
-        query.put("include_stack_roles", true);
+        organization.addParam("limit", 2);
+        organization.addParam("skip", 2);
+        organization.addParam("asc", true);
+        organization.addParam("desc", true);
+        organization.addParam("include_count", true);
+        organization.addParam("include_stack_roles", true);
         String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.getRoles(orgUid).execute();
+        Response<ResponseBody> response = organization.roles(orgUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("roles"));
@@ -126,15 +138,14 @@ import java.util.HashMap;
 
     @Test
     void testRoleWithQueryPrams() throws IOException {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("limit", 2);
-        query.put("skip", 2);
-        query.put("asc", true);
-        query.put("desc", true);
-        query.put("include_count", true);
-        query.put("include_stack_roles", false);
+        organization.addParam("limit", 2);
+        organization.addParam("skip", 2);
+        organization.addParam("asc", true);
+        organization.addParam("desc", true);
+        organization.addParam("include_count", true);
+        organization.addParam("include_stack_roles", false);
         String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.getRoles(orgUid, query).execute();
+        Response<ResponseBody> response = organization.roles(orgUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("roles"));
@@ -151,9 +162,7 @@ import java.util.HashMap;
 
     @Test
     void testInviteUser() throws IOException {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("include_plan", true);
-
+        organization.addParam("include_plan", true);
         String requestBody = "{\n" +
                 "\t\"share\": {\n" +
                 "\t\t\"users\": {\n" +
@@ -172,7 +181,8 @@ import java.util.HashMap;
                 "\t\t\"message\": \"Invitation message\"\n" +
                 "\t}\n" +
                 "}";
-        Response<ResponseBody> response = organization.inviteUser(organizationUid, requestBody).execute();
+        JSONObject body = theJSONBody(requestBody);
+        Response<ResponseBody> response = organization.inviteUser(organizationUid, body).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("shares"));
@@ -189,12 +199,26 @@ import java.util.HashMap;
 
     @Test
     void testRemoveUser() throws IOException {
-        String reqBody = "{\n" +
-                "    \"emails\":[\n" +
-                "        \"abc@sample.com\", \"xyz@sample.com\"\n" +
-                "    ]\n" +
+        String _body = "{\n" +
+                "\t\"share\": {\n" +
+                "\t\t\"users\": {\n" +
+                "\t\t\t\"abc@sample.com\": [\"{{orgAdminRoleUid}}\"],\n" +
+                "\t\t\t\"xyz@sample.com\": [\"{{orgMemberRoleUid}}\"]\n" +
+                "\t\t},\n" +
+                "\t\t\"stacks\": {\n" +
+                "\t\t\t\"abc@sample.com\": {\n" +
+                "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"xyz@sample.com\": {\n" +
+                "\t\t\t\t\"blta1ed1f11111c1eb1\": [\"blt111d1b110111e1f1\"],\n" +
+                "\t\t\t\t\"bltf0c00caa0f0000f0\": [\"bltcea22222d2222222\", \"blt333f33cb3e33ffde\"]\n" +
+                "\t\t\t}\n" +
+                "\t\t},\n" +
+                "\t\t\"message\": \"Invitation message\"\n" +
+                "\t}\n" +
                 "}";
-        Response<ResponseBody> response = organization.removeUsers(organizationUid, reqBody).execute();
+        JSONObject body = theJSONBody(_body);
+        Response<ResponseBody> response = organization.removeUsers(organizationUid, body).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("notice"));
@@ -236,9 +260,8 @@ import java.util.HashMap;
         String strBody = "{\n" +
                 "\t\"transfer_to\": \"ishaileshmishra@gmail.com\"\n" +
                 "}";
-        Response<ResponseBody> response = organization.transferOwnership(orgUid, strBody)
-                .execute();
-
+        JSONObject body = theJSONBody(strBody);
+        Response<ResponseBody> response = organization.transferOwnership(orgUid, body).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("notice"));
@@ -253,15 +276,8 @@ import java.util.HashMap;
 
     @Test
     void testStacks() throws IOException {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("limit", 2);
-        query.put("skip", 2);
-        query.put("asc", true);
-        query.put("desc", true);
-        query.put("include_count", true);
-        query.put("typeahead", "contentstack");
         String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.getStacks(orgUid, query).execute();
+        Response<ResponseBody> response = organization.stacks(orgUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("stacks"));
@@ -277,7 +293,7 @@ import java.util.HashMap;
     @Test
     void testLogDetails() throws IOException {
         String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.getLogsDetails(orgUid).execute();
+        Response<ResponseBody> response = organization.logsDetails(orgUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("logs"));
@@ -293,7 +309,7 @@ import java.util.HashMap;
     @Test
     void testLogsItem() throws IOException {
         String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.getLogsItem(orgUid, "fake@loguid").execute();
+        Response<ResponseBody> response = organization.logItem(orgUid, "fake@loguid").execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("stacks"));
@@ -311,7 +327,7 @@ import java.util.HashMap;
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
         Response<ResponseBody> response =
-                organization.getAllInvitations(organizationUid).execute();
+                organization.allInvitations(organizationUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("shares"));
@@ -329,13 +345,10 @@ import java.util.HashMap;
     void testAllInvitationWithQuery() {
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
-
-       // Java Code
-        Call<ResponseBody> response = organization.getAllInvitations(organizationUid);
-
-
+        // Java Code
+        Call<ResponseBody> response = organization.allInvitations(organizationUid);
         // Android Code
-        organization.getAllInvitations(organizationUid).enqueue(new Callback<ResponseBody>() {
+        organization.allInvitations(organizationUid).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 // This is android thing

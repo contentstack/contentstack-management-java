@@ -1,11 +1,16 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.Util;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
+import java.io.File;
 import java.util.HashMap;
 
 
@@ -71,6 +76,14 @@ public class Webhook {
         this.params.remove(key);
     }
 
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
+
     /**
      * The Get audit log request is used to retrieve the audit log of a stack.
      * <p>
@@ -128,6 +141,7 @@ public class Webhook {
      * @return Call
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
+        this.headers.put(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
         return this.service.create(this.headers, requestBody);
     }
 
@@ -159,6 +173,8 @@ public class Webhook {
      *
      * @param webhookUid
      *         The unique ID of the webhook of which you want to retrieve the details.
+     * @param requestBody
+     *         the request body @JSONObject
      * @return Call
      */
     public Call<ResponseBody> update(@NotNull String webhookUid, JSONObject requestBody) {
@@ -184,10 +200,12 @@ public class Webhook {
      * The Export a Webhook request exports an existing webhook. The exported webhook data is saved in a downloadable
      * JSON file.
      *
+     * @param webhookUid
+     *         The unique ID of the webhook of which you want to retrieve the details.
      * @return Call
      */
-    public Call<ResponseBody> export() {
-        return this.service.export(this.headers);
+    public Call<ResponseBody> export(@NotNull String webhookUid) {
+        return this.service.export(this.headers, webhookUid);
     }
 
 
@@ -199,11 +217,18 @@ public class Webhook {
      * parameter named webhook under form-data. Select the input type as <b>File</b> and select the JSON file of the
      * webhook that you want to import.
      *
+     * @param fileName
+     *         the file name
+     * @param jsonPath
+     *         jsonPath like example /Users/shaileshmishra/Downloads/thejson.json
      * @return Call
      */
-    //:TODO
-    public Call<ResponseBody> importWebhook() {
-        return this.service.importExisting(this.headers);
+    public Call<ResponseBody> importWebhook(@NotNull String fileName, @NotNull String jsonPath) {
+        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+        MultipartBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("webhook", fileName, RequestBody.create(mediaType, new File(jsonPath))).build();
+        this.headers.put(Util.CONTENT_TYPE, Util.MULTIPART);
+        return this.service.imports(this.headers, body);
     }
 
 
@@ -260,7 +285,7 @@ public class Webhook {
      * @return Call
      */
     public Call<ResponseBody> getExecutions(@NotNull String webhookUid) {
-        return this.service.getExecutions(this.headers, webhookUid);
+        return this.service.getExecutions(this.headers, webhookUid, this.params);
     }
 
     /**

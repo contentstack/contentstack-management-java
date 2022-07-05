@@ -2,7 +2,6 @@ package com.contentstack.cms.stack;
 
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -20,6 +19,7 @@ import java.util.Map;
 public class Entry {
 
     protected final HashMap<String, Object> headers;
+    protected final HashMap<String, Object> params;
     protected final EntryService service;
     // Enter the unique ID of the content type of which you wish to retrieve the
     // details.
@@ -32,7 +32,52 @@ public class Entry {
         this.headers = new HashMap<>();
         this.headers.put("Content-Type", "application/json");
         this.headers.putAll(stackHeaders);
+        this.params = new HashMap<>();
         this.service = instance.create(EntryService.class);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
     }
 
     /**
@@ -47,16 +92,19 @@ public class Entry {
      * make use of the include_publish_details parameter and set its value to <b>true</b>. This query will return the
      * publishing details of the entry in every environment along with the version number that is published in each of
      * the environment.
+     * <p>
+     * {@link #addParam(String, Object)} You can add Query params, the Query parameters are:
+     * <br>
+     * <pre>
+     *     -locale={language_code}
+     *     -include_workflow={boolean_value}
+     *     -include_publish_details={boolean_value}
+     * </pre>
      *
-     * @param queryParameter
-     *         The Query parameters are:
-     *         <br>
-     *         -locale={language_code}<br> -include_workflow={boolean_value}<br>
-     *         -include_publish_details={boolean_value}
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> fetch(Map<String, Object> queryParameter) {
-        return this.service.fetch(this.headers, this.contentTypeUid, queryParameter);
+    public Call<ResponseBody> fetch() {
+        return this.service.fetch(this.headers, this.contentTypeUid, this.params);
     }
 
     /**
@@ -67,14 +115,13 @@ public class Entry {
      * wish to retrieve the entries.
      *
      * @param entryUid
-     *         Entry uid
-     * @param queryParameter
-     *         The Query Parameters are <br> - version={version_number} <br> - locale={language_code} <br> -
-     *         include_workflow={boolean_value} <br> - include_publish_details={boolean_value}
+     *         Entry uid {@link #addParam(String, Object)} The Query Parameters are <br> - version={version_number} <br>
+     *         - locale={language_code} <br> - include_workflow={boolean_value} <br> -
+     *         include_publish_details={boolean_value}
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> single(@NotNull String entryUid, Map<String, Object> queryParameter) {
-        return this.service.single(headers, this.contentTypeUid, entryUid, queryParameter);
+    public Call<ResponseBody> single(@NotNull String entryUid) {
+        return this.service.single(headers, this.contentTypeUid, entryUid, this.params);
     }
 
     /**
@@ -95,17 +142,13 @@ public class Entry {
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">...</a>)</b>
      *
      * @param requestBody
-     *         Provide the Json Body to create entry: ```json { "entry": { "title": "example", "url": "/example" } }
-     *         ```
-     * @param queryParameter
-     *         locale: Enter the code of the language in which you want your entry to be localized in.
+     *         Provide the Json Body to create entry: ```json { "entry": { "title": "example", "url": "/example" } } ```
+     *         {@link #addParam(String, Object)} locale: Enter the code of the language in which you want your entry to
+     *         be localized in.
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> create(JSONObject requestBody, @Nullable Map<String, Object> queryParameter) {
-        if (queryParameter == null) {
-            queryParameter = new HashMap<>();
-        }
-        return this.service.create(this.headers, this.contentTypeUid, requestBody, queryParameter);
+    public Call<ResponseBody> create(JSONObject requestBody) {
+        return this.service.create(this.headers, this.contentTypeUid, requestBody, this.params);
     }
 
     /**
@@ -120,15 +163,14 @@ public class Entry {
      * </p>
      *
      * @param entryUId
-     *         The entry you want to update
-     * @param queryParameter
-     *         locale: Enter the code of the language in which you want your entry to be localized in.
+     *         The entry you want to update {@link #addParam(String, Object)} locale: Enter the code of the language in
+     *         which you want your entry to be localized in.
      * @param requestBody
      *         request body for the entry update ```json{ "entry": { "title": "example", "url": "/example" } }```
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> update(String entryUId, JSONObject requestBody, Map<String, Object> queryParameter) {
-        return this.service.update(this.headers, this.contentTypeUid, entryUId, requestBody, queryParameter);
+    public Call<ResponseBody> update(String entryUId, JSONObject requestBody) {
+        return this.service.update(this.headers, this.contentTypeUid, entryUId, requestBody, this.params);
     }
 
     /**
@@ -162,11 +204,9 @@ public class Entry {
      *         <b>UPDATE Operation: </b> The UPDATE operation allows you
      *         to update data at a specific index. This operation works for both singular fields and fields marked
      *         "Multiple". """ { "entry": { "multiple_number": { "UPDATE": { "index": 0, "data": 1 } } } } """
-     *         <p>
-     *         Add, SUB and Delete will be executed like the above. for more details [read
-     *         here](https://www.contentstack.com/docs/developers/apis/content-management-api/#atomic-updates-to-entries)
-     *         </p>
-     * @return the retrofit2.Call
+     *         <br>
+     *         Add, SUB and Delete will be executed like the above. for more details
+     * @return Call
      */
     public Call<ResponseBody> atomicOperation(String entryUId, JSONObject requestBody) {
         return this.service.atomicOperations(this.headers, this.contentTypeUid, entryUId, requestBody);
@@ -183,9 +223,7 @@ public class Entry {
      * </p>
      *
      * @param entryUId
-     *         The entry you want to update
-     * @param queryParameter
-     *         - Delete specific localized entry: <br>
+     *         The entry you want to update {@link #addParam(String, Object)} - Delete specific localized entry: <br>
      *         <p>
      *         For this request, you need to only specify the locale code of the language in the locale query parameter.
      *         If the locale parameter is not been specified, by default, the master language entry will be deleted.
@@ -199,8 +237,8 @@ public class Entry {
      * <p>
      * [Read More]{https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry}
      */
-    public Call<ResponseBody> delete(String entryUId, Map<String, Object> queryParameter) {
-        return this.service.delete(this.headers, this.contentTypeUid, entryUId, new JSONObject(), queryParameter);
+    public Call<ResponseBody> delete(String entryUId) {
+        return this.service.delete(this.headers, this.contentTypeUid, entryUId, new JSONObject(), this.params);
     }
 
     /**
@@ -214,9 +252,7 @@ public class Entry {
      * </p>
      *
      * @param entryUId
-     *         The entry you want to update
-     * @param queryParameter
-     *         - Delete specific localized entry: <br>
+     *         The entry you want to update {@link #addParam(String, Object)} - Delete specific localized entry: <br>
      *         <p>
      *         For this request, you need to only specify the locale code of the language in the locale query parameter.
      *         If the locale parameter is not been specified, by default, the master language entry will be deleted.
@@ -234,10 +270,12 @@ public class Entry {
      *         locales key as follows ``` { "entry": { "locales": ["hi-in", "mr-in", "es"] } } ```
      * @return the retrofit2.Call
      * <p>
-     * [Read More]{https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry}
+     * Read more about <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">Delete
+     * Entry</a>
      */
-    public Call<ResponseBody> delete(String entryUId, JSONObject requestBody, Map<String, Object> queryParameter) {
-        return this.service.delete(this.headers, this.contentTypeUid, entryUId, requestBody, queryParameter);
+    public Call<ResponseBody> delete(String entryUId, JSONObject requestBody) {
+        return this.service.delete(this.headers, this.contentTypeUid, entryUId, requestBody, this.params);
     }
 
     /**
@@ -273,16 +311,17 @@ public class Entry {
      *
      * @param entryUId::
      *         The UID of the entry to which you want to assign a specific version name.
-     * @param queryParameter
-     *         - skip(optional) Enter the number of version details to be skipped. - limit(optional): Enter the maximum
-     *         number of version details to be returned. - named(optional): Set to ‘true’ if you want to retrieve only
-     *         the named versions of your entry. - include_count(optional): Enter 'true' to get the total count of the
-     *         entry version details. - locale(optional): Enter the code of the language of which the entries need to be
-     *         included. Only the version details of entries published in this locale will be displayed
+     *         <p>
+     *         {@link #addParam(String, Object)} - skip(optional) Enter the number of version details to be skipped. -
+     *         limit(optional): Enter the maximum number of version details to be returned. - named(optional): Set to
+     *         ‘true’ if you want to retrieve only the named versions of your entry. - include_count(optional): Enter
+     *         'true' to get the total count of the entry version details. - locale(optional): Enter the code of the
+     *         language of which the entries need to be included. Only the version details of entries published in this
+     *         locale will be displayed
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> detailOfAllVersion(String entryUId, Map<String, Object> queryParameter) {
-        return this.service.detailOfAllVersion(this.headers, this.contentTypeUid, entryUId, queryParameter);
+    public Call<ResponseBody> detailOfAllVersion(String entryUId) {
+        return this.service.detailOfAllVersion(this.headers, this.contentTypeUid, entryUId, this.params);
     }
 
     /**
@@ -305,27 +344,26 @@ public class Entry {
      *
      * @param entryUId
      *         The entry uid
-     * @param queryParameter
-     *         The Query parameter: Locale: Enter the code of the language of which the entries need to be included.
-     *         Only the entries published in this locale will be displayed
+     *         <p>
+     *         {@link #addParam(String, Object)} The Query parameter: Locale: Enter the code of the language of which
+     *         the entries need to be included. Only the entries published in this locale will be displayed
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> getReference(String entryUId, Map<String, Object> queryParameter) {
-        return this.service.reference(this.headers, this.contentTypeUid, entryUId, queryParameter);
+    public Call<ResponseBody> getReference(String entryUId) {
+        return this.service.reference(this.headers, this.contentTypeUid, entryUId, this.params);
     }
 
     /**
      * The Get languages of an entry call returns the details of all the languages that an entry exists in
      *
      * @param entryUId
-     *         the entry uid
-     * @param queryParameter
-     *         the query parameter The Query parameter: Locale: Enter the code of the language of which the entries need
-     *         to be included. Only the entries published in this locale will be displayed
+     *         the entry uid {@link #addParam(String, Object)} the query parameter The Query parameter: Locale: Enter
+     *         the code of the language of which the entries need to be included. Only the entries published in this
+     *         locale will be displayed
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> getLanguage(String entryUId, Map<String, Object> queryParameter) {
-        return this.service.language(this.headers, this.contentTypeUid, entryUId, queryParameter);
+    public Call<ResponseBody> getLanguage(String entryUId) {
+        return this.service.language(this.headers, this.contentTypeUid, entryUId, this.params);
     }
 
     /**
@@ -358,7 +396,7 @@ public class Entry {
      *         The entry uid
      * @param localeCode
      *         Enter the code of the language to localize the entry of that particular language
-     * @return the retrofit2.Call
+     * @return Call
      */
     public Call<ResponseBody> unLocalize(@NotNull String entryUId, @NotNull String localeCode) {
         return this.service.unLocalize(this.headers, this.contentTypeUid, entryUId, localeCode);
@@ -369,13 +407,12 @@ public class Entry {
      * file.
      *
      * @param entryUId
-     *         The entry uid
-     * @param queryParameter
-     *         Locale: Enter the code of the language to localize the entry of that particular language
-     * @return the retrofit2.Call
+     *         The entry uid {@link #addParam(String, Object)} Locale: Enter the code of the language to localize the
+     *         entry of that particular language
+     * @return Call
      */
-    public Call<ResponseBody> export(@NotNull String entryUId, Map<String, Object> queryParameter) {
-        return this.service.export(this.headers, this.contentTypeUid, entryUId, queryParameter);
+    public Call<ResponseBody> export(@NotNull String entryUId) {
+        return this.service.export(this.headers, this.contentTypeUid, entryUId, this.params);
     }
 
     /**
@@ -386,17 +423,17 @@ public class Entry {
      * The Import an existing entry call will import a new version of an existing entry. You can create multiple
      * versions of an entry.
      * </p>
+     * <p>
+     * {@link #addParam(String, Object)} the query parameter
+     * <br>
+     * locale (optional): Enter the code of the language to localize the entry of that particular
+     * <br>
+     * overwrite (optional): Select 'true' to replace an existing entry with the imported entry file. language
      *
-     * @param queryParameter
-     *         the query parameter
-     *         <br>
-     *         locale (optional): Enter the code of the language to localize the entry of that particular
-     *         <br>
-     *         overwrite (optional): Select 'true' to replace an existing entry with the imported entry file. language
-     * @return the retrofit2.Call
+     * @return Call
      */
-    public Call<ResponseBody> imports(Map<String, Object> queryParameter) {
-        return this.service.imports(this.headers, this.contentTypeUid, queryParameter);
+    public Call<ResponseBody> imports() {
+        return this.service.imports(this.headers, this.contentTypeUid, this.params);
     }
 
     /**
@@ -404,17 +441,15 @@ public class Entry {
      * versions of an entry.
      *
      * @param entryUId
-     *         the entry uid
-     * @param queryParameter
-     *         the query parameter
+     *         the entry uid {@link #addParam(String, Object)} the query parameter
      *         <br>
      *         locale (optional): Enter the code of the language to localize the entry of that particular
      *         <br>
      *         overwrite (optional): Select 'true' to replace an existing entry with the imported entry file. language
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> importExisting(@NotNull String entryUId, Map<String, Object> queryParameter) {
-        return this.service.importExisting(this.headers, this.contentTypeUid, entryUId, queryParameter);
+    public Call<ResponseBody> importExisting(@NotNull String entryUId) {
+        return this.service.importExisting(this.headers, this.contentTypeUid, entryUId, this.params);
     }
 
     /**
@@ -454,16 +489,14 @@ public class Entry {
      * the same time.
      *
      * @param requestBody
-     *         The request body in JSONObject format
-     * @param queryParameter
-     *         Below are the query parameters <br> - approvals:Set this to <b>true</b> to publish the entries that do
-     *         not require an approval to be published.<br> skip_workflow_stage_check - Set this to <b>true</b> to
-     *         publish the entries that are at a workflow stage where they satisfy the applied to publish rules.
+     *         The request body in JSONObject format {@link #addParam(String, Object)} Below are the query parameters
+     *         <br> - approvals:Set this to <b>true</b> to publish the entries that do not require an approval to be
+     *         published.<br> skip_workflow_stage_check - Set this to <b>true</b> to publish the entries that are at a
+     *         workflow stage where they satisfy the applied to publish rules.
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> publishWithReference(@NotNull JSONObject requestBody,
-                                                   Map<String, Object> queryParameter) {
-        return this.service.publishWithReference(this.headers, requestBody, queryParameter);
+    public Call<ResponseBody> publishWithReference(@NotNull JSONObject requestBody) {
+        return this.service.publishWithReference(this.headers, requestBody, this.params);
     }
 
     /**

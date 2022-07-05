@@ -20,13 +20,59 @@ import java.util.Map;
 public class Environment {
 
     protected final Map<String, Object> headers;
+    protected final Map<String, Object> params;
     protected final EnvironmentService service;
 
     protected Environment(Retrofit instance, @NotNull Map<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
+        this.params = new HashMap<>();
         this.headers.put("Content-Type", "application/json");
         this.headers.putAll(stackHeaders);
         this.service = instance.create(EnvironmentService.class);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
     }
 
     /**
@@ -34,16 +80,18 @@ public class Environment {
      * <p>
      * You can add queries to extend the functionality of this API call. Under the URI Parameters section, insert a
      * parameter named query and provide a query in JSON format as the value.
+     * <p>
+     * {@link #addParam(String, Object)} Use addParams to include Query parameters
+     * <p>
+     * <b>Example: </b>
+     * <pre>
+     * environment.addParams("someKey", "someValue').fetch()
+     * </pre>
      *
-     * @param query
-     *         query parameter
      * @return Call
      */
-    public Call<ResponseBody> fetch(Map<String, Object> query) {
-        if (query == null) {
-            query = new HashMap<>();
-        }
-        return this.service.fetch(this.headers, query);
+    public Call<ResponseBody> fetch() {
+        return this.service.fetch(this.headers, this.params);
     }
 
 

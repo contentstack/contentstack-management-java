@@ -8,13 +8,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +26,22 @@ class ExtensionUnitTest {
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Extensions extension;
+    protected static JSONObject body;
+
+    static String requestBody = "{\n" +
+            "\t\"extension\": {\n" +
+            "\t\t\"tags\": [\n" +
+            "\t\t\t\"tag1\",\n" +
+            "\t\t\t\"tag2\"\n" +
+            "\t\t],\n" +
+            "\t\t\"data_type\": \"text\",\n" +
+            "\t\t\"title\": \"Old Extension\",\n" +
+            "\t\t\"src\": \"Enter either the source code (use 'srcdoc') or the external hosting link of the extension depending on the hosting method you selected.\",\n" +
+            "\t\t\"multiple\": false,\n" +
+            "\t\t\"config\": \"{}\",\n" +
+            "\t\t\"type\": \"field\"\n" +
+            "\t}\n" +
+            "}";
 
     @BeforeAll
     static void setup() {
@@ -34,13 +50,19 @@ class ExtensionUnitTest {
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
         extension = stack.extensions();
+
+        try {
+            JSONParser parser = new JSONParser();
+            body = (JSONObject) parser.parse(requestBody);
+        } catch (ParseException e) {
+            System.out.println(e.getLocalizedMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void extensionGetAll() {
-        Map<String, Object> body = new HashMap<>();
-        body.put("keyForSomething", "valueForSomething");
-        Request request = extension.getAll("\"type\":\"field\"", false).request();
+        Request request = extension.fetch("\"type\":\"field\"", false).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -56,11 +78,10 @@ class ExtensionUnitTest {
 
     @Test
     void getSingleWithUid() {
-        Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("include_count", false);
-        queryParam.put("include_branch", false);
-        Request request = extension.get(_uid, queryParam).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        extension.addParam("include_count", false);
+        extension.addParam("include_branch", false);
+        Request request = extension.single(_uid).request();
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -74,19 +95,7 @@ class ExtensionUnitTest {
 
     @Test
     void extensionUpdate() {
-        Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("include_count", false);
-        queryParam.put("include_branch", false);
-
-        JSONObject body = new JSONObject();
-        JSONObject innerBody = new JSONObject();
-        innerBody.put("tags", Arrays.asList("tag1", "tag2"));
-        innerBody.put("data_type", "text");
-        innerBody.put("title", "Old Extension");
-        innerBody.put("src", "Enter either the source code");
-        body.put("extension", innerBody);
-
-        Request request = extension.update(_uid, queryParam, body).request();
+        Request request = extension.update(_uid, body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -103,7 +112,7 @@ class ExtensionUnitTest {
     @Test
     void extensionDelete() {
         Request request = extension.delete(_uid).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -115,17 +124,17 @@ class ExtensionUnitTest {
 
     @Test
     void extensionGetSingle() {
-        Map<String, Object> theQuery = new HashMap<>();
-        theQuery.put("include_branch", false);
-        Request request = extension.get(_uid, theQuery).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+
+        extension.addParam("include_branch", false);
+        Request request = extension.single(_uid).request();
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/" + _uid + "?include_branch=false",
+        Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/" + _uid + "?include_count=false&include_branch=false",
                 request.url().toString());
     }
 
@@ -143,9 +152,8 @@ class ExtensionUnitTest {
             }
         };
         params.put("DYNAMIC_PARAM_NAME", someDataBody);
-        Map<String, Object> param = new HashMap<>();
-        param.put("include_branch", false);
-        Request request = extension.uploadCustomField(params, param).request();
+        extension.addParam("include_branch", false);
+        Request request = extension.uploadCustomField(params).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
@@ -153,32 +161,24 @@ class ExtensionUnitTest {
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions?include_branch=false",
+        Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/extensions?include_count=false&include_branch=false",
                 request.url().toString());
     }
 
-    @Test
-    void updateTheExtension() {
-        JSONObject theQuery = new JSONObject();
-        JSONObject innerObject = new JSONObject();
-        innerObject.put("name", "Test");
-        innerObject.put("parent", Arrays.asList("label_uid0", "label_uid1"));
-        innerObject.put("content_types", new ArrayList().add("content_type_uid"));
-        theQuery.put("label", innerObject);
-        Map<String, Object> params = new HashMap<>();
-        params.put("include_something", "true");
-        Request request = extension.uploadCustomField(params, theQuery).request();
-        Assertions.assertEquals(2, request.headers().names().size());
-        Assertions.assertEquals("POST", request.method());
-        Assertions.assertNotNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
-        Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions", request.url().toString());
-    }
+//    @Test
+//    void updateTheExtension() {
+//        Request request = extension.uploadCustomField(body).request();
+//        Assertions.assertEquals(2, request.headers().names().size());
+//        Assertions.assertEquals("POST", request.method());
+//        Assertions.assertNotNull(request.body());
+//        Assertions.assertTrue(request.url().isHttps());
+//        Assertions.assertEquals("api.contentstack.io", request.url().host());
+//        Assertions.assertEquals(2, request.url().pathSegments().size());
+//        Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
+//        Assertions.assertNull(request.url().encodedQuery());
+//        Assertions.assertEquals("https://api.contentstack.io/v3/extensions", request.url().toString());
+//    }
 
     @Test
     void extensionDeleteAgain() {

@@ -75,6 +75,14 @@ public class AuditLog {
 
 
     /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
+
+
+    /**
      * The Get audit log request is used to retrieve the audit log of a stack.
      * <p>
      * You can apply queries to filter the results. Refer to the Queries section for more details.

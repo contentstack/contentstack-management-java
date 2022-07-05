@@ -26,14 +26,60 @@ import java.util.Map;
 public class Asset {
 
     protected final Map<String, Object> headers;
+    protected Map<String, Object> params;
     protected final AssetService service;
 
     protected Asset(Retrofit instance, @NotNull Map<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
         this.headers.put("Content-Type", "application/json");
         this.headers.putAll(stackHeaders);
+        params = new HashMap<>();
         this.service = instance.create(AssetService.class);
     }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
+
 
     /**
      * The Get all assets request returns comprehensive information on all assets available in a stack.
@@ -42,46 +88,46 @@ public class Asset {
      * parameter named query and provide a query in JSON format as the value.
      * <p>
      * To learn more about the queries, refer to the <b>Queries</b> section of the Content Delivery API doc.
+     * <p>
+     * #addParam query params for the assets older(optional) Enter either the UID of a specific folder to get the assets
+     * of that folder, or enter ‘cs_root’ to get all assets and their folder details from the root folder.
      *
-     * @param query
-     *         query params for the assets older(optional) Enter either the UID of a specific folder to get the assets
-     *         of that folder, or enter ‘cs_root’ to get all assets and their folder details from the root folder.
+     * <p>
+     * include_folders(optional) Set this parameter to ‘true’ to include the details of the created folders along with
+     * the details of the assets.
      *
-     *         <p>
-     *         include_folders(optional) Set this parameter to ‘true’ to include the details of the created folders
-     *         along with the details of the assets.
+     * <p>
+     * environment(optional) Enter the name of the environment to retrieve the assets published on them. You can enter
+     * multiple environments.
      *
-     *         <p>
-     *         environment(optional) Enter the name of the environment to retrieve the assets published on them. You can
-     *         enter multiple environments.
+     * <p>
+     * version(optional) Specify the version number of the asset that you want to retrieve. If the version is not
+     * specified, the details of the latest version will be retrieved.
+     * <p>
+     * include_publish_details(optional) Enter 'true' to include the publishing details of the entry.
      *
-     *         <p>
-     *         version(optional) Specify the version number of the asset that you want to retrieve. If the version is
-     *         not specified, the details of the latest version will be retrieved.
-     *         <p>
-     *         include_publish_details(optional) Enter 'true' to include the publishing details of the entry.
+     * <p>
+     * include_count(optional) Set this parameter to 'true' to include the total number of assets available in your
+     * stack in the response body.
      *
-     *         <p>
-     *         include_count(optional) Set this parameter to 'true' to include the total number of assets available in
-     *         your stack in the response body.
+     * <p>
+     * relative_urls(optional) Set this to 'true' to display the relative URL of the asset.
      *
-     *         <p>
-     *         relative_urls(optional) Set this to 'true' to display the relative URL of the asset.
+     * <p>
+     * asc_field_uid(optional) Enter the unique ID of the field for sorting the assets in ascending order by that field.
+     * Example:created_at
      *
-     *         <p>
-     *         asc_field_uid(optional) Enter the unique ID of the field for sorting the assets in ascending order by
-     *         that field. Example:created_at
+     * <p>
+     * desc_field_uid(optional) Enter the unique ID of the field for sorting the assets in descending order by that
+     * field.
      *
-     *         <p>
-     *         desc_field_uid(optional) Enter the unique ID of the field for sorting the assets in descending order by
-     *         that field.
+     * <p>
+     * Example:file_size
      *
-     *         <p>
-     *         Example:file_size
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> fetch(Map<String, Object> query) {
-        return this.service.fetch(this.headers, query);
+    public Call<ResponseBody> fetch() {
+        return this.service.fetch(this.headers, this.params);
     }
 
     /**
@@ -94,13 +140,11 @@ public class Asset {
      *
      * @param uid
      *         asset uid
-     * @param queryParams
-     *         query parameters for the assets
      * @return the retrofit2.Call
      */
     public Call<ResponseBody> single(
-            @NotNull String uid, Map<String, Object> queryParams) {
-        return this.service.single(this.headers, uid, queryParams);
+            @NotNull String uid) {
+        return this.service.single(this.headers, uid, this.params);
     }
 
     /**
@@ -129,10 +173,9 @@ public class Asset {
      */
     public Call<ResponseBody> subfolder(
             @NotNull String folderUid, Boolean isIncludeFolders) {
-        HashMap<String, Object> queryMap = new HashMap<>();
-        queryMap.put("folder", folderUid);
-        queryMap.put("include_folders", isIncludeFolders);
-        return this.service.subfolder(this.headers, queryMap);
+        this.params.put("folder", folderUid);
+        this.params.put("include_folders", isIncludeFolders);
+        return this.service.subfolder(this.headers, this.params);
     }
 
     /**
@@ -156,8 +199,7 @@ public class Asset {
      *         <p>
      *         asset[description] (optional) Enter a description for your uploaded asset.
      *         <p>
-     *         asset[tags] (optional) Assign a specific tag(s) to your uploaded asset.
-     * @param query
+     *         asset[tags] (optional) Assign a specific tag(s) to your uploaded asset. {@link #addParam(String, Object)}
      *         The query parameter for the asset to upload
      *         <p>
      *         relative_urls(optional) Set this to 'true' to display the relative URL of the asset. Example:false
@@ -170,9 +212,9 @@ public class Asset {
      * @return the retrofit2.Call
      */
     public Call<ResponseBody> uploadAsset(
-            @NotNull String filePath, @NotNull RequestBody requestBody, Map<String, Object> query) {
+            @NotNull String filePath, @NotNull RequestBody requestBody) {
         MultipartBody.Part assetPath = uploadFile(filePath);
-        return this.service.uploadAsset(this.headers, assetPath, requestBody, query);
+        return this.service.uploadAsset(this.headers, assetPath, requestBody, this.params);
     }
 
     private MultipartBody.Part uploadFile(@NotNull String filePath) {
@@ -198,12 +240,10 @@ public class Asset {
      *
      * @param uid
      *         asset uid
-     * @param query
-     *         query parameter
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> replace(String uid, Map<String, Object> query) {
-        return this.service.replace(this.headers, uid, query);
+    public Call<ResponseBody> replace(String uid) {
+        return this.service.replace(this.headers, uid, this.params);
     }
 
     /**
@@ -211,11 +251,9 @@ public class Asset {
      * constant irrespective of any subsequent updates to the asset.
      * <p>
      * In the request body, you need to pass the permanent URL in the following format:
-     * <p>
-     * { "asset": { "permanent_url": "https://api.contentstack.io/v3...{stack_api_key}/{asset_uid}/{unique_identifier}"
-     * <p>
-     * } }
-     * </p>
+     * <pre>
+     * { "asset": { "permanent_url": "https://api.contentstack.io/v3...{stack_api_key}/{asset_uid}/{unique_identifier}"} }
+     * </pre>
      *
      * @param uid
      *         asset uid
@@ -236,7 +274,7 @@ public class Asset {
      * of the asset, pass the environment query parameter with the environment name.
      * <p>
      * Note: Before executing this API request, ensure to create a permanent URL for the asset you want to download.
-     * <p>
+     * <br>
      *
      * @param uid
      *         the uid of the asset you want to download the asset.
@@ -271,15 +309,16 @@ public class Asset {
 
     /**
      * Version naming allows you to assign a name to a version of an asset for easy identification. For more
-     * information, refer the [Name Asset
-     * Versions](https://www.contentstack.com/docs/content-managers/asset-versions/name-asset-versions) documentation
+     * information, Read more about <a
+     * href="https://www.contentstack.com/docs/content-managers/asset-versions/name-asset-versions">Asset</a>
+     *
      * <p>
      * <b>Set version name for asset</b>
      * <p>
      * The Set Version Name for Asset request allows you to assign a name to a specific version of an asset.
      * <p>
      * In the request body, you need to specify the version name to be assigned to the asset version.
-     * <p>
+     * <br>
      *
      * @param assetUid
      *         asset uid
@@ -305,14 +344,12 @@ public class Asset {
      * a name; and the count of the versions.
      *
      * @param assetUid
-     *         asset uid
-     * @param query
-     *         request parameters are below - skip(optional):Enter the number of version details to be skipped.
-     *         Example:2
+     *         the asset uid #addParam request parameters are below - skip(optional):Enter the number of version details
+     *         to be skipped. Example:2
      *         <p>
      *         - limit(optional): Enter the maximum number of version details to be returned. Example:5
      *         <p>
-     *         - named(optional):Set to ‘true’ if you want to retrieve only the named versions of your asset.
+     *         - named(optional):Set to <b>true</b> if you want to retrieve only the named versions of your asset.
      *         Example:false
      *         <p>
      *         - include_count(optional):Enter 'true' to get the total count of the asset version details.
@@ -320,11 +357,8 @@ public class Asset {
      * @return the retrofit2.Call
      */
     public Call<ResponseBody> getVersionNameDetails(
-            @NotNull String assetUid, @Nullable Map<String, Object> query) {
-        if (query == null) {
-            query = new HashMap<>();
-        }
-        return this.service.getVersionNameDetails(this.headers, assetUid, query);
+            @NotNull String assetUid) {
+        return this.service.getVersionNameDetails(this.headers, assetUid, this.params);
     }
 
     /**
@@ -442,56 +476,43 @@ public class Asset {
      * When executing the API call to search for a subfolder, you need to provide the parent folder UID.
      *
      * @param folderUid
-     *         folder uid
-     * @param query
-     *         query parameters - include_path(optional) Set this parameter to ‘true’ to retrieve the complete path of
-     *         the folder. The path will be displayed as an array of objects which includes the names and UIDs of each
-     *         parent folder.
+     *         folder uid provide query using <p>#addParam query parameters - include_path(optional) Set this parameter
+     *         to ‘true’ to retrieve the complete path of the folder. The path will be displayed as an array of objects
+     *         which includes the names and UIDs of each parent folder.
      *         <p>
      *         Example:false
      * @return the retrofit2.Call
      */
     public Call<ResponseBody> singleFolder(
-            @NotNull String folderUid, @Nullable Map<String, Object> query) {
-        if (query == null) {
-            query = new HashMap<>();
-        }
-        return this.service.singleFolder(this.headers, folderUid, query);
+            @NotNull String folderUid) {
+        return this.service.singleFolder(this.headers, folderUid, this.params);
     }
 
     /**
      * The Get a single folder by name call retrieves a specific asset folder based on the name provided.
+     * <p>
+     * $addParam query parameters - query(required) Enter the is_dir and name parameters to find the asset folder by
+     * name.
+     * <p>
+     * Example:{"is_dir": true, "name": "folder_name"}
+     * <br>
      *
-     * @param query
-     *         query parameters - query(required) Enter the is_dir and name parameters to find the asset folder by
-     *         name.
-     *         <p>
-     *         Example:{"is_dir": true, "name": "folder_name"}
-     *         <p>
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> getSingleFolderByName(
-            @Nullable Map<String, Object> query) {
-        if (query == null) {
-            query = new HashMap<>();
-        }
-        return this.service.singleFolderByName(this.headers, query);
+    public Call<ResponseBody> getSingleFolderByName() {
+        return this.service.singleFolderByName(this.headers, this.params);
     }
 
     /**
      * Get subfolders of a parent folder request retrieves the details of only the subfolders of a specific asset
      * folder. This request does not retrieve asset files.
+     * <p>
+     * #addParam query parameters
      *
-     * @param query
-     *         query parameters
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> getSubfolder(
-            @Nullable Map<String, Object> query) {
-        if (query == null) {
-            query = new HashMap<>();
-        }
-        return this.service.getSubfolder(this.headers, query);
+    public Call<ResponseBody> getSubfolder() {
+        return this.service.getSubfolder(this.headers, this.params);
     }
 
     /**
@@ -514,8 +535,7 @@ public class Asset {
      *         JSONObject request body
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> createFolder(
-            @Nullable JSONObject requestBody) {
+    public Call<ResponseBody> createFolder(@Nullable JSONObject requestBody) {
         return this.service.createFolder(this.headers, requestBody);
     }
 
@@ -540,8 +560,7 @@ public class Asset {
      *         JSONObject request body { "asset": { "name": "Demo" } }
      * @return the retrofit2.Call
      */
-    public Call<ResponseBody> updateFolder(@NotNull String folderUid,
-                                           @Nullable JSONObject requestBody) {
+    public Call<ResponseBody> updateFolder(@NotNull String folderUid, @Nullable JSONObject requestBody) {
         return this.service.updateFolder(this.headers, folderUid, requestBody);
     }
 

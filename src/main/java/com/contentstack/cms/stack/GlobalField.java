@@ -31,6 +31,7 @@ public class GlobalField {
      */
     protected final GlobalFieldService service;
     protected HashMap<String, Object> headers;
+    protected HashMap<String, Object> params;
 
     /**
      * Instantiates a new Global field.
@@ -43,7 +44,52 @@ public class GlobalField {
     protected GlobalField(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
         this.headers.putAll(stackHeaders);
+        this.params = new HashMap<>();
         this.service = retrofit.create(GlobalFieldService.class);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
     }
 
     /**

@@ -4,7 +4,6 @@ import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.MediaType;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
@@ -16,8 +15,6 @@ import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,36 +39,19 @@ class ExtensionAPITest {
 
     @Test
     void extensionGetAll() throws IOException {
-        Map<String, Object> body = new HashMap<>();
-        body.put("keyForSomething", "valueForSomething");
-        Response<ResponseBody> response = extension.getAll("\"type\":\"field\"", false).execute();
+        Response<ResponseBody> response = extension.fetch("\"type\":\"field\"", false).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void getSingleWithUid() throws IOException {
-        Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("include_count", false);
-        queryParam.put("include_branch", false);
-        Response<ResponseBody> response = extension.get(_uid, queryParam).execute();
+        Response<ResponseBody> response = extension.single(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void extensionUpdate() throws IOException {
-        Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("include_count", false);
-        queryParam.put("include_branch", false);
-
-        JSONObject body = new JSONObject();
-        JSONObject innerBody = new JSONObject();
-        innerBody.put("tags", Arrays.asList("tag1", "tag2"));
-        innerBody.put("data_type", "text");
-        innerBody.put("title", "Old Extension");
-        innerBody.put("src", "Enter either the source code");
-        body.put("extension", innerBody);
-
-        Response<ResponseBody> response = extension.update(_uid, queryParam, body).execute();
+        Response<ResponseBody> response = extension.update(_uid, new JSONObject()).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -83,9 +63,7 @@ class ExtensionAPITest {
 
     @Test
     void extensionGetSingle() throws IOException {
-        Map<String, Object> theQuery = new HashMap<>();
-        theQuery.put("include_branch", false);
-        Response<ResponseBody> response = extension.get(_uid, theQuery).execute();
+        Response<ResponseBody> response = extension.single(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -105,22 +83,14 @@ class ExtensionAPITest {
         params.put("DYNAMIC_PARAM_NAME", someDataBody);
         Map<String, Object> param = new HashMap<>();
         param.put("include_branch", false);
-        Response<ResponseBody> response = extension.uploadCustomField(params, param).execute();
+        Response<ResponseBody> response = extension.uploadCustomField(params).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void updateTheExtension() throws IOException {
-        JSONObject theQuery = new JSONObject();
-        JSONObject innerObject = new JSONObject();
-        innerObject.put("name", "Test");
-        innerObject.put("parent", Arrays.asList("label_uid0", "label_uid1"));
-        innerObject.put("content_types", new ArrayList().add("content_type_uid"));
-        theQuery.put("label", innerObject);
-        Map<String, Object> params = new HashMap<>();
-        params.put("include_something", "true");
-        Response<ResponseBody> response = extension.uploadCustomField(params, theQuery).execute();
-        Assertions.assertTrue(response.isSuccessful());
+        //Response<ResponseBody> response = extension.uploadCustomField(new JSONObject()).execute();
+        //Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test

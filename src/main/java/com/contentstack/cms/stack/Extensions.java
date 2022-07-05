@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Extensions let you create custom fields and custom widgets that lets you customize Contentstack's default UI and
+ * Extensions let you create custom fields and custom widgets that lets you customize Contentstack default UI and
  * behavior. Read more about Extensions.
  * <p>
  * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
@@ -43,9 +43,47 @@ public class Extensions {
         return this;
     }
 
-    public Extensions addParam(@NotNull String key, @NotNull String value) {
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
-        return this;
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
     }
 
     /**
@@ -59,7 +97,7 @@ public class Extensions {
      *         <b>Example:false</b>
      * @return Call
      */
-    public Call<ResponseBody> getAll(@NotNull String query, boolean isIncludeBranch) {
+    public Call<ResponseBody> fetch(@NotNull String query, boolean isIncludeBranch) {
         return this.service.getAll(this.headers, query, isIncludeBranch);
     }
 
@@ -67,46 +105,16 @@ public class Extensions {
     /**
      * @param customFieldUid
      *         Enter the UID of the custom field of which you want to retrieve the details.
-     * @param queryParam
-     *         Set this to 'true' to include the '_branch' top-level key in the response. This key states the unique ID
-     *         of the branch where the concerned Contentstack module resides.
+     *         <br><br>
+     *         {@link #addParam(String, Object)} Set this to 'true' to include the '_branch' top-level key in the
+     *         response. This key states the unique ID of the branch where the concerned Contentstack module resides.
      *         <p>
      *         <b>Example:false</b>
      * @return Call
      */
-    public Call<ResponseBody> get(@NotNull String customFieldUid, Map<String, Object> queryParam) {
-        if (queryParam == null) {
-            queryParam = new HashMap<>();
-            this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
-        }
-        return this.service.getSingle(this.headers, customFieldUid, queryParam);
-    }
-
-    /**
-     * The Upload a custom field request is used to upload a custom field to Contentstack.
-     * <p>
-     * - extension[upload]: Select the HTML file of the custom field that you want to upload<br> - extension[title]:
-     * Enter the title of the custom field that you want to upload<br> - extension[data_type]: Enter the data type for
-     * the input field of the custom field<br> - extension[tags]: Enter the tags that you want to assign to the custom
-     * field<br> - extension[multiple]: Enter ‘true’ if you want your custom field to store multiple values<br> -
-     * extension[type]: Enter type as ‘field’, since this is a custom field extension.<br>
-     *
-     * @param queryParam
-     *         Set this to 'true' to include the '_branch' top-level key in the response. This key states the unique ID
-     *         of the branch where the concerned Contentstack module resides.
-     *         <p>
-     *         <b>Example:false</b>
-     * @param body the request body
-     *
-     * @return Call
-     */
-    public Call<ResponseBody> uploadCustomField(Map<String, RequestBody> body, Map<String, Object> queryParam) {
-        //TODO: Could be improved:
-        if (queryParam == null) {
-            queryParam = new HashMap<>();
-        }
+    public Call<ResponseBody> single(@NotNull String customFieldUid) {
         this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
-        return this.service.uploadCustomField(this.headers, body, queryParam);
+        return this.service.getSingle(this.headers, customFieldUid, this.params);
     }
 
     /**
@@ -117,51 +125,66 @@ public class Extensions {
      * the input field of the custom field<br> - extension[tags]: Enter the tags that you want to assign to the custom
      * field<br> - extension[multiple]: Enter ‘true’ if you want your custom field to store multiple values<br> -
      * extension[type]: Enter type as ‘field’, since this is a custom field extension.<br>
+     * <br><br>
+     * <p>
+     * {@link #addParam(String, Object)} Set this to 'true' to include the '_branch' top-level key in the response. This
+     * key states the unique ID of the branch where the concerned Contentstack module resides.
+     * <p>
+     * <b>Example:false</b>
      *
-     * @param queryParam
-     *         Set this to 'true' to include the '_branch' top-level key in the response. This key states the unique ID
-     *         of the branch where the concerned Contentstack module resides.
-     *         <p>
-     *         <b>Example:false</b>
      * @param body
      *         the request body
      * @return Call
      */
-    public Call<ResponseBody> uploadCustomField(Map<String, Object> queryParam, JSONObject body) {
-        if (queryParam != null) {
-            queryParam = new HashMap<>();
-            if (!this.headers.containsKey(Util.CONTENT_TYPE)) {
-                this.headers.put(Util.CONTENT_TYPE, "application/json");
-            }
-        }
-        return this.service.uploadCustomField(this.headers, queryParam, body);
+    public Call<ResponseBody> uploadCustomField(Map<String, RequestBody> body) {
+        this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
+        return this.service.uploadCustomField(this.headers, body, this.params);
+    }
+
+    /**
+     * The Upload a custom field request is used to upload a custom field to Contentstack.
+     * <p>
+     * - extension[upload]: Select the HTML file of the custom field that you want to upload<br> - extension[title]:
+     * Enter the title of the custom field that you want to upload<br> - extension[data_type]: Enter the data type for
+     * the input field of the custom field<br> - extension[tags]: Enter the tags that you want to assign to the custom
+     * field<br> - extension[multiple]: Enter ‘true’ if you want your custom field to store multiple values<br> -
+     * extension[type]: Enter type as ‘field’, since this is a custom field extension.<br>
+     * <p>
+     * {@link #addParam(String, Object)} Set this to 'true' to include the '_branch' top-level key in the response. This
+     * key states the unique ID of the branch where the concerned Contentstack module resides.
+     * <p>
+     * <b>Example:false</b>
+     *
+     * @param body
+     *         the request body
+     * @return Call
+     */
+    public Call<ResponseBody> uploadCustomField(JSONObject body) {
+        this.headers.put(Util.CONTENT_TYPE, "application/json");
+        return this.service.uploadCustomField(this.headers, this.params, body);
     }
 
 
     /**
      * @param customFieldUid
-     *         The UID of the custom field that you want to update
-     * @param queryParam
-     *         Set this to 'true' to include the '_branch' top-level key in the response. This key states the unique ID
-     *         of the branch where the concerned Contentstack module resides.
+     *         The UID of the custom field that you want to update {@link #addParam(String, Object)} Set this to 'true'
+     *         to include the '_branch' top-level key in the response. This key states the unique ID of the branch where
+     *         the concerned Contentstack module resides.
      *         <br>
      *         <b>Example:false</b>
      * @param body
      *         JSON requestBody
      * @return Call
      */
-    public Call<ResponseBody> update(@NotNull String customFieldUid, Map<String, Object> queryParam, JSONObject body) {
+    public Call<ResponseBody> update(@NotNull String customFieldUid, JSONObject body) {
         if (body == null) {
             try {
                 throw new CMSRuntimeException("body can not be Null");
             } catch (CMSRuntimeException e) {
-                throw new RuntimeException(e.getLocalizedMessage());
+                throw new IllegalArgumentException(e.getLocalizedMessage());
             }
         }
-        if (queryParam == null) {
-            queryParam = new HashMap<>();
-        }
-        return this.service.update(this.headers, customFieldUid, queryParam, body);
+        return this.service.update(this.headers, customFieldUid, this.params, body);
     }
 
 

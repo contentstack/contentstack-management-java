@@ -38,33 +38,28 @@ class EntryFieldUnitTests {
 
     @Test
     void testEntryFetchIsHttps() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
-        queryParams.put("include_workflow", false);
-        queryParams.put("include_publish_details", true);
-        Request resp = entryInstance.fetch(queryParams).request();
+        entryInstance.addParam("locale", "en-us");
+        entryInstance.addParam("include_workflow", false);
+        entryInstance.addParam("include_publish_details", true);
+        Request resp = entryInstance.fetch().request();
         Assertions.assertTrue(resp.isHttps());
     }
 
     @Test
     void testEntryFetchQuery() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
-        queryParams.put("include_workflow", false);
-        queryParams.put("include_publish_details", true);
-        Request resp = entryInstance.fetch(queryParams).request();
+        Request resp = entryInstance.fetch().request();
         Assertions.assertEquals("include_publish_details=true&locale=en-us&include_workflow=false", resp.url().query());
     }
 
     @Test
     void testEntryFetchEncodedPath() {
-        Request resp = entryInstance.fetch(new HashMap<>()).request();
+        Request resp = entryInstance.fetch().request();
         Assertions.assertEquals("/v3/content_types/product/entries", resp.url().encodedPath());
     }
 
     @Test
     void testEntryFetchHeaders() {
-        Request resp = entryInstance.fetch(new HashMap<>()).request();
+        Request resp = entryInstance.fetch().request();
         Assertions.assertEquals(3, resp.headers().size());
     }
 
@@ -74,13 +69,13 @@ class EntryFieldUnitTests {
         matcher.add("api_key");
         matcher.add("authorization");
         matcher.add("Content-Type");
-        Request resp = entryInstance.fetch(new HashMap<>()).request();
+        Request resp = entryInstance.fetch().request();
         Assertions.assertTrue(resp.headers().names().containsAll(matcher));
     }
 
     @Test
     void testEntryFetchMethod() {
-        Request resp = entryInstance.fetch(new HashMap<>()).request();
+        Request resp = entryInstance.fetch().request();
         Assertions.assertEquals("GET", resp.method());
     }
 
@@ -88,23 +83,22 @@ class EntryFieldUnitTests {
 
     @Test
     void testSingleEntryQuery() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
-        queryParams.put("include_workflow", false);
-        queryParams.put("include_publish_details", true);
-        Request resp = entryInstance.single(API_KEY, queryParams).request();
+        entryInstance.addParam("locale", "en-us");
+        entryInstance.addParam("include_workflow", false);
+        entryInstance.addParam("include_publish_details", true);
+        Request resp = entryInstance.single(API_KEY).request();
         Assertions.assertEquals("include_publish_details=true&locale=en-us&include_workflow=false", resp.url().query());
     }
 
     @Test
     void testSingleEntryEncodedPath() {
-        Request resp = entryInstance.single(API_KEY, new HashMap<>()).request();
+        Request resp = entryInstance.single(API_KEY).request();
         Assertions.assertEquals("/v3/content_types/product/entries/" + API_KEY, resp.url().encodedPath());
     }
 
     @Test
     void testSingleEntryHeaders() {
-        Request resp = entryInstance.single(API_KEY, new HashMap<>()).request();
+        Request resp = entryInstance.single(API_KEY).request();
         Assertions.assertEquals(3, resp.headers().size());
     }
 
@@ -114,19 +108,19 @@ class EntryFieldUnitTests {
         matcher.add("api_key");
         matcher.add("authorization");
         matcher.add("Content-Type");
-        Request resp = entryInstance.single(API_KEY, new HashMap<>()).request();
+        Request resp = entryInstance.single(API_KEY).request();
         Assertions.assertTrue(resp.headers().names().containsAll(matcher));
     }
 
     @Test
     void testSingleEntryMethod() {
-        Request resp = entryInstance.single(API_KEY, new HashMap<>()).request();
+        Request resp = entryInstance.single(API_KEY).request();
         Assertions.assertEquals("GET", resp.method());
     }
 
     @Test
     void testSingleEntryCompleteUrl() {
-        Request resp = entryInstance.single(API_KEY, new HashMap<>()).request();
+        Request resp = entryInstance.single(API_KEY).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + API_KEY,
                 resp.url().toString());
     }
@@ -135,58 +129,46 @@ class EntryFieldUnitTests {
 
     @Test
     void testCreateEntryQueryRespNull() {
-        Request resp = entryInstance.create(new JSONObject(), null).request();
+        Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertNull(resp.url().query());
     }
 
     @Test
     void testCreateEntryQuery() {
-        Map<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
-        Request resp = entryInstance.create(new JSONObject(), query).request();
+        Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertEquals("locale=en-us", resp.url().query());
     }
 
     @Test
     void testCreateEntryEncodedPath() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
-        Request resp = entryInstance.create(new JSONObject(), queryParams).request();
+        Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertEquals("/v3/content_types/product/entries", resp.url().encodedPath());
     }
 
     @Test
     void testCreateEntryHeaders() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
-        Request resp = entryInstance.create(new JSONObject(), queryParams).request();
+        Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertEquals(2, resp.headers().size());
     }
 
     @Test
     void testCreateEntryHeaderNames() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
-        Request resp = entryInstance.create(new JSONObject(), queryParams).request();
+        Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertTrue(resp.headers().names().containsAll(matcher));
     }
 
     @Test
     void testCreateEntryMethod() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
-        Request resp = entryInstance.create(new JSONObject(), queryParams).request();
+        Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertEquals("POST", resp.method());
     }
 
     @Test
     void testCreateEntryCompleteUrl() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
-        Request resp = entryInstance.create(new JSONObject(), queryParams).request();
+        Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries?locale=en-us",
                 resp.url().toString());
     }
@@ -205,7 +187,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryMethod() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update("entryUid", new JSONObject(), queryParams).request();
+        Request resp = entryInstance.update("entryUid", new JSONObject()).request();
         Assertions.assertEquals("PUT", resp.method());
     }
 
@@ -213,7 +195,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryHeaderSize() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update("entryUid", new JSONObject(), queryParams).request();
+        Request resp = entryInstance.update("entryUid", new JSONObject()).request();
         Assertions.assertEquals(2, resp.headers().size());
     }
 
@@ -221,7 +203,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryHeaders() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update("entryUid", new JSONObject(), queryParams).request();
+        Request resp = entryInstance.update("entryUid", new JSONObject()).request();
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -233,7 +215,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryEncodedPath() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update(_uid, new JSONObject(), queryParams).request();
+        Request resp = entryInstance.update(_uid, new JSONObject()).request();
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid, resp.url().encodedPath());
     }
 
@@ -241,7 +223,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryHost() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update(_uid, new JSONObject(), queryParams).request();
+        Request resp = entryInstance.update(_uid, new JSONObject()).request();
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
     }
 
@@ -249,7 +231,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryQuery() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update(_uid, new JSONObject(), queryParams).request();
+        Request resp = entryInstance.update(_uid, new JSONObject()).request();
         Assertions.assertEquals("locale=en-us", resp.url().query());
     }
 
@@ -257,7 +239,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryRequestBody() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update(_uid, updateRequestBody(), queryParams).request();
+        Request resp = entryInstance.update(_uid, updateRequestBody()).request();
         Assertions.assertNotNull(resp.body());
     }
 
@@ -265,7 +247,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryCompleteUrl() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update(_uid, new JSONObject(), queryParams).request();
+        Request resp = entryInstance.update(_uid, new JSONObject()).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/content_types/product/entries/" + _uid + "?locale=en-us",
                 resp.url().toString());
@@ -396,7 +378,7 @@ class EntryFieldUnitTests {
         HashMap<String, Object> query = new HashMap<>();
         query.put("locale", "en-us");
         query.put("delete_all_localized", true);
-        Request resp = entryInstance.delete(_uid, deleteRequestBody(), query).request();
+        Request resp = entryInstance.delete(_uid).request();
         Assertions.assertEquals("delete_all_localized=true&locale=en-us", resp.url().query());
     }
 
@@ -460,7 +442,7 @@ class EntryFieldUnitTests {
         HashMap<String, Object> query = new HashMap<>();
         query.put("locale", "en-us");
         query.put("delete_all_localized", true);
-        Request resp = entryInstance.delete(_uid, deleteRequestBody(), query).request();
+        Request resp = entryInstance.delete(_uid).request();
         Assertions.assertEquals("delete_all_localized=true&locale=en-us", resp.url().query());
     }
 
@@ -475,7 +457,7 @@ class EntryFieldUnitTests {
         HashMap<String, Object> query = new HashMap<>();
         query.put("locale", "en-us");
         query.put("delete_all_localized", true);
-        Request resp = entryInstance.delete(_uid, deleteRequestBody(), query).request();
+        Request resp = entryInstance.delete(_uid).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
                 + "?delete_all_localized=true&locale=en-us", resp.url().toString());
     }
@@ -504,7 +486,7 @@ class EntryFieldUnitTests {
         query.put("named", false);
         query.put("include_count", false);
         query.put("locale", "en-us");
-        Request resp = entryInstance.detailOfAllVersion(_uid, query).request();
+        Request resp = entryInstance.detailOfAllVersion(_uid).request();
 
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(3, resp.headers().size());
@@ -526,7 +508,7 @@ class EntryFieldUnitTests {
 
         HashMap<String, Object> query = new HashMap<>();
         query.put("locale", "en-us");
-        Request resp = entryInstance.getReference(_uid, query).request();
+        Request resp = entryInstance.getReference(_uid).request();
 
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(3, resp.headers().size());
@@ -549,7 +531,7 @@ class EntryFieldUnitTests {
 
         HashMap<String, Object> query = new HashMap<>();
         query.put("locale", "en-us");
-        Request resp = entryInstance.getLanguage(_uid, query).request();
+        Request resp = entryInstance.getLanguage(_uid).request();
 
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(3, resp.headers().size());
@@ -624,7 +606,7 @@ class EntryFieldUnitTests {
         // HashMap<String, Object> mapRequest = new HashMap<>();
         HashMap<String, Object> query = new HashMap<>();
         query.put("locale", "en-us");
-        Request resp = entryInstance.export(_uid, query).request();
+        Request resp = entryInstance.export(_uid).request();
 
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(3, resp.headers().size());
@@ -648,7 +630,7 @@ class EntryFieldUnitTests {
         HashMap<String, Object> query = new HashMap<>();
         query.put("locale", "en-us");
         query.put("overwrite", false);
-        Request resp = entryInstance.imports(query).request();
+        Request resp = entryInstance.imports().request();
 
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
@@ -671,7 +653,7 @@ class EntryFieldUnitTests {
         HashMap<String, Object> query = new HashMap<>();
         query.put("locale", "en-us");
         query.put("overwrite", false);
-        Request resp = entryInstance.importExisting(_uid, query).request();
+        Request resp = entryInstance.importExisting(_uid).request();
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
@@ -734,8 +716,7 @@ class EntryFieldUnitTests {
         query.put("skip_workflow_stage_check", true);
 
         // Publish With Reference
-        Request resp = entryInstance.publishWithReference(requestBody, query).request(); // sending request body and
-                                                                                         // query parameter
+        Request resp = entryInstance.publishWithReference(requestBody).request(); // sending request body and
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();

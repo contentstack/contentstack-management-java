@@ -2,7 +2,6 @@ package com.contentstack.cms.stack;
 
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -22,6 +21,7 @@ public class ContentType {
 
     protected final ContentTypeService service;
     protected final Map<String, Object> headers;
+    protected Map<String, Object> params;
     protected String contentTypeUid;
     protected Retrofit instance;
     protected String apiKey;
@@ -38,6 +38,7 @@ public class ContentType {
         this.instance = instance;
         this.headers = new HashMap<>();
         this.headers.putAll(stackHeaders);
+        this.params = new HashMap<>();
         this.service = instance.create(ContentTypeService.class);
     }
 
@@ -51,8 +52,7 @@ public class ContentType {
      * @param contentTypeUid
      *         the contentTypeUid
      */
-    public ContentType(
-            @NotNull Retrofit instance, @NotNull Map<String, Object> headers, String contentTypeUid) {
+    public ContentType(@NotNull Retrofit instance, @NotNull Map<String, Object> headers, String contentTypeUid) {
         this.instance = instance;
         this.headers = new HashMap<>();
         this.contentTypeUid = contentTypeUid;
@@ -67,6 +67,51 @@ public class ContentType {
         return new Entry(this.instance, this.headers, this.contentTypeUid);
     }
 
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addHeader(@NotNull String key, @NotNull Object value) {
+        this.headers.put(key, value);
+    }
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     * @param value
+     *         header value for the request
+     */
+    public void addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+    }
+
+
+    /**
+     * Sets header for the request
+     *
+     * @param key
+     *         header key for the request
+     */
+    public void removeParam(@NotNull String key) {
+        this.params.remove(key);
+    }
+
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
+
     /**
      * <b>Fetch call.</b>
      * The Get all content types call returns comprehensive information of all the content types available in a
@@ -76,19 +121,16 @@ public class ContentType {
      * <p>
      * You need to use either the stack's Management Token or the user Authtoken (any one is mandatory), along with the
      * stack API key, to make a valid Content Management API request.
-     * <p>
-     * Read more about authentication.
-     * https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types
+     * <br>
+     * <br>
+     * Read more about <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types">Content
+     * Types</a>
      *
-     * @param queryParam
-     *         the query param
      * @return the call
      */
-    public Call<ResponseBody> fetch(@Nullable Map<String, Object> queryParam) {
-        if (queryParam == null) {
-            queryParam = new HashMap<>();
-        }
-        return service.fetch(this.headers, queryParam);
+    public Call<ResponseBody> fetch() {
+        return service.fetch(this.headers, this.params);
     }
 
     /**
@@ -107,15 +149,14 @@ public class ContentType {
      * <p>
      * The schema of the content type returned will depend on the provided version. If no version is specified, you will
      * get the latest version of the content type.
-     * <p>
+     * <br>
      *
      * @param contentTypeUid
      *         the content type uid of which you want to retrieve the details. The UID is generated based on the title
      *         of the content type. The unique ID of a content type is unique across a stack.
      *         <p>
      *         <b>Example: </b>product
-     * @param queryParam
-     *         Query Parameters <b>include_global_field_schema</b>
+     *         #addParam queryParam Query Parameters <b>include_global_field_schema</b>
      *         <p>
      *         the query param Tip: If any of your content types contains a Global field, and you wish to fetch the
      *         content schema of the Global field, then you need to pass the include_global_field_schema:true parameter.
@@ -127,12 +168,8 @@ public class ContentType {
      *         will get the latest version of the content type.
      * @return retrofit2.Call
      */
-    public Call<ResponseBody> single(@NotNull String contentTypeUid,
-                                     Map<String, Object> queryParam) {
-        return service.single(
-                this.headers,
-                contentTypeUid,
-                queryParam);
+    public Call<ResponseBody> single(@NotNull String contentTypeUid) {
+        return service.single(this.headers, contentTypeUid, this.params);
     }
 
     /**
@@ -187,8 +224,7 @@ public class ContentType {
      *         the request body
      * @return {@link Call} call
      */
-    public Call<ResponseBody> update(@NotNull String contentTypeUid,
-                                     JSONObject requestBody) {
+    public Call<ResponseBody> update(@NotNull String contentTypeUid, JSONObject requestBody) {
         return service.update(contentTypeUid, this.headers, requestBody);
     }
 
@@ -209,8 +245,7 @@ public class ContentType {
      *         the request body JSONBody
      * @return the call
      */
-    public Call<ResponseBody> fieldVisibilityRule(@NotNull String contentTypeUid,
-                                                  JSONObject requestBody) {
+    public Call<ResponseBody> fieldVisibilityRule(@NotNull String contentTypeUid, JSONObject requestBody) {
         return service.visibilityRule(contentTypeUid, this.headers, requestBody);
     }
 
@@ -247,8 +282,7 @@ public class ContentType {
      *         the is force
      * @return the call
      */
-    public Call<ResponseBody> delete(@NotNull String contentTypeUid,
-                                     @NotNull Boolean isForce) {
+    public Call<ResponseBody> delete(@NotNull String contentTypeUid, @NotNull Boolean isForce) {
         return service.delete(contentTypeUid, this.headers, isForce);
     }
 

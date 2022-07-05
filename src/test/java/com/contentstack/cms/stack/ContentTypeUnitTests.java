@@ -5,7 +5,6 @@ import com.contentstack.cms.Utils;
 import com.contentstack.cms.core.Util;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
-import org.apiguardian.api.API;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -37,10 +36,9 @@ class ContentTypeUnitTests {
 
     @Test
     void testFetch() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request request = contentType.fetch(mapQuery).request();
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
+        Request request = contentType.fetch().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -55,46 +53,37 @@ class ContentTypeUnitTests {
 
     @Test
     void testGetAllContentTypesIncludeCount() {
-        Map<String, Object> query = new HashMap<>();
-        query.put("include_count", true);
-        query.put("include_global_field_schema", true);
-        Request response = contentType.fetch(query).request();
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
+        Request response = contentType.fetch().request();
         Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_count"));
     }
 
     @Test
     void testGetAllContentTypesIncludeQuery() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.fetch(mapQuery).request();
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
+        Request response = contentType.fetch().request();
         Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
     }
 
     @Test
     void testGetAllContentTypesEncodedPath() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.fetch(mapQuery).request();
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
+        Request response = contentType.fetch().request();
         Assertions.assertEquals("/v3/content_types", response.url().encodedPath());
     }
 
     @Test
     void testGetAllContentTypesEncodedUrl() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.fetch(mapQuery).request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals("include_count=true&include_global_field_schema=true", response.url().encodedQuery());
     }
 
     @Test
     void testGetAllContentTypesUrl() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.fetch(mapQuery).request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
                 response.url().toString());
@@ -102,46 +91,31 @@ class ContentTypeUnitTests {
 
     @Test
     void testGetAllContentTypesAuth() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.fetch(mapQuery).request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals(managementToken, response.header("authorization"));
     }
 
     @Test
     void testGetSingleQueryIncludeGlobalFieldSchema() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Request response = contentType.single(contentTypeUid).request();
         Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
     }
 
     @Test
     void testGetSingleEncodedPath() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Request response = contentType.single(contentTypeUid).request();
         Assertions.assertEquals("/v3/content_types/product", response.url().encodedPath());
     }
 
     @Test
     void testGetSingleEncodedQuery() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Request response = contentType.single(contentTypeUid).request();
         Assertions.assertEquals("include_count=true&include_global_field_schema=true", response.url().encodedQuery());
     }
 
     @Test
     void testGetSingleCompleteUrl() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Request response = contentType.single(contentTypeUid).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/content_types/product?include_count=true&include_global_field_schema=true",
                 response.url().toString());
@@ -149,30 +123,20 @@ class ContentTypeUnitTests {
 
     @Test
     void testGetSingleMethod() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Request response = contentType.single(contentTypeUid).request();
         Assertions.assertEquals("GET", response.method());
     }
 
     @Test
     void testGetSingleHeader() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Request response = contentType.single(contentTypeUid).request();
         Assertions.assertEquals(API_KEY, response.header("api_key"));
     }
 
     @Test
     void testGetSingleAuthorization() {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
-        Request response = contentType.single(contentTypeUid, mapQuery).request();
+        Request response = contentType.single(contentTypeUid).request();
         Assertions.assertEquals(managementToken, response.header("authorization"));
-
     }
 
     @Test
