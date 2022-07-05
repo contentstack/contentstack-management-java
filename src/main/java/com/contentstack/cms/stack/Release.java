@@ -75,6 +75,14 @@ public class Release {
         this.params.remove(key);
     }
 
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
+
     /**
      * The Get all Releases request retrieves a list of all Releases of a stack along with details of each Release.
      * <p>
@@ -150,6 +158,7 @@ public class Release {
      *
      * @param releaseUid
      *         The UID of the role that you want to retrieve
+     * @return ReleaseItem
      */
     public ReleaseItem item(@NotNull String releaseUid) {
         return new ReleaseItem(this.retrofit, this.headers, releaseUid);

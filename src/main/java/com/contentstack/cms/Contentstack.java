@@ -61,7 +61,7 @@ public class Contentstack {
      * Client client = new Client.Builder().build();
      * User userInstance = client.user();
      * </pre>
-     * <p>
+     * <br>
      *
      * @return User user
      */
@@ -100,7 +100,7 @@ public class Contentstack {
      * Contentstack client = new Contentstack.Builder().build();
      * Response login = client.login("emailId", "password");
      * </pre>
-     * <p>
+     * <br>
      *
      * @param emailId
      *         the email id
@@ -147,7 +147,7 @@ public class Contentstack {
      * Contentstack client = new Contentstack.Builder().build();
      * Response login = client.login("emailId", "password");
      * </pre>
-     * <p>
+     * <br>
      *
      * @param emailId
      *         the email id
@@ -244,7 +244,7 @@ public class Contentstack {
     public Organization organization() {
         if (this.authtoken == null)
             throw new IllegalStateException("Please Login to access user instance");
-        return new Organization(this.instance);
+        return new Organization(this.instance, this.authtoken);
     }
 
     /**
@@ -396,9 +396,11 @@ public class Contentstack {
         /**
          * Sets proxy. (Setting proxy to the OkHttpClient) Proxy proxy = new Proxy(Proxy.Type.HTTP, new
          * InetSocketAddress(proxyHost, proxyPort));
-         * <p>
-         * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433)); Contentstack contentstack =
-         * new Contentstack.Builder().setProxy(proxy).build();
+         * <br>
+         * <pre>
+         *         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
+         *         Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
+         *     </pre>
          *
          * @param proxy
          *         the proxy

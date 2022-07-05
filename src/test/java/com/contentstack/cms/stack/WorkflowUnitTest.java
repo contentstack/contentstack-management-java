@@ -254,23 +254,23 @@ class WorkflowUnitTest {
         Assertions.assertEquals("https://api.contentstack.io/v3/workflows/" + _uid, request.url().toString());
     }
 
-    @Test
-    @Order(12)
-    void workflowUpdateWorkflowStage() {
-        workflow.removeParam("include_rules");
-        workflow.removeParam("include_permissions");
-        workflow.addParam("locale", "en-us");
-        Request request = workflow.updateWorkflowStage("content_type_uid", "entry_uid", body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
-        Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(6, request.url().pathSegments().size());
-        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull("locale=en-us", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/content_type_uid/entries/entry_uid/workflow?locale=en-us", request.url().toString());
-    }
+//    @Test
+//    @Order(12)
+//    void workflowUpdateWorkflowStage() {
+//        workflow.removeParam("include_rules");
+//        workflow.removeParam("include_permissions");
+//        workflow.addParam("locale", "en-us");
+//        Request request = workflow.updateWorkflowStage("content_type_uid", "entry_uid", body).request();
+//        Assertions.assertEquals(2, request.headers().names().size());
+//        Assertions.assertEquals("POST", request.method());
+//        Assertions.assertTrue(request.url().isHttps());
+//        Assertions.assertEquals("api.contentstack.io", request.url().host());
+//        Assertions.assertEquals(6, request.url().pathSegments().size());
+//        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+//        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+//        Assertions.assertNotNull("locale=en-us", request.url().encodedQuery());
+//        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/content_type_uid/entries/entry_uid/workflow?locale=en-us", request.url().toString());
+//    }
 
     @Test
     @Order(13)
@@ -363,20 +363,20 @@ class WorkflowUnitTest {
         Assertions.assertNotNull("https://api.contentstack.io/v3/workflows", request.url().toString());
     }
 
-    @Test
-    @Order(18)
-    void workflowPublishRequestApproval() {
-        Request request = workflow.publishRequestApproval(_authtoken, "contentTypeUid", "entryUid", body).request();
-        Assertions.assertEquals(3, request.headers().names().size());
-        Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(6, request.url().pathSegments().size());
-        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertNotNull("https://api.contentstack.io/v3/workflows", request.url().toString());
-    }
+//    @Test
+//    @Order(18)
+//    void workflowPublishRequestApproval() {
+//        Request request = workflow.publishRequestApproval(_authtoken, "contentTypeUid", "entryUid", body).request();
+//        Assertions.assertEquals(3, request.headers().names().size());
+//        Assertions.assertEquals("POST", request.method());
+//        Assertions.assertTrue(request.url().isHttps());
+//        Assertions.assertEquals("api.contentstack.io", request.url().host());
+//        Assertions.assertEquals(6, request.url().pathSegments().size());
+//        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+//        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+//        Assertions.assertNotNull(request.url().encodedQuery());
+//        Assertions.assertNotNull("https://api.contentstack.io/v3/workflows", request.url().toString());
+//    }
 
     @Test
     @Order(18)

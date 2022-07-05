@@ -73,6 +73,14 @@ public class ReleaseItem {
         this.params.remove(key);
     }
 
+
+    /**
+     * To clear all the params
+     */
+    protected void clearParams() {
+        this.params.clear();
+    }
+
     /**
      * The <b>Get all items in a Release</b> request retrieves a list of all items (entries and assets) that are part of
      * a specific Release.
@@ -125,8 +133,8 @@ public class ReleaseItem {
      * <b>Note:</b> You need to use either the stack's Management Token or the user Authtoken  (anyone is
      * mandatory), along with the stack API key, to make a valid Content Management API request. Read more about
      * authentication
-     * <p>
-     * <p>
+     * <br>
+     * <br>
      * In case an un-localized entry in the release has been localized later, this request will update the entry to the
      * latest localized version. For example, if you add an un-localized entry to a release and later localize it to the
      * French (France) language, this API request will update the release with the localized French version of the

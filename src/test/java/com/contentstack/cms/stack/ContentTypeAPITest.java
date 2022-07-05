@@ -33,7 +33,7 @@ class ContentTypeAPITest {
         Stack stack = new Contentstack.Builder().build().stack(headers);
         // TODO: Setting ManagementToken more than once
         contentType = stack.contentType("contentTypeUid");
-        Response<ResponseBody> response = contentType.fetch(null).execute();
+        Response<ResponseBody> response = contentType.fetch().execute();
         assert response.body() != null;
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);
@@ -59,7 +59,7 @@ class ContentTypeAPITest {
         Map<String, Object> mapQuery = new HashMap<>();
         mapQuery.put("include_count", true);
         mapQuery.put("include_global_field_schema", true);
-        Response<ResponseBody> response = contentType.fetch(mapQuery).execute();
+        Response<ResponseBody> response = contentType.fetch().execute();
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);
             Assertions.assertTrue(jsonObject.has("content_types"));
@@ -77,7 +77,7 @@ class ContentTypeAPITest {
         Map<String, Object> mapQuery = new HashMap<>();
         mapQuery.put("version", 1);
         mapQuery.put("include_global_field_schema", true);
-        Response<ResponseBody> response = contentType.single(contentTypeUid, mapQuery).execute();
+        Response<ResponseBody> response = contentType.single(contentTypeUid).execute();
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);
             Assertions.assertTrue(jsonObject.has("content_type"));

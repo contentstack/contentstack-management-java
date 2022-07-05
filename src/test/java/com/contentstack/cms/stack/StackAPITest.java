@@ -14,8 +14,9 @@ import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
+
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
@@ -69,7 +70,8 @@ class StackAPITest {
         try {
             assert apiKey != null;
             assert organizationUid != null;
-            Response<ResponseBody> response = stackInstance.fetch(organizationUid).execute();
+            stackInstance.addHeader("organization_uid", organizationUid);
+            Response<ResponseBody> response = stackInstance.fetch().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -82,13 +84,14 @@ class StackAPITest {
     @Test
     void testFetchWithOptionalQueryParams() {
         try {
-            Map<String, Boolean> query = new HashMap<>();
-            query.put("include_collaborators", true);
-            query.put("include_stack_variables", false);
-            query.put("include_discrete_variables", true);
-            query.put("include_count", false);
+
+            stackInstance.addParam("include_collaborators", true);
+            stackInstance.addParam("include_stack_variables", false);
+            stackInstance.addParam("include_discrete_variables", true);
+            stackInstance.addParam("include_count", false);
             assert organizationUid != null;
-            Response<ResponseBody> response = stackInstance.fetch(organizationUid, query).execute();
+            stackInstance.addHeader("organization_uid", organizationUid);
+            Response<ResponseBody> response = stackInstance.fetch().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -101,14 +104,14 @@ class StackAPITest {
     @Test
     void testFetchWithOptionalOrgUidAndQueryParams() {
         try {
-            Map<String, Boolean> query = new HashMap<>();
-            query.put("include_collaborators", true);
-            query.put("include_stack_variables", false);
-            query.put("include_discrete_variables", true);
-            query.put("include_count", false);
+            stackInstance.addParam("include_collaborators", true);
+            stackInstance.addParam("include_stack_variables", false);
+            stackInstance.addParam("include_discrete_variables", true);
+            stackInstance.addParam("include_count", false);
             assert apiKey != null;
             assert organizationUid != null;
-            Response<ResponseBody> response = stackInstance.fetch(organizationUid, query).execute();
+            stackInstance.addHeader("organization_uid", organizationUid);
+            Response<ResponseBody> response = stackInstance.fetch().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -127,7 +130,6 @@ class StackAPITest {
             Contentstack client = new Contentstack.Builder().build();
             Response<ResponseBody> response = client.stack().create(organizationUid, requestBody).execute();
             if (response.isSuccessful()) {
-                log.info("Stack Created");
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -170,7 +172,7 @@ class StackAPITest {
                 String errMessage = error.getErrorMessage();
                 Assertions.assertEquals(109, errCode);
                 Assertions.assertEquals(
-                        "Sorry about that. Provided email is not a part of the organization.",
+                        "We can't find that Stack. Please try again.",
                         errMessage);
             }
         } catch (IOException e) {
@@ -209,7 +211,7 @@ class StackAPITest {
                             .request()
                             .url()
                             .query());
-            Assertions.assertEquals(4,
+            Assertions.assertEquals(6,
                     response.raw().request().headers().size());
 
         }
@@ -282,7 +284,7 @@ class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/share",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(5,
+                Assertions.assertEquals(6,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
@@ -304,7 +306,7 @@ class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/unshare",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(5,
+                Assertions.assertEquals(6,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
@@ -345,7 +347,7 @@ class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/users/roles",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(5,
+                Assertions.assertEquals(6,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {

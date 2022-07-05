@@ -5,6 +5,8 @@ import com.contentstack.cms.core.Util;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
@@ -14,7 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Tag("unit") class LabelUnitTest {
+@Tag("unit")
+class LabelUnitTest {
 
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
@@ -22,6 +25,20 @@ import java.util.Map;
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Label label;
+    protected static JSONObject body;
+
+
+    static String theJsonString = "{\n" +
+            "  \"label\": {\n" +
+            "    \"name\": \"Test\",\n" +
+            "    \"parent\": [\n" +
+            "      \"label_uid\"\n" +
+            "    ],\n" +
+            "    \"content_types\": [\n" +
+            "      \"content_type_uid\"\n" +
+            "    ]\n" +
+            "  }\n" +
+            "}";
 
     @BeforeAll
     static void setup() {
@@ -30,12 +47,20 @@ import java.util.Map;
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
         label = stack.label();
+
+        try {
+            JSONParser parser = new JSONParser();
+            body = (JSONObject) parser.parse(theJsonString);
+        } catch (ParseException e) {
+            System.out.println(e.getLocalizedMessage());
+            throw new RuntimeException(e);
+        }
     }
 
 
     @Test
     void getAllLabels() {
-        Request request = label.get().request();
+        Request request = label.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -48,10 +73,7 @@ import java.util.Map;
 
     @Test
     void getAllLabelsWithBody() {
-        Map<String, Object> jsonJson = new HashMap<>();
-        jsonJson.put("include_count", false);
-        jsonJson.put("include_branch", false);
-        Request request = label.get(jsonJson).request();
+        Request request = label.fetch().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -64,10 +86,7 @@ import java.util.Map;
 
     @Test
     void getAllLabelsWithBodyWithBranch() {
-        Map<String, Object> jsonJson = new HashMap<>();
-        jsonJson.put("include_count", false);
-        jsonJson.put("include_branch", false);
-        Request request = label.addBranch("main").get(jsonJson).request();
+        Request request = label.addBranch("main").fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -80,7 +99,7 @@ import java.util.Map;
 
     @Test
     void getLabel() {
-        Request request = label.get(_uid).request();
+        Request request = label.single(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -93,9 +112,8 @@ import java.util.Map;
 
     @Test
     void getLabelWithQuery() {
-        Map<String, Object> theQuery = new HashMap<>();
-        theQuery.put("include_branch", false);
-        Request request = label.get(_uid, theQuery).request();
+        label.addParam("include_branch", false);
+        Request request = label.single(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -108,17 +126,7 @@ import java.util.Map;
 
     @Test
     void addLabelPost() {
-        JSONObject theQuery = new JSONObject();
-
-        ArrayList list = new ArrayList();
-        list.add("label_uid");
-        JSONObject innerObject = new JSONObject();
-        innerObject.put("name", "Test");
-        innerObject.put("parent", list);
-        innerObject.put("content_types", new ArrayList().add("content_type_uid"));
-        theQuery.put("label", innerObject);
-
-        Request request = label.add(theQuery).request();
+        Request request = label.add(body).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
@@ -133,17 +141,7 @@ import java.util.Map;
 
     @Test
     void labelUpdate() {
-
-        JSONObject theQuery = new JSONObject();
-        ArrayList list = new ArrayList();
-        list.add("label_uid");
-        JSONObject innerObject = new JSONObject();
-        innerObject.put("name", "Test");
-        innerObject.put("parent", list);
-        innerObject.put("content_types", new ArrayList().add("content_type_uid"));
-        theQuery.put("label", innerObject);
-
-        Request request = label.update(_uid, theQuery).request();
+        Request request = label.update(_uid, body).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertNotNull(request.body());

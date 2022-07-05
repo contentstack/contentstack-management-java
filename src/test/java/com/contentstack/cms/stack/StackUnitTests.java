@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("unit") class StackUnitTests {
+@Tag("unit")
+class StackUnitTests {
 
     protected Stack stack;
     protected Dotenv env = Dotenv.load();
@@ -49,8 +51,9 @@ import java.util.Set;
 
     @Test
     void testSingleStackHeaders() {
+        stack.clearParams();
         Request request = stack.fetch().request();
-        Assertions.assertEquals(1, request.headers().size());
+        Assertions.assertEquals(2, request.headers().size());
         Assertions.assertEquals(stack.headers.get("api_key").toString(), request.headers("api_key").get(0));
     }
 
@@ -68,6 +71,7 @@ import java.util.Set;
 
     @Test
     void testSingleStackUrl() {
+        stack.clearParams();
         Request request = stack.fetch().request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks",
@@ -84,7 +88,8 @@ import java.util.Set;
     void testSingleStackWithOrgUid() {
         String orgId = env.get("organizationUid");
         assert orgId != null;
-        Request request = stack.fetch(orgId).request();
+        stack.addHeader("organization_uid", orgId);
+        Request request = stack.fetch().request();
         Assertions.assertEquals(2, request.headers().size());
     }
 
@@ -92,7 +97,8 @@ import java.util.Set;
     void testSingleStackWithHeaders() {
         String orgId = env.get("organizationUid");
         assert orgId != null;
-        Request request = stack.fetch(orgId).request();
+        stack.addHeader("organization_uid", orgId);
+        Request request = stack.fetch().request();
         Set<String> headers = request.headers().names();
         Assertions.assertEquals(2, headers.size());
     }
@@ -101,7 +107,8 @@ import java.util.Set;
     void testSingleStackWithHeadersNames() {
         String orgId = env.get("organizationUid");
         assert orgId != null;
-        Request request = stack.fetch(orgId).request();
+        stack.addHeader("organization_uid", orgId);
+        Request request = stack.fetch().request();
         String headerAPIKey = request.headers().name(0);
         String headerOrgKey = request.headers().name(1);
         Assertions.assertEquals("api_key", headerAPIKey);
@@ -111,13 +118,14 @@ import java.util.Set;
     @Test
     void testSingleStackWithQueryParams() {
         String orgId = env.get("organizationUid");
-        HashMap<String, Boolean> queryParams = new HashMap<>();
-        queryParams.put("include_collaborators", true);
-        queryParams.put("include_stack_variables", true);
-        queryParams.put("include_discrete_variables", true);
-        queryParams.put("include_count", true);
+        stack.addParam("include_collaborators", true);
+        stack.addParam("include_stack_variables", true);
+        stack.addParam("include_discrete_variables", true);
+        stack.addParam("include_count", true);
         assert orgId != null;
-        Request request = stack.fetch(orgId, queryParams).request();
+        stack.addHeader("organization_uid", orgId);
+        //stack.clearParams();
+        Request request = stack.fetch().request();
         Assertions.assertEquals(
                 "include_collaborators=true&include_discrete_variables=true&include_stack_variables=true&include_count=true",
                 request.url().encodedQuery());
@@ -126,10 +134,11 @@ import java.util.Set;
     @Test
     void testSingleStackWithQueryIncludeCount() {
         String orgId = env.get("organizationUid");
-        HashMap<String, Boolean> queryParams = new HashMap<>();
-        queryParams.put("include_count", true);
         assert orgId != null;
-        Request request = stack.fetch(orgId, queryParams).request();
+        stack.clearParams();
+        stack.addParam("include_count", true);
+        stack.addHeader("organization_uid", orgId);
+        Request request = stack.fetch().request();
         Assertions.assertEquals(
                 "include_count=true",
                 request.url().encodedQuery());
@@ -138,10 +147,11 @@ import java.util.Set;
     @Test
     void testSingleStackWithQueryIncludeCountAndHeaders() {
         String orgId = env.get("organizationUid");
-        HashMap<String, Boolean> queryParams = new HashMap<>();
-        queryParams.put("include_count", true);
+        stack.clearParams();
+        stack.addParam("include_count", true);
         assert orgId != null;
-        Request request = stack.fetch(orgId, queryParams).request();
+        stack.addHeader("organization_uid", orgId);
+        Request request = stack.fetch().request();
         Assertions.assertEquals(
                 "include_count=true",
                 request.url().encodedQuery());
@@ -540,6 +550,7 @@ import java.util.Set;
         String ownershipToken = env.get("ownershipToken");
         assert ownershipToken != null;
         assert userId != null;
+        stack.clearParams();
         Request request = stack.acceptOwnership(ownershipToken, userId).request();
         Assertions.assertEquals("GET", request.method());
         Assertions.assertEquals(443, request.url().port());
@@ -587,6 +598,7 @@ import java.util.Set;
         String ownershipToken = env.get("ownershipToken");
         assert ownershipToken != null;
         assert userId != null;
+        stack.clearParams();
         Request request = stack.acceptOwnership(ownershipToken, userId).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks/accept_ownership/" + ownershipToken + "?uid=" + userId

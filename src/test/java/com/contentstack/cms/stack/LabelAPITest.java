@@ -37,16 +37,13 @@ import java.util.Map;
 
     @Test
     void getAllLabels() throws IOException {
-        Response<ResponseBody> response = label.get().execute();
+        Response<ResponseBody> response = label.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void getAllLabelsWithBody() throws IOException {
-        Map<String, Object> jsonJson = new HashMap<>();
-        jsonJson.put("include_count", false);
-        jsonJson.put("include_branch", false);
-        Response<ResponseBody> response = label.get(jsonJson).execute();
+        Response<ResponseBody> response = label.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -55,22 +52,20 @@ import java.util.Map;
         Map<String, Object> jsonJson = new HashMap<>();
         jsonJson.put("include_count", false);
         jsonJson.put("include_branch", false);
-        Response<ResponseBody> response = label.addBranch("main").get(jsonJson).execute();
+        Response<ResponseBody> response = label.addBranch("main").fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void getLabel() throws IOException {
-        Response<ResponseBody> response = label.get(_uid).execute();
+        Response<ResponseBody> response = label.single(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
 
     }
 
     @Test
     void getLabelWithQuery() throws IOException {
-        Map<String, Object> theQuery = new HashMap<>();
-        theQuery.put("include_branch", false);
-        Response<ResponseBody> response = label.get(_uid, theQuery).execute();
+        Response<ResponseBody> response = label.single(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
