@@ -10,24 +10,24 @@ import java.util.Map;
 public interface ReleaseService {
 
     @GET("releases")
-    Call<ResponseBody> getReleases(
+    Call<ResponseBody> fetch(
             @HeaderMap Map<String, Object> headers, @QueryMap Map<String, Object> params);
 
     @GET("releases/{release_uid}")
-    Call<ResponseBody> getRelease(
+    Call<ResponseBody> single(
             @HeaderMap Map<String, Object> headers, @Path("release_uid") String releaseUid);
 
     @POST("releases")
-    Call<ResponseBody> createRelease(
+    Call<ResponseBody> create(
             @HeaderMap Map<String, Object> headers, @Body JSONObject body);
 
     @PUT("releases/{release_uid}")
-    Call<ResponseBody> updateRelease(
+    Call<ResponseBody> update(
             @HeaderMap Map<String, Object> headers, @Path("release_uid") String releaseUid,
             @Body JSONObject body);
 
     @DELETE("releases/{release_uid}")
-    Call<ResponseBody> deleteRelease(
+    Call<ResponseBody> delete(
             @HeaderMap Map<String, Object> headers, @Path("release_uid") String releaseUid);
 
     @GET("releases/{release_uid}/items")
@@ -63,6 +63,7 @@ public interface ReleaseService {
     @POST("releases/{release_uid}/clone")
     Call<ResponseBody> clone(
             @HeaderMap Map<String, Object> headers, @Path("release_uid") String releaseUid,
+            @QueryMap Map<String, Object> params,
             @Body JSONObject body);
 
 }

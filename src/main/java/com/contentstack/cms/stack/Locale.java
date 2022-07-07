@@ -9,16 +9,18 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
+/**
  * <b>Languages</b>
  * <br>
- * Contentstack has a sophisticated multilingual capability.
- *  It allows you to create and publish entries in any language.
- * This feature allows you to set up multilingual websites
- * and cater to a wide variety of audience by serving content in their local language(s).
+ * Contentstack has a sophisticated multilingual capability. It allows you to create and publish entries in any
+ * language. This feature allows you to set up multilingual websites and cater to a wide variety of audience by serving
+ * content in their local language(s).
  *
  * @author ishaileshmishra
  * @version 1.0.0
+ * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#languages">  Read more about
+ * Languages
+ * </a>
  * @since 2022-05-19
  */
 public class Locale {
@@ -60,9 +62,9 @@ public class Locale {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         query param key for the request
      * @param value
-     *         header value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -70,10 +72,10 @@ public class Locale {
 
 
     /**
-     * Sets header for the request
+     * Set header for the request
      *
      * @param key
-     *         header key for the request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -81,13 +83,16 @@ public class Locale {
 
 
     /**
-     * To clear all the params
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
     }
 
+
     /**
+     * <b>Get all languages</b>
+     * <br>
      * This call fetches the list of all languages (along with the language codes) available for a stack.
      * <p>
      * When executing the API call, under the <b>Header</b> section, you need to enter the authtoken that you receive
@@ -98,13 +103,21 @@ public class Locale {
      * <p>
      * To learn more about the queries, refer to the <b>Queries</b> section of the Content Delivery API doc.
      *
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetch() {
-        return localeService.locales(this.headers);
+        return localeService.locales(this.headers, this.params);
     }
 
     /**
+     * <b>Add a language</b>
+     * <br>
      * This call lets you add a new language to your stack. You can either add a supported language or a custom language
      * of your choice.
      * <p>
@@ -116,10 +129,16 @@ public class Locale {
      *
      * @param body
      *         the request body
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> addLocale(@NotNull JSONObject body) {
-        return localeService.addLocale(this.headers, body);
+    public Call<ResponseBody> create(@NotNull JSONObject body) {
+        return localeService.create(this.headers, body);
     }
 
     /**
@@ -129,11 +148,17 @@ public class Locale {
      * logging into your account.
      *
      * @param code
-     *         the language code
-     * @return the retrofit2.Call
+     *         The code of the language that you want to retrieve
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> getLocale(@NotNull String code) {
-        return localeService.getLocale(this.headers, code);
+    public Call<ResponseBody> single(@NotNull String code) {
+        return localeService.singel(this.headers, code, this.params);
     }
 
     /**
@@ -146,13 +171,20 @@ public class Locale {
      * In the 'Body' section, enter the updated details of your language name and fallback language in JSON format.
      *
      * @param code
-     *         the language code
+     *         The code of the language that you want to retrieve
      * @param body
      *         the request body
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-language">Update
+     * language
+     *
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> updateLocale(@NotNull String code, @NotNull JSONObject body) {
-        return localeService.updateLocale(this.headers, code, body);
+    public Call<ResponseBody> update(@NotNull String code, @NotNull JSONObject body) {
+        return localeService.update(this.headers, code, this.params, body);
     }
 
     /**
@@ -163,12 +195,19 @@ public class Locale {
      * <p>
      * Fallback Languages
      *
-     * @param localeCode
-     *         locale code you want to delete
+     * @param code
+     *         The code of the language that you want to retrieve
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-language">Delete
+     * language
+     *
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> deleteLocale(String localeCode) {
-        return localeService.deleteLocale(this.headers, localeCode);
+    public Call<ResponseBody> delete(String code) {
+        return localeService.delete(this.headers, code);
     }
 
     /**
@@ -182,10 +221,19 @@ public class Locale {
      *
      * @param body
      *         the request body
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#set-a-fallback-language">Set a
+     * fallback language
+     *
+     *
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> setFallbackLocale(@NotNull JSONObject body) {
-        return localeService.setFallbackLocale(this.headers, body);
+    public Call<ResponseBody> setFallback(@NotNull JSONObject body) {
+        return localeService.setFallback(this.headers, body);
     }
 
     /**
@@ -201,10 +249,15 @@ public class Locale {
      *         the locale uid
      * @param body
      *         the request body
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-fallback-language">Update
+     * fallback language
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
-    public Call<ResponseBody> updateFallbackLocale(@NotNull String localeUid, @NotNull JSONObject body) {
-        return localeService.updateFallbackLocale(this.headers, localeUid, body);
+    public Call<ResponseBody> updateFallback(@NotNull String localeUid, @NotNull JSONObject body) {
+        return localeService.updateFallback(this.headers, localeUid, body);
     }
 
 }

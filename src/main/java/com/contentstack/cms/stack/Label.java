@@ -7,7 +7,6 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Labels allow you to group a collection of content within a stack. Using labels you can group content types that need
@@ -50,9 +49,9 @@ public class Label {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         query param key for the request
      * @param value
-     *         header value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -60,10 +59,10 @@ public class Label {
 
 
     /**
-     * Sets header for the request
+     * Set header for the request
      *
      * @param key
-     *         header key for the request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -71,7 +70,7 @@ public class Label {
 
 
     /**
-     * To clear all the params
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
@@ -102,6 +101,12 @@ public class Label {
      * To learn more about the queries, refer to the Query section of the Content Delivery API doc.
      *
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-labels">Get all
+     * labels
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetch() {
         return this.service.get(this.headers, this.params);
@@ -114,6 +119,13 @@ public class Label {
      * @param labelUid
      *         Provide the unique ID of the label that you want to retrieve
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-label">Get a
+     * single label
+     *
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> single(@NotNull String labelUid) {
         return this.service.get(this.headers, labelUid, this.params);
@@ -133,8 +145,13 @@ public class Label {
      * @param requestBody
      *         JSONObject request body
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#add-label">Add label
+     *
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
-    public Call<ResponseBody> add(@NotNull JSONObject requestBody) {
+    public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
         return this.service.add(this.headers, requestBody);
     }
 
@@ -154,6 +171,13 @@ public class Label {
      * @param body
      *         the request body to update the {@link Label}
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-label">Update
+     * label
+     *
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> update(@NotNull String labelUid, @NotNull JSONObject body) {
         return this.service.update(this.headers, labelUid, body);
@@ -169,6 +193,13 @@ public class Label {
      * @param labelUid
      *         The unique ID of the label that you want to retrieve.
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-label">Delete
+     * label
+     *
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> delete(@NotNull String labelUid) {
         return this.service.delete(this.headers, labelUid);

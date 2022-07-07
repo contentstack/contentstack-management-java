@@ -12,12 +12,14 @@ public interface GlobalFieldService {
 
     @GET("global_fields")
     Call<ResponseBody> fetch(
-            @HeaderMap Map<String, Object> headers);
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> param);
 
     @GET("global_fields/{global_field_uid}")
     Call<ResponseBody> single(
             @HeaderMap Map<String, Object> headers,
-            @Path("global_field_uid") String globalFieldUid);
+            @Path("global_field_uid") String globalFieldUid,
+            @QueryMap Map<String, Object> param);
 
     @POST("global_fields")
     Call<ResponseBody> create(

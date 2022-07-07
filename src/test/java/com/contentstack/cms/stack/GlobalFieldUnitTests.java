@@ -18,7 +18,7 @@ import java.util.HashMap;
 
     protected String globalFiledUid = "description";
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static GlobalField globalField;
 

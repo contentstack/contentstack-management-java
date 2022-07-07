@@ -39,7 +39,9 @@ class ExtensionAPITest {
 
     @Test
     void extensionGetAll() throws IOException {
-        Response<ResponseBody> response = extension.fetch("\"type\":\"field\"", false).execute();
+        extension.addParam("query", "\"type\":\"field\"");
+        extension.addParam("include_branch", true);
+        Response<ResponseBody> response = extension.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
