@@ -7,8 +7,6 @@ package com.contentstack.cms.core;
  * @version 1.0.0
  * @since 2022-05-19
  */
-public class CMSRuntimeException extends Exception {
-    public CMSRuntimeException(String message) {
+public class CMSRuntimeException extends Exception { public CMSRuntimeException(String message) {
         super(message);
-    }
-}
+    }}
