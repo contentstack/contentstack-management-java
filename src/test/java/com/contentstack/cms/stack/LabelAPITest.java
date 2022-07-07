@@ -81,7 +81,7 @@ import java.util.Map;
         innerObject.put("content_types", new ArrayList().add("content_type_uid"));
         theQuery.put("label", innerObject);
 
-        Response<ResponseBody> response = label.add(theQuery).execute();
+        Response<ResponseBody> response = label.create(theQuery).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 

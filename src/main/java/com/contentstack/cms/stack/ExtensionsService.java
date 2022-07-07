@@ -14,8 +14,7 @@ public interface ExtensionsService {
     @GET("extensions")
     Call<ResponseBody> getAll(
             @HeaderMap Map<String, Object> headers,
-            @Query("query") String query,
-            @Query("include_branch") Boolean isIncludeBranch);
+            @QueryMap(encoded = true) Map<String, Object> query);
 
     @GET("extensions/{custom_field_uid}")
     Call<ResponseBody> getSingle(

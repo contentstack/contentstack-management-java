@@ -48,7 +48,7 @@ public class EnvironmentAPITest {
     @Order(2)
     void addLocale() {
         try {
-            Response<ResponseBody> response = environment.get("development").execute();
+            Response<ResponseBody> response = environment.single("development").execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,7 +62,7 @@ public class EnvironmentAPITest {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
             Response<ResponseBody> response = environment
-                    .add(requestBody).execute();
+                    .create(requestBody).execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();

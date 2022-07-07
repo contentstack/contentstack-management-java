@@ -22,7 +22,7 @@ import java.util.Map;
 class ExtensionUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Extensions extension;
@@ -61,8 +61,13 @@ class ExtensionUnitTest {
     }
 
     @Test
-    void extensionGetAll() {
-        Request request = extension.fetch("\"type\":\"field\"", false).request();
+    void fetchExtension() {
+        extension.clearParams();
+        JSONObject params = new JSONObject();
+        params.put("type", "field");
+        extension.addParam("query", "\"type\":\"field\"");
+        extension.addParam("include_branch", false);
+        Request request = extension.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -72,12 +77,13 @@ class ExtensionUnitTest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/extensions?query=%22type%22%3A%22field%22&include_branch=false",
+                "https://api.contentstack.io/v3/extensions?query=%22type%22:%22field%22&include_branch=false",
                 request.url().toString());
     }
 
     @Test
-    void getSingleWithUid() {
+    void fetcgSingleExt() {
+        extension.clearParams();
         extension.addParam("include_count", false);
         extension.addParam("include_branch", false);
         Request request = extension.single(_uid).request();
@@ -95,6 +101,9 @@ class ExtensionUnitTest {
 
     @Test
     void extensionUpdate() {
+        extension.clearParams();
+        extension.addParam("include_count", false);
+        extension.addParam("include_branch", false);
         Request request = extension.update(_uid, body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
@@ -124,7 +133,7 @@ class ExtensionUnitTest {
 
     @Test
     void extensionGetSingle() {
-
+        extension.addParam("include_count", false);
         extension.addParam("include_branch", false);
         Request request = extension.single(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
@@ -151,6 +160,7 @@ class ExtensionUnitTest {
             public void writeTo(BufferedSink sink) {
             }
         };
+        extension.clearParams();
         params.put("DYNAMIC_PARAM_NAME", someDataBody);
         extension.addParam("include_branch", false);
         Request request = extension.uploadCustomField(params).request();
@@ -161,8 +171,8 @@ class ExtensionUnitTest {
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions?include_count=false&include_branch=false",
+        Assertions.assertEquals("include_branch=false", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/extensions?include_branch=false",
                 request.url().toString());
     }
 
