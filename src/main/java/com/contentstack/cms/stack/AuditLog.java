@@ -28,14 +28,12 @@ public class AuditLog {
     protected final AuditLogService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
-    private final Retrofit retrofit;
 
     protected AuditLog(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
         this.headers.putAll(stackHeaders);
-        this.retrofit = retrofit;
-        this.service = this.retrofit.create(AuditLogService.class);
+        this.service = retrofit.create(AuditLogService.class);
     }
 
     /**

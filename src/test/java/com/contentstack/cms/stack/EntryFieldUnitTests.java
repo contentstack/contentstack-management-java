@@ -20,7 +20,7 @@ import java.util.Map;
 class EntryFieldUnitTests {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     protected static String contentType = "product";
@@ -47,6 +47,10 @@ class EntryFieldUnitTests {
 
     @Test
     void testEntryFetchQuery() {
+        entryInstance.clearParams();
+        entryInstance.addParam("include_publish_details", true);
+        entryInstance.addParam("locale", "en-us");
+        entryInstance.addParam("include_workflow", false);
         Request resp = entryInstance.fetch().request();
         Assertions.assertEquals("include_publish_details=true&locale=en-us&include_workflow=false", resp.url().query());
     }
@@ -120,6 +124,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testSingleEntryCompleteUrl() {
+        entryInstance.clearParams();
         Request resp = entryInstance.single(API_KEY).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + API_KEY,
                 resp.url().toString());
@@ -135,6 +140,8 @@ class EntryFieldUnitTests {
 
     @Test
     void testCreateEntryQuery() {
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
         Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertEquals("locale=en-us", resp.url().query());
     }
@@ -168,6 +175,8 @@ class EntryFieldUnitTests {
 
     @Test
     void testCreateEntryCompleteUrl() {
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
         Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries?locale=en-us",
                 resp.url().toString());
@@ -229,8 +238,8 @@ class EntryFieldUnitTests {
 
     @Test
     void testUpdateEntryQuery() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
         Request resp = entryInstance.update(_uid, new JSONObject()).request();
         Assertions.assertEquals("locale=en-us", resp.url().query());
     }
@@ -245,8 +254,8 @@ class EntryFieldUnitTests {
 
     @Test
     void testUpdateEntryCompleteUrl() {
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("locale", "en-us");
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
         Request resp = entryInstance.update(_uid, new JSONObject()).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/content_types/product/entries/" + _uid + "?locale=en-us",
@@ -375,9 +384,8 @@ class EntryFieldUnitTests {
 
     @Test
     void testDeleteQuery() {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
-        query.put("delete_all_localized", true);
+        entryInstance.addParam("locale", "en-us");
+        entryInstance.addParam("delete_all_localized", true);
         Request resp = entryInstance.delete(_uid).request();
         Assertions.assertEquals("delete_all_localized=true&locale=en-us", resp.url().query());
     }
@@ -439,9 +447,9 @@ class EntryFieldUnitTests {
 
     @Test
     void testVersionNameQuery() {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
-        query.put("delete_all_localized", true);
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
+        entryInstance.addParam("delete_all_localized", true);
         Request resp = entryInstance.delete(_uid).request();
         Assertions.assertEquals("delete_all_localized=true&locale=en-us", resp.url().query());
     }
@@ -454,9 +462,9 @@ class EntryFieldUnitTests {
 
     @Test
     void testVersionNameCompleteUrl() {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
-        query.put("delete_all_localized", true);
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
+        entryInstance.addParam("delete_all_localized", true);
         Request resp = entryInstance.delete(_uid).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
                 + "?delete_all_localized=true&locale=en-us", resp.url().toString());
@@ -479,13 +487,14 @@ class EntryFieldUnitTests {
 
     @Test
     void testDetailVersionName() {
-        HashMap<String, Object> query = new HashMap<>();
+
         // skip=1&limit=5&named=false&include_count=false&locale=en-us
-        query.put("skip", 1);
-        query.put("limit", 5);
-        query.put("named", false);
-        query.put("include_count", false);
-        query.put("locale", "en-us");
+        entryInstance.clearParams();
+        entryInstance.addParam("skip", 1);
+        entryInstance.addParam("limit", 5);
+        entryInstance.addParam("named", false);
+        entryInstance.addParam("include_count", false);
+        entryInstance.addParam("locale", "en-us");
         Request resp = entryInstance.detailOfAllVersion(_uid).request();
 
         Assertions.assertEquals("GET", resp.method());
@@ -505,9 +514,8 @@ class EntryFieldUnitTests {
 
     @Test
     void testGetReference() {
-
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
         Request resp = entryInstance.getReference(_uid).request();
 
         Assertions.assertEquals("GET", resp.method());
@@ -528,11 +536,9 @@ class EntryFieldUnitTests {
 
     @Test
     void testGetLanguages() {
-
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
         Request resp = entryInstance.getLanguage(_uid).request();
-
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
@@ -602,12 +608,9 @@ class EntryFieldUnitTests {
 
     @Test
     void testExport() {
-
-        // HashMap<String, Object> mapRequest = new HashMap<>();
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
         Request resp = entryInstance.export(_uid).request();
-
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
@@ -626,12 +629,9 @@ class EntryFieldUnitTests {
 
     @Test
     void testImport() {
-
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
-        query.put("overwrite", false);
+        entryInstance.addParam("locale", "en-us");
+        entryInstance.addParam("overwrite", false);
         Request resp = entryInstance.imports().request();
-
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
@@ -650,9 +650,9 @@ class EntryFieldUnitTests {
 
     @Test
     void testImportWithUid() {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("locale", "en-us");
-        query.put("overwrite", false);
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
+        entryInstance.addParam("overwrite", false);
         Request resp = entryInstance.importExisting(_uid).request();
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
@@ -711,9 +711,9 @@ class EntryFieldUnitTests {
         requestBody.put("publish_with_reference", "2019-02-14T18:30:00.000Z");
 
         // Query Params
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("approvals", true);
-        query.put("skip_workflow_stage_check", true);
+        entryInstance.clearParams();
+        entryInstance.addParam("approvals", true);
+        entryInstance.addParam("skip_workflow_stage_check", true);
 
         // Publish With Reference
         Request resp = entryInstance.publishWithReference(requestBody).request(); // sending request body and

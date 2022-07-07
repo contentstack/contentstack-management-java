@@ -12,7 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type Stack.
+ * A stack is a space that stores the content of a project (a web or mobile property). Within a stack, you can create
+ * content structures, content entries, users, etc. related to the project.
+ *
+ * @author ***REMOVED***
+ * @version 1.0.0
+ * @since 2022-05-19
  */
 public class Stack {
 
@@ -28,8 +33,9 @@ public class Stack {
      * @param client
      *         the Retrofit instance
      */
-    public Stack(@NotNull Retrofit client) {
+    public Stack(@NotNull Retrofit client, String authtoken) {
         this.headers = new HashMap<>();
+        this.headers.put("authtoken", authtoken);
         this.client = client;
         this.params = new HashMap<>();
         this.service = client.create(StackService.class);
@@ -38,12 +44,11 @@ public class Stack {
 
     /**
      * Sets header for the request
+     *
      * @param key
      *         header key for the request
      * @param value
      *         header value for the request
-     * @author shaileshmishra
-     * @since 1.0.0
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -56,8 +61,6 @@ public class Stack {
      *         header key for the request
      * @param value
      *         header value for the request
-     * @author shaileshmishra
-     * @since 1.0.0
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -69,8 +72,6 @@ public class Stack {
      *
      * @param key
      *         header key for the request
-     * @author shaileshmishra
-     * @since 1.0.0
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -78,9 +79,7 @@ public class Stack {
 
 
     /**
-     * To clear all the params
-     *
-     * @apiNote Use {@link #clearParams()} . to clear all the parameters
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
@@ -117,7 +116,7 @@ public class Stack {
      * To get an idea of building your content type as per webpage's layout, we recommend you to check out our Content
      * Modeling guide
      *
-     * @return the {@link ContentType}
+     * @return ContentType
      */
     public ContentType contentType() {
         return new ContentType(this.client, this.headers);
@@ -137,8 +136,9 @@ public class Stack {
      * Modeling guide
      *
      * @param contentTypeUid
-     *         the content type uid
-     * @return the content type
+     *         Enter the unique ID of the content type of which you want to retrieve the details. The UID is generated
+     *         based on the title of the content type. The unique ID of a content type is unique across a stack
+     * @return ContentType
      */
     public ContentType contentType(@NotNull String contentTypeUid) {
         return new ContentType(this.client, this.headers, contentTypeUid);
@@ -151,7 +151,7 @@ public class Stack {
      * <p>
      * These files can be attached and used in multiple entries.
      *
-     * @return {@link Asset} Asset instance
+     * @return Asset
      */
     public Asset asset() {
         return new Asset(this.client, this.headers);
@@ -161,12 +161,14 @@ public class Stack {
      * An entry is the actual piece of content created using one of the defined
      *
      * @param contentTypeUid
-     *         content type uid for the entry
-     * @return Entry instance
-     * @see <a href="https://www.contentstack.com/docs/developers/create-content-types/about-content-types">Content
-     * Type</a>
+     *         Enter the unique ID of the content type of which you want to retrieve the details. The UID is generated
+     *         based on the title of the content type. The unique ID of a content type is unique across a stack
+     * @return Entry
      */
     public Entry entry(@NotNull String contentTypeUid) {
+        if (contentTypeUid.isEmpty()) {
+            throw new IllegalArgumentException("Can not provide empty contentTypeUid");
+        }
         return new Entry(this.client, this.headers, contentTypeUid);
     }
 
@@ -342,7 +344,7 @@ public class Stack {
     /**
      * <b>Get stacks</b>
      * <br>
-     * <b>All Stack:- </b>authtoken is required and organization_uid is optional to fetch all the stacks
+     * <b>All Stack:- </b>authtoken is required to fetch all the stacks
      * <br>
      * <br>
      * <b>Single Stack:- </b> : api_key and authtoken is required and organization_uid is optional
@@ -360,12 +362,14 @@ public class Stack {
      * Request request = stack.fetch().request();
      * }
      * </pre>
+     * <b>For SSO-enabled organizations, it is mandatory to pass the organization UID in the header.</b>
+     * <br>
+     * <br>
+     * - Add headers using {@link #addHeader(String, Object)}
+     * <br>
+     * - Add query parameters using {@link #addParam(String, Object)}
      *
      * @return Call
-     * @author shaileshmishra
-     * @apiNote For SSO-enabled organizations, it is mandatory to pass the organization UID in the header.
-     * @implNote Add headers using {@link #addHeader(String, Object)} <br> Add params using
-     * {@link #addParam(String, Object)}
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-stacks">Get all
      * Stacks</a>
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-stack">Get
@@ -391,7 +395,10 @@ public class Stack {
      *         the organization uid
      * @param requestBody
      *         The request body as JSONObject
-     * @return the stack
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-stacks">Get all
+     * Stacks</a>
+     * @since 1.0.0
      */
     public Call<ResponseBody> create(
             @NotNull String organizationUid, @NotNull JSONObject requestBody) {
@@ -685,7 +692,7 @@ public class Stack {
      *
      * @param body
      *         the request body
-     * @return the {@link okhttp3.Call}
+     * @return Call
      */
     public Call<ResponseBody> roles(@NotNull JSONObject body) {
         return service.updateUserRoles(this.headers, body);
