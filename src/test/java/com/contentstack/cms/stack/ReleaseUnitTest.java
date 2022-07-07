@@ -85,7 +85,7 @@ class ReleaseUnitTest {
     @Test
     @Order(5)
     void releaseQueryParams() {
-        Request request = release.getAll().request();
+        Request request = release.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -104,7 +104,7 @@ class ReleaseUnitTest {
     void fetchSingleUrl() {
         release.addParam("include_rules", true);
         release.addParam("include_permissions", true);
-        Request request = release.fetch(_uid).request();
+        Request request = release.single(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

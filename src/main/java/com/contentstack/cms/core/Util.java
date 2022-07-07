@@ -8,7 +8,7 @@ import java.util.Objects;
 
 
 /**
- * The Utility class that contains utility common functions
+ * The utility class that contains utility common functions
  *
  * @author Shailesh Mishra
  * @version 1.0.0
@@ -80,8 +80,7 @@ public class Util {
     }
 
     public static RequestBody toRequestBody(String bodyString) {
-        return RequestBody.create(MediaType.parse("application/json; charset=UTF-8"),
-                bodyString);
+        return RequestBody.create(MediaType.parse("application/json; charset=UTF-8"), bodyString);
     }
 
 }

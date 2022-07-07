@@ -12,18 +12,19 @@ import java.util.HashMap;
  * The Publish Queue displays the historical and current details of activities such as publish, unpublish, or delete
  * that can be performed on entries and/or assets. It also shows details of Release deployments. These details include
  * time, entry, content type, version, language, user, environment, and status.
- * <p>
- * For more details, refer the Publish Queue documentation.
- * <p>
+ * <br><br>
+ * For more details, refer the <b>Publish Queue documentation</b>.
+ * <br><br>
  * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
  * the stack. Additionally, you can also set the include_branch query parameter to true to include the branch top-level
  * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
- * <p>
- * Read more about <a
- * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">Publish Queue</a>
+ * <br>
  *
  * @author Shailesh Mishra
  * @version 1.0.0
+ * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">
+ * Publish Queue
+ * </a>
  * @since 2022-05-19
  */
 public class PublishQueue {
@@ -57,9 +58,9 @@ public class PublishQueue {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         query param key for the request
      * @param value
-     *         header value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -67,10 +68,10 @@ public class PublishQueue {
 
 
     /**
-     * Sets header for the request
+     * Set header for the request
      *
      * @param key
-     *         header key for the request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -78,7 +79,7 @@ public class PublishQueue {
 
 
     /**
-     * To clear all the params
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
@@ -102,6 +103,12 @@ public class PublishQueue {
      * You can add headers to the request by using {@link #addParam(String, Object)}
      *
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue">Get
+     * publish queue
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetch() {
         return this.service.fetch(this.headers, this.params);
@@ -119,6 +126,13 @@ public class PublishQueue {
      *         the UID of a specific publish queue activity of which you want to retrieve the details. Execute the Get
      *         publish queue API request to retrieve the UID of a particular publish queue activity.
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue-activity">Get
+     * publish queue activity
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetchActivity(@NotNull String publishQueueUid) {
         return this.service.fetchActivity(this.headers, publishQueueUid, this.params);
@@ -132,6 +146,14 @@ public class PublishQueue {
      * @param publishQueueUid
      *         The UID of the event to be cancelled in the publish queue.
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#cancel-scheduled-action">Cancel
+     * scheduled action
+     *
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> cancelScheduledAction(String publishQueueUid) {
         return this.service.cancelScheduledAction(this.headers, publishQueueUid, this.params);
