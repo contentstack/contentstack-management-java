@@ -53,9 +53,9 @@ public class Asset {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         query param key for the request
      * @param value
-     *         header value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -63,10 +63,10 @@ public class Asset {
 
 
     /**
-     * Sets header for the request
+     * Set header for the request
      *
      * @param key
-     *         header key for the request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -74,7 +74,7 @@ public class Asset {
 
 
     /**
-     * To clear all the params
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
@@ -124,7 +124,10 @@ public class Asset {
      * <p>
      * Example:file_size
      *
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-assets">Get all
+     * As</a>
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetch() {
         return this.service.fetch(this.headers, this.params);
@@ -139,11 +142,13 @@ public class Asset {
      * of the entry in every environment along with the version number that is published in each of the environment.
      *
      * @param uid
-     *         asset uid
-     * @return the retrofit2.Call
+     *         The unique ID of the asset of which you wish to retrieve details
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-asset">Get a
+     * single asset</a>
+     * @since 1.0.0
      */
-    public Call<ResponseBody> single(
-            @NotNull String uid) {
+    public Call<ResponseBody> single(@NotNull String uid) {
         return this.service.single(this.headers, uid, this.params);
     }
 
@@ -152,13 +157,18 @@ public class Asset {
      * the details of sub-folders within it.
      *
      * @param folderUid
-     *         uid of specific folder
-     * @return the retrofit2.Call
+     *         The folderUid of specific folder
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-of-a-specific-folder">Get
+     * Assets of a Specific Folder</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> byFolderUid(@NotNull String folderUid) {
-        HashMap<String, Object> queryMap = new HashMap<>();
-        queryMap.put("folder", folderUid);
-        return this.service.specificFolder(this.headers, queryMap);
+        this.params.put("folder", folderUid);
+        return this.service.specificFolder(this.headers, this.params);
     }
 
     /**
@@ -169,7 +179,13 @@ public class Asset {
      *         folder uid
      * @param isIncludeFolders
      *         provide true/false
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-and-subfolders-of-a-parent-folder">Get
+     * Assets and Subfolders of a Parent Folder</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> subfolder(
             @NotNull String folderUid, Boolean isIncludeFolders) {
@@ -188,31 +204,36 @@ public class Asset {
      *         the file path
      * @param requestBody
      *         Request body for the asset file
-     *         <p>
-     *         asset[upload] (mandatory) Select the input type as 'File'. Then, browse and select the asset file that
-     *         you want to import. Supported file types include JPG, GIF, PNG, XML, WebP, BMP, TIFF, SVG, and PSD.
-     *         <p>
-     *         asset[parent_uid] (optional) If needed, assign a parent folder to your asset by passing the UID of the
-     *         parent folder.
-     *         <p>
-     *         asset[title] (optional) Enter a title for your uploaded asset.
-     *         <p>
-     *         asset[description] (optional) Enter a description for your uploaded asset.
-     *         <p>
-     *         asset[tags] (optional) Assign a specific tag(s) to your uploaded asset. {@link #addParam(String, Object)}
-     *         The query parameter for the asset to upload
-     *         <p>
-     *         relative_urls(optional) Set this to 'true' to display the relative URL of the asset. Example:false
-     *
-     *         <p>
-     *         include_dimension(optional) Set this to 'true' to include the dimensions (height and width) of the image
-     *         in the response.
-     *         <p>
-     *         Example:true
-     * @return the retrofit2.Call
+     *         <ul>
+     *         <br>
+     *         <li>asset[upload] (mandatory) Select the input type as 'File'. Then, browse and select the asset file that
+     *         you want to import. Supported file types include JPG, GIF, PNG, XML, WebP, BMP, TIFF, SVG, and PSD</li>
+     *         <br>
+     *         <li>asset[parent_uid] (optional) If needed, assign a parent folder to your asset by passing the UID of the
+     *         parent folder.</li>
+     *         <br>
+     *         <li>asset[title] (optional) Enter a title for your uploaded asset.</li>
+     *         <br>
+     *         <li>asset[description] (optional) Enter a description for your uploaded asset.</li>
+     *         <br>
+     *         <li>asset[tags] (optional) Assign a specific tag(s) to your uploaded asset. {@link #addParam(String, Object)}
+     *         The query parameter for the asset to upload</li>
+     *         <br>
+     *         <li>relative_urls(optional) Set this to 'true' to display the relative URL of the asset. Example:false</li>
+     *         <br>
+     *         <li>include_dimension(optional) Set this to 'true' to include the dimensions (height and width) of the image
+     *         in the response.</li>
+     *         <br>
+     *         </ul>
+     *         <br>
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-asset"> Upload
+     * Asset</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0<br>
      */
-    public Call<ResponseBody> uploadAsset(
-            @NotNull String filePath, @NotNull RequestBody requestBody) {
+    public Call<ResponseBody> uploadAsset(@NotNull String filePath, @NotNull RequestBody requestBody) {
         MultipartBody.Part assetPath = uploadFile(filePath);
         return this.service.uploadAsset(this.headers, assetPath, requestBody, this.params);
     }
@@ -239,8 +260,13 @@ public class Asset {
      * uploaded asset, respectively.
      *
      * @param uid
-     *         asset uid
-     * @return the retrofit2.Call
+     *         The unique ID of the asset of which you wish to retrieve details, or that you wish to update or delete
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#replace-asset"> Replace
+     * Asset</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0<br>
      */
     public Call<ResponseBody> replace(String uid) {
         return this.service.replace(this.headers, uid, this.params);
@@ -251,15 +277,25 @@ public class Asset {
      * constant irrespective of any subsequent updates to the asset.
      * <p>
      * In the request body, you need to pass the permanent URL in the following format:
-     * <pre>
-     * { "asset": { "permanent_url": "https://api.contentstack.io/v3...{stack_api_key}/{asset_uid}/{unique_identifier}"} }
+     * <br>
+     * <b>Example:</b>
+     * <pre>{
+     * <code>
+     *     { "asset": { "permanent_url": "<a href="https://api.contentstack.io/v3">...</a>...{stack_api_key}/{asset_uid}/{unique_identifier}"} }}
+     * </code>
+     * }
      * </pre>
      *
      * @param uid
-     *         asset uid
+     *         The unique ID of the asset of which you wish to retrieve details, or that you wish to update or delete
      * @param body
-     *         the JSON request body
-     * @return the retrofit2.Call
+     *         the JSONObject request body
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
+     * Generate Permanent Asset URL </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0<br>
      */
     public Call<ResponseBody> generatePermanentUrl(String uid, JSONObject body) {
         return this.service.generatePermanentUrl(this.headers, uid, body);
@@ -277,13 +313,19 @@ public class Asset {
      * <br>
      *
      * @param uid
-     *         the uid of the asset you want to download the asset.
+     *         The UID of the asset you want to download. Use the Get All Assets request to get the UID of the asset..
      * @param slugUrl
-     *         the unique identifier of the asset.
-     * @return the retrofit2.Call
+     *         The unique identifier of the asset.
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
+     * Generate Permanent Asset Url
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> getPermanentUrl(String uid, String slugUrl) {
-        return this.service.downloadPermanentUrl(this.headers, uid, slugUrl);
+        return this.service.downloadPermanentUrl(this.headers, uid, slugUrl, this.params);
     }
 
     /**
@@ -291,9 +333,13 @@ public class Asset {
      *
      * @param uid
      *         the UID of the asset you want to delete asset
-     * @return the retrofit2.Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-asset"> Delete
+     * Asset
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
-    public Call<ResponseBody> delete(String uid) {
+    public Call<ResponseBody> delete(@NotNull String uid) {
         return this.service.delete(this.headers, uid);
     }
 
@@ -301,10 +347,16 @@ public class Asset {
      * The Get information on RTE assets call returns comprehensive information on all assets uploaded through the Rich
      * Text Editor field.
      *
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
+     * Get Information On RTE Assets
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> rteInformation() {
-        return this.service.rteInfo(this.headers);
+        return this.service.rteInfo(this.headers, this.params);
     }
 
     /**
@@ -326,7 +378,12 @@ public class Asset {
      *         asset version number
      * @param requestBody
      *         the request body of {@link JSONObject}
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
+     * Get Information On RTE Assets
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> setVersionName(@NotNull String assetUid, int versionNumber,
                                              @NotNull JSONObject requestBody) {
@@ -345,7 +402,9 @@ public class Asset {
      *
      * @param assetUid
      *         the asset uid #addParam request parameters are below - skip(optional):Enter the number of version details
-     *         to be skipped. Example:2
+     *         to be skipped.
+     *         <br>
+     *         <b>Example:</b>
      *         <p>
      *         - limit(optional): Enter the maximum number of version details to be returned. Example:5
      *         <p>
@@ -354,10 +413,15 @@ public class Asset {
      *         <p>
      *         - include_count(optional):Enter 'true' to get the total count of the asset version details.
      *         Example:false
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-asset">
+     * Get Details of All Versions of an Asset
+     * @see #addParam(String, Object)  to add Query parameters
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
-    public Call<ResponseBody> getVersionNameDetails(
-            @NotNull String assetUid) {
+    public Call<ResponseBody> getVersionNameDetails(@NotNull String assetUid) {
         return this.service.getVersionNameDetails(this.headers, assetUid, this.params);
     }
 
@@ -371,7 +435,12 @@ public class Asset {
      *         asset uid
      * @param versionNumber
      *         asset version
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-asset">
+     * Delete Version Name Of Asset
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> deleteVersionName(@NotNull String assetUid, int versionNumber) {
         return this.service.deleteVersionName(this.headers, assetUid, versionNumber);
@@ -383,7 +452,11 @@ public class Asset {
      *
      * @param assetUid
      *         asset uid
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-asset-references">
+     * Get Asset References
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> getReferences(@NotNull String assetUid) {
         return this.service.getReferences(this.headers, assetUid);
@@ -397,12 +470,18 @@ public class Asset {
      * parameter named query and provide a query in JSON format as the value.
      *
      * @param assetType
-     *         asset type that you want to retrieve. For example, "images" or "videos".
+     *         asset type that you want to retrieve. For example, <b>images</b> or <b>videos</b>.
      *         <p>
      *         - For images, "images"
      *         <p>
      *         - For videos, "videos"
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-either-only-images-or-videos">
+     * Get Either Only Images Or Videos
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> getByType(@NotNull String assetType) {
         return this.service.getByType(this.headers, assetType);
@@ -418,16 +497,21 @@ public class Asset {
      * <p>
      * Here's an example of the raw body:
      * <p>
-     * { "asset": { "title": "Title", "description": "Description" }, "version": 3 }
+     * <pre>
+     *  @code { "asset": { "title": "Title", "description": "Description" }, "version": 3 }
+     * </pre>
      *
      * @param assetUid
-     *         asset uid
+     *         The UID of the asset that you want to update details.
      * @param requestBody
      *         JSON Request body
-     * @return the retrofit2.Call
+     * @return Call
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> updateDetails(@NotNull String assetUid, @NotNull JSONObject requestBody) {
-        return this.service.updateDetails(this.headers, assetUid, requestBody);
+        return this.service.updateDetails(this.headers, assetUid, this.params, requestBody);
     }
 
     /**
@@ -441,10 +525,14 @@ public class Asset {
      * published. These details should be in JSON format.
      *
      * @param assetUid
-     *         asset uid
+     *         The UID of the asset that you want to publish.
      * @param requestBody
      *         JSON Request body
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-asset">
+     * Publish An Asset
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> publish(@NotNull String assetUid, @NotNull JSONObject requestBody) {
         return this.service.publish(this.headers, assetUid, requestBody);
@@ -456,14 +544,18 @@ public class Asset {
      * In case of Scheduled Unpublished, add the scheduled_at key and provide the date/time in the ISO format as its
      * value. Example: "scheduled_at":"2016-10-07T12:34:36.000Z"
      * <p>
-     * In the 'Body' section, enter the asset details, such as locales and environments, from where the assets need to
-     * be unpublished. These details should be in JSON format.
+     * In the <b>Body</b> section, enter the asset details, such as locales and environments, from where the assets need
+     * to be unpublished. These details should be in JSON format.
      *
      * @param assetUid
-     *         asset uid
+     *         The UID of the asset that you want to unpublish
      * @param requestBody
      *         JSON Request body
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
+     * Unpublish An Asset
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> unpublish(
             @NotNull String assetUid, @NotNull JSONObject requestBody) {
@@ -481,7 +573,12 @@ public class Asset {
      *         which includes the names and UIDs of each parent folder.
      *         <p>
      *         Example:false
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
+     * Unpublish An Asset
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> singleFolder(
             @NotNull String folderUid) {
@@ -497,7 +594,13 @@ public class Asset {
      * Example:{"is_dir": true, "name": "folder_name"}
      * <br>
      *
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-folder-by-name"> Get
+     * A Single Folder By Name
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> getSingleFolderByName() {
         return this.service.singleFolderByName(this.headers, this.params);
@@ -509,7 +612,13 @@ public class Asset {
      * <p>
      * #addParam query parameters
      *
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-subfolders-of-a-parent-folder">
+     * Get subfolders of a parent folder
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> getSubfolder() {
         return this.service.getSubfolder(this.headers, this.params);
@@ -533,10 +642,15 @@ public class Asset {
      *
      * @param requestBody
      *         JSONObject request body
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-folder"> Create
+     * a folder
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> createFolder(@Nullable JSONObject requestBody) {
-        return this.service.createFolder(this.headers, requestBody);
+        return this.service.createFolder(this.headers, this.params, requestBody);
     }
 
     /**
@@ -555,13 +669,18 @@ public class Asset {
      * cannot nest a folder within the same folder or within its child folders.
      *
      * @param folderUid
-     *         folder uid
+     *         The UID of the folder that you want to either update or move
      * @param requestBody
      *         JSONObject request body { "asset": { "name": "Demo" } }
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-or-move-folder">
+     * Update ORr Move Folder
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> updateFolder(@NotNull String folderUid, @Nullable JSONObject requestBody) {
-        return this.service.updateFolder(this.headers, folderUid, requestBody);
+        return this.service.updateFolder(this.headers, folderUid, this.params, requestBody);
     }
 
     /**
@@ -570,8 +689,13 @@ public class Asset {
      * When executing the API call, provide the parent folder UID.
      *
      * @param folderUid
-     *         folder uid
-     * @return the retrofit2.Call
+     *         The UID of the asset folder that you want to delete
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-folder">
+     * Delete A Folder
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> deleteFolder(@NotNull String folderUid) {
         return this.service.deleteFolder(this.headers, folderUid);

@@ -10,12 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * To get an idea of building your content type as per webpage's layout, we recommend you to check out our Content
- * Modeling guide
+ * Content type defines the structure or schema of a page or a section of your web or mobile property. To create content
+ * for your application, you are required to first create a content type, and then create entries using the content
+ * type.
+ * <br><br>
+ * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
+ * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
+ * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
  *
  * @author ***REMOVED***
  * @version 1.0.0
- * @since 2022-05-19
+ * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#content-types">Content
+ * Types</a>
  */
 public class ContentType {
 
@@ -24,7 +30,6 @@ public class ContentType {
     protected Map<String, Object> params;
     protected String contentTypeUid;
     protected Retrofit instance;
-    protected String apiKey;
 
     /**
      * Instantiates a new Content type.
@@ -57,6 +62,7 @@ public class ContentType {
         this.headers = new HashMap<>();
         this.contentTypeUid = contentTypeUid;
         this.headers.putAll(headers);
+        this.params = new HashMap<>();
         this.service = instance.create(ContentTypeService.class);
     }
 
@@ -66,7 +72,6 @@ public class ContentType {
         }
         return new Entry(this.instance, this.headers, this.contentTypeUid);
     }
-
 
 
     /**
@@ -85,9 +90,9 @@ public class ContentType {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         key of query parameters of request
      * @param value
-     *         header value for the request
+     *         value of query parameters of request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -98,7 +103,7 @@ public class ContentType {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         Remove query parameters of request by key
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -106,7 +111,7 @@ public class ContentType {
 
 
     /**
-     * To clear all the params
+     * To clear all the query parameters of request
      */
     protected void clearParams() {
         this.params.clear();
@@ -128,6 +133,11 @@ public class ContentType {
      * Types</a>
      *
      * @return the call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types">
+     * Get all content types</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetch() {
         return service.fetch(this.headers, this.params);
@@ -166,7 +176,13 @@ public class ContentType {
      *         <p>
      *         version of the content type of which you want to retrieve the details. If no version is specified, you
      *         will get the latest version of the content type.
-     * @return retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-content-type"> Get a
+     * single content type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> single(@NotNull String contentTypeUid) {
         return service.single(this.headers, contentTypeUid, this.params);
@@ -201,10 +217,15 @@ public class ContentType {
      *
      * @param requestBody
      *         the request body
-     * @return retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-content-type">
+     * Create A Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> create(JSONObject requestBody) {
-        return service.create(this.headers, requestBody);
+        return service.create(this.headers, this.params, requestBody);
     }
 
     /**
@@ -219,13 +240,19 @@ public class ContentType {
      * more</a>
      *
      * @param contentTypeUid
-     *         the content type uid
+     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
+     *         content type. The unique ID of a content type is unique across a stack.
      * @param requestBody
      *         the request body
-     * @return {@link Call} call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-content-type">
+     * Update Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> update(@NotNull String contentTypeUid, JSONObject requestBody) {
-        return service.update(contentTypeUid, this.headers, requestBody);
+        return service.update(contentTypeUid, this.headers, this.params, requestBody);
     }
 
     /**
@@ -240,17 +267,26 @@ public class ContentType {
      * required fields to the content type and saved it) or while editing a content type (both via UI and API).
      *
      * @param contentTypeUid
-     *         the content type uid
+     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
+     *         content type. The unique ID of a content type is unique across a stack.
      * @param requestBody
      *         the request body JSONBody
-     * @return the call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#set-field-visibility-rule-for-content-type">
+     * Set Field Visibility Rule for Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> fieldVisibilityRule(@NotNull String contentTypeUid, JSONObject requestBody) {
-        return service.visibilityRule(contentTypeUid, this.headers, requestBody);
+        return service.visibilityRule(contentTypeUid, this.headers, this.params, requestBody);
     }
+
 
     /**
      * <b>Delete Content Type</b>.
+     *
      * <p>
      * To Delete Content Type call deletes an existing content type and all the entries within it. When executing the
      * API call, in the <b>URI Parameters</b> section, provide the UID of your content type
@@ -259,31 +295,17 @@ public class ContentType {
      * the stack API key, to make a valid Content Management API request. Read more about Authentication.
      *
      * @param contentTypeUid
-     *         the content type uid
-     * @return the call
+     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
+     *         content type. The unique ID of a content type is unique across a stack.
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-content-type">
+     * Delete Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query params
+     * @since 1.0.0
      */
     public Call<ResponseBody> delete(@NotNull String contentTypeUid) {
-        return service.delete(contentTypeUid, this.headers);
-    }
-
-    /**
-     * <b>Delete Content Type</b>.
-     *
-     * <p>
-     * To Delete Content Type call deletes an existing content type and all the entries within it. When executing the
-     * API call, in the <b>URI Parameters</b> section, provide the UID of your content type
-     * <b>Note:</b>
-     * Note: You need to use either the stack's Management Token or the user Authtoken (anyone is mandatory), along with
-     * the stack API key, to make a valid Content Management API request. Read more about Authentication.
-     *
-     * @param contentTypeUid
-     *         the content type uid
-     * @param isForce
-     *         the is force
-     * @return the call
-     */
-    public Call<ResponseBody> delete(@NotNull String contentTypeUid, @NotNull Boolean isForce) {
-        return service.delete(contentTypeUid, this.headers, isForce);
+        return service.delete(contentTypeUid, this.headers, this.params);
     }
 
     /**
@@ -300,10 +322,16 @@ public class ContentType {
      * authentication.
      *
      * @param contentTypeUid
-     *         the content type uid
+     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
+     *         content type. The unique ID of a content type is unique across a stack.
      * @param isIncludeGlobalField
      *         Include Global Field true/false
-     * @return the call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
+     * Get All References Of Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> reference(@NotNull String contentTypeUid, Boolean isIncludeGlobalField) {
         return service.reference(contentTypeUid, this.headers, isIncludeGlobalField);
@@ -322,8 +350,14 @@ public class ContentType {
      * authentication.
      *
      * @param contentTypeUid
-     *         the content type uid
-     * @return the call
+     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
+     *         content type. The unique ID of a content type is unique across a stack.
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
+     * Get All References Of Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> referenceIncludeGlobalField(@NotNull String contentTypeUid) {
         return service.referenceIncludeGlobalField(contentTypeUid, this.headers);
@@ -342,8 +376,13 @@ public class ContentType {
      * Read more about authentication.
      *
      * @param contentTypeUid
-     *         the content type uid
-     * @return the call
+     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
+     *         content type. The unique ID of a content type is unique across a stack.
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
+     * Export A Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> export(@NotNull String contentTypeUid) {
         return service.export(contentTypeUid, this.headers);
@@ -362,22 +401,35 @@ public class ContentType {
      * Read more about authentication.
      *
      * @param contentTypeUid
-     *         the content type uid
+     *         The unique ID of the content type you want to retrieve. The unique ID of a content type is unique across
+     *         a stack
      * @param version
-     *         the version
-     * @return the call
+     *         The version of content type you want to retrieve. If no version is specified, you will get the latest
+     *         version of the content type
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
+     * Export A Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> export(@NotNull String contentTypeUid, int version) {
         return service.export(contentTypeUid, this.headers, version);
     }
 
     /**
-     * Imports call.
+     * <b>Import content type</b>
+     * <br>
+     * The Import a content type call imports a content type into a stack by uploading JSON file.
+     * <br>
      *
-     * @return the call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
+     * Import A Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> imports() {
-        return service.imports(this.headers);
+        return service.imports(this.headers, this.params);
     }
 
     /**
@@ -389,7 +441,11 @@ public class ContentType {
      * Authtoken (any one is mandatory), along with the stack API key, to make a valid Content Management API request.
      * Read more about authentication.
      *
-     * @return the call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
+     * Import A Content Type</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> importOverwrite() {
         this.headers.put("Content-Type", "multipart/form-data");
