@@ -5,12 +5,13 @@
     <groupId>com.contentstack.sdk</groupId>
     <artifactId>cms</artifactId>
     <name>contentstack-management-java</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
     <url>https://github.com/contentstack/contentstack-management-java/</url>
 
+    <!--    release the package using mvn clean deploy -->
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
@@ -200,6 +201,7 @@
                 </executions>
             </plugin>
 
+            <!--  -overview "/Users/shaileshmishra/Documents/Workspace/contentstack/java/contentstack-management-java/src/main/overview.html" -bottom  "<b>Copyright © 2012-2022 Contentstack </b><sup>TM</sup>"-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>

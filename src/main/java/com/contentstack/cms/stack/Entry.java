@@ -10,7 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * An entry is the actual piece of content created using one of the defined
+ * An entry is the actual piece of content created using one of the defined content types.
+ * <p>
+ * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
+ * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
+ * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
  *
  * @author Shailesh Mishra
  * @version 1.0.0
@@ -53,9 +57,9 @@ public class Entry {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         query param key for the request
      * @param value
-     *         header value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -63,10 +67,10 @@ public class Entry {
 
 
     /**
-     * Sets header for the request
+     * Set header for the request
      *
      * @param key
-     *         header key for the request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -74,11 +78,12 @@ public class Entry {
 
 
     /**
-     * To clear all the params
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
     }
+
 
     /**
      * <b>Fetches the list of all the entries of a particular content type.</b>
@@ -101,7 +106,9 @@ public class Entry {
      *     -include_publish_details={boolean_value}
      * </pre>
      *
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-entries">Get
+     * All Entry</a>
      */
     public Call<ResponseBody> fetch() {
         return this.service.fetch(this.headers, this.contentTypeUid, this.params);
@@ -118,7 +125,9 @@ public class Entry {
      *         Entry uid {@link #addParam(String, Object)} The Query Parameters are <br> - version={version_number} <br>
      *         - locale={language_code} <br> - include_workflow={boolean_value} <br> -
      *         include_publish_details={boolean_value}
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-entry">Get A
+     * Single Entry</a>
      */
     public Call<ResponseBody> single(@NotNull String entryUid) {
         return this.service.single(headers, this.contentTypeUid, entryUid, this.params);
@@ -137,15 +146,19 @@ public class Entry {
      * <b>Scenario 1:</b> If you have a reference
      * field in your content type, here's the format you need to follow to add the data in the "Body" section
      * <br>
-     * <b>[Read
-     * more](<a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">...</a>)</b>
      *
      * @param requestBody
-     *         Provide the Json Body to create entry: ```json { "entry": { "title": "example", "url": "/example" } } ```
-     *         {@link #addParam(String, Object)} locale: Enter the code of the language in which you want your entry to
-     *         be localized in.
-     * @return the retrofit2.Call
+     *         Provide the Json Body to create entry: <pre
+     *         <code>
+     *         { "entry": { "title": "Entry title", "url": "Entry URL", "reference_field_uid": [{ "uid": "the_uid",
+     *         "_content_type_uid": "referred_content_type_uid" }] } }</code>
+     *         </pre>
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">Create A
+     * Entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> create(JSONObject requestBody) {
         return this.service.create(this.headers, this.contentTypeUid, requestBody, this.params);
@@ -153,21 +166,24 @@ public class Entry {
 
     /**
      * The Update an entry call lets you update the content of an existing entry.
-     * <p>
-     * Passing the locale parameter will cause the entry to be localized in the specified locale.
-     * </p>
      * <br>
-     * <p>
+     * Passing the locale parameter will cause the entry to be localized in the specified locale.
+     * <br>
      * <b>Note:</b> The Update an entry call does not allow you to update the
      * workflow stage for an entry. To update the workflow stage for the entry, use the Set Entry Workflow Stage call.
      * </p>
      *
      * @param entryUId
-     *         The entry you want to update {@link #addParam(String, Object)} locale: Enter the code of the language in
-     *         which you want your entry to be localized in.
+     *         the unique ID of the content type of which you wish to retrieve the details. The uid is generated based
+     *         on the title of the content type and it is unique across a stack
      * @param requestBody
-     *         request body for the entry update ```json{ "entry": { "title": "example", "url": "/example" } }```
-     * @return the retrofit2.Call
+     *         request body for the entry update <code>{ "entry": { "title": "example", "url": "/example" } } </code>
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-an-entry">
+     * Update an entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> update(String entryUId, JSONObject requestBody) {
         return this.service.update(this.headers, this.contentTypeUid, entryUId, requestBody, this.params);
@@ -207,6 +223,12 @@ public class Entry {
      *         <br>
      *         Add, SUB and Delete will be executed like the above. for more details
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#atomic-updates-to-entries">
+     * Atomic Operation</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> atomicOperation(String entryUId, JSONObject requestBody) {
         return this.service.atomicOperations(this.headers, this.contentTypeUid, entryUId, requestBody);
@@ -233,9 +255,12 @@ public class Entry {
      *         </b>For this request, instead of the locale
      *         query parameter, you need to pass the delete_all_localized:true query parameter
      *         <br>
-     * @return the retrofit2.Call
-     * <p>
-     * [Read More]{https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry}
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">Get
+     * Delete An Entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> delete(String entryUId) {
         return this.service.delete(this.headers, this.contentTypeUid, entryUId, new JSONObject(), this.params);
@@ -268,11 +293,12 @@ public class Entry {
      * @param requestBody
      *         you can delete specific localized entries by passing the locale codes in the Request body using the
      *         locales key as follows ``` { "entry": { "locales": ["hi-in", "mr-in", "es"] } } ```
-     * @return the retrofit2.Call
-     * <p>
-     * Read more about <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">Delete
-     * Entry</a>
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry"> Delete
+     * An Entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> delete(String entryUId, JSONObject requestBody) {
         return this.service.delete(this.headers, this.contentTypeUid, entryUId, requestBody, this.params);
@@ -290,7 +316,12 @@ public class Entry {
      * @param requestBody
      *         RequestBody like below. ``` { "entry": { "_version_name": "Test version", "locale": "fr-fr", "force":
      *         true } } ```
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#set-version-name-for-entry"> Set
+     * Version Name for Entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> versionName(String entryUId, int version, JSONObject requestBody) {
         return this.service.versionName(this.headers, this.contentTypeUid, entryUId, String.valueOf(version),
@@ -318,7 +349,12 @@ public class Entry {
      *         'true' to get the total count of the entry version details. - locale(optional): Enter the code of the
      *         language of which the entries need to be included. Only the version details of entries published in this
      *         locale will be displayed
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-entry">
+     * Get Details of All Versions of an Entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> detailOfAllVersion(String entryUId) {
         return this.service.detailOfAllVersion(this.headers, this.contentTypeUid, entryUId, this.params);
@@ -331,7 +367,12 @@ public class Entry {
      *         Enter the version number of the entry that you want to delete.
      * @param requestBody
      *         Request body for the delete operation ``` { "entry": { "locale": "en-us" } } ```
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-entry">
+     * Delete Version Name of Entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> deleteVersionName(String entryUId, int versionNumber, JSONObject requestBody) {
         return this.service.deleteVersionName(this.headers, this.contentTypeUid, entryUId, versionNumber, requestBody);
@@ -347,7 +388,13 @@ public class Entry {
      *         <p>
      *         {@link #addParam(String, Object)} The Query parameter: Locale: Enter the code of the language of which
      *         the entries need to be included. Only the entries published in this locale will be displayed
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-references-of-an-entry"> Get
+     * references of an entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object)  to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> getReference(String entryUId) {
         return this.service.reference(this.headers, this.contentTypeUid, entryUId, this.params);
@@ -360,7 +407,13 @@ public class Entry {
      *         the entry uid {@link #addParam(String, Object)} the query parameter The Query parameter: Locale: Enter
      *         the code of the language of which the entries need to be included. Only the entries published in this
      *         locale will be displayed
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-languages-of-an-entry"> Get
+     * language of an entry</a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object)  to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> getLanguage(String entryUId) {
         return this.service.language(this.headers, this.contentTypeUid, entryUId, this.params);
@@ -382,7 +435,12 @@ public class Entry {
      *         In the "Body" parameter, you need to provide the content of your entry based on the content type.
      * @param localeCode
      *         Enter the code of the language to localize the entry of that particular language
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#localize-an-entry">
+     * Localize an entry
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> localize(@NotNull String entryUId, @NotNull JSONObject requestBody,
                                        @NotNull String localeCode) {
@@ -397,6 +455,11 @@ public class Entry {
      * @param localeCode
      *         Enter the code of the language to localize the entry of that particular language
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#unlocalize-an-entry">
+     * unlocalize an entry
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> unLocalize(@NotNull String entryUId, @NotNull String localeCode) {
         return this.service.unLocalize(this.headers, this.contentTypeUid, entryUId, localeCode);
@@ -407,9 +470,15 @@ public class Entry {
      * file.
      *
      * @param entryUId
-     *         The entry uid {@link #addParam(String, Object)} Locale: Enter the code of the language to localize the
-     *         entry of that particular language
+     *         The unique ID of the content type of which you wish to retrieve the details. The uid is generated based
+     *         on the title of the content type and it is unique across a stack.
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-an-entry">
+     * Export an entry
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object)  to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> export(@NotNull String entryUId) {
         return this.service.export(this.headers, this.contentTypeUid, entryUId, this.params);
@@ -431,6 +500,12 @@ public class Entry {
      * overwrite (optional): Select 'true' to replace an existing entry with the imported entry file. language
      *
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
+     * Import an entry
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object)  to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> imports() {
         return this.service.imports(this.headers, this.contentTypeUid, this.params);
@@ -446,7 +521,13 @@ public class Entry {
      *         locale (optional): Enter the code of the language to localize the entry of that particular
      *         <br>
      *         overwrite (optional): Select 'true' to replace an existing entry with the imported entry file. language
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
+     * Import an entry
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object)  to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> importExisting(@NotNull String entryUId) {
         return this.service.importExisting(this.headers, this.contentTypeUid, entryUId, this.params);
@@ -478,7 +559,12 @@ public class Entry {
      *         The entry uid
      * @param requestBody
      *         The requestBody in JSONObject
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry">
+     * Publish an entry
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> publish(@NotNull String entryUId, @NotNull JSONObject requestBody) {
         return this.service.publish(this.headers, this.contentTypeUid, entryUId, requestBody);
@@ -493,7 +579,14 @@ public class Entry {
      *         <br> - approvals:Set this to <b>true</b> to publish the entries that do not require an approval to be
      *         published.<br> skip_workflow_stage_check - Set this to <b>true</b> to publish the entries that are at a
      *         workflow stage where they satisfy the applied to publish rules.
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry-with-references">
+     * Publish an entry With reference
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object)  to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> publishWithReference(@NotNull JSONObject requestBody) {
         return this.service.publishWithReference(this.headers, requestBody, this.params);
@@ -518,7 +611,12 @@ public class Entry {
      *         The entry uid
      * @param requestBody
      *         The requestBody in JSONObject
-     * @return the retrofit2.Call
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-entry">
+     * Unpublish an entry
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> unpublish(@NotNull String entryUid, @NotNull JSONObject requestBody) {
         return this.service.unpublish(this.headers, this.contentTypeUid, entryUid, requestBody);

@@ -264,7 +264,7 @@ public class Contentstack {
     public Stack stack() {
         if (this.authtoken == null)
             throw new IllegalStateException(ILLEGAL_USER);
-        return new Stack(this.instance);
+        return new Stack(this.instance, this.authtoken);
     }
 
 
@@ -288,7 +288,9 @@ public class Contentstack {
      */
     public Stack stack(@NotNull Map<String, Object> header) {
         if (this.authtoken == null)
-            throw new IllegalStateException(PLEASE_LOGIN);
+            if (header.size() == 0) {
+                throw new IllegalStateException(PLEASE_LOGIN);
+            }
         return new Stack(this.instance, header);
     }
 
