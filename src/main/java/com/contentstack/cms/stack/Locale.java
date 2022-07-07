@@ -17,7 +17,7 @@ import java.util.Map;
  * This feature allows you to set up multilingual websites
  * and cater to a wide variety of audience by serving content in their local language(s).
  *
- * @author Shailesh Mishra (ishaileshmishra)
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */
