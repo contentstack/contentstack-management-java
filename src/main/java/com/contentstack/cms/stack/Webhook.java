@@ -31,14 +31,12 @@ public class Webhook {
     protected final WebhookService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
-    private final Retrofit retrofit;
 
     protected Webhook(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
         this.headers.putAll(stackHeaders);
-        this.retrofit = retrofit;
-        this.service = this.retrofit.create(WebhookService.class);
+        this.service = retrofit.create(WebhookService.class);
     }
 
     /**
