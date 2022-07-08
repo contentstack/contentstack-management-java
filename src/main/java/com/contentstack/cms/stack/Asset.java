@@ -19,7 +19,7 @@ import java.util.Map;
  * Assets refer to all the media files (images, videos, PDFs, audio files, and so on) uploaded in your Contentstack
  * repository for future use.
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */

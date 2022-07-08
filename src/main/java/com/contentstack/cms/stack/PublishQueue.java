@@ -20,7 +20,7 @@ import java.util.HashMap;
  * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
  * <br>
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">
  * Publish Queue
