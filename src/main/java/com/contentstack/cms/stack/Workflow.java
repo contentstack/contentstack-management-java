@@ -30,14 +30,12 @@ public class Workflow {
     protected final WorkflowService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
-    private final Retrofit retrofit;
 
     protected Workflow(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
         this.headers.putAll(stackHeaders);
-        this.retrofit = retrofit;
-        this.service = this.retrofit.create(WorkflowService.class);
+        this.service = retrofit.create(WorkflowService.class);
     }
 
 
@@ -88,12 +86,22 @@ public class Workflow {
     /**
      * Get a Single Workflow request retrieves the comprehensive details of a specific Workflow of a stack.
      *
+     * @return Call
+     */
+    public Call<ResponseBody> fetch() {
+        return this.service.fetch(this.headers, this.params);
+    }
+
+
+    /**
+     * Get a Single Workflow request retrieves the comprehensive details of a specific Workflow of a stack.
+     *
      * @param workflowUid
      *         the UID of your workflow that you want to retrieve
      * @return Call
      */
-    public Call<ResponseBody> fetch(@NotNull String workflowUid) {
-        return this.service.fetch(this.headers, workflowUid);
+    public Call<ResponseBody> single(@NotNull String workflowUid) {
+        return this.service.single(this.headers, workflowUid);
     }
 
     /**

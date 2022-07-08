@@ -17,7 +17,7 @@ import java.util.HashMap;
 class RoleUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     protected static Roles roles;
@@ -158,7 +158,7 @@ class RoleUnitTest {
     @Test
     @Order(5)
     void rolesQueryParams() {
-        Request request = roles.getRoles().request();
+        Request request = roles.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -177,7 +177,7 @@ class RoleUnitTest {
     void allRoles() {
         roles.addParam("include_rules", true);
         roles.addParam("include_permissions", true);
-        Request request = roles.getRoles().request();
+        Request request = roles.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -193,7 +193,7 @@ class RoleUnitTest {
     @Test
     @Order(7)
     void singleRole() {
-        Request request = roles.getRole(_uid).request();
+        Request request = roles.single(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -210,7 +210,7 @@ class RoleUnitTest {
     @Test
     @Order(8)
     void createRole() {
-        Request request = roles.createRole(body).request();
+        Request request = roles.create(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -227,7 +227,7 @@ class RoleUnitTest {
     @Test
     @Order(9)
     void updateRole() {
-        Request request = roles.updateRole(_uid, body).request();
+        Request request = roles.update(_uid, body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -241,7 +241,7 @@ class RoleUnitTest {
     @Test
     @Order(10)
     void deleteRole() {
-        Request request = roles.deleteRole(_uid).request();
+        Request request = roles.delete(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
