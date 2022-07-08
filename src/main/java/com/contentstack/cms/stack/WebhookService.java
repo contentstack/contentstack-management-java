@@ -1,6 +1,5 @@
 package com.contentstack.cms.stack;
 
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -13,10 +12,11 @@ import java.util.Map;
 public interface WebhookService {
 
     @GET("webhooks")
-    Call<ResponseBody> fetch(@HeaderMap Map<String, Object> headers, @QueryMap HashMap<String, Object> params);
+    Call<ResponseBody> fetch(@HeaderMap Map<String, Object> headers,
+                             @QueryMap HashMap<String, Object> params);
 
     @GET("webhooks/{webhook_uid}")
-    Call<ResponseBody> fetch(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String executionUid);
+    Call<ResponseBody> single(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String executionUid);
 
     @POST("webhooks")
     Call<ResponseBody> create(@HeaderMap Map<String, Object> headers, @Body JSONObject requestBody);
@@ -38,11 +38,14 @@ public interface WebhookService {
     Call<ResponseBody> importExisting(@HeaderMap Map<String, Object> headers);
 
     @GET("webhooks/{webhook_uid}/executions")
-    Call<ResponseBody> getExecutions(HashMap<String, Object> headers, String webhookUid, @QueryMap HashMap<String, Object> params);
+    Call<ResponseBody> getExecutions(
+            @HeaderMap Map<String, Object> headers,
+            @Path("webhook_uid") String executionUid,
+            @QueryMap Map<String, Object> params);
 
     @POST("webhooks/{webhook_uid}/retry")
-    Call<ResponseBody> retry(HashMap<String, Object> headers, @Path("webhook_uid") String executionUid);
+    Call<ResponseBody> retry(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String executionUid);
 
     @GET("webhooks/{execution_uid}/logs")
-    Call<ResponseBody> getExecutionLog(HashMap<String, Object> headers, @Path("execution_uid") String executionUid);
+    Call<ResponseBody> getExecutionLog(@HeaderMap Map<String, Object> headers, @Path("execution_uid") String executionUid);
 }

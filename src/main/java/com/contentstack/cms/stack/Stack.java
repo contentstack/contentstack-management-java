@@ -341,6 +341,32 @@ public class Stack {
         return new Webhook(this.client, this.headers);
     }
 
+
+    /**
+     * <b>Branches</b>
+     * <br>
+     * <b>Branches</b> allows you to isolate and easily manage your <b>in-progress</b> work from your stable, live work
+     * in the production environment. It helps multiple development teams to work in parallel in a more collaborative,
+     * organized, and structured manner without impacting each other.
+     * <br>
+     *
+     * @return Branch
+     */
+    public Branch branch() {
+        return new Branch(this.client, this.headers);
+    }
+
+
+    /**
+     * An alias acts as a pointer to a particular branch. You can specify the alias ID in your frontend code to pull
+     * content from the target branch associated with an alias.
+     *
+     * @return Alias
+     */
+    public Alias alias() {
+        return new Alias(this.client, this.headers);
+    }
+
     /**
      * <b>Get stacks</b>
      * <br>
