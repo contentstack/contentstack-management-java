@@ -111,7 +111,7 @@ public class Branch {
 
     /**
      * The Create a branch request creates a new branch in a particular stack of your organization.
-     *
+     * @param body the request body
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-branch">Create a
      * branch</a>
@@ -126,6 +126,8 @@ public class Branch {
      * The Get assets and folders of a parent folder retrieves details of both assets and asset subfolders within a
      * specific parent asset folder.
      *
+     * @param branchUid
+     *         The unique ID of the branch of which you want to retrieve the details.
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-branch">Delete a
      * branch</a>

@@ -137,12 +137,7 @@ public class Environment {
      *
      * @param body
      *         The {@link JSONObject} request body<br>
-     *         <b>Example:</b>
-     *         <pre
      * @return Call
-     * @code{ { "environment": { "name": "development", "servers": [ { "name": "default" } ], "urls": [ { "locale":
-     * "en-us", "url": "http://example.com/" } ], "deploy_content": true } }}
-     * </pre>
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get all
      * environments
@@ -173,7 +168,7 @@ public class Environment {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-environment">Update
-     * Environment
+     * Environment</a>
      * @see #addHeader(String, Object) to add headers to the request
      * @since 1.0.0
      */
@@ -193,7 +188,7 @@ public class Environment {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-environment">Delete
-     * Environment
+     * Environment</a>
      * @see #addHeader(String, Object) to add headers to the request
      * @since 1.0.0
      */

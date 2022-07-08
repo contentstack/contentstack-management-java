@@ -1,208 +1,511 @@
 ﻿<<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
 
 <head>
- <meta charset="utf-8">
- <meta http-equiv="X-UA-Compatible" content="IE=edge">
- <title>Contentstack</title>
- <meta name="Headless CMS" content="">
- <meta name="viewport" content="width=device-width, initial-scale=1">
- <link rel="stylesheet" href="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Contentstack API Documentation</title>
+    <meta name="Headless CMS" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
 </head>
 
 <body>
-<h1 id="contentstack-management-sdk---java">Contentstack Management SDK - Java</h1>
-<p>Contentstack is a headless CMS with an API-first approach. It is a CMS that developers can use to build powerful cross-platform applications in their favorite languages. All you have to do is build your application frontend, and Contentstack will
- take care of the rest. <a href="https://www.contentstack.com/">Read More</a>. This SDK uses the <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/">Content Management API</a> (CMA). The CMA is used to manage
- the content of your Contentstack account. This includes creating, updating, deleting, and fetching content of your account.</p>
-<p><strong>Note:</strong> <em>By using CMA, you can execute GET requests for fetching content. However, we strongly recommend that you always use the <a href="https://www.contentstack.com/docs/developers/apis/content-delivery-api/">Content Delivery API</a> to deliver content to your web or mobile properties</em>.</p>
+<h1>Contentstack API Reference Documentation</h1>
+<h2>Contentstack Management SDK Using Java</h2>
+<p>Contentstack is a headless CMS with an API-first approach. It is a CMS that developers can use to build powerful
+    cross-platform applications in their favorite languages. All you have to do is build your application frontend, and
+    Contentstack will
+    take care of the rest. <a href="https://www.contentstack.com/">Read More</a>. This SDK uses the <a
+            href="https://www.contentstack.com/docs/developers/apis/content-management-api/">Content Management API</a>
+    (CMA). The CMA is used to manage
+    the content of your Contentstack account. This includes creating, updating, deleting, and fetching content of your
+    account.</p>
+<p><strong>Note:</strong> <em>By using CMA, you can execute GET requests for fetching content. However, we strongly
+    recommend that you always use the <a href="https://www.contentstack.com/docs/developers/apis/content-delivery-api/">Content
+        Delivery API</a> to deliver content to your web or mobile properties</em>.</p>
 
 Table of contents
 <ul>
- <li><a href="#prerequisite">Prerequisite</a></li>
- <li><a href="#installation">Installation</a></li>
- <li><a href="#initialization">Initialization</a></li>
- <li><a href="#authentication">Authentication</a></li>
- <li><a href="#users">Users</a></li>
- <li><a href="#organizations">Organizations</a></li>
- <li><a href="#stacks">Stacks</a></li>
- <li><a href="#content-types">Content Types</a></li>
- <li><a href="#global-fields">Global Fields</a></li>
- <li><a href="#entries">Entries</a></li>
- <li><a href="#assets">Assets</a></li>
- <li><a href="#bulk-operations">Bulk Operation</a></li>
+    <li><a href="#prerequisite">Prerequisite</a></li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#initialization">Initialization</a></li>
+    <li><a href="#authentication">Authentication</a></li>
+    <li><a href="#users">Users</a></li>
+    <li><a href="#organizations">Organizations</a></li>
+    <li><a href="#stacks">Stacks</a></li>
+    <li><a href="#content-types">Content Types</a></li>
+    <li><a href="#global-fields">Global Fields</a></li>
+    <li><a href="#entries">Entries</a></li>
+    <li><a href="#assets">Assets</a></li>
+    <li><a href="#bulk-operations">Bulk Operation</a></li>
 </ul>
 
-<ul>
-<!-- <li>Others<br>-->
-<!--  <a href="##RequestBody">Create JSON Body</a></li>-->
-</ul>
+<!--<ul>-->
+<!--    <li>Others<br>-->
+<!--        <a href="##RequestBody">Create JSON Body</a></li>-->
+<!--</ul>-->
 <h2 id="prerequisite">Prerequisite</h2>
 <p>To use the Contentstack management sdk for Java, you must have:</p>
 <ul>
- <li>The suitable <a href="http://www.oracle.com/technetwork/java/javase/downloads/">Java Development Environment</a>.</li>
- <li>The <a href="https://www.contentstack.com">Contentstack</a> account.</li>
- <li>Login your account</li>
- <li>Get the <a href="https://www.contentstack.com">Contentstack</a> credentials (API keys and Management Token) set in your stack token section.</li>
- <li>Should be Java 1.8 or above installed.</li>
+    <li>The suitable <a href="http://www.oracle.com/technetwork/java/javase/downloads/">Java Development Environment</a>.
+    </li>
+    <li>The <a href="https://www.contentstack.com">Contentstack</a> account.</li>
+    <li>Login your account</li>
+    <li>Get the <a href="https://www.contentstack.com">Contentstack</a> credentials (API keys and Management Token) set
+        in your stack token section.
+    </li>
+    <li>Should be Java 1.8 or above installed.</li>
 </ul>
 <h2 id="setup">Setup</h2>
-<p>To use Contentstack management sdk in our Maven project, we’ll need to add the following dependency to our pom.xml:</p>
-<pre class=" language-java"><code class="prism  language-java"><span class="token operator">&lt;</span>dependency<span class="token operator">&gt;</span>
-         <span class="token operator">&lt;</span>groupId<span class="token operator">&gt;</span>com<span class="token punctuation">.</span>contentstack<span class="token punctuation">.</span>sdk<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>artifactId<span class="token operator">&gt;</span>cms<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>version<span class="token operator">&gt;</span><span class="token punctuation">{</span>version<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">&gt;</span>
+<p>To use Contentstack management sdk in our Maven project, we’ll need to add the following dependency to our
+    pom.xml:</p>
+<pre class=" language-java"><code class="prism  language-java"><span class="token operator">&lt;</span>dependency<span
+        class="token operator">&gt;</span>
+         <span class="token operator">&lt;</span>groupId<span class="token operator">&gt;</span>com<span
+            class="token punctuation">.</span>contentstack<span class="token punctuation">.</span>sdk<span
+            class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">&gt;</span> <span
+            class="token operator">&lt;</span>artifactId<span class="token operator">&gt;</span>cms<span
+            class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span
+            class="token operator">&gt;</span> <span class="token operator">&lt;</span>version<span
+            class="token operator">&gt;</span><span class="token punctuation">{</span>version<span
+            class="token punctuation">}</span><span class="token operator">&lt;</span><span
+            class="token operator">/</span>version<span class="token operator">&gt;</span><span class="token operator">&lt;</span><span
+            class="token operator">/</span>dependency<span class="token operator">&gt;</span>
         </code></pre>
 <p>Or, for a Gradle project:</p>
 <pre class=" language-java"><code class="prism  language-java">implementation <span class="token string">'com.contentstack.cms:{version}'</span>
         </code></pre>
 <ul>
- <li>Download the latest version <a href="https://search.maven.org/artifact/com.contentstack.cma">HERE</a></li>
+    <li>Download the latest version <a href="https://search.maven.org/artifact/com.contentstack.cma">HERE</a></li>
 </ul>
 <h2 id="initialization">Initialization</h2>
 <p>To use the Java CMA SDK, you need get the client first:</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class=" language-java"><code class="prism  language-java">Contentstack client <span class="token operator">=</span> <span
+        class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span
+        class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
         </code></pre>
 <h2 id="authentication">Authentication</h2>
-<p>To use the CMA, you will need to authenticate your users with a <a href="https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens">Management Token</a> or an <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#how-to-get-authtoken">Authtoken</a>.
- Read more about it in <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#authentication">Authentication</a></p>
+<p>To use the CMA, you will need to authenticate your users with a <a
+        href="https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens">Management Token</a>
+    or an <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#how-to-get-authtoken">Authtoken</a>.
+    Read more about it in <a
+            href="https://www.contentstack.com/docs/developers/apis/content-management-api/#authentication">Authentication</a>
+</p>
 <ul>
- <li><em>Using authtoken</em></li>
+    <li><em>Using authtoken</em></li>
 </ul>
 <hr>
-<p>An <a href="https://www.contentstack.com/docs/developers/create-tokens/types-of-tokens/#authentication-tokens-authtokens-">Authtoken</a> is a read-write token used to make authorized CMA requests, and it is a <strong>user-specific</strong> token.</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack  client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>An <a
+        href="https://www.contentstack.com/docs/developers/create-tokens/types-of-tokens/#authentication-tokens-authtokens-">Authtoken</a>
+    is a read-write token used to make authorized CMA requests, and it is a <strong>user-specific</strong> token.</p>
+<pre class=" language-java"><code class="prism  language-java">Contentstack  client <span
+        class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span
+        class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
         </code></pre>
 <ul>
- <li><em>Using login email id and password</em></li>
+    <li><em>Using login email id and password</em></li>
 </ul>
 <p>To Login to Contentstack by using credentials, you can use the following lines of code:</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack  client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token string">"EMAIL"</span><span class="token punctuation">,</span> <span class="token string">"PASSWORD"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<pre class=" language-java"><code class="prism  language-java">Contentstack  client <span
+        class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span
+        class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> client<span
+            class="token punctuation">.</span><span class="token function">login</span><span
+            class="token punctuation">(</span><span class="token string">"EMAIL"</span><span
+            class="token punctuation">,</span> <span class="token string">"PASSWORD"</span><span
+            class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span>
         </code></pre>
 <ul>
- <li><em>Using management token</em></li>
+    <li><em>Using management token</em></li>
 </ul>
-<p><a href="https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens/">Management Tokens</a> are <strong>stack-level</strong> tokens, with no users attached to them.</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack  client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">stack</span><span class="token punctuation">(</span><span class="token string">"API_KEY"</span><span class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contentType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<p><a href="https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens/">Management Tokens</a>
+    are <strong>stack-level</strong> tokens, with no users attached to them.</p>
+<pre class=" language-java"><code class="prism  language-java">Contentstack  client <span
+        class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span
+        class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> client<span
+            class="token punctuation">.</span><span class="token function">stack</span><span
+            class="token punctuation">(</span><span class="token string">"API_KEY"</span><span
+            class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span
+            class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contentType</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">execute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span>
         </code></pre>
 <h2 id="users">Users</h2>
-<p><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#users">Users</a> All accounts registered with Contentstack are known as Users. A stack can have many users with varying permissions and roles.</p>
+<p><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#users">Users</a> All accounts
+    registered with Contentstack are known as Users. A stack can have many users with varying permissions and roles.</p>
 <p>Access the user like below snippet:</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        client<span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token string">"EMAIL"</span><span class="token punctuation">,</span> <span class="token string">"PASSWORD"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        User user <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">user</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> user<span class="token punctuation">.</span><span class="token function">getUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class=" language-java"><code class="prism  language-java">Contentstack client <span class="token operator">=</span> <span
+        class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
+        client<span class="token punctuation">.</span><span class="token function">login</span><span
+            class="token punctuation">(</span><span class="token string">"EMAIL"</span><span
+            class="token punctuation">,</span> <span class="token string">"PASSWORD"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        User user <span class="token operator">=</span> client<span class="token punctuation">.</span><span
+            class="token function">user</span><span class="token punctuation">(</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> user<span
+            class="token punctuation">.</span><span class="token function">getUser</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">execute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
         </code></pre>
 <h2 id="organizations">Organizations</h2>
-<p><a href="https://www.contentstack.com/docs/owners-and-admins/about-organizations">Organization</a> is the top-level entity in the hierarchy of Contentstack, consisting of stacks and <a href="https://www.contentstack.com/docs/developers/set-up-stack/about-stack/">stack</a>            resources, and users. Organization allows easy management of projects as well as users within the Organization.</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        client<span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token string">"EMAIL"</span><span class="token punctuation">,</span> <span class="token string">"PASSWORD"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Organization organization <span class="token operator">=</span> contentstack<span class="token punctuation">.</span><span class="token function">organization</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> organization<span class="token punctuation">.</span><span class="token function">getAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p><a href="https://www.contentstack.com/docs/owners-and-admins/about-organizations">Organization</a> is the top-level
+    entity in the hierarchy of Contentstack, consisting of stacks and <a
+            href="https://www.contentstack.com/docs/developers/set-up-stack/about-stack/">stack</a> resources, and
+    users. Organization allows easy management of projects as well as users within the Organization.</p>
+<pre class=" language-java"><code class="prism  language-java">Contentstack client <span class="token operator">=</span> <span
+        class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
+        client<span class="token punctuation">.</span><span class="token function">login</span><span
+            class="token punctuation">(</span><span class="token string">"EMAIL"</span><span
+            class="token punctuation">,</span> <span class="token string">"PASSWORD"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        Organization organization <span class="token operator">=</span> contentstack<span
+            class="token punctuation">.</span><span class="token function">organization</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> organization<span
+            class="token punctuation">.</span><span class="token function">getAll</span><span class="token punctuation">(</span><span
+            class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
         </code></pre>
 <h2 id="stacks">Stacks</h2>
-<p>A <a href="https://www.contentstack.com/docs/developers/set-up-stack/about-stack">Stack</a> is a space that stores the content of a project (a web or mobile property). Within a stack, you can create content structures, content entries, users,
- etc. related to the project.</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        client<span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token string">"EMAIL"</span><span class="token punctuation">,</span> <span class="token string">"PASSWORD"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Stack stack <span class="token operator">=</span> contentstack<span class="token punctuation">.</span><span class="token function">stack</span><span class="token punctuation">(</span><span class="token string">"APIKey"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> stack<span class="token punctuation">.</span><span class="token function">fetch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>A <a href="https://www.contentstack.com/docs/developers/set-up-stack/about-stack">Stack</a> is a space that stores
+    the content of a project (a web or mobile property). Within a stack, you can create content structures, content
+    entries, users,
+    etc. related to the project.</p>
+<pre class=" language-java"><code class="prism  language-java">Contentstack client <span class="token operator">=</span> <span
+        class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
+        client<span class="token punctuation">.</span><span class="token function">login</span><span
+            class="token punctuation">(</span><span class="token string">"EMAIL"</span><span
+            class="token punctuation">,</span> <span class="token string">"PASSWORD"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        Stack stack <span class="token operator">=</span> contentstack<span class="token punctuation">.</span><span
+            class="token function">stack</span><span class="token punctuation">(</span><span class="token string">"APIKey"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> stack<span
+            class="token punctuation">.</span><span class="token function">fetch</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">execute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
         </code></pre>
 <p>OR</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack  client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">stack</span><span class="token punctuation">(</span><span class="token string">"API_KEY"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exceute</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<pre class=" language-java"><code class="prism  language-java">Contentstack  client <span
+        class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span
+        class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> client<span
+            class="token punctuation">.</span><span class="token function">stack</span><span
+            class="token punctuation">(</span><span class="token string">"API_KEY"</span><span
+            class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exceute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span>
         </code></pre>
 <h2 id="content-types">Content Types</h2>
-<p><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#content-types">Content type</a> defines the structure or schema of a page or a section of your web or mobile property. To create content for your application, you
- are required to first create a content type, and then create entries using the content type.</p>
-<pre class=" language-java"><code class="prism  language-java">Contentstack contentstack <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ContentType contentType <span class="token operator">=</span> contentstack<span class="token punctuation">.</span><span class="token function">contentType</span><span class="token punctuation">(</span><span class="token string">"API_KEY"</span><span class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> contentType<span class="token punctuation">.</span><span class="token function">fetch</span><span class="token punctuation">(</span>mapQuery<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#content-types">Content type</a>
+    defines the structure or schema of a page or a section of your web or mobile property. To create content for your
+    application, you
+    are required to first create a content type, and then create entries using the content type.</p>
+<pre class=" language-java"><code class="prism  language-java">Contentstack contentstack <span
+        class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
+        ContentType contentType <span class="token operator">=</span> contentstack<span
+            class="token punctuation">.</span><span class="token function">contentType</span><span
+            class="token punctuation">(</span><span class="token string">"API_KEY"</span><span
+            class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> contentType<span
+            class="token punctuation">.</span><span class="token function">fetch</span><span
+            class="token punctuation">(</span>mapQuery<span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">execute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
         </code></pre>
 <h2 id="global-fields">Global Fields</h2>
-<p>A <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#global-fields">Global field</a> is a reusable field (or group of fields) that you can define once and reuse in any content type within your stack. This eliminates
- the need (and thereby time and efforts) to create the same set of fields repeatedly in multiple content types.</p>
-<pre class=" language-java"><code class="prism  language-java">GlobalField globalField <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span class="token punctuation">(</span>GLOBAL_AUTHTOKEN<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-         <span class="token punctuation">.</span><span class="token function">globalField</span><span class="token punctuation">(</span><span class="token string">"API_KEY"</span><span class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>Call<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> globalField<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>GlobalFiledUid<span class="token punctuation">,</span>
-         <span class="token string">"requestBody"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>```
+<p>A <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#global-fields">Global field</a>
+    is a reusable field (or group of fields) that you can define once and reuse in any content type within your stack.
+    This eliminates
+    the need (and thereby time and efforts) to create the same set of fields repeatedly in multiple content types.</p>
+<pre class=" language-java"><code class="prism  language-java">GlobalField globalField <span
+        class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span
+        class="token punctuation">(</span>GLOBAL_AUTHTOKEN<span class="token punctuation">)</span><span
+        class="token punctuation">.</span><span class="token function">build</span><span
+        class="token punctuation">(</span><span class="token punctuation">)</span>
+         <span class="token punctuation">.</span><span class="token function">globalField</span><span
+            class="token punctuation">(</span><span class="token string">"API_KEY"</span><span
+            class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>Call<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> globalField<span
+            class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>GlobalFiledUid<span
+            class="token punctuation">,</span>
+         <span class="token string">"requestBody"</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>```
 
         ## Entries
 
-        An <span class="token punctuation">[</span>entry<span class="token punctuation">]</span><span class="token punctuation">(</span>https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>www<span class="token punctuation">.</span>contentstack<span class="token punctuation">.</span>com<span class="token operator">/</span>docs<span class="token operator">/</span>developers<span class="token operator">/</span>apis<span class="token operator">/</span>content<span class="token operator">-</span>management<span class="token operator">-</span>api<span class="token operator">/</span>#entries<span class="token punctuation">)</span> is the actual piece of content created using one of the defined content types<span class="token punctuation">.</span>
+        An <span class="token punctuation">[</span>entry<span class="token punctuation">]</span><span
+            class="token punctuation">(</span>https<span class="token operator">:</span><span
+            class="token operator">/</span><span class="token operator">/</span>www<span
+            class="token punctuation">.</span>contentstack<span class="token punctuation">.</span>com<span
+            class="token operator">/</span>docs<span class="token operator">/</span>developers<span
+            class="token operator">/</span>apis<span class="token operator">/</span>content<span class="token operator">-</span>management<span
+            class="token operator">-</span>api<span class="token operator">/</span>#entries<span
+            class="token punctuation">)</span> is the actual piece of content created using one of the defined content types<span
+            class="token punctuation">.</span>
 
         ```java
-        Entry entry <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span class="token punctuation">(</span>authToken<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-         <span class="token punctuation">.</span><span class="token function">entry</span><span class="token punctuation">(</span><span class="token string">"API_KEY"</span><span class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>HashMap<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">&gt;</span> queryParams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> entry<span class="token punctuation">.</span><span class="token function">fetch</span><span class="token punctuation">(</span>queryParams<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Entry entry <span class="token operator">=</span> <span class="token keyword">new</span> <span
+            class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">setAuthtoken</span><span
+            class="token punctuation">(</span>authToken<span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">build</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span>
+         <span class="token punctuation">.</span><span class="token function">entry</span><span
+            class="token punctuation">(</span><span class="token string">"API_KEY"</span><span
+            class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>HashMap<span
+            class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span
+            class="token operator">&gt;</span> queryParams <span class="token operator">=</span> <span
+            class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span
+            class="token operator">&gt;</span><span class="token punctuation">(</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> entry<span
+            class="token punctuation">.</span><span class="token function">fetch</span><span
+            class="token punctuation">(</span>queryParams<span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">execute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
         </code></pre>
 <h2 id="assets">Assets</h2>
-<p><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#assets">Assets</a> refer to all the media files (images, videos, PDFs, audio files, and so on) uploaded in your Contentstack repository for future use.</p>
-<pre class=" language-java"><code class="prism  language-java">Asset asset <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Contentstack<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">asset</span><span class="token punctuation">(</span><span class="token string">"API_KEY"</span><span class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">&gt;</span> queryParams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"folder"</span><span class="token punctuation">,</span> <span class="token string">"folder_uid_some_example"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"include_folders"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"environment"</span><span class="token punctuation">,</span> <span class="token string">"production"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"version"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"include_publish_details"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"include_count"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"relative_urls"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"asc_field_uid"</span><span class="token punctuation">,</span> <span class="token string">"created_at"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"desc_field_uid"</span><span class="token punctuation">,</span> <span class="token number">230</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#assets">Assets</a> refer to all
+    the media files (images, videos, PDFs, audio files, and so on) uploaded in your Contentstack repository for future
+    use.</p>
+<pre class=" language-java"><code class="prism  language-java">Asset asset <span class="token operator">=</span> <span
+        class="token keyword">new</span> <span class="token class-name">Contentstack<span
+        class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAuthtoken</span><span
+        class="token punctuation">(</span><span class="token string">"AUTHTOKEN"</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">build</span><span class="token punctuation">(</span><span
+        class="token punctuation">)</span><span class="token punctuation">.</span><span
+        class="token function">asset</span><span class="token punctuation">(</span><span
+        class="token string">"API_KEY"</span><span class="token punctuation">,</span> <span class="token string">"MANAGEMENT_TOKEN"</span><span
+        class="token punctuation">)</span><span class="token punctuation">;</span>
+        Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span
+            class="token operator">&gt;</span> queryParams <span class="token operator">=</span> <span
+            class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span
+            class="token operator">&gt;</span><span class="token punctuation">(</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"folder"</span><span class="token punctuation">,</span> <span
+            class="token string">"folder_uid_some_example"</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"include_folders"</span><span
+            class="token punctuation">,</span> <span class="token boolean">true</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"environment"</span><span
+            class="token punctuation">,</span> <span class="token string">"production"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"version"</span><span
+            class="token punctuation">,</span> <span class="token number">1</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"include_publish_details"</span><span
+            class="token punctuation">,</span> <span class="token boolean">true</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"include_count"</span><span
+            class="token punctuation">,</span> <span class="token boolean">true</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"relative_urls"</span><span
+            class="token punctuation">,</span> <span class="token boolean">false</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"asc_field_uid"</span><span
+            class="token punctuation">,</span> <span class="token string">"created_at"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        queryParams<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"desc_field_uid"</span><span
+            class="token punctuation">,</span> <span class="token number">230</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        Response<span class="token operator">&lt;</span>ResponseBody<span class="token operator">&gt;</span> response <span class="token operator">=</span> asset<span class="token punctuation">.</span><span class="token function">fetch</span><span class="token punctuation">(</span>queryParams<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response<span class="token operator">&lt;</span>ResponseBody<span
+            class="token operator">&gt;</span> response <span class="token operator">=</span> asset<span
+            class="token punctuation">.</span><span class="token function">fetch</span><span
+            class="token punctuation">(</span>queryParams<span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">execute</span><span
+            class="token punctuation">(</span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
 
         </code></pre>
 <h2 id="bulk-operations">Bulk Operations</h2>
-<p>You can perform <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-operations">bulk operations</a> such as Publish, Unpublish, and Delete on multiple entries or assets, or Change the Workflow Details of multiple
- entries or assets at the same time.</p>
+<p>You can perform <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-operations">bulk
+    operations</a> such as Publish, Unpublish, and Delete on multiple entries or assets, or Change the Workflow Details
+    of multiple
+    entries or assets at the same time.</p>
 <h2 id="others">Others</h2>
 <h3 id="create-requestbody">Create RequestBody</h3>
 <ul>
- <li>JSON Body could be created by using Map passing in the JSONObject or directly create JSONObject.<br> Let’s suppose you have to make json like below:</li>
+    <li>JSON Body could be created by using Map passing in the JSONObject or directly create JSONObject.<br> Let’s
+        suppose you have to make json like below:
+    </li>
 </ul>
 <pre class=" language-java"><code class="prism  language-java"><span class="token punctuation">{</span>
-        <span class="token string">"entry"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-         <span class="token string">"title"</span><span class="token operator">:</span>  <span class="token string">"example"</span><span class="token punctuation">,</span> <span class="token string">"url"</span><span class="token operator">:</span>  <span class="token string">"/example"</span> <span class="token punctuation">}</span><span class="token punctuation">}</span>
+        <span class="token string">"entry"</span><span class="token operator">:</span> <span
+            class="token punctuation">{</span>
+         <span class="token string">"title"</span><span class="token operator">:</span>  <span class="token string">"example"</span><span
+            class="token punctuation">,</span> <span class="token string">"url"</span><span
+            class="token operator">:</span>  <span class="token string">"/example"</span> <span
+            class="token punctuation">}</span><span class="token punctuation">}</span>
         </code></pre>
 <ul>
- <li>Create request body using HashMap like below</li>
+    <li>Create request body using HashMap like below</li>
 </ul>
-<pre class=" language-java"><code class="prism  language-java">HashMap<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">&gt;</span> mapBody <span class="token operator">=</span> <span class="token keyword">new</span>  <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        HashMap<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">&gt;</span> bodyContent <span class="token operator">=</span> <span class="token keyword">new</span>  <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        bodyContent<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token string">"example"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        bodyContent<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"url"</span><span class="token punctuation">,</span> <span class="token string">"/example"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        requestBody<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"entry"</span><span class="token punctuation">,</span> bodyContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        JSONObject  requestBody <span class="token operator">=</span> <span class="token keyword">new</span>  <span class="token class-name">JSONObject</span><span class="token punctuation">(</span>mapBody<span class="token punctuation">)</span>
+<pre class=" language-java"><code class="prism  language-java">HashMap<span
+        class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span
+        class="token operator">&gt;</span> mapBody <span class="token operator">=</span> <span
+        class="token keyword">new</span>  <span class="token class-name">HashMap</span><span
+        class="token operator">&lt;</span><span class="token operator">&gt;</span><span
+        class="token punctuation">(</span><span class="token punctuation">)</span><span
+        class="token punctuation">;</span>
+        HashMap<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span
+            class="token operator">&gt;</span> bodyContent <span class="token operator">=</span> <span
+            class="token keyword">new</span>  <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span
+            class="token operator">&gt;</span><span class="token punctuation">(</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        bodyContent<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"title"</span><span
+            class="token punctuation">,</span> <span class="token string">"example"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        bodyContent<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"url"</span><span
+            class="token punctuation">,</span> <span class="token string">"/example"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        requestBody<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"entry"</span><span
+            class="token punctuation">,</span> bodyContent<span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
+        JSONObject  requestBody <span class="token operator">=</span> <span class="token keyword">new</span>  <span
+            class="token class-name">JSONObject</span><span class="token punctuation">(</span>mapBody<span
+            class="token punctuation">)</span>
         </code></pre>
 <ul>
- <li>The other way to create RequestBody using JSONObject like below</li>
+    <li>The other way to create RequestBody using JSONObject like below</li>
 </ul>
-<pre class=" language-java"><code class="prism  language-java">JSONObject  requestBody <span class="token operator">=</span> <span class="token keyword">new</span>  <span class="token class-name">JSONObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        JSONObject  bodyContent <span class="token operator">=</span> <span class="token keyword">new</span>  <span class="token class-name">JSONObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        bodyContent<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token string">"example"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        bodyContent<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"url"</span><span class="token punctuation">,</span> <span class="token string">"/example"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        requestBody<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"entry"</span><span class="token punctuation">,</span> bodyContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class=" language-java"><code class="prism  language-java">JSONObject  requestBody <span
+        class="token operator">=</span> <span class="token keyword">new</span>  <span class="token class-name">JSONObject</span><span
+        class="token punctuation">(</span><span class="token punctuation">)</span><span
+        class="token punctuation">;</span>
+        JSONObject  bodyContent <span class="token operator">=</span> <span class="token keyword">new</span>  <span
+            class="token class-name">JSONObject</span><span class="token punctuation">(</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        bodyContent<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"title"</span><span
+            class="token punctuation">,</span> <span class="token string">"example"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        bodyContent<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"url"</span><span
+            class="token punctuation">,</span> <span class="token string">"/example"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span>
+        requestBody<span class="token punctuation">.</span><span class="token function">put</span><span
+            class="token punctuation">(</span><span class="token string">"entry"</span><span
+            class="token punctuation">,</span> bodyContent<span class="token punctuation">)</span><span
+            class="token punctuation">;</span>
         </code></pre>
 <h3 id="documentation">Documentation</h3>
 <ul>
- <li><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#api-reference">Content Management API Docs</a></li>
- <li><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#api-reference">API References</a></li>
+    <li><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#api-reference">Content
+        Management API Docs</a></li>
+    <li><a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#api-reference">API
+        References</a></li>
 </ul>
 <h3 id="other-helpful-links">Other helpful Links</h3>
 <ul>
- <li><a href="https://www.contentstack.com/">Contentstack Website</a></li>
- <li><a href="https://contentstack.com/docs">Official Documentation</a></li>
+    <li><a href="https://www.contentstack.com/">Contentstack Website</a></li>
+    <li><a href="https://contentstack.com/docs">Official Documentation</a></li>
 </ul>
 <h3 id="the-mit-license-mit">The MIT License (MIT)</h3>
-<p>Copyright © 2012-2022 <a href="https://www.contentstack.com/">Contentstack</a>. All Rights Reserved Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”),
- to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
- to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
- OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Copyright © 2012-2022 <a href="https://www.contentstack.com/">Contentstack</a>. All Rights Reserved Permission is
+    hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+    (the “Software”),
+    to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
+    publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+    furnished
+    to do so, subject to the following conditions: The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY
+    OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER
+    IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    OTHER DEALINGS IN THE SOFTWARE.</p>
 
 
 </body>

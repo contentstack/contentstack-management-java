@@ -1,3 +1,7 @@
+
+/**
+ * The top most package to access contentstack instance
+ */
 package com.contentstack.cms;
 
 import com.contentstack.cms.core.AuthInterceptor;
@@ -29,7 +33,7 @@ import static com.contentstack.cms.core.Util.*;
  * <br>
  * <b>Contentstack Java Management SDK</b> interact with the Content Management APIs and allow you to create, update,
  * delete, and fetch content from your Contentstack account. They are read-write in nature.
- * <b>
+ * <br>
  * You can use them to build your own apps and manage your content from Contentstack.
  */
 public class Contentstack {
@@ -420,7 +424,6 @@ public class Contentstack {
          * <br>
          * <pre>
          * {
-         * @code
          * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
          * Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
          * }
