@@ -10,7 +10,7 @@ import java.util.HashMap;
  * <br>
  * Contentstack provides different types of tokens to authorize API requests
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */

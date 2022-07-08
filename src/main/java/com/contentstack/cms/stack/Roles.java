@@ -16,7 +16,7 @@ import static com.contentstack.cms.core.Util.CONTENT_TYPE_VALUE;
  * A role is a collection of permissions that will be applicable to all the users who are assigned this role.
  * <p>
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @see <a href="https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-roles">Roles
  *

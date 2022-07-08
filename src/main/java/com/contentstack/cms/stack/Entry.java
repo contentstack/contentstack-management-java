@@ -16,7 +16,7 @@ import java.util.Map;
  * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
  * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */

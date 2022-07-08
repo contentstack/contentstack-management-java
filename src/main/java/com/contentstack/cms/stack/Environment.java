@@ -14,7 +14,7 @@ import java.util.Map;
  * A publishing environment corresponds to one or more deployment servers or a content delivery destination where the
  * entries need to be published.
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */

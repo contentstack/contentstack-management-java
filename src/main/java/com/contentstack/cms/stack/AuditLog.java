@@ -19,7 +19,7 @@ import java.util.HashMap;
  * Read more about <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">Audit
  * Log</a>
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */
