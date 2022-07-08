@@ -15,7 +15,7 @@ import java.io.IOException;
  * responses coming back in. Typically, interceptors add, remove, or transform headers on the request. Depending on the
  * API implementation, you'll want to pass the auth token as the value for the Authorization header.
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */
