@@ -11,10 +11,11 @@ public interface WorkflowService {
 
     @GET("workflows")
     Call<ResponseBody> fetch(
-            @HeaderMap Map<String, Object> headers);
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> params);
 
     @GET("workflows/{workflow_uid}")
-    Call<ResponseBody> fetch(
+    Call<ResponseBody> single(
             @HeaderMap Map<String, Object> headers,
             @Path("workflow_uid") String workflowUid);
 

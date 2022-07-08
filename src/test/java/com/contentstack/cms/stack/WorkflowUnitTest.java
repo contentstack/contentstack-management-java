@@ -18,7 +18,7 @@ import java.util.List;
 class WorkflowUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _authtoken = Dotenv.load().get("auth_token");
     protected static String _uid = Dotenv.load().get("workflow_uid");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
@@ -167,7 +167,7 @@ class WorkflowUnitTest {
     @Test
     @Order(6)
     void workflowFetchByWorkflowId() {
-        Request request = workflow.fetch(_uid).request();
+        Request request = workflow.single(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
