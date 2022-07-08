@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * The utility class that contains utility common functions
  *
- * @author Shailesh Mishra
+ * @author ***REMOVED***
  * @version 1.0.0
  * @since 2022-05-19
  */

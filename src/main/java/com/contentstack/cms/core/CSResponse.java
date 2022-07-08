@@ -9,6 +9,14 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Contentstack Response:
+ *
+ * @author ***REMOVED***
+ * @version 1.0.0
+ * @since 2022-05-19
+ */
+
 public class CSResponse {
 
     private static final String MODEL_NULL_CHECK = "model class == null";
