@@ -7,7 +7,6 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +31,8 @@ public class Stack {
      *
      * @param client
      *         the Retrofit instance
+     * @param authtoken
+     *         The authtoken
      */
     public Stack(@NotNull Retrofit client, String authtoken) {
         this.headers = new HashMap<>();

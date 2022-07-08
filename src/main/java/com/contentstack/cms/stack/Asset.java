@@ -205,27 +205,19 @@ public class Asset {
      * @param requestBody
      *         Request body for the asset file
      *         <ul>
-     *         <br>
      *         <li>asset[upload] (mandatory) Select the input type as 'File'. Then, browse and select the asset file that
      *         you want to import. Supported file types include JPG, GIF, PNG, XML, WebP, BMP, TIFF, SVG, and PSD</li>
-     *         <br>
      *         <li>asset[parent_uid] (optional) If needed, assign a parent folder to your asset by passing the UID of the
      *         parent folder.</li>
-     *         <br>
+     *
      *         <li>asset[title] (optional) Enter a title for your uploaded asset.</li>
-     *         <br>
      *         <li>asset[description] (optional) Enter a description for your uploaded asset.</li>
-     *         <br>
      *         <li>asset[tags] (optional) Assign a specific tag(s) to your uploaded asset. {@link #addParam(String, Object)}
      *         The query parameter for the asset to upload</li>
-     *         <br>
      *         <li>relative_urls(optional) Set this to 'true' to display the relative URL of the asset. Example:false</li>
-     *         <br>
      *         <li>include_dimension(optional) Set this to 'true' to include the dimensions (height and width) of the image
      *         in the response.</li>
-     *         <br>
      *         </ul>
-     *         <br>
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-asset"> Upload
      * Asset</a>
@@ -319,7 +311,7 @@ public class Asset {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
-     * Generate Permanent Asset Url
+     * Generate Permanent Asset Url</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
@@ -333,6 +325,7 @@ public class Asset {
      *
      * @param uid
      *         the UID of the asset you want to delete asset
+     * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-asset"> Delete
      * Asset
      * </a>
@@ -350,7 +343,7 @@ public class Asset {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
-     * Get Information On RTE Assets
+     * Get Information On RTE Assets</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
@@ -381,7 +374,7 @@ public class Asset {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
-     * Get Information On RTE Assets
+     * Get Information On RTE Assets</a>
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
@@ -416,7 +409,7 @@ public class Asset {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-asset">
-     * Get Details of All Versions of an Asset
+     * Get Details of All Versions of an Asset</a>
      * @see #addParam(String, Object)  to add Query parameters
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
@@ -438,7 +431,7 @@ public class Asset {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-asset">
-     * Delete Version Name Of Asset
+     * Delete Version Name Of Asset</a>
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
@@ -454,7 +447,7 @@ public class Asset {
      *         asset uid
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-asset-references">
-     * Get Asset References
+     * Get Asset References</a>
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
@@ -494,23 +487,23 @@ public class Asset {
      * and also provide a "Title" and a "Description" for the asset. Another way to provide a "Title" and a
      * "Description" for the asset is to pass them as optional form-data parameters, i.e., asset[title] and
      * asset[description].
-     * <p>
-     * Here's an example of the raw body:
-     * <p>
+     * <br>
+     * <b>Here's an example of the body:</b>
+     * <br>
      * <pre>
-     *  @code { "asset": { "title": "Title", "description": "Description" }, "version": 3 }
+     *  { "asset": { "title": "Title", "description": "Description" }, "version": 3 }
      * </pre>
      *
      * @param assetUid
      *         The UID of the asset that you want to update details.
      * @param requestBody
-     *         JSON Request body
+     *         The request body
      * @return Call
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> updateDetails(@NotNull String assetUid, @NotNull JSONObject requestBody) {
+    public Call<ResponseBody> updateDetails(@NotNull String assetUid, JSONObject requestBody) {
         return this.service.updateDetails(this.headers, assetUid, this.params, requestBody);
     }
 
@@ -530,7 +523,7 @@ public class Asset {
      *         JSON Request body
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-asset">
-     * Publish An Asset
+     * Publish An Asset</a>
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
@@ -553,7 +546,7 @@ public class Asset {
      *         JSON Request body
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
-     * Unpublish An Asset
+     * Unpublish An Asset</a>
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
@@ -575,7 +568,7 @@ public class Asset {
      *         Example:false
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
-     * Unpublish An Asset
+     * Unpublish An Asset</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
@@ -597,7 +590,7 @@ public class Asset {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-folder-by-name"> Get
-     * A Single Folder By Name
+     * A Single Folder By Name</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
@@ -615,7 +608,7 @@ public class Asset {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-subfolders-of-a-parent-folder">
-     * Get subfolders of a parent folder
+     * Get subfolders of a parent folder</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
@@ -644,7 +637,7 @@ public class Asset {
      *         JSONObject request body
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-folder"> Create
-     * a folder
+     * a folder</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
@@ -674,7 +667,7 @@ public class Asset {
      *         JSONObject request body { "asset": { "name": "Demo" } }
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-or-move-folder">
-     * Update ORr Move Folder
+     * Update ORr Move Folder</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
@@ -692,7 +685,7 @@ public class Asset {
      *         The UID of the asset folder that you want to delete
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-folder">
-     * Delete A Folder
+     * Delete A Folder</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0

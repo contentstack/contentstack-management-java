@@ -252,7 +252,7 @@ public class Locale {
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-fallback-language">Update
-     * fallback language
+     * fallback language</a>
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */

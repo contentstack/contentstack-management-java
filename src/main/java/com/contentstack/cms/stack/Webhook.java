@@ -17,9 +17,8 @@ import java.util.HashMap;
 /**
  * A webhook is a mechanism that sends real-time information to any third-party app or service to keep your application
  * in sync with your Contentstack account. Webhooks allow you to specify a URL to which you would like Contentstack to
- * post data when an event happens. <a
- * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token"> Read
- * more about Webhooks.
+ * post data when an event happens. <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token"> Read
+ * more about Webhooks.</a>
  *
  * @author ***REMOVED***
  * @version 1.0.0

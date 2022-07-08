@@ -116,6 +116,8 @@ public class Alias {
      * You can use the same request to update the target branch of an alias. In the “Body” section, you need to provide
      * the UID of the new target branch that will be associated with the alias.
      *
+     * @param body
+     *         the request body
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#assign-or-update-an-alias">Update
@@ -134,6 +136,8 @@ public class Alias {
      * <p>
      * When executing the API call, in the “URL Parameters” section, provide the UID of your alias.
      *
+     * @param branchUid
+     *         the branch uid
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-alias">Delete a
      * branch</a>
