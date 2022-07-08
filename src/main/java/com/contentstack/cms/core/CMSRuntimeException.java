@@ -3,7 +3,7 @@ package com.contentstack.cms.core;
 /**
  * CMSRuntimeException that extends Exception class
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */

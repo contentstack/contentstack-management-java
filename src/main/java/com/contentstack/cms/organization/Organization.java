@@ -13,7 +13,7 @@ import java.util.HashMap;
  * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources, and
  * users. Organization allows easy management of projects as well as users within the Organization.
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */
