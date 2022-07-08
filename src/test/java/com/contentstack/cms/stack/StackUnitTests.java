@@ -19,7 +19,7 @@ class StackUnitTests {
     protected Stack stack;
     protected Dotenv env = Dotenv.load();
     String orgId = env.get("organizationUid");
-    protected String apiKey = env.get("api_key");
+    protected String apiKey = env.get("apiKey");
     protected String authtoken = env.get("auth_token");
     protected JSONObject requestBody = Utils.readJson("mockstack/create_stack.json");
 
