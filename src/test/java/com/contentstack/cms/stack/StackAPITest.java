@@ -30,7 +30,7 @@ class StackAPITest {
     private Stack stackInstance;
     private final String organizationUid = Dotenv.load().get("organizationUid");
     private final String userId = Dotenv.load().get("userId");
-    private final String apiKey = Dotenv.load().get("api_key");
+    private final String apiKey = Dotenv.load().get("apiKey");
     private final String ownershipToken = Dotenv.load().get("ownershipToken");
 
     private JsonObject toJson(Response<ResponseBody> response) throws IOException {
