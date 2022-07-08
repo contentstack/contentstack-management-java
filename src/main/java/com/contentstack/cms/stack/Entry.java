@@ -148,11 +148,10 @@ public class Entry {
      * <br>
      *
      * @param requestBody
-     *         Provide the Json Body to create entry: <pre
-     *         <code>
-     *         { "entry": { "title": "Entry title", "url": "Entry URL", "reference_field_uid": [{ "uid": "the_uid",
-     *         "_content_type_uid": "referred_content_type_uid" }] } }</code>
-     *         </pre>
+     *         Provide the Json Body to create entry: <pre>
+     *                 { "entry": { "title": "Entry title", "url": "Entry URL", "reference_field_uid": [{ "uid": "the_uid",
+     *                 "_content_type_uid": "referred_content_type_uid" }] } }
+     *                 </pre>
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">Create A
      * Entry</a>
@@ -171,7 +170,7 @@ public class Entry {
      * <br>
      * <b>Note:</b> The Update an entry call does not allow you to update the
      * workflow stage for an entry. To update the workflow stage for the entry, use the Set Entry Workflow Stage call.
-     * </p>
+     * <br>
      *
      * @param entryUId
      *         the unique ID of the content type of which you wish to retrieve the details. The uid is generated based
