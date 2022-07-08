@@ -20,7 +20,7 @@ class ContentTypeUnitTests {
     JSONObject requestBody = Utils.readJson("mockcontenttype/update.json");
     ContentType contentType;
     private final String contentTypeUid = "product";
-    String API_KEY = Dotenv.load().get("api_key");
+    String API_KEY = Dotenv.load().get("apiKey");
     String AUTHTOKEN = Dotenv.load().get("authToken");
     String managementToken = Dotenv.load().get("auth_token");
 
