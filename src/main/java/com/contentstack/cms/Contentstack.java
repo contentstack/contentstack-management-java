@@ -1,8 +1,12 @@
+
+/**
+ * The top most package to access contentstack instance
+ */
 package com.contentstack.cms;
 
 import com.contentstack.cms.core.AuthInterceptor;
-import com.contentstack.cms.models.Error;
 import com.contentstack.cms.core.Util;
+import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
@@ -10,11 +14,11 @@ import com.contentstack.cms.user.User;
 import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.io.IOException;
 import java.net.Proxy;
@@ -25,7 +29,12 @@ import java.util.logging.Logger;
 import static com.contentstack.cms.core.Util.*;
 
 /**
- * The type Contentstack.
+ * <b>Contentstack Java Management SDK</b>
+ * <br>
+ * <b>Contentstack Java Management SDK</b> interact with the Content Management APIs and allow you to create, update,
+ * delete, and fetch content from your Contentstack account. They are read-write in nature.
+ * <br>
+ * You can use them to build your own apps and manage your content from Contentstack.
  */
 public class Contentstack {
 
@@ -63,7 +72,11 @@ public class Contentstack {
      * </pre>
      * <br>
      *
-     * @return User user
+     * @return User
+     * @author ***REMOVED***
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     * </a>
+     * @since 2022-05-19
      */
     public User user() {
         if (this.authtoken == null)
@@ -103,12 +116,15 @@ public class Contentstack {
      * <br>
      *
      * @param emailId
-     *         the email id
+     *         the email id of the user
      * @param password
-     *         the password
-     * @return response the Response type of @{@link LoginDetails}
+     *         the password of the user
+     * @return LoginDetails
      * @throws IOException
-     *         the io exception
+     *         the IOException
+     * @author ***REMOVED***
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     * </a>
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
@@ -155,9 +171,16 @@ public class Contentstack {
      *         the password
      * @param tfaToken
      *         the tfa token
-     * @return response the Response type of @{@link LoginDetails} throws {@link IOException}
+     * @return LoginDetails
      * @throws IOException
      *         the io exception
+     * @throws IOException
+     *         the IOException
+     * @author ***REMOVED***
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
+     * your account
+     * </a>
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
         if (this.authtoken != null)
@@ -264,7 +287,7 @@ public class Contentstack {
     public Stack stack() {
         if (this.authtoken == null)
             throw new IllegalStateException(ILLEGAL_USER);
-        return new Stack(this.instance);
+        return new Stack(this.instance, this.authtoken);
     }
 
 
@@ -288,7 +311,9 @@ public class Contentstack {
      */
     public Stack stack(@NotNull Map<String, Object> header) {
         if (this.authtoken == null)
-            throw new IllegalStateException(PLEASE_LOGIN);
+            if (header.size() == 0) {
+                throw new IllegalStateException(PLEASE_LOGIN);
+            }
         return new Stack(this.instance, header);
     }
 
@@ -398,9 +423,11 @@ public class Contentstack {
          * InetSocketAddress(proxyHost, proxyPort));
          * <br>
          * <pre>
-         *         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
-         *         Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
-         *     </pre>
+         * {
+         * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
+         * Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
+         * }
+         * </pre>
          *
          * @param proxy
          *         the proxy

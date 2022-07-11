@@ -18,7 +18,7 @@ import java.util.List;
 class WorkflowUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _authtoken = Dotenv.load().get("auth_token");
     protected static String _uid = Dotenv.load().get("workflow_uid");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
@@ -152,6 +152,7 @@ class WorkflowUnitTest {
     @Test
     @Order(5)
     void workflowFetchAll() {
+        workflow.clearParams();
         Request request = workflow.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -167,7 +168,7 @@ class WorkflowUnitTest {
     @Test
     @Order(6)
     void workflowFetchByWorkflowId() {
-        Request request = workflow.fetch(_uid).request();
+        Request request = workflow.single(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -254,24 +255,6 @@ class WorkflowUnitTest {
         Assertions.assertEquals("https://api.contentstack.io/v3/workflows/" + _uid, request.url().toString());
     }
 
-//    @Test
-//    @Order(12)
-//    void workflowUpdateWorkflowStage() {
-//        workflow.removeParam("include_rules");
-//        workflow.removeParam("include_permissions");
-//        workflow.addParam("locale", "en-us");
-//        Request request = workflow.updateWorkflowStage("content_type_uid", "entry_uid", body).request();
-//        Assertions.assertEquals(2, request.headers().names().size());
-//        Assertions.assertEquals("POST", request.method());
-//        Assertions.assertTrue(request.url().isHttps());
-//        Assertions.assertEquals("api.contentstack.io", request.url().host());
-//        Assertions.assertEquals(6, request.url().pathSegments().size());
-//        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-//        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-//        Assertions.assertNotNull("locale=en-us", request.url().encodedQuery());
-//        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/content_type_uid/entries/entry_uid/workflow?locale=en-us", request.url().toString());
-//    }
-
     @Test
     @Order(13)
     void workflowCreatePublishRule() {
@@ -351,7 +334,7 @@ class WorkflowUnitTest {
     @Test
     @Order(17)
     void workflowFetchPublishRuleContentType() {
-        Request request = workflow.fetchPublishRuleContentType("contentTypeUid", "action").request();
+        Request request = workflow.fetchPublishRuleContentType("contentTypeUid").request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -363,20 +346,6 @@ class WorkflowUnitTest {
         Assertions.assertNotNull("https://api.contentstack.io/v3/workflows", request.url().toString());
     }
 
-//    @Test
-//    @Order(18)
-//    void workflowPublishRequestApproval() {
-//        Request request = workflow.publishRequestApproval(_authtoken, "contentTypeUid", "entryUid", body).request();
-//        Assertions.assertEquals(3, request.headers().names().size());
-//        Assertions.assertEquals("POST", request.method());
-//        Assertions.assertTrue(request.url().isHttps());
-//        Assertions.assertEquals("api.contentstack.io", request.url().host());
-//        Assertions.assertEquals(6, request.url().pathSegments().size());
-//        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-//        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-//        Assertions.assertNotNull(request.url().encodedQuery());
-//        Assertions.assertNotNull("https://api.contentstack.io/v3/workflows", request.url().toString());
-//    }
 
     @Test
     @Order(18)

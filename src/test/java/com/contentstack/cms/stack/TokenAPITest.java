@@ -2,6 +2,8 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
+import com.contentstack.cms.stack.Stack;
+import com.contentstack.cms.stack.Tokens;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -17,7 +19,7 @@ import java.util.HashMap;
 class TokenAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     protected static Tokens tokens;
@@ -90,67 +92,67 @@ class TokenAPITest {
 
     @Test
     void allDeliveryTokens() throws IOException {
-        Response<ResponseBody> response = tokens.getDeliveryTokens().execute();
+        Response<ResponseBody> response = tokens.deliveryTokens().fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void singleDeliveryToken() throws IOException {
-        Response<ResponseBody> response = tokens.getDeliveryToken(_uid).execute();
+        Response<ResponseBody> response = tokens.deliveryTokens().single(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void createDeliveryToken() throws IOException {
-        Response<ResponseBody> response = tokens.createDeliveryToken(body).execute();
+        Response<ResponseBody> response = tokens.deliveryTokens().create(body).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void updateDeliveryToken() throws IOException {
-        Response<ResponseBody> response = tokens.updateDeliveryToken(_uid, body).execute();
+        Response<ResponseBody> response = tokens.deliveryTokens().update(_uid, body).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void deleteDeliveryToken() throws IOException {
-        Response<ResponseBody> response = tokens.deleteDeliveryToken(_uid).execute();
+        Response<ResponseBody> response = tokens.deliveryTokens().delete(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void deleteDeliveryTokenForcefully() throws IOException {
-        Response<ResponseBody> response = tokens.deleteDeliveryToken(_uid, true).execute();
+        Response<ResponseBody> response = tokens.deliveryTokens().delete(_uid, true).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void allManagementToken() throws IOException {
-        Response<ResponseBody> response = tokens.getManagementTokens().execute();
+        Response<ResponseBody> response = tokens.managementToken().fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void singleManagementToken() throws IOException {
-        Response<ResponseBody> response = tokens.getManagementToken(_uid).execute();
+        Response<ResponseBody> response = tokens.managementToken().single(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void createManagementToken() throws IOException {
-        Response<ResponseBody> response = tokens.createManagementToken(body).execute();
+        Response<ResponseBody> response = tokens.managementToken().create(body).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void updateManagementToken() throws IOException {
-        Response<ResponseBody> response = tokens.updateManagementToken(_uid, body).execute();
+        Response<ResponseBody> response = tokens.managementToken().update(_uid, body).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void deleteManagementToken() throws IOException {
-        Response<ResponseBody> response = tokens.deleteManagementToken(_uid).execute();
+        Response<ResponseBody> response = tokens.managementToken().delete(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 }

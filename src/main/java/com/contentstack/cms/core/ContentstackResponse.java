@@ -19,7 +19,6 @@ public class ContentstackResponse<T> {
 
     Call<ResponseBody> response;
 
-
     public Response<ResponseBody> fetch(Call<ResponseBody> response) {
         try {
             return response.execute();

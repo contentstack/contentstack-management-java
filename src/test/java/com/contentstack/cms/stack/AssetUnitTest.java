@@ -23,7 +23,7 @@ import java.util.Map;
 class AssetUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Asset asset;
@@ -39,6 +39,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetFetchAll() {
+        asset.clearParams();
         asset.addParam("folder", "folder_uid_some_example");
         asset.addParam("include_folders", true);
         asset.addParam("environment", "production");
@@ -71,6 +72,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetSingle() {
+        asset.clearParams();
         asset.addParam("include_path", false);
         asset.addParam("version", 1);
         asset.addParam("include_publish_details", true);
@@ -98,6 +100,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetSpecificFolder() {
+        asset.clearParams();
         Request resp = asset.byFolderUid(_uid).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
@@ -121,6 +124,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetSubFolder() {
+        asset.clearParams();
         Request resp = asset.subfolder(_uid, true).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
@@ -144,7 +148,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetUpload() {
-
+        asset.clearParams();
         asset.addParam("relative_urls", true);
         asset.addParam("include_dimension", true);
         JSONObject jsonBody = new JSONObject();
@@ -185,7 +189,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetReplace() {
-
+        asset.clearParams();
         asset.addParam("relative_urls", true);
         asset.addParam("include_dimension", true);
 
@@ -213,12 +217,10 @@ class AssetUnitTest {
 
     @Test
     void testAssetGeneratePermanentUrl() {
-
+        asset.clearParams();
+        asset.addParam("relative_urls", true);
+        asset.addParam("include_dimension", true);
         JSONObject body = new JSONObject();
-
-        body.put("relative_urls", true);
-        body.put("include_dimension", true);
-
         Request resp = asset.generatePermanentUrl(_uid, body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
@@ -241,7 +243,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetDownloadPermanentUrl() {
-
+        asset.clearParams();
         Request resp = asset.getPermanentUrl(_uid, "www.google.com/search").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
@@ -264,6 +266,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetDelete() {
+        asset.clearParams();
         Request resp = asset.delete(_uid).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
@@ -334,7 +337,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetGetDetailsVersionName() {
-
+        asset.clearParams();
         asset.addParam("skip", 2);
         asset.addParam("limit", 5);
         asset.addParam("named", false);
@@ -456,7 +459,7 @@ class AssetUnitTest {
         _bodyContent.put("description", "description demo example");
         _body.put("asset", _bodyContent);
         _body.put("version", 2);
-
+        asset.clearParams();
         Request resp = asset.updateDetails(_uid, _body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
@@ -537,7 +540,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetSingleFolder() {
-
+        asset.clearParams();
         asset.addParam("include_path", false);
         Request resp = asset.singleFolder(_uid).request();
         Assertions.assertTrue(resp.isHttps());
@@ -561,13 +564,11 @@ class AssetUnitTest {
 
     @Test
     void testAssetSingleFolderByName() {
-
-        Map<String, Object> query = new HashMap<>();
+        asset.clearParams();
         JSONObject queryContent = new JSONObject();
         queryContent.put("is_dir", true);
         queryContent.put("name", "folder_name");
-        query.put("query", queryContent);
-
+        asset.addParam("query", queryContent);
         Request resp = asset.getSingleFolderByName().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
@@ -623,7 +624,7 @@ class AssetUnitTest {
         _bodyContent.put("locales", "en-us");
         _bodyContent.put("environments", "development");
         _body.put("asset", _bodyContent);
-
+        asset.clearParams();
         Request resp = asset.createFolder(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
@@ -653,6 +654,7 @@ class AssetUnitTest {
         _bodyContent.put("environments", "development");
         _body.put("asset", _bodyContent);
 
+        asset.clearParams();
         Request resp = asset.updateFolder(_uid, _body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());

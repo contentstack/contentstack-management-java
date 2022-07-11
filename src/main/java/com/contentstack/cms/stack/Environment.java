@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.Util;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -26,7 +27,7 @@ public class Environment {
     protected Environment(Retrofit instance, @NotNull Map<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.put("Content-Type", "application/json");
+        this.headers.put(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
         this.headers.putAll(stackHeaders);
         this.service = instance.create(EnvironmentService.class);
     }
@@ -48,9 +49,9 @@ public class Environment {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         query param key for the request
      * @param value
-     *         header value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -58,10 +59,10 @@ public class Environment {
 
 
     /**
-     * Sets header for the request
+     * Set header for the request
      *
      * @param key
-     *         header key for the request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -69,11 +70,12 @@ public class Environment {
 
 
     /**
-     * To clear all the params
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
     }
+
 
     /**
      * The Get all environments call fetches the list of all environments available in a stack.
@@ -89,6 +91,13 @@ public class Environment {
      * </pre>
      *
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get all
+     * environments
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> fetch() {
         return this.service.fetch(this.headers, this.params);
@@ -102,10 +111,17 @@ public class Environment {
      * logging into your account.
      *
      * @param environment
-     *         name of the environment
+     *         The name of the environment
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-environment">Get a
+     * single environments
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> get(@NotNull String environment) {
+    public Call<ResponseBody> single(@NotNull String environment) {
         return this.service.getEnv(this.headers, environment);
     }
 
@@ -119,12 +135,19 @@ public class Environment {
      * In the 'Body' section, mention the environment name, server names that are part of the environment, the urls
      * (which include the language code and the URL of the server), and the option to deploy content to a server.
      *
-     * @param requestBody
-     *         request body of type @{@link JSONObject}
+     * @param body
+     *         The {@link JSONObject} request body<br>
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get all
+     * environments
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> add(@NotNull JSONObject requestBody) {
-        return this.service.add(this.headers, requestBody);
+    public Call<ResponseBody> create(@NotNull JSONObject body) {
+        return this.service.add(this.headers, body);
     }
 
 
@@ -139,10 +162,15 @@ public class Environment {
      * the option to deploy content to a server.
      *
      * @param environmentName
-     *         name of the environment
+     *         The name of the environment
      * @param requestBody
      *         request body of type @{@link JSONObject}
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-environment">Update
+     * Environment</a>
+     * @see #addHeader(String, Object) to add headers to the request
+     * @since 1.0.0
      */
     public Call<ResponseBody> update(@NotNull String environmentName, @NotNull JSONObject requestBody) {
         return this.service.update(this.headers, environmentName, requestBody);
@@ -156,8 +184,13 @@ public class Environment {
      * authtoken that you receive after logging into your account.
      *
      * @param environmentName
-     *         name of the environment
+     *         The name of the environment
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-environment">Delete
+     * Environment</a>
+     * @see #addHeader(String, Object) to add headers to the request
+     * @since 1.0.0
      */
     public Call<ResponseBody> delete(@NotNull String environmentName) {
         return this.service.delete(this.headers, environmentName);
