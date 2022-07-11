@@ -11,14 +11,13 @@ import java.io.IOException;
  * The ContentstackResponse is the response when we execute the API Response, ContentstackResponse contains different
  * response type
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */
 public class ContentstackResponse<T> {
 
     Call<ResponseBody> response;
-
 
     public Response<ResponseBody> fetch(Call<ResponseBody> response) {
         try {

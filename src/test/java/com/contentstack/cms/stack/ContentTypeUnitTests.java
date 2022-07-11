@@ -9,7 +9,6 @@ import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -21,7 +20,7 @@ class ContentTypeUnitTests {
     JSONObject requestBody = Utils.readJson("mockcontenttype/update.json");
     ContentType contentType;
     private final String contentTypeUid = "product";
-    String API_KEY = Dotenv.load().get("api_key");
+    String API_KEY = Dotenv.load().get("apiKey");
     String AUTHTOKEN = Dotenv.load().get("authToken");
     String managementToken = Dotenv.load().get("auth_token");
 
@@ -83,6 +82,9 @@ class ContentTypeUnitTests {
 
     @Test
     void testGetAllContentTypesUrl() {
+        contentType.clearParams();
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
         Request response = contentType.fetch().request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
@@ -109,12 +111,18 @@ class ContentTypeUnitTests {
 
     @Test
     void testGetSingleEncodedQuery() {
+        contentType.clearParams();
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
         Request response = contentType.single(contentTypeUid).request();
         Assertions.assertEquals("include_count=true&include_global_field_schema=true", response.url().encodedQuery());
     }
 
     @Test
     void testGetSingleCompleteUrl() {
+        contentType.clearParams();
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
         Request response = contentType.single(contentTypeUid).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/content_types/product?include_count=true&include_global_field_schema=true",
@@ -161,6 +169,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testUpdateCompleteUrl() {
+        contentType.clearParams();
         Request request = contentType.update(contentTypeUid,
                 requestBody).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product",
@@ -211,7 +220,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testFieldVisibilityRuleCompleteUrl() {
-
+        contentType.clearParams();
         Request request = contentType.fieldVisibilityRule(contentTypeUid, requestBody).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product", request.url().toString());
     }
@@ -249,6 +258,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testDeleteHeaderCompleteUrl() {
+        contentType.clearParams();
         Request request = contentType.delete(contentTypeUid).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product", request.url().toString());
     }
@@ -262,14 +272,16 @@ class ContentTypeUnitTests {
 
     @Test
     void testDeleteWithIsForceHeaders() {
-        Request request = contentType.delete(contentTypeUid, true).request();
+        Request request = contentType.delete(contentTypeUid).request();
         Assertions.assertEquals(API_KEY, request.headers().get("api_key"));
         Assertions.assertEquals(managementToken, request.headers().get("authorization"));
     }
 
     @Test
     void testDeleteWithIsForce() {
-        Request request = contentType.delete(contentTypeUid, true).request();
+        contentType.clearParams();
+        contentType.addParam("force", true);
+        Request request = contentType.delete(contentTypeUid).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product?force=true",
                 request.url().toString());
 
@@ -277,7 +289,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testDeleteWithIsForceMethod() {
-        Request request = contentType.delete(contentTypeUid, true).request();
+        Request request = contentType.delete(contentTypeUid).request();
         Assertions.assertEquals("DELETE", request.method());
 
     }
@@ -397,6 +409,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testImportUrl() {
+        contentType.clearParams();
         Request request = contentType.imports().request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import", request.url().toString());
     }

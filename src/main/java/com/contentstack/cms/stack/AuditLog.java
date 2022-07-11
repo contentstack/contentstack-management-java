@@ -19,7 +19,7 @@ import java.util.HashMap;
  * Read more about <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">Audit
  * Log</a>
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */
@@ -28,14 +28,12 @@ public class AuditLog {
     protected final AuditLogService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
-    private final Retrofit retrofit;
 
     protected AuditLog(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
         this.headers.putAll(stackHeaders);
-        this.retrofit = retrofit;
-        this.service = this.retrofit.create(AuditLogService.class);
+        this.service = retrofit.create(AuditLogService.class);
     }
 
     /**

@@ -2,6 +2,8 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.Utils;
+import com.contentstack.cms.stack.Environment;
+import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -17,7 +19,7 @@ import java.util.Map;
 public class EnvironmentAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Environment environment;
 
@@ -31,7 +33,6 @@ public class EnvironmentAPITest {
     @Test
     @Order(1)
     void fetchLocales() {
-        Map<String, Object> queryParam = new HashMap<>();
         environment.addParam("include_count", false);
         environment.addParam("asc", "created_at");
         environment.addParam("desc", "updated_at");
@@ -48,7 +49,7 @@ public class EnvironmentAPITest {
     @Order(2)
     void addLocale() {
         try {
-            Response<ResponseBody> response = environment.get("development").execute();
+            Response<ResponseBody> response = environment.single("development").execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,7 +63,7 @@ public class EnvironmentAPITest {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
             Response<ResponseBody> response = environment
-                    .add(requestBody).execute();
+                    .create(requestBody).execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();

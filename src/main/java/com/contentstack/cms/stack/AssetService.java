@@ -56,7 +56,8 @@ public interface AssetService {
     Call<ResponseBody> downloadPermanentUrl(
             @HeaderMap Map<String, Object> headers,
             @Path("asset_uid") String uid,
-            @Path("slug") String slugUrl);
+            @Path("slug") String slugUrl,
+            @QueryMap(encoded = true) Map<String, Object> query);
 
     @DELETE("assets/{asset_uid}")
     Call<ResponseBody> delete(
@@ -64,7 +65,8 @@ public interface AssetService {
             @Path("asset_uid") String uid);
 
     @GET("assets/rt")
-    Call<ResponseBody> rteInfo(@HeaderMap Map<String, Object> headers);
+    Call<ResponseBody> rteInfo(@HeaderMap Map<String, Object> headers,
+                               @QueryMap(encoded = true) Map<String, Object> query);
 
     @POST("assets/{asset_uid}/versions/{version_number}/name")
     Call<ResponseBody> setVersionName(
@@ -99,6 +101,7 @@ public interface AssetService {
     Call<ResponseBody> updateDetails(
             @HeaderMap Map<String, Object> headers,
             @Path("asset_uid") String assetUid,
+            @QueryMap(encoded = true) Map<String, Object> query,
             @Body JSONObject requestBody);
 
     @POST("assets/{asset_uid}/publish")
@@ -132,12 +135,14 @@ public interface AssetService {
     @POST("assets/folders")
     Call<ResponseBody> createFolder(
             @HeaderMap Map<String, Object> headers,
+            @QueryMap(encoded = true) Map<String, Object> query,
             @Body JSONObject requestBody);
 
     @PUT("assets/folders/{folder_uid}")
     Call<ResponseBody> updateFolder(
             @HeaderMap Map<String, Object> headers,
             @Path("folder_uid") String folderUid,
+            @QueryMap(encoded = true) Map<String, Object> query,
             @Body JSONObject requestBody);
 
     @DELETE("assets/folders/{folder_uid}")
