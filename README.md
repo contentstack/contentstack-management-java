@@ -101,11 +101,11 @@ jsonBody.put("key", "value");
 
 // Add Query parameters to the entry
 entry.addParam("locale", "en-us");
-Response<ResponseBody> resp = entry.create(jsonBody).execute();
+Response<ResponseBody> response = entry.create(jsonBody).execute();
 if (response.isSuccessful()){
-    System.out.println(response.body(););
+    System.out.println(response.body());
 }else {
-    System.out.println(response.errorBody(););
+    System.out.println(response.errorBody());
 }
 ```
 
@@ -119,11 +119,11 @@ Asset asset = stack.asset();
 
 // Add Query parameters to the entry
 asset.addParam("title'","headeline")
-Response<ResponseBody> response = asset.uploadAsset(filePath, description).execute();
+Response<ResponseBody> response = asset.uploadAsset("filePath", "description").execute();
 if (response.isSuccessful()){
-    System.out.println(response.body(););
+    System.out.println(response.body());
 }else {
-    System.out.println(response.errorBody(););
+    System.out.println(response.errorBody());
 }
 ```
 
