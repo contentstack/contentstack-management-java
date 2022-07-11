@@ -13,7 +13,7 @@ import java.util.HashMap;
 class AuditLogUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("workflow_uid");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     protected static AuditLog auditLog;

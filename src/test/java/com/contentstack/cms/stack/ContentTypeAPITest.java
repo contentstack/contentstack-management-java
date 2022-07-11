@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
+import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
@@ -15,28 +16,38 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
 @Tag("api")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContentTypeAPITest {
 
-    protected static String API_KEY = Dotenv.load().get("apiKey1");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("managementToken1");
     public static ContentType contentType;
     public static Logger logger = Logger.getLogger(ContentTypeAPITest.class.getName());
-    private static String contentTypeUid;
+    protected static String API_KEY = Dotenv.load().get("apiKey");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("managementToken1");
+    private static String contentTypeUid = "following";
+    private static Stack stack;
+
 
     @BeforeAll
-    static void setupBeforeStart() throws IOException {
-
+    public void setUp() throws IOException {
+        Contentstack contentstack = new Contentstack.Builder().build();
+        String emailId = Dotenv.load().get("username");
+        String password = Dotenv.load().get("password");
+        contentstack.login(emailId, password);
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(Util.API_KEY, API_KEY);
-        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-        Stack stack = new Contentstack.Builder().build().stack(headers);
-        // TODO: Setting ManagementToken more than once
-        contentType = stack.contentType("contentTypeUid");
+        stack = contentstack.stack(headers);
+    }
+
+    @Order(14)
+    @Test
+    void setupBeforeStart() throws IOException {
+        contentType = stack.contentType(contentTypeUid);
         Response<ResponseBody> response = contentType.fetch().execute();
-        assert response.body() != null;
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);
+            logger.info(jsonObject.toString());
             int position = jsonObject.size() - 1;
             JsonElement arrayResponse = jsonObject.getAsJsonArray("content_types").get(position);
             contentTypeUid = arrayResponse.getAsJsonObject().get("uid").getAsString();
@@ -44,7 +55,7 @@ class ContentTypeAPITest {
         }
     }
 
-    @Order(1)
+    @Order(10)
     @Test
     void testCreate() throws IOException {
         JSONObject requestBody = Utils.readJson("mockcontenttype/create.json");
@@ -56,9 +67,8 @@ class ContentTypeAPITest {
     @Test
     @Order(2)
     void testFetchAPI() throws IOException {
-        Map<String, Object> mapQuery = new HashMap<>();
-        mapQuery.put("include_count", true);
-        mapQuery.put("include_global_field_schema", true);
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
         Response<ResponseBody> response = contentType.fetch().execute();
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);
@@ -111,6 +121,7 @@ class ContentTypeAPITest {
 
     @Order(6)
     @Test
+    @Disabled("No need to import all time")
     void testReference() throws IOException {
         Response<ResponseBody> response = contentType.reference(contentTypeUid, false).execute();
         if (response.isSuccessful()) {
@@ -182,6 +193,7 @@ class ContentTypeAPITest {
 
     @Order(12)
     @Test
+    @Ignore
     void testDelete() throws IOException {
         Response<ResponseBody> response = contentType.delete("fake_content_type").execute();
         Assertions.assertTrue(response.isSuccessful());
@@ -191,7 +203,7 @@ class ContentTypeAPITest {
     @Disabled("avoid running delete forcefully")
     @Test
     void testDeleteForcefully() throws IOException {
-        Response<ResponseBody> response = contentType.delete(contentTypeUid, true).execute();
+        Response<ResponseBody> response = contentType.delete(contentTypeUid).execute();
         assert response.body() != null;
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);

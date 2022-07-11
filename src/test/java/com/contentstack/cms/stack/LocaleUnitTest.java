@@ -10,10 +10,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-@Tag("unit") public class LocaleUnitTest {
+@Tag("unit")
+public class LocaleUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Locale locale;
 
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 
     @Test
     void fetchLocales() {
+        locale.addParam("include_count", true);
         Request request = locale.fetch().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -42,7 +44,7 @@ import org.junit.jupiter.api.Test;
     @Test
     void addLocale() {
         JSONObject requestBody = Utils.readJson("locales/add_locale.json");
-        Request request = locale.addLocale(requestBody).request();
+        Request request = locale.create(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -57,7 +59,8 @@ import org.junit.jupiter.api.Test;
 
     @Test
     void getLocale() {
-        Request request = locale.getLocale("en-us").request();
+        locale.clearParams();
+        Request request = locale.single("en-us").request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -73,7 +76,8 @@ import org.junit.jupiter.api.Test;
     @Test
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("locales/update_locale.json");
-        Request request = locale.updateLocale("en-us", requestBody).request();
+        locale.clearParams();
+        Request request = locale.update("en-us", requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -88,7 +92,7 @@ import org.junit.jupiter.api.Test;
 
     @Test
     void deleteLocale() {
-        Request request = locale.deleteLocale("en-us").request();
+        Request request = locale.delete("en-us").request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -104,7 +108,7 @@ import org.junit.jupiter.api.Test;
     @Test
     void setFallbackLocale() {
         JSONObject requestBody = Utils.readJson("locales/set_fallback_lang.json");
-        Request request = locale.setFallbackLocale(requestBody).request();
+        Request request = locale.setFallback(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -120,7 +124,7 @@ import org.junit.jupiter.api.Test;
     @Test
     void updateFallbackLocale() {
         JSONObject requestBody = Utils.readJson("locales/update_fallback.json");
-        Request request = locale.updateFallbackLocale("en-us", requestBody).request();
+        Request request = locale.updateFallback("en-us", requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());

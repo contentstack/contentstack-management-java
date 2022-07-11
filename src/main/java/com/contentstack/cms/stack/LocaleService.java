@@ -9,37 +9,40 @@ import java.util.Map;
 
 public interface LocaleService {
 
-    @GET("locales?include_count=true")
+    @GET("locales")
     Call<ResponseBody> locales(
-            @HeaderMap Map<String, Object> headers);
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> params);
 
     @POST("locales")
-    Call<ResponseBody> addLocale(
+    Call<ResponseBody> create(
             @HeaderMap Map<String, Object> headers,
             @Body JSONObject body);
 
     @GET("locales/{code}")
-    Call<ResponseBody> getLocale(
-            @HeaderMap Map<String, Object> headers,
-            @Path("code") String code);
-
-    @PUT("locales/{code}")
-    Call<ResponseBody> updateLocale(
+    Call<ResponseBody> singel(
             @HeaderMap Map<String, Object> headers,
             @Path("code") String code,
+            @QueryMap Map<String, Object> params);
+
+    @PUT("locales/{code}")
+    Call<ResponseBody> update(
+            @HeaderMap Map<String, Object> headers,
+            @Path("code") String code,
+            @QueryMap Map<String, Object> params,
             @Body JSONObject body);
 
     @DELETE("locales/{code}")
-    Call<ResponseBody> deleteLocale(
+    Call<ResponseBody> delete(
             @HeaderMap Map<String, Object> headers, @Path("code") String code);
 
     @POST("locales")
-    Call<ResponseBody> setFallbackLocale(
+    Call<ResponseBody> setFallback(
             @HeaderMap Map<String, Object> headers,
             @Body JSONObject body);
 
     @PUT("locales/{locale_uid}")
-    Call<ResponseBody> updateFallbackLocale(
+    Call<ResponseBody> updateFallback(
             @HeaderMap Map<String, Object> headers,
             @Path("locale_uid") String localeUid,
             @Body JSONObject body);

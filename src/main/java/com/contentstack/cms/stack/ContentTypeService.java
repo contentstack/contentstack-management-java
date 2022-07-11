@@ -23,30 +23,28 @@ public interface ContentTypeService {
     @POST("content_types")
     Call<ResponseBody> create(
             @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> queryParam,
             @Body JSONObject body);
 
     @PUT("content_types/{content_type_uid}")
     Call<ResponseBody> update(
             @Path("content_type_uid") String contentTypeUid,
             @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> queryParam,
             @Body JSONObject body);
 
     @PUT("content_types/{content_type_uid}")
     Call<ResponseBody> visibilityRule(
             @Path("content_type_uid") String contentTypeUid,
             @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> queryParam,
             @Body JSONObject body);
 
     @DELETE("content_types/{content_type_uid}")
     Call<ResponseBody> delete(
             @Path("content_type_uid") String contentTypeUid,
-            @HeaderMap Map<String, Object> headers);
-
-    @DELETE("content_types/{content_type_uid}")
-    Call<ResponseBody> delete(
-            @Path("content_type_uid") String contentTypeUid,
             @HeaderMap Map<String, Object> headers,
-            @Query("force") Boolean force);
+            @QueryMap Map<String, Object> param);
 
     @GET("content_types/{content_type_uid}/references")
     Call<ResponseBody> reference(
@@ -72,7 +70,7 @@ public interface ContentTypeService {
 
     @POST("content_types/import")
     Call<ResponseBody> imports(
-            @HeaderMap Map<String, Object> headers);
+            @HeaderMap Map<String, Object> headers, @QueryMap Map<String, Object> param);
 
     @POST("content_types/import?overwrite=true")
     Call<ResponseBody> importOverwrite(
