@@ -10,15 +10,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 @Tag("unit")
 public class EnvironmentUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Environment environment;
 
@@ -31,7 +28,6 @@ public class EnvironmentUnitTest {
 
     @Test
     void fetchLocales() {
-        Map<String, Object> queryParam = new HashMap<>();
         environment.addParam("include_count", false);
         environment.addParam("asc", "created_at");
         environment.addParam("desc", "updated_at");
@@ -50,7 +46,7 @@ public class EnvironmentUnitTest {
 
     @Test
     void addLocale() {
-        Request request = environment.get("development").request();
+        Request request = environment.single("development").request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -65,9 +61,8 @@ public class EnvironmentUnitTest {
 
     @Test
     void getLocale() {
-        //add_env.json
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
-        Request request = environment.add(requestBody).request();
+        Request request = environment.create(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());

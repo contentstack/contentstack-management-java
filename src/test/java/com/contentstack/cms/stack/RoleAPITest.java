@@ -2,6 +2,8 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
+import com.contentstack.cms.stack.Roles;
+import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -17,7 +19,7 @@ import java.util.HashMap;
 class RoleAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     protected static Roles roles;
@@ -128,34 +130,34 @@ class RoleAPITest {
 
     @Test
     void rolesQueryParams() throws IOException {
-        Response<ResponseBody> response = roles.getRoles().execute();
+        Response<ResponseBody> response = roles.fetch().execute();
     }
 
     @Test
     void allRoles() throws IOException {
         roles.addParam("include_rules", true);
         roles.addParam("include_permissions", true);
-        Response<ResponseBody> response = roles.getRoles().execute();
+        Response<ResponseBody> response = roles.fetch().execute();
     }
 
     @Test
     void singleRole() throws IOException {
-        Response<ResponseBody> response = roles.getRole(_uid).execute();
+        Response<ResponseBody> response = roles.single(_uid).execute();
     }
 
     @Test
     void createRole() throws IOException {
-        Response<ResponseBody> response = roles.createRole(body).execute();
+        Response<ResponseBody> response = roles.create(body).execute();
     }
 
     @Test
     void updateRole() throws IOException {
-        Response<ResponseBody> response = roles.updateRole(_uid, body).execute();
+        Response<ResponseBody> response = roles.update(_uid, body).execute();
     }
 
     @Test
     void deleteRole() throws IOException {
-        Response<ResponseBody> response = roles.deleteRole(_uid).execute();
+        Response<ResponseBody> response = roles.delete(_uid).execute();
     }
 
 }

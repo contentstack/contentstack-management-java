@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 /**
  * The Contentstack RetryCallback
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */

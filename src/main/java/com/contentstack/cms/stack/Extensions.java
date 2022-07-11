@@ -21,7 +21,7 @@ import java.util.Map;
  * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
  * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */
@@ -36,11 +36,6 @@ public class Extensions {
         this.params = new HashMap<>();
         this.headers.putAll(stackHeaders);
         this.service = retrofit.create(ExtensionsService.class);
-    }
-
-    public Extensions addHeader(@NotNull String key, @NotNull String value) {
-        this.headers.put(key, value);
-        return this;
     }
 
     /**
@@ -59,9 +54,9 @@ public class Extensions {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         query param key for the request
      * @param value
-     *         header value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -69,10 +64,10 @@ public class Extensions {
 
 
     /**
-     * Sets header for the request
+     * Set header for the request
      *
      * @param key
-     *         header key for the request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -80,37 +75,54 @@ public class Extensions {
 
 
     /**
-     * To clear all the params
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
     }
 
+
     /**
      * The Get all custom fields request is used to get the information of all custom fields created in a stack.
      *
-     * @param query
-     *         For custom fields  <b>Example:"type":"field"</b>
-     * @param isIncludeBranch
-     *         Set this to 'true' to include the '_branch' top-level key in the response. This key states the unique ID
-     *         of the branch where the concerned Contentstack module resides.
-     *         <b>Example:false</b>
+     * <dl>
+     *   <dt>query</dt>
+     *   <dd>For custom fields  <b>Example:"type":"field"</b></dd>
+     *   <dt>include_branch</dt>
+     *   <dd>Set this to 'true' to include the '_branch' top-level key in the response. This key states the unique ID
+     *      of the branch where the concerned Contentstack module resides</dd>
+     * </dl>
+     *
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-custom-fields">Get all
+     * Custom Field
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> fetch(@NotNull String query, boolean isIncludeBranch) {
-        return this.service.getAll(this.headers, query, isIncludeBranch);
+    public Call<ResponseBody> fetch() {
+        return this.service.getAll(this.headers, this.params);
     }
 
 
     /**
      * @param customFieldUid
-     *         Enter the UID of the custom field of which you want to retrieve the details.
-     *         <br><br>
-     *         {@link #addParam(String, Object)} Set this to 'true' to include the '_branch' top-level key in the
-     *         response. This key states the unique ID of the branch where the concerned Contentstack module resides.
-     *         <p>
-     *         <b>Example:false</b>
+     *         Enter the UID of the custom field of which you want to retrieve the details.<br>
+     *          <dl>
+     *            <dt>include_branch</dt>
+     *            <dd>Set this to 'true' to include the '_branch' top-level key in the response.
+     *            This key states the unique ID of the branch where the concerned Contentstack module resides.</dd>
+     *         </dl>
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-custom-field">Get a
+     * Single Custom Field
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> single(@NotNull String customFieldUid) {
         this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
@@ -135,6 +147,13 @@ public class Extensions {
      * @param body
      *         the request body
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload a
+     * custom field
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> uploadCustomField(Map<String, RequestBody> body) {
         this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
@@ -158,6 +177,13 @@ public class Extensions {
      * @param body
      *         the request body
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload a
+     * custom field
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> uploadCustomField(JSONObject body) {
         this.headers.put(Util.CONTENT_TYPE, "application/json");
@@ -175,6 +201,12 @@ public class Extensions {
      * @param body
      *         JSON requestBody
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-custom-field">Update a
+     * custom field
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> update(@NotNull String customFieldUid, JSONObject body) {
         if (body == null) {
@@ -194,6 +226,12 @@ public class Extensions {
      * @param customFieldUid
      *         UID of the custom field that you want to update
      * @return Call
+     * @see <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-custom-field">Delete a
+     * custom field
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> delete(@NotNull String customFieldUid) {
         return this.service.delete(this.headers, customFieldUid);

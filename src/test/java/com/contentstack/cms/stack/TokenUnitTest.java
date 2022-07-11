@@ -15,7 +15,7 @@ import java.util.HashMap;
 class TokenUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     protected static Tokens tokens;
@@ -88,7 +88,7 @@ class TokenUnitTest {
 
     @Test
     void allDeliveryTokens() {
-        Request request = tokens.getDeliveryTokens().request();
+        Request request = tokens.deliveryTokens().fetch().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -104,7 +104,7 @@ class TokenUnitTest {
 
     @Test
     void singleDeliveryToken() {
-        Request request = tokens.getDeliveryToken(_uid).request();
+        Request request = tokens.deliveryTokens().single(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -120,7 +120,7 @@ class TokenUnitTest {
 
     @Test
     void createDeliveryToken() {
-        Request request = tokens.createDeliveryToken(body).request();
+        Request request = tokens.deliveryTokens().create(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -136,7 +136,7 @@ class TokenUnitTest {
 
     @Test
     void updateDeliveryToken() {
-        Request request = tokens.updateDeliveryToken(_uid, body).request();
+        Request request = tokens.deliveryTokens().update(_uid, body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -149,7 +149,7 @@ class TokenUnitTest {
 
     @Test
     void deleteDeliveryToken() {
-        Request request = tokens.deleteDeliveryToken(_uid).request();
+        Request request = tokens.deliveryTokens().delete(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -163,7 +163,7 @@ class TokenUnitTest {
 
     @Test
     void deleteDeliveryTokenForcefully() {
-        Request request = tokens.deleteDeliveryToken(_uid, true).request();
+        Request request = tokens.deliveryTokens().delete(_uid, true).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -177,7 +177,7 @@ class TokenUnitTest {
 
     @Test
     void allManagementToken() {
-        Request request = tokens.getManagementTokens().request();
+        Request request = tokens.managementToken().fetch().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertNull(request.body());
@@ -192,7 +192,7 @@ class TokenUnitTest {
 
     @Test
     void singleManagementToken() {
-        Request request = tokens.getManagementToken(_uid).request();
+        Request request = tokens.managementToken().single(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertNull(request.body());
@@ -206,7 +206,7 @@ class TokenUnitTest {
 
     @Test
     void createManagementToken() {
-        Request request = tokens.createManagementToken(body).request();
+        Request request = tokens.managementToken().create(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
@@ -220,7 +220,7 @@ class TokenUnitTest {
 
     @Test
     void updateManagementToken() {
-        Request request = tokens.updateManagementToken(_uid, body).request();
+        Request request = tokens.managementToken().update(_uid, body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertNotNull(request.body());
@@ -234,7 +234,7 @@ class TokenUnitTest {
 
     @Test
     void deleteManagementToken() {
-        Request request = tokens.deleteManagementToken(_uid).request();
+        Request request = tokens.managementToken().delete(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());

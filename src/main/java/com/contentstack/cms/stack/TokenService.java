@@ -39,11 +39,11 @@ public interface TokenService {
 
     // Management Tokens
     @GET("management_tokens")
-    Call<ResponseBody> getManagementToken(
-            @HeaderMap Map<String, Object> headers);
+    Call<ResponseBody> fetchManagementToken(
+            @HeaderMap Map<String, Object> headers, @QueryMap Map<String, Object> params);
 
     @GET("management_tokens/{token_uid}")
-    Call<ResponseBody> getManagementToken(
+    Call<ResponseBody> getSingleManagementToken(
             @HeaderMap Map<String, Object> headers,
             @Path("token_uid") String tokenUid);
 

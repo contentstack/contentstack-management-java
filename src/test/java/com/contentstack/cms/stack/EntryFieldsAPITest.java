@@ -17,7 +17,7 @@ import static com.contentstack.cms.Utils.toJson;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EntryFieldsAPITest {
 
-    protected static String API_KEY = Dotenv.load().get("apiKey1");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("managementToken1");
     protected static String emailId = Dotenv.load().get("username");
     protected static String password = Dotenv.load().get("password");

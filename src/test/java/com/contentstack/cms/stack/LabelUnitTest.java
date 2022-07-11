@@ -12,16 +12,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 @Tag("unit")
 class LabelUnitTest {
 
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
+    protected static String API_KEY = Dotenv.load().get("apiKey");
     protected static String _uid = Dotenv.load().get("auth_token");
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
     static Label label;
@@ -61,7 +59,7 @@ class LabelUnitTest {
     @Test
     void getAllLabels() {
         Request request = label.fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -72,7 +70,9 @@ class LabelUnitTest {
     }
 
     @Test
-    void getAllLabelsWithBody() {
+    void fetchLabels() {
+        label.addParam("include_count", false);
+        label.addParam("include_branch", false);
         Request request = label.fetch().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -85,7 +85,10 @@ class LabelUnitTest {
     }
 
     @Test
-    void getAllLabelsWithBodyWithBranch() {
+    void fetchWithBranch() {
+        label.clearParams();
+        label.addParam("include_count", false);
+        label.addParam("include_branch", false);
         Request request = label.addBranch("main").fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -99,6 +102,7 @@ class LabelUnitTest {
 
     @Test
     void getLabel() {
+        label.clearParams();
         Request request = label.single(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -114,7 +118,7 @@ class LabelUnitTest {
     void getLabelWithQuery() {
         label.addParam("include_branch", false);
         Request request = label.single(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -126,8 +130,8 @@ class LabelUnitTest {
 
     @Test
     void addLabelPost() {
-        Request request = label.add(body).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = label.create(body).request();
+        Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -142,7 +146,7 @@ class LabelUnitTest {
     @Test
     void labelUpdate() {
         Request request = label.update(_uid, body).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertNotNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -156,7 +160,7 @@ class LabelUnitTest {
     @Test
     void labelDelete() {
         Request request = label.delete(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());
         Assertions.assertTrue(request.url().isHttps());

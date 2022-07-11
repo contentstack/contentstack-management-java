@@ -21,7 +21,7 @@ import java.util.HashMap;
  * Read more about <a
  * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#releases">Releases</a>
  *
- * @author Shailesh Mishra
+ * @author ishaileshmishra
  * @version 1.0.0
  * @since 2022-05-19
  */
@@ -56,9 +56,9 @@ public class Release {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *         query param key for the request
      * @param value
-     *         header value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -66,10 +66,10 @@ public class Release {
 
 
     /**
-     * Sets header for the request
+     * Set header for the request
      *
      * @param key
-     *         header key for the request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -77,7 +77,7 @@ public class Release {
 
 
     /**
-     * To clear all the params
+     * To clear all the query params
      */
     protected void clearParams() {
         this.params.clear();
@@ -88,9 +88,15 @@ public class Release {
      * <p>
      *
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-releases">Get
+     * all Releases
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> getAll() {
-        return this.service.getReleases(this.headers, this.params);
+    public Call<ResponseBody> fetch() {
+        return this.service.fetch(this.headers, this.params);
     }
 
     /**
@@ -101,9 +107,15 @@ public class Release {
      * @param releaseUid
      *         The unique ID of the release of which you want to retrieve the details
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-release">Get
+     * a singel release
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
-    public Call<ResponseBody> fetch(@NotNull String releaseUid) {
-        return this.service.getRelease(this.headers, releaseUid);
+    public Call<ResponseBody> single(@NotNull String releaseUid) {
+        return this.service.single(this.headers, releaseUid);
     }
 
     /**
@@ -113,9 +125,15 @@ public class Release {
      * @param requestBody
      *         The details of the delivery role in @{@link JSONObject} format
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-release">Create
+     * a release
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
-        return this.service.createRelease(this.headers, requestBody);
+        return this.service.create(this.headers, requestBody);
     }
 
     /**
@@ -129,10 +147,16 @@ public class Release {
      * @param requestBody
      *         The body should be of @{@link JSONObject} type
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-release">Update
+     * a release
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> update(
             @NotNull String releaseUid, @NotNull JSONObject requestBody) {
-        return this.service.updateRelease(this.headers, releaseUid, requestBody);
+        return this.service.update(this.headers, releaseUid, requestBody);
     }
 
     /**
@@ -143,9 +167,15 @@ public class Release {
      * @param releaseUid
      *         The UID of the role that you want to retrieve
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-release">Delete
+     * a release
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> delete(@NotNull String releaseUid) {
-        return this.service.deleteRelease(this.headers, releaseUid);
+        return this.service.delete(this.headers, releaseUid);
     }
 
 
@@ -159,6 +189,12 @@ public class Release {
      * @param releaseUid
      *         The UID of the role that you want to retrieve
      * @return ReleaseItem
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Get
+     * a release item
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public ReleaseItem item(@NotNull String releaseUid) {
         return new ReleaseItem(this.retrofit, this.headers, releaseUid);
@@ -178,6 +214,12 @@ public class Release {
      * @param requestBody
      *         The JSONObject request body
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#deploy-a-release">Deploy
+     * a release
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
      */
     public Call<ResponseBody> deploy(
             @NotNull String releaseUid, @NotNull JSONObject requestBody) {
@@ -195,10 +237,15 @@ public class Release {
      * @param requestBody
      *         The JSONObject request body
      * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#clone-a-release">Clone
+     * all release
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @since 1.0.0
      */
     public Call<ResponseBody> clone(
             @NotNull String releaseUid, @NotNull JSONObject requestBody) {
-        return this.service.clone(this.headers, releaseUid, requestBody);
+        return this.service.clone(this.headers, releaseUid, this.params, requestBody);
     }
 
 
