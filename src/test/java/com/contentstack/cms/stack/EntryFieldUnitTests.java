@@ -142,6 +142,7 @@ class EntryFieldUnitTests {
     void testCreateEntryQuery() {
         entryInstance.clearParams();
         entryInstance.addParam("locale", "en-us");
+
         Request resp = entryInstance.create(new JSONObject()).request();
         Assertions.assertEquals("locale=en-us", resp.url().query());
     }
