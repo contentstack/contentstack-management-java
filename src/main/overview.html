@@ -69,17 +69,17 @@ Table of contents
     pom.xml:</p>
 
 
-<!--<pre>-->
-<!--    <dependencies>-->
-<!--        ...-->
-<!--        <dependency>-->
-<!--            <groupId>com.contentstack.sdk</groupId>-->
-<!--            <artifactId>cms</artifactId>-->
-<!--            <version>1.0.0</version>-->
-<!--        </dependency>-->
-<!--        ...-->
-<!--    </dependencies>-->
-<!--</pre>-->
+<pre class=" language-java" style=“background-color:lightgray;”>
+    &lt;dependencies&gt;
+        ...
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.contentstack.sdk&lt;/groupId&gt;
+            &lt;artifactId&gt;cms&lt;/artifactId&gt;
+            &lt;version&gt;1.0.0&lt;/version&gt;
+        &lt;/dependency&gt;
+        ...
+    &lt;/dependencies&gt;
+</pre>
 
 <pre class=" language-java"><code class="prism  language-java"><span class="token operator">&lt;</span>dependency<span
         class="token operator">&gt;</span>
@@ -93,7 +93,17 @@ Table of contents
             class="token punctuation">}</span><span class="token operator">&lt;</span><span
             class="token operator">/</span>version<span class="token operator">&gt;</span><span class="token operator">&lt;</span><span
             class="token operator">/</span>dependency<span class="token operator">&gt;</span>
-        </code></pre>
+        </code>
+</pre>
+
+<pre class="language-java" style=“background-color:lightgray;”>
+    &lt;dependencies&gt;
+        ...
+        &lt;implementation&gt; com.contentstack.sdk.cms:1.0.0 &lt;implementation&gt;
+        ...
+    &lt;/dependencies&gt;
+</pre>
+
 <p>Or, for a Gradle project:</p>
 <pre class=" language-java"><code class="prism  language-java">implementation <span class="token string">'com.contentstack.cms:{version}'</span>
         </code></pre>
