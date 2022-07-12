@@ -1,7 +1,3 @@
-
-/**
- * The top most package to access contentstack instance
- */
 package com.contentstack.cms;
 
 import com.contentstack.cms.core.AuthInterceptor;
@@ -310,10 +306,8 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack(@NotNull Map<String, Object> header) {
-        if (this.authtoken == null)
-            if (header.size() == 0) {
-                throw new IllegalStateException(PLEASE_LOGIN);
-            }
+        if (this.authtoken == null && header.size() == 0)
+            throw new IllegalStateException(PLEASE_LOGIN);
         return new Stack(this.instance, header);
     }
 
@@ -416,6 +410,7 @@ public class Contentstack {
          * Instantiates a new Builder.
          */
         public Builder() {
+            // this blank builder constructor
         }
 
         /**
