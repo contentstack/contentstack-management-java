@@ -68,11 +68,11 @@ Contentstack  client = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").buil
 Stack stack = client.stack("API_KEY", "MANAGEMENT_TOKEN");
 ```
 
-### Contentstack Management JavaScript SDK: 5-minute Quickstart
+### Contentstack Management Java SDK: 5-minute Quickstart
 
 #### Initializing Your SDK
 
-To use the JavaScript CMA SDK, you need to first initialize it. To do this, use the following code:
+To use the Java CMA SDK, you need to first initialize it. To do this, use the following code:
 
 ```java
 package com.contentstack.cms;
