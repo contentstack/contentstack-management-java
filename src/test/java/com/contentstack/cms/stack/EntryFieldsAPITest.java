@@ -26,22 +26,14 @@ class EntryFieldsAPITest {
 
     @BeforeAll
     static void setup() throws IOException {
-        // Initialise Contentstack
-        //Contentstack contentstack = new Contentstack.Builder().build();
-        //Response<LoginDetails> loginStatus = contentstack.login(emailId, password);
-        //assert loginStatus.body() != null;
-        // Get the Authtoken
-        //String authToken = loginStatus.body().getUser().getAuthtoken();
         Contentstack client = new Contentstack.Builder().setAuthtoken(MANAGEMENT_TOKEN).build();
         HashMap<String, Object> headers = new HashMap<>();
         headers.put("api_key", API_KEY);
         headers.put("authorization", MANAGEMENT_TOKEN);
         Stack stack = client.stack(headers);
-        // Get all content types
         Response<ResponseBody> response = stack.contentType(MANAGEMENT_TOKEN).fetch().execute();
         JsonObject jsonResp = toJson(response);
         JsonArray allCT = jsonResp.getAsJsonArray("content_types");
-        // find first content type from the stack
         if (allCT.size() > 0) {
             int count = allCT.size();
             count--; // to avoid java.lang.IndexOutOfBoundsException
