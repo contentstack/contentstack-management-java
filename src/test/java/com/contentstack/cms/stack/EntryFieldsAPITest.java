@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
@@ -21,6 +22,7 @@ class EntryFieldsAPITest {
     protected static String MANAGEMENT_TOKEN = Dotenv.load().get("managementToken1");
     protected static String emailId = Dotenv.load().get("username");
     protected static String password = Dotenv.load().get("password");
+    protected static String _uid = Dotenv.load().get("uid");
     protected static Entry entry;
     protected static String contentTypeUid;
 
@@ -49,7 +51,6 @@ class EntryFieldsAPITest {
         Assertions.assertTrue(response.isSuccessful());
     }
 
-
     @Test
     void testFetch() {
         try {
@@ -63,19 +64,23 @@ class EntryFieldsAPITest {
 
     @Test
     void testSingle() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.single(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testCreate() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        JSONObject body = new JSONObject();
+        body.put("param", "paramValue");
+        Response<ResponseBody> response = entry.create(body).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testUpdate() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        JSONObject body = new JSONObject();
+        body.put("param", "paramValue");
+        Response<ResponseBody> response = entry.update(_uid, body).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
