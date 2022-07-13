@@ -10,7 +10,7 @@ Note: By using CMA, you can execute GET requests for fetching content. However, 
 
 ### Prerequisite
 
-You need Node.js version 10 or above installed on your machine to use the Contentstack Java CMS SDK.
+You need Java 8 or above installed on your machine to use the Contentstack Management Java SDK.
 
 ### Installation
 
@@ -35,7 +35,7 @@ To import the SDK, use the following command:
 ```java
 package com.contentstack.cms;
 
-Contentstack client = new Contentstack.Builder().build();
+Contentstack contentstack = new Contentstack.Builder().build();
 ```
 
 ### Authentication
@@ -47,7 +47,7 @@ To use this SDK, you need to authenticate your users by using the Authtoken, cre
 An [Authtoken](https://www.contentstack.com/docs/developers/create-tokens/types-of-tokens/#authentication-tokens-authtokens-) is a read-write token used to make authorized CMA requests, and it is a **user-specific** token.
 
 ```java
-Contentstack client = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
 ```
 
 ### Login
@@ -55,8 +55,8 @@ Contentstack client = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build
 To Login to Contentstack by using credentials, you can use the following lines of code:
 
 ```java
-Contentstack client = new Contentstack.Builder().build();
-client.login("EMAIL", "PASSWORD");
+Contentstack contentstack = new Contentstack.Builder().build();
+contentstack.login("EMAIL", "PASSWORD");
 ```
 
 ### Management Token
@@ -64,20 +64,20 @@ client.login("EMAIL", "PASSWORD");
 [Management Tokens](https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens/) are **stack-level** tokens, with no users attached to them.
 
 ```java
-Contentstack  client = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
-Stack stack = client.stack("API_KEY", "MANAGEMENT_TOKEN");
+Contentstack  contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
+Stack stack = contentstack.stack("API_KEY", "MANAGEMENT_TOKEN");
 ```
 
-### Contentstack Management JavaScript SDK: 5-minute Quickstart
+### Contentstack Management Java SDK: 5-minute Quickstart
 
 #### Initializing Your SDK
 
-To use the JavaScript CMA SDK, you need to first initialize it. To do this, use the following code:
+To use the Java CMA SDK, you need to first initialize it. To do this, use the following code:
 
 ```java
 package com.contentstack.cms;
 
-Contentstack client = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
 ```
 
 #### Fetch Stack Detail
