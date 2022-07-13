@@ -1,6 +1,6 @@
 package com.contentstack.cms;
 
-import com.contentstack.cms.core.CSResponse;
+import com.contentstack.cms.core.CMAResponseConvertor;
 import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.models.UserDetail;
@@ -120,7 +120,8 @@ public class ContentstackAPITest {
         client.login(dotenv.get("username"), dotenv.get("password"));
         Response<ResponseBody> response = client.user().getUser().execute();
         if (response.isSuccessful()) {
-            CSResponse csr = new CSResponse(response);
+
+            CMAResponseConvertor csr = new CMAResponseConvertor(response);
             String csrStr = csr.asString();
             String csrStrOne = csr.asJson();
             String csrStrTwo = csr.asJson(csrStr);
