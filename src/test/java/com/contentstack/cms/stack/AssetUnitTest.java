@@ -542,7 +542,7 @@ class AssetUnitTest {
     void testAssetSingleFolder() {
         asset.clearParams();
         asset.addParam("include_path", false);
-        Request resp = asset.singleFolder(_uid).request();
+        Request resp = asset.folder().singleFolder(_uid).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(3, resp.headers().size());
@@ -625,7 +625,7 @@ class AssetUnitTest {
         _bodyContent.put("environments", "development");
         _body.put("asset", _bodyContent);
         asset.clearParams();
-        Request resp = asset.createFolder(_body).request();
+        Request resp = asset.folder().createFolder(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
@@ -655,7 +655,7 @@ class AssetUnitTest {
         _body.put("asset", _bodyContent);
 
         asset.clearParams();
-        Request resp = asset.updateFolder(_uid, _body).request();
+        Request resp = asset.folder().updateFolder(_uid, _body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
@@ -677,7 +677,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetDeleteFolder() {
-        Request resp = asset.deleteFolder(_uid).request();
+        Request resp = asset.folder().deleteFolder(_uid).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
         Assertions.assertEquals(3, resp.headers().size());
