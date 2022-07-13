@@ -345,9 +345,6 @@ public class ContentType {
      * is mandatory), along with the stack API key, to make a valid Content Management API request. Read more about
      * authentication.
      *
-     * @param contentTypeUid
-     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
-     *         content type. The unique ID of a content type is unique across a stack.
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
@@ -372,9 +369,6 @@ public class ContentType {
      * Authtoken (anyone is mandatory), along with the stack API key, to make a valid Content Management API request.
      * Read more about authentication.
      *
-     * @param contentTypeUid
-     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
-     *         content type. The unique ID of a content type is unique across a stack.
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
      * Export A Content Type</a>
