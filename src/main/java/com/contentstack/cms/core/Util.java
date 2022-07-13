@@ -66,8 +66,8 @@ public class Util {
     public static void nullEmptyThrowsException(@NotNull String field) {
         Objects.requireNonNull(field);
         try {
-            throw new CMSRuntimeException(field + " cannot take in an empty String or null value");
-        } catch (CMSRuntimeException e) {
+            throw new CMARuntimeException(field + " cannot take in an empty String or null value");
+        } catch (CMARuntimeException e) {
             e.printStackTrace();
         }
     }

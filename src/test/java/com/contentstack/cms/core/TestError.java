@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 @Tag("unit")
 class TestError {
 
-    static CMSLogger logger = new CMSLogger(TestError.class);
+    static CMALogger logger = new CMALogger(TestError.class);
 
     /**
      * Test gson mapper not null.
