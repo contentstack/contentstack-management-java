@@ -10,7 +10,7 @@ import java.net.URL;
 @Tag("unit")
 public class TestUtils {
 
-    static CMSLogger logger = new CMSLogger(TestUtils.class);
+    static CMALogger logger = new CMALogger(TestUtils.class);
 
     public static boolean isValid(String url) {
         try {
