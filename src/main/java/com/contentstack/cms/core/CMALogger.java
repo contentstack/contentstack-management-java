@@ -11,15 +11,15 @@ import java.util.logging.Logger;
  * @version 1.0.0
  * @since 2022-05-19
  */
-public class CMSLogger {
+public class CMALogger {
 
     private final Logger logger;
 
-    public Logger getLOGGER() {
+    public Logger getLogger() {
         return logger;
     }
 
-    public CMSLogger(@NotNull Class<?> className) {
+    public CMALogger(@NotNull Class<?> className) {
         logger = Logger.getLogger(className.getSimpleName());
     }
 
