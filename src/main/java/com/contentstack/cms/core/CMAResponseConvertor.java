@@ -17,13 +17,13 @@ import java.util.Objects;
  * @since 2022-05-19
  */
 
-public class CSResponse {
+public class CMAResponseConvertor {
 
     private static final String MODEL_NULL_CHECK = "model class == null";
     private static final String RESPONSE_NULL = "response == null";
     private final Response<ResponseBody> response;
 
-    public CSResponse(Response<ResponseBody> response) {
+    public CMAResponseConvertor(Response<ResponseBody> response) {
         this.response = response;
     }
 

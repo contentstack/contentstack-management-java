@@ -160,22 +160,19 @@ public class ContentType {
      * The schema of the content type returned will depend on the provided version. If no version is specified, you will
      * get the latest version of the content type.
      * <br>
+     * <p>
+     * <b>Example: </b>product
+     * #addParam queryParam Query Parameters <b>include_global_field_schema</b>
+     * <p>
+     * the query param Tip: If any of your content types contains a Global field, and you wish to fetch the content
+     * schema of the Global field, then you need to pass the include_global_field_schema:true parameter. This parameter
+     * helps return the Global field's schema along with the content type schema.
+     * <p>
+     * <b>version</b>
+     * <p>
+     * version of the content type of which you want to retrieve the details. If no version is specified, you will get
+     * the latest version of the content type.
      *
-     * @param contentTypeUid
-     *         the content type uid of which you want to retrieve the details. The UID is generated based on the title
-     *         of the content type. The unique ID of a content type is unique across a stack.
-     *         <p>
-     *         <b>Example: </b>product
-     *         #addParam queryParam Query Parameters <b>include_global_field_schema</b>
-     *         <p>
-     *         the query param Tip: If any of your content types contains a Global field, and you wish to fetch the
-     *         content schema of the Global field, then you need to pass the include_global_field_schema:true parameter.
-     *         This parameter helps return the Global field's schema along with the content type schema.
-     *         <p>
-     *         <b>version</b>
-     *         <p>
-     *         version of the content type of which you want to retrieve the details. If no version is specified, you
-     *         will get the latest version of the content type.
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-content-type"> Get a
@@ -184,8 +181,15 @@ public class ContentType {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String contentTypeUid) {
-        return service.single(this.headers, contentTypeUid, this.params);
+    public Call<ResponseBody> single() {
+        validate();
+        return service.single(this.headers, this.contentTypeUid, this.params);
+    }
+
+    private void validate() {
+        if (this.contentTypeUid == null) {
+            throw new IllegalArgumentException("contentTypeUid is required");
+        }
     }
 
     /**
@@ -239,9 +243,6 @@ public class ContentType {
      * <a href=https://www.contentstack.com/docs/developers/apis/content-management-api/#update-content-type>Read
      * more</a>
      *
-     * @param contentTypeUid
-     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
-     *         content type. The unique ID of a content type is unique across a stack.
      * @param requestBody
      *         the request body
      * @return Call
@@ -251,8 +252,9 @@ public class ContentType {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String contentTypeUid, JSONObject requestBody) {
-        return service.update(contentTypeUid, this.headers, this.params, requestBody);
+    public Call<ResponseBody> update(JSONObject requestBody) {
+        validate();
+        return service.update(this.contentTypeUid, this.headers, this.params, requestBody);
     }
 
     /**
@@ -266,9 +268,6 @@ public class ContentType {
      * Visibility Rules</a> can be set while creating your content type (via UI, only after you've added all the
      * required fields to the content type and saved it) or while editing a content type (both via UI and API).
      *
-     * @param contentTypeUid
-     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
-     *         content type. The unique ID of a content type is unique across a stack.
      * @param requestBody
      *         the request body JSONBody
      * @return Call
@@ -279,8 +278,9 @@ public class ContentType {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> fieldVisibilityRule(@NotNull String contentTypeUid, JSONObject requestBody) {
-        return service.visibilityRule(contentTypeUid, this.headers, this.params, requestBody);
+    public Call<ResponseBody> fieldVisibilityRule(JSONObject requestBody) {
+        validate();
+        return service.visibilityRule(this.contentTypeUid, this.headers, this.params, requestBody);
     }
 
 
@@ -294,9 +294,6 @@ public class ContentType {
      * Note: You need to use either the stack's Management Token or the user Authtoken (anyone is mandatory), along with
      * the stack API key, to make a valid Content Management API request. Read more about Authentication.
      *
-     * @param contentTypeUid
-     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
-     *         content type. The unique ID of a content type is unique across a stack.
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-content-type">
      * Delete Content Type</a>
@@ -304,8 +301,9 @@ public class ContentType {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String contentTypeUid) {
-        return service.delete(contentTypeUid, this.headers, this.params);
+    public Call<ResponseBody> delete() {
+        validate();
+        return service.delete(this.contentTypeUid, this.headers, this.params);
     }
 
     /**
@@ -321,9 +319,6 @@ public class ContentType {
      * one is mandatory), along with the stack API key, to make a valid Content Management API request. Read more about
      * authentication.
      *
-     * @param contentTypeUid
-     *         The unique ID of the content type that you wish to update. The uid is generated based on the title of the
-     *         content type. The unique ID of a content type is unique across a stack.
      * @param isIncludeGlobalField
      *         Include Global Field true/false
      * @return Call
@@ -333,8 +328,9 @@ public class ContentType {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> reference(@NotNull String contentTypeUid, Boolean isIncludeGlobalField) {
-        return service.reference(contentTypeUid, this.headers, isIncludeGlobalField);
+    public Call<ResponseBody> reference( Boolean isIncludeGlobalField) {
+        validate();
+        return service.reference(this.contentTypeUid, this.headers, isIncludeGlobalField);
     }
 
     /**
@@ -359,8 +355,9 @@ public class ContentType {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> referenceIncludeGlobalField(@NotNull String contentTypeUid) {
-        return service.referenceIncludeGlobalField(contentTypeUid, this.headers);
+    public Call<ResponseBody> referenceIncludeGlobalField() {
+        validate();
+        return service.referenceIncludeGlobalField(this.contentTypeUid, this.headers);
     }
 
     /**
@@ -384,8 +381,9 @@ public class ContentType {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> export(@NotNull String contentTypeUid) {
-        return service.export(contentTypeUid, this.headers);
+    public Call<ResponseBody> export() {
+        validate();
+        return service.export(this.contentTypeUid, this.headers);
     }
 
     /**
@@ -400,9 +398,6 @@ public class ContentType {
      * Authtoken (anyone is mandatory), along with the stack API key, to make a valid Content Management API request.
      * Read more about authentication.
      *
-     * @param contentTypeUid
-     *         The unique ID of the content type you want to retrieve. The unique ID of a content type is unique across
-     *         a stack
      * @param version
      *         The version of content type you want to retrieve. If no version is specified, you will get the latest
      *         version of the content type
@@ -412,8 +407,9 @@ public class ContentType {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> export(@NotNull String contentTypeUid, int version) {
-        return service.export(contentTypeUid, this.headers, version);
+    public Call<ResponseBody> export( int version) {
+        validate();
+        return service.export(this.contentTypeUid, this.headers, version);
     }
 
     /**

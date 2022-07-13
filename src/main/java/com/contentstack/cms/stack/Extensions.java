@@ -1,6 +1,6 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.core.CMSRuntimeException;
+import com.contentstack.cms.core.CMARuntimeException;
 import com.contentstack.cms.core.Util;
 
 import okhttp3.RequestBody;
@@ -211,8 +211,8 @@ public class Extensions {
     public Call<ResponseBody> update(@NotNull String customFieldUid, JSONObject body) {
         if (body == null) {
             try {
-                throw new CMSRuntimeException("body can not be Null");
-            } catch (CMSRuntimeException e) {
+                throw new CMARuntimeException("body can not be Null");
+            } catch (CMARuntimeException e) {
                 throw new IllegalArgumentException(e.getLocalizedMessage());
             }
         }

@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
  * @version 1.0.0
  * @since 2022-05-19
  */
-public class ResponseResult<T> {
+class ResponseResult<T> {
 
     public T execute(Call<T> call) throws IOException {
         T data = null;
@@ -32,17 +32,3 @@ public class ResponseResult<T> {
         return data;
     }
 }
-
-/*
- * class BaseCallBack<T> implements Callback<T> {
- *
- * @Override public void onResponse(Call<T> call, Response<T> response) { if
- * (!response.isSuccessful()) {
- * System.out.println("Response Fail"); } }
- *
- * @Override public void onFailure(Call<T> call, Throwable t) {
- * System.out.println("Response Fail" + t.toString()); } }
- * <p>
- * <p>
- * interface CustomCallListener<T> { public void getResult(T object); }
- */
