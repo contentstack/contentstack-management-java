@@ -110,7 +110,7 @@ public class Entry {
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-entries">Get
      * All Entry</a>
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.contentTypeUid, this.params);
     }
 
@@ -129,7 +129,7 @@ public class Entry {
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-entry">Get A
      * Single Entry</a>
      */
-    public Call<ResponseBody> single(@NotNull String entryUid) {
+    public Call<ResponseBody> fetch(@NotNull String entryUid) {
         return this.service.single(headers, this.contentTypeUid, entryUid, this.params);
     }
 

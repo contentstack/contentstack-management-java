@@ -139,7 +139,7 @@ public class ContentType {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return service.fetch(this.headers, this.params);
     }
 
@@ -181,7 +181,7 @@ public class ContentType {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> single() {
+    public Call<ResponseBody> fetch() {
         validate();
         return service.single(this.headers, this.contentTypeUid, this.params);
     }

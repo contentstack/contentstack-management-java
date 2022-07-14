@@ -53,7 +53,7 @@ class AliaUnitTest {
 
     @Test
     void fetchBranch() {
-        Request request = alias.fetch().request();
+        Request request = alias.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -73,7 +73,7 @@ class AliaUnitTest {
         alias.addParam("limit", 2);
         alias.addParam("skip", 2);
         alias.addParam("include_count", false);
-        Request request = alias.fetch().request();
+        Request request = alias.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -93,7 +93,7 @@ class AliaUnitTest {
         alias.clearParams();
         alias.addParam("include_rules", true);
         alias.addParam("include_permissions", true);
-        Request request = alias.fetch().request();
+        Request request = alias.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -109,7 +109,7 @@ class AliaUnitTest {
 
     @Test
     void singleRole() {
-        Request request = alias.single(_uid).request();
+        Request request = alias.fetch(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

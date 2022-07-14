@@ -28,7 +28,7 @@ public class LocaleUnitTest {
     @Test
     void fetchLocales() {
         locale.addParam("include_count", true);
-        Request request = locale.fetch().request();
+        Request request = locale.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -60,7 +60,7 @@ public class LocaleUnitTest {
     @Test
     void getLocale() {
         locale.clearParams();
-        Request request = locale.single("en-us").request();
+        Request request = locale.fetch("en-us").request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

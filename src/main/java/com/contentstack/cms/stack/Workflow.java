@@ -93,7 +93,7 @@ public class Workflow {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -111,7 +111,7 @@ public class Workflow {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String workflowUid) {
+    public Call<ResponseBody> fetch(@NotNull String workflowUid) {
         return this.service.single(this.headers, workflowUid);
     }
 

@@ -102,7 +102,7 @@ public class Extensions {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.getAll(this.headers, this.params);
     }
 
@@ -124,7 +124,7 @@ public class Extensions {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String customFieldUid) {
+    public Call<ResponseBody> fetch(@NotNull String customFieldUid) {
         this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
         return this.service.getSingle(this.headers, customFieldUid, this.params);
     }

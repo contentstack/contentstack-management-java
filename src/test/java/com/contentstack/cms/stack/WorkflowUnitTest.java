@@ -153,7 +153,7 @@ class WorkflowUnitTest {
     @Order(5)
     void workflowFetchAll() {
         workflow.clearParams();
-        Request request = workflow.fetch().request();
+        Request request = workflow.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -168,7 +168,7 @@ class WorkflowUnitTest {
     @Test
     @Order(6)
     void workflowFetchByWorkflowId() {
-        Request request = workflow.single(_uid).request();
+        Request request = workflow.fetch(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

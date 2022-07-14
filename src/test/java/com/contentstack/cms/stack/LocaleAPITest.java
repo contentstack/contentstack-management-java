@@ -2,8 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.Utils;
-import com.contentstack.cms.stack.Locale;
-import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -31,7 +29,7 @@ public class LocaleAPITest {
 
     @Test
     void fetchLocales() throws IOException {
-        Response<ResponseBody> response = locale.fetch().execute();
+        Response<ResponseBody> response = locale.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -44,7 +42,7 @@ public class LocaleAPITest {
 
     @Test
     void getLocale() throws IOException {
-        Response<ResponseBody> response = locale.single("en-us").execute();
+        Response<ResponseBody> response = locale.fetch("en-us").execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 

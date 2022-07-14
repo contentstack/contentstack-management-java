@@ -95,7 +95,7 @@ public class Roles {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.getRoles(this.headers, this.params);
     }
 
@@ -112,7 +112,7 @@ public class Roles {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String roleUid) {
+    public Call<ResponseBody> fetch(@NotNull String roleUid) {
         return this.service.getRole(this.headers, roleUid);
     }
 

@@ -89,7 +89,7 @@ public class ReleaseItem {
      *
      * @return Call
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         this.headers.put(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
         return this.service.fetch(this.headers, this.releaseUid, this.params);
     }

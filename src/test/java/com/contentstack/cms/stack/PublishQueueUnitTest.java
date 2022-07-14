@@ -57,7 +57,7 @@ class PublishQueueUnitTest {
     @Test
     @Order(5)
     void publishQueueFetchAll() {
-        Request request = publishQueue.fetch().request();
+        Request request = publishQueue.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

@@ -50,7 +50,7 @@ public class OrgUnitTests {
     @Test
     @Order(2)
     void testOrganizationGetAllRelativeUrl() {
-        Request requestInfo = organization.fetch().request();
+        Request requestInfo = organization.find().request();
         Assertions.assertEquals("/v3/organizations", requestInfo.url().encodedPath());
     }
 
@@ -58,14 +58,14 @@ public class OrgUnitTests {
     @Test
     @Order(3)
     void testGetAllMethod() {
-        Request requestInfo = organization.fetch().request();
+        Request requestInfo = organization.find().request();
         Assertions.assertEquals("GET", requestInfo.method());
     }
 
     @Test
     @Order(4)
     void testGetAllBaseUrl() {
-        Request requestInfo = organization.fetch().request();
+        Request requestInfo = organization.find().request();
         Assertions.assertEquals("https://api.contentstack.io/v3/organizations?asc=false&typehead=contentstack&limit=4&skip=4&include_count=true&desc=true",
                 requestInfo.url().toString());
     }
@@ -73,7 +73,7 @@ public class OrgUnitTests {
     @Test
     @Order(5)
     void testGetAllEncodedPath() {
-        Request requestInfo = organization.fetch().request();
+        Request requestInfo = organization.find().request();
         Assertions.assertEquals("/v3/organizations",
                 requestInfo.url().encodedPath());
     }
@@ -81,7 +81,7 @@ public class OrgUnitTests {
     @Test
     @Order(6)
     void testFetch() {
-        Request requestInfo = organization.fetch().request();
+        Request requestInfo = organization.find().request();
         Assertions.assertEquals("asc=false&typehead=contentstack&limit=4&skip=4&include_count=true&desc=true", requestInfo.url().query());
     }
 
@@ -91,7 +91,7 @@ public class OrgUnitTests {
     void testGetAllRequestParam() {
         organization.addParam("limit", 5);
         organization.addParam("skip", 5);
-        Request requestInfo = organization.fetch().request();
+        Request requestInfo = organization.find().request();
         Assertions.assertEquals("limit=5&skip=5",
                 requestInfo.url().query());
     }
@@ -102,7 +102,7 @@ public class OrgUnitTests {
         Organization org = new Contentstack.Builder().setAuthtoken(authtoken).build().organization();
         org.addParam("limit", 5);
         org.addParam("skip", 5);
-        Request requestInfo = org.fetch().request();
+        Request requestInfo = org.find().request();
         Assertions.assertEquals("limit=5&skip=5",
                 requestInfo.url().query());
     }
@@ -112,7 +112,7 @@ public class OrgUnitTests {
     void testGetSingleMethod() {
         String organizationUid = Dotenv.load().get("organizationUid");
         assert organizationUid != null;
-        Request requestInfo = organization.single(organizationUid).request();
+        Request requestInfo = organization.fetch(organizationUid).request();
         Assertions.assertEquals("GET",
                 requestInfo.method());
     }
@@ -122,7 +122,7 @@ public class OrgUnitTests {
     void testGetSingleBaseUrl() {
         String organizationUid = Dotenv.load().get("organizationUid");
         assert organizationUid != null;
-        Request requestInfo = organization.single(organizationUid).request();
+        Request requestInfo = organization.fetch(organizationUid).request();
         Assertions.assertEquals("api.contentstack.io",
                 requestInfo.url().host());
     }
@@ -132,7 +132,7 @@ public class OrgUnitTests {
     void testGetSingleEncodedPath() {
         String organizationUid = Dotenv.load().get("organizationUid");
         assert organizationUid != null;
-        Request requestInfo = organization.single(organizationUid).request();
+        Request requestInfo = organization.fetch(organizationUid).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid,
                 requestInfo.url().encodedPath());
     }
@@ -144,7 +144,7 @@ public class OrgUnitTests {
         organization.clearParams();
         organization.addParam("include_plan", true);
         assert organizationUid != null;
-        Request requestInfo = organization.single(organizationUid).request();
+        Request requestInfo = organization.fetch(organizationUid).request();
         Assertions.assertEquals("include_plan=true",
                 requestInfo.url().query());
     }
@@ -683,7 +683,7 @@ public class OrgUnitTests {
     @Test
     @Order(59)
     void testGetAllWithQueryParamLimit() {
-        Request requestInfo = organization.fetch().request();
+        Request requestInfo = organization.find().request();
         Assertions.assertEquals("GET", requestInfo.method());
         assertTrue(isValid(requestInfo.url().toString()));
         assertEquals("4", requestInfo.url().queryParameter("limit"));
