@@ -111,9 +111,31 @@ public class Locale {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return localeService.locales(this.headers, this.params);
     }
+
+
+    /**
+     * The Get a language call returns information about a specific language available on the stack.
+     * <p>
+     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
+     * logging into your account.
+     *
+     * @param code
+     *         The code of the language that you want to retrieve
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
+     */
+    public Call<ResponseBody> fetch(@NotNull String code) {
+        return localeService.singel(this.headers, code, this.params);
+    }
+
 
     /**
      * <b>Add a language</b>
@@ -141,25 +163,6 @@ public class Locale {
         return localeService.create(this.headers, body);
     }
 
-    /**
-     * The Get a language call returns information about a specific language available on the stack.
-     * <p>
-     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
-     * logging into your account.
-     *
-     * @param code
-     *         The code of the language that you want to retrieve
-     * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
-     * all languages
-     * </a>
-     * @see #addHeader(String, Object) to add headers
-     * @see #addParam(String, Object) to add query parameters
-     * @since 1.0.0
-     */
-    public Call<ResponseBody> single(@NotNull String code) {
-        return localeService.singel(this.headers, code, this.params);
-    }
 
     /**
      * The Update language call will let you update the details (such as display name) and the fallback language of an

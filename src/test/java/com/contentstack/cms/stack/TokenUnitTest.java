@@ -88,7 +88,7 @@ class TokenUnitTest {
 
     @Test
     void allDeliveryTokens() {
-        Request request = tokens.deliveryTokens().fetch().request();
+        Request request = tokens.deliveryTokens().find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -104,7 +104,7 @@ class TokenUnitTest {
 
     @Test
     void singleDeliveryToken() {
-        Request request = tokens.deliveryTokens().single(_uid).request();
+        Request request = tokens.deliveryTokens().fetch(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -177,7 +177,7 @@ class TokenUnitTest {
 
     @Test
     void allManagementToken() {
-        Request request = tokens.managementToken().fetch().request();
+        Request request = tokens.managementToken().find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertNull(request.body());
@@ -192,7 +192,7 @@ class TokenUnitTest {
 
     @Test
     void singleManagementToken() {
-        Request request = tokens.managementToken().single(_uid).request();
+        Request request = tokens.managementToken().fetch(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertNull(request.body());

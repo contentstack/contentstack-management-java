@@ -33,7 +33,7 @@ class EntryFieldsAPITest {
         headers.put("api_key", API_KEY);
         headers.put("authorization", MANAGEMENT_TOKEN);
         Stack stack = client.stack(headers);
-        Response<ResponseBody> response = stack.contentType(MANAGEMENT_TOKEN).fetch().execute();
+        Response<ResponseBody> response = stack.contentType(MANAGEMENT_TOKEN).find().execute();
         JsonObject jsonResp = toJson(response);
         JsonArray allCT = jsonResp.getAsJsonArray("content_types");
         if (allCT.size() > 0) {
@@ -47,14 +47,14 @@ class EntryFieldsAPITest {
     @Test
     @Order(1)
     void testGetAllCT() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testFetch() {
         try {
-            Response<ResponseBody> response = entry.fetch().execute();
+            Response<ResponseBody> response = entry.find().execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,7 +64,7 @@ class EntryFieldsAPITest {
 
     @Test
     void testSingle() throws IOException {
-        Response<ResponseBody> response = entry.single(_uid).execute();
+        Response<ResponseBody> response = entry.fetch(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -86,91 +86,91 @@ class EntryFieldsAPITest {
 
     @Test
     void testAtomicOperation() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testDelete() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testVersionName() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testDetailOfAllVersion() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testDeleteVersionName() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testReference() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testLanguage() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testLocalise() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testUnLocalise() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testExport() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testImport() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testImportExisting() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testPublish() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testPublishWithReference() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void testUnpublish() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        Response<ResponseBody> response = entry.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 

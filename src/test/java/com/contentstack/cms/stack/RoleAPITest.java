@@ -2,8 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
-import com.contentstack.cms.stack.Roles;
-import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -130,19 +128,19 @@ class RoleAPITest {
 
     @Test
     void rolesQueryParams() throws IOException {
-        Response<ResponseBody> response = roles.fetch().execute();
+        Response<ResponseBody> response = roles.find().execute();
     }
 
     @Test
     void allRoles() throws IOException {
         roles.addParam("include_rules", true);
         roles.addParam("include_permissions", true);
-        Response<ResponseBody> response = roles.fetch().execute();
+        Response<ResponseBody> response = roles.find().execute();
     }
 
     @Test
     void singleRole() throws IOException {
-        Response<ResponseBody> response = roles.single(_uid).execute();
+        Response<ResponseBody> response = roles.fetch(_uid).execute();
     }
 
     @Test

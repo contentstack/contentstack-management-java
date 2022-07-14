@@ -106,7 +106,7 @@ class WebhookUnitTest {
         webhook.clearParams();
         webhook.addParam("include_rules", true);
         webhook.addParam("include_permissions", true);
-        Request request = webhook.fetch().request();
+        Request request = webhook.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -124,7 +124,7 @@ class WebhookUnitTest {
         webhook.removeParam("include_rules");
         webhook.removeParam("include_permissions");
         assert _webhook_uid != null;
-        Request request = webhook.single(_webhook_uid).request();
+        Request request = webhook.fetch(_webhook_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

@@ -2,8 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
-import com.contentstack.cms.stack.Extensions;
-import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -43,13 +41,13 @@ class ExtensionAPITest {
     void extensionGetAll() throws IOException {
         extension.addParam("query", "\"type\":\"field\"");
         extension.addParam("include_branch", true);
-        Response<ResponseBody> response = extension.fetch().execute();
+        Response<ResponseBody> response = extension.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void getSingleWithUid() throws IOException {
-        Response<ResponseBody> response = extension.single(_uid).execute();
+        Response<ResponseBody> response = extension.fetch(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -67,7 +65,7 @@ class ExtensionAPITest {
 
     @Test
     void extensionGetSingle() throws IOException {
-        Response<ResponseBody> response = extension.single(_uid).execute();
+        Response<ResponseBody> response = extension.fetch(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 

@@ -87,7 +87,7 @@ public class Folder {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> singleFolder(
+    public Call<ResponseBody> fetch(
             @NotNull String folderUid) {
         return this.service.singleFolder(this.headers, folderUid, this.params);
     }
@@ -117,7 +117,7 @@ public class Folder {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> createFolder(@Nullable JSONObject requestBody) {
+    public Call<ResponseBody> create(@Nullable JSONObject requestBody) {
         return this.service.createFolder(this.headers, this.params, requestBody);
     }
 
@@ -147,7 +147,7 @@ public class Folder {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> updateFolder(@NotNull String folderUid, @Nullable JSONObject requestBody) {
+    public Call<ResponseBody> update(@NotNull String folderUid, @Nullable JSONObject requestBody) {
         return this.service.updateFolder(this.headers, folderUid, this.params, requestBody);
     }
 
@@ -165,7 +165,7 @@ public class Folder {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> deleteFolder(@NotNull String folderUid) {
+    public Call<ResponseBody> delete(@NotNull String folderUid) {
         return this.service.deleteFolder(this.headers, folderUid);
     }
 

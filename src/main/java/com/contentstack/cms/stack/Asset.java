@@ -134,7 +134,7 @@ public class Asset {
      * As</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -153,7 +153,7 @@ public class Asset {
      * single asset</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String uid) {
+    public Call<ResponseBody> fetch(@NotNull String uid) {
         return this.service.single(this.headers, uid, this.params);
     }
 

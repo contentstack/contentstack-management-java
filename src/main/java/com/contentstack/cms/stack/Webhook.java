@@ -99,7 +99,7 @@ public class Webhook {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -118,7 +118,7 @@ public class Webhook {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String webhookUid) {
+    public Call<ResponseBody> fetch(@NotNull String webhookUid) {
         return this.service.single(this.headers, webhookUid);
     }
 

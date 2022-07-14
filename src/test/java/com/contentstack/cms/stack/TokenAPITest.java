@@ -2,8 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
-import com.contentstack.cms.stack.Stack;
-import com.contentstack.cms.stack.Tokens;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -92,13 +90,13 @@ class TokenAPITest {
 
     @Test
     void allDeliveryTokens() throws IOException {
-        Response<ResponseBody> response = tokens.deliveryTokens().fetch().execute();
+        Response<ResponseBody> response = tokens.deliveryTokens().find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void singleDeliveryToken() throws IOException {
-        Response<ResponseBody> response = tokens.deliveryTokens().single(_uid).execute();
+        Response<ResponseBody> response = tokens.deliveryTokens().fetch(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -128,13 +126,13 @@ class TokenAPITest {
 
     @Test
     void allManagementToken() throws IOException {
-        Response<ResponseBody> response = tokens.managementToken().fetch().execute();
+        Response<ResponseBody> response = tokens.managementToken().find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void singleManagementToken() throws IOException {
-        Response<ResponseBody> response = tokens.managementToken().single(_uid).execute();
+        Response<ResponseBody> response = tokens.managementToken().fetch(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
