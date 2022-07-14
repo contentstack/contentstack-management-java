@@ -4,7 +4,6 @@ import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
-import retrofit2.Retrofit;
 
 import java.util.HashMap;
 
@@ -92,7 +91,7 @@ public class DeliveryToken {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.getDeliveryToken(this.headers);
     }
 
@@ -110,7 +109,7 @@ public class DeliveryToken {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String tokenUid) {
+    public Call<ResponseBody> fetch(@NotNull String tokenUid) {
         return this.service.getDeliveryToken(this.headers, tokenUid);
     }
 

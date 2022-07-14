@@ -111,7 +111,7 @@ public class GlobalField {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -139,7 +139,7 @@ public class GlobalField {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String globalFiledUid) {
+    public Call<ResponseBody> fetch(@NotNull String globalFiledUid) {
         return this.service.single(this.headers, globalFiledUid, this.params);
     }
 

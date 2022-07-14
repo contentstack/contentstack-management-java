@@ -58,7 +58,7 @@ class LabelUnitTest {
 
     @Test
     void getAllLabels() {
-        Request request = label.fetch().request();
+        Request request = label.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -73,7 +73,7 @@ class LabelUnitTest {
     void fetchLabels() {
         label.addParam("include_count", false);
         label.addParam("include_branch", false);
-        Request request = label.fetch().request();
+        Request request = label.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -89,7 +89,7 @@ class LabelUnitTest {
         label.clearParams();
         label.addParam("include_count", false);
         label.addParam("include_branch", false);
-        Request request = label.addBranch("main").fetch().request();
+        Request request = label.addBranch("main").find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -103,7 +103,7 @@ class LabelUnitTest {
     @Test
     void getLabel() {
         label.clearParams();
-        Request request = label.single(_uid).request();
+        Request request = label.fetch(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -117,7 +117,7 @@ class LabelUnitTest {
     @Test
     void getLabelWithQuery() {
         label.addParam("include_branch", false);
-        Request request = label.single(_uid).request();
+        Request request = label.fetch(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

@@ -2,8 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.Utils;
-import com.contentstack.cms.stack.Environment;
-import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -11,8 +9,6 @@ import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Tag("api")
@@ -37,7 +33,7 @@ public class EnvironmentAPITest {
         environment.addParam("asc", "created_at");
         environment.addParam("desc", "updated_at");
         try {
-            Response<ResponseBody> response = environment.fetch().execute();
+            Response<ResponseBody> response = environment.find().execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,7 +45,7 @@ public class EnvironmentAPITest {
     @Order(2)
     void addLocale() {
         try {
-            Response<ResponseBody> response = environment.single("development").execute();
+            Response<ResponseBody> response = environment.fetch("development").execute();
             Assertions.assertTrue(response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();

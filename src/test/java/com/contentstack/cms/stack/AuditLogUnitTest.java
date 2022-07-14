@@ -62,7 +62,7 @@ class AuditLogUnitTest {
     @Test
     @Order(5)
     void workflowFetchAll() {
-        Request request = auditLog.fetch().request();
+        Request request = auditLog.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -77,7 +77,7 @@ class AuditLogUnitTest {
     @Test
     @Order(6)
     void workflowFetchByWorkflowId() {
-        Request request = auditLog.fetchAuditLog(_uid).request();
+        Request request = auditLog.fetch(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

@@ -95,7 +95,7 @@ public class Release {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -114,7 +114,7 @@ public class Release {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String releaseUid) {
+    public Call<ResponseBody> fetch(@NotNull String releaseUid) {
         return this.service.single(this.headers, releaseUid);
     }
 

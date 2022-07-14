@@ -54,7 +54,7 @@ class OrgApiTests {
 
     @Test
     void testGetAll() throws IOException {
-        Response<ResponseBody> response = organization.fetch().execute();
+        Response<ResponseBody> response = organization.find().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organizations"));
@@ -69,7 +69,7 @@ class OrgApiTests {
     @Test
     void testGetAllWithParams() throws IOException {
         organization.addParam("include_plan", true);
-        Response<ResponseBody> response = organization.fetch().execute();
+        Response<ResponseBody> response = organization.find().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organizations"));
@@ -85,7 +85,7 @@ class OrgApiTests {
     void testGetSingle() throws IOException {
         String orgUid = Dotenv.load().get("organizationUid");
         assert orgUid != null;
-        Response<ResponseBody> response = organization.single(orgUid).execute();
+        Response<ResponseBody> response = organization.fetch(orgUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organization"));
@@ -101,7 +101,7 @@ class OrgApiTests {
         organization.addParam("include_plan", true);
         String orgUid = Dotenv.load().get("organizationUid");
         assert orgUid != null;
-        Response<ResponseBody> response = organization.single(orgUid).execute();
+        Response<ResponseBody> response = organization.fetch(orgUid).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organization"));

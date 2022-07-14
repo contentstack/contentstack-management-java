@@ -54,7 +54,7 @@ class StackAPITest {
     void testStackFetchAll() {
         try {
             assert apiKey != null;
-            Response<ResponseBody> response = stackInstance.fetch().execute();
+            Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 log.fine(jsonResp.get("stack").getAsJsonObject().toString());
@@ -71,7 +71,7 @@ class StackAPITest {
             assert apiKey != null;
             assert organizationUid != null;
             stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.fetch().execute();
+            Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -91,7 +91,7 @@ class StackAPITest {
             stackInstance.addParam("include_count", false);
             assert organizationUid != null;
             stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.fetch().execute();
+            Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -111,7 +111,7 @@ class StackAPITest {
             assert apiKey != null;
             assert organizationUid != null;
             stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.fetch().execute();
+            Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));

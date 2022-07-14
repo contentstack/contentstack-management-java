@@ -403,7 +403,7 @@ public class Stack {
      * single Stack</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 

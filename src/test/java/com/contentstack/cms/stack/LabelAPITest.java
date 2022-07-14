@@ -2,8 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.core.Util;
-import com.contentstack.cms.stack.Label;
-import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -39,13 +37,13 @@ import java.util.Map;
 
     @Test
     void getAllLabels() throws IOException {
-        Response<ResponseBody> response = label.fetch().execute();
+        Response<ResponseBody> response = label.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void getAllLabelsWithBody() throws IOException {
-        Response<ResponseBody> response = label.fetch().execute();
+        Response<ResponseBody> response = label.find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
@@ -54,20 +52,20 @@ import java.util.Map;
         Map<String, Object> jsonJson = new HashMap<>();
         jsonJson.put("include_count", false);
         jsonJson.put("include_branch", false);
-        Response<ResponseBody> response = label.addBranch("main").fetch().execute();
+        Response<ResponseBody> response = label.addBranch("main").find().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
     void getLabel() throws IOException {
-        Response<ResponseBody> response = label.single(_uid).execute();
+        Response<ResponseBody> response = label.fetch(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
 
     }
 
     @Test
     void getLabelWithQuery() throws IOException {
-        Response<ResponseBody> response = label.single(_uid).execute();
+        Response<ResponseBody> response = label.fetch(_uid).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 

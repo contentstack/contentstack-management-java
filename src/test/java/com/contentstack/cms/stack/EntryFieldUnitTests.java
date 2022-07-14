@@ -41,7 +41,7 @@ class EntryFieldUnitTests {
         entryInstance.addParam("locale", "en-us");
         entryInstance.addParam("include_workflow", false);
         entryInstance.addParam("include_publish_details", true);
-        Request resp = entryInstance.fetch().request();
+        Request resp = entryInstance.find().request();
         Assertions.assertTrue(resp.isHttps());
     }
 
@@ -51,19 +51,19 @@ class EntryFieldUnitTests {
         entryInstance.addParam("include_publish_details", true);
         entryInstance.addParam("locale", "en-us");
         entryInstance.addParam("include_workflow", false);
-        Request resp = entryInstance.fetch().request();
+        Request resp = entryInstance.find().request();
         Assertions.assertEquals("include_publish_details=true&locale=en-us&include_workflow=false", resp.url().query());
     }
 
     @Test
     void testEntryFetchEncodedPath() {
-        Request resp = entryInstance.fetch().request();
+        Request resp = entryInstance.find().request();
         Assertions.assertEquals("/v3/content_types/product/entries", resp.url().encodedPath());
     }
 
     @Test
     void testEntryFetchHeaders() {
-        Request resp = entryInstance.fetch().request();
+        Request resp = entryInstance.find().request();
         Assertions.assertEquals(3, resp.headers().size());
     }
 
@@ -73,13 +73,13 @@ class EntryFieldUnitTests {
         matcher.add("api_key");
         matcher.add("authorization");
         matcher.add("Content-Type");
-        Request resp = entryInstance.fetch().request();
+        Request resp = entryInstance.find().request();
         Assertions.assertTrue(resp.headers().names().containsAll(matcher));
     }
 
     @Test
     void testEntryFetchMethod() {
-        Request resp = entryInstance.fetch().request();
+        Request resp = entryInstance.find().request();
         Assertions.assertEquals("GET", resp.method());
     }
 
@@ -90,19 +90,19 @@ class EntryFieldUnitTests {
         entryInstance.addParam("locale", "en-us");
         entryInstance.addParam("include_workflow", false);
         entryInstance.addParam("include_publish_details", true);
-        Request resp = entryInstance.single(API_KEY).request();
+        Request resp = entryInstance.fetch(API_KEY).request();
         Assertions.assertEquals("include_publish_details=true&locale=en-us&include_workflow=false", resp.url().query());
     }
 
     @Test
     void testSingleEntryEncodedPath() {
-        Request resp = entryInstance.single(API_KEY).request();
+        Request resp = entryInstance.fetch(API_KEY).request();
         Assertions.assertEquals("/v3/content_types/product/entries/" + API_KEY, resp.url().encodedPath());
     }
 
     @Test
     void testSingleEntryHeaders() {
-        Request resp = entryInstance.single(API_KEY).request();
+        Request resp = entryInstance.fetch(API_KEY).request();
         Assertions.assertEquals(3, resp.headers().size());
     }
 
@@ -112,20 +112,20 @@ class EntryFieldUnitTests {
         matcher.add("api_key");
         matcher.add("authorization");
         matcher.add("Content-Type");
-        Request resp = entryInstance.single(API_KEY).request();
+        Request resp = entryInstance.fetch(API_KEY).request();
         Assertions.assertTrue(resp.headers().names().containsAll(matcher));
     }
 
     @Test
     void testSingleEntryMethod() {
-        Request resp = entryInstance.single(API_KEY).request();
+        Request resp = entryInstance.fetch(API_KEY).request();
         Assertions.assertEquals("GET", resp.method());
     }
 
     @Test
     void testSingleEntryCompleteUrl() {
         entryInstance.clearParams();
-        Request resp = entryInstance.single(API_KEY).request();
+        Request resp = entryInstance.fetch(API_KEY).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + API_KEY,
                 resp.url().toString());
     }
