@@ -99,7 +99,7 @@ public class Environment {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -121,7 +121,7 @@ public class Environment {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String environment) {
+    public Call<ResponseBody> fetch(@NotNull String environment) {
         return this.service.getEnv(this.headers, environment);
     }
 

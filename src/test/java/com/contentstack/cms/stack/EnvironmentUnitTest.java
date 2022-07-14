@@ -31,7 +31,7 @@ public class EnvironmentUnitTest {
         environment.addParam("include_count", false);
         environment.addParam("asc", "created_at");
         environment.addParam("desc", "updated_at");
-        Request request = environment.fetch().request();
+        Request request = environment.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -46,7 +46,7 @@ public class EnvironmentUnitTest {
 
     @Test
     void addLocale() {
-        Request request = environment.single("development").request();
+        Request request = environment.fetch("development").request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

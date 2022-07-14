@@ -108,7 +108,7 @@ public class Label {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.get(this.headers, this.params);
     }
 
@@ -127,7 +127,7 @@ public class Label {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String labelUid) {
+    public Call<ResponseBody> fetch(@NotNull String labelUid) {
         return this.service.get(this.headers, labelUid, this.params);
     }
 

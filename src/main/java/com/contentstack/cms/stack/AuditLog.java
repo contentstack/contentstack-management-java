@@ -87,7 +87,7 @@ public class AuditLog {
      *
      * @return Call
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -99,7 +99,7 @@ public class AuditLog {
      *         The UID of a specific log item you want to retrieve the details of
      * @return Call
      */
-    public Call<ResponseBody> fetchAuditLog(@NotNull String logItemUid) {
+    public Call<ResponseBody> fetch(@NotNull String logItemUid) {
         return this.service.fetch(this.headers, logItemUid);
     }
 

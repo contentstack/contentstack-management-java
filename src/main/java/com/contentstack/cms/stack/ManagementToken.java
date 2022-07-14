@@ -77,21 +77,6 @@ public class ManagementToken {
 
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *         header key for the request
-     * @param value
-     *         header value for the request
-     * @return Tokens
-     */
-    public ManagementToken addHeader(@NotNull String key, @NotNull String value) {
-        this.headers.put(key, value);
-        return this;
-    }
-
-
-    /**
      * The Get all management tokens request returns the details of all the management tokens generated in a stack and
      * NOT the actual management tokens.
      *
@@ -104,7 +89,7 @@ public class ManagementToken {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetchManagementToken(this.headers, this.params);
     }
 
@@ -122,7 +107,7 @@ public class ManagementToken {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String tokenUid) {
+    public Call<ResponseBody> fetch(@NotNull String tokenUid) {
         return this.service.getSingleManagementToken(this.headers, tokenUid);
     }
 

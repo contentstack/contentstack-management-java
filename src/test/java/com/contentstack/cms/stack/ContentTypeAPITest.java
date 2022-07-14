@@ -42,7 +42,7 @@ class ContentTypeAPITest {
     @Test
     void setupBeforeStart() throws IOException {
         contentType = stack.contentType(contentTypeUid);
-        Response<ResponseBody> response = contentType.fetch().execute();
+        Response<ResponseBody> response = contentType.find().execute();
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);
             logger.info(jsonObject.toString());
@@ -67,7 +67,7 @@ class ContentTypeAPITest {
     void testFetchAPI() throws IOException {
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Response<ResponseBody> response = contentType.fetch().execute();
+        Response<ResponseBody> response = contentType.find().execute();
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);
             Assertions.assertTrue(jsonObject.has("content_types"));
@@ -82,7 +82,7 @@ class ContentTypeAPITest {
     @Test
     @Order(3)
     void testSingleApi() throws IOException {
-        Response<ResponseBody> response = contentType.single().execute();
+        Response<ResponseBody> response = contentType.fetch().execute();
         if (response.isSuccessful()) {
             JsonObject jsonObject = Utils.toJson(response);
             Assertions.assertTrue(jsonObject.has("content_type"));

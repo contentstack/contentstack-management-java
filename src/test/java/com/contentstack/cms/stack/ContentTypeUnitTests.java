@@ -37,7 +37,7 @@ class ContentTypeUnitTests {
     void testFetch() {
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request request = contentType.fetch().request();
+        Request request = contentType.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -54,7 +54,7 @@ class ContentTypeUnitTests {
     void testGetAllContentTypesIncludeCount() {
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request response = contentType.fetch().request();
+        Request response = contentType.find().request();
         Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_count"));
     }
 
@@ -62,7 +62,7 @@ class ContentTypeUnitTests {
     void testGetAllContentTypesIncludeQuery() {
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request response = contentType.fetch().request();
+        Request response = contentType.find().request();
         Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
     }
 
@@ -70,13 +70,13 @@ class ContentTypeUnitTests {
     void testGetAllContentTypesEncodedPath() {
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request response = contentType.fetch().request();
+        Request response = contentType.find().request();
         Assertions.assertEquals("/v3/content_types", response.url().encodedPath());
     }
 
     @Test
     void testGetAllContentTypesEncodedUrl() {
-        Request response = contentType.fetch().request();
+        Request response = contentType.find().request();
         Assertions.assertEquals("include_count=true&include_global_field_schema=true", response.url().encodedQuery());
     }
 
@@ -85,7 +85,7 @@ class ContentTypeUnitTests {
         contentType.clearParams();
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request response = contentType.fetch().request();
+        Request response = contentType.find().request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
                 response.url().toString());
@@ -93,19 +93,19 @@ class ContentTypeUnitTests {
 
     @Test
     void testGetAllContentTypesAuth() {
-        Request response = contentType.fetch().request();
+        Request response = contentType.find().request();
         Assertions.assertEquals(managementToken, response.header("authorization"));
     }
 
     @Test
     void testGetSingleQueryIncludeGlobalFieldSchema() {
-        Request response = contentType.single().request();
+        Request response = contentType.fetch().request();
         Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
     }
 
     @Test
     void testGetSingleEncodedPath() {
-        Request response = contentType.single().request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals("/v3/content_types/product", response.url().encodedPath());
     }
 
@@ -114,7 +114,7 @@ class ContentTypeUnitTests {
         contentType.clearParams();
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request response = contentType.single().request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals("include_count=true&include_global_field_schema=true", response.url().encodedQuery());
     }
 
@@ -123,7 +123,7 @@ class ContentTypeUnitTests {
         contentType.clearParams();
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request response = contentType.single().request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/content_types/product?include_count=true&include_global_field_schema=true",
                 response.url().toString());
@@ -131,19 +131,19 @@ class ContentTypeUnitTests {
 
     @Test
     void testGetSingleMethod() {
-        Request response = contentType.single().request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals("GET", response.method());
     }
 
     @Test
     void testGetSingleHeader() {
-        Request response = contentType.single().request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals(API_KEY, response.header("api_key"));
     }
 
     @Test
     void testGetSingleAuthorization() {
-        Request response = contentType.single().request();
+        Request response = contentType.fetch().request();
         Assertions.assertEquals(managementToken, response.header("authorization"));
     }
 

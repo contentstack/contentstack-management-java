@@ -49,7 +49,7 @@ public class ContentstackUnitTest {
     @Test
     void testCredentialsApiKey() {
         Assertions.assertNotNull(
-                dotenv.get("api_key"), "apikey is not null");
+                dotenv.get("apiKey"), "apikey is not null");
     }
 
     @Test

@@ -53,7 +53,7 @@ class BranchUnitTest {
 
     @Test
     void fetchBranch() {
-        Request request = branch.fetch().request();
+        Request request = branch.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -73,7 +73,7 @@ class BranchUnitTest {
         branch.addParam("limit", 2);
         branch.addParam("skip", 2);
         branch.addParam("include_count", false);
-        Request request = branch.fetch().request();
+        Request request = branch.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -93,7 +93,7 @@ class BranchUnitTest {
         branch.clearParams();
         branch.addParam("include_rules", true);
         branch.addParam("include_permissions", true);
-        Request request = branch.fetch().request();
+        Request request = branch.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -109,7 +109,7 @@ class BranchUnitTest {
 
     @Test
     void singleRole() {
-        Request request = branch.single(_uid).request();
+        Request request = branch.fetch(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

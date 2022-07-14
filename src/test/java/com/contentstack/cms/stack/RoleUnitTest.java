@@ -158,7 +158,7 @@ class RoleUnitTest {
     @Test
     @Order(5)
     void rolesQueryParams() {
-        Request request = roles.fetch().request();
+        Request request = roles.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -177,7 +177,7 @@ class RoleUnitTest {
     void allRoles() {
         roles.addParam("include_rules", true);
         roles.addParam("include_permissions", true);
-        Request request = roles.fetch().request();
+        Request request = roles.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -193,7 +193,7 @@ class RoleUnitTest {
     @Test
     @Order(7)
     void singleRole() {
-        Request request = roles.single(_uid).request();
+        Request request = roles.fetch(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

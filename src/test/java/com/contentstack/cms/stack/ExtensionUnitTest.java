@@ -67,7 +67,7 @@ class ExtensionUnitTest {
         params.put("type", "field");
         extension.addParam("query", "\"type\":\"field\"");
         extension.addParam("include_branch", false);
-        Request request = extension.fetch().request();
+        Request request = extension.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -86,7 +86,7 @@ class ExtensionUnitTest {
         extension.clearParams();
         extension.addParam("include_count", false);
         extension.addParam("include_branch", false);
-        Request request = extension.single(_uid).request();
+        Request request = extension.fetch(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -135,7 +135,7 @@ class ExtensionUnitTest {
     void extensionGetSingle() {
         extension.addParam("include_count", false);
         extension.addParam("include_branch", false);
-        Request request = extension.single(_uid).request();
+        Request request = extension.fetch(_uid).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());

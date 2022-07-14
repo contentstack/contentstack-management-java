@@ -90,7 +90,7 @@ public class Branch {
      * branches</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -105,7 +105,7 @@ public class Branch {
      * Get a single branch</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String uid) {
+    public Call<ResponseBody> fetch(@NotNull String uid) {
         return this.service.single(this.headers, uid);
     }
 

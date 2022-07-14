@@ -120,7 +120,7 @@ public class Organization {
      *
      * @return Call
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -138,7 +138,7 @@ public class Organization {
      *         {@link #addParam(String, Object)} the Query Parameters include_plan(optional) = true
      * @return Call
      */
-    public Call<ResponseBody> single(@NotNull String organizationUid) {
+    public Call<ResponseBody> fetch(@NotNull String organizationUid) {
         return service.getSingle(this.headers, organizationUid, this.params);
     }
 
