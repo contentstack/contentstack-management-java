@@ -1,76 +1,108 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.core.Util;
-import com.contentstack.cms.stack.GlobalField;
-import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import retrofit2.Call;
+import org.junit.jupiter.api.*;
+import retrofit2.Response;
 
-import java.util.HashMap;
+import java.io.IOException;
 
-@Tag("api") class GlobalFieldsAPITest {
+@Tag("api")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class GlobalFieldsAPITest {
 
-    protected String GlobalFiledUid = "description";
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("api_key");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
-    static GlobalField globalField;
+    private static GlobalField globalField;
+
 
     @BeforeAll
-    static void setup() {
-        HashMap<String, Object> headers = new HashMap<>();
-        headers.put(Util.API_KEY, API_KEY);
-        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-        Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        globalField = stack.globalField();
+    static void setup() throws IOException {
+
+        Dotenv cred = Dotenv.load();
+        String username = cred.get("username");
+        String password = cred.get("password");
+        String globalFiledUid = cred.get("authToken");
+        Contentstack contentstack = new Contentstack.Builder().build();
+        contentstack.login(username, password);
+        globalField = contentstack.stack().globalField(globalFiledUid);
+    }
+
+    @Order(1)
+    @Test
+    void testGlobalFieldFind() throws IOException {
+        Response<ResponseBody> response = globalField.find().execute();
+        if (response.isSuccessful()) {
+            Assertions.assertTrue(response.isSuccessful());
+        } else {
+            Assertions.assertFalse(response.isSuccessful());
+        }
     }
 
     @Test
-    void testFetch() {
-        Call<ResponseBody> response = globalField.update(GlobalFiledUid,
-                new JSONObject());
+    void testGlobalFieldFetch() throws IOException {
+        Response<ResponseBody> response = globalField.fetch().execute();
+        if (response.isSuccessful()) {
+            Assertions.assertTrue(response.isSuccessful());
+        } else {
+            Assertions.assertFalse(response.isSuccessful());
+        }
     }
 
     @Test
-    void testSingle() {
-        Call<ResponseBody> response = globalField.update(GlobalFiledUid,
-                new JSONObject());
+    void testCreate() throws IOException {
+        Response<ResponseBody> response = globalField.create(new JSONObject()).execute();
+        if (response.isSuccessful()) {
+            Assertions.assertTrue(response.isSuccessful());
+        } else {
+            Assertions.assertFalse(response.isSuccessful());
+        }
     }
 
     @Test
-    void testCreate() {
-        Call<ResponseBody> response = globalField.update(GlobalFiledUid,
-                new JSONObject());
+    void testUpdate() throws IOException {
+        Response<ResponseBody> response = globalField.update(new JSONObject()).execute();
+        if (response.isSuccessful()) {
+            Assertions.assertTrue(response.isSuccessful());
+        } else {
+            Assertions.assertFalse(response.isSuccessful());
+        }
     }
 
     @Test
-    void testUpdate() {
-        Call<ResponseBody> response = globalField.update(GlobalFiledUid,
-                new JSONObject());
+    void testDelete() throws IOException {
+        Response<ResponseBody> response = globalField.delete().execute();
+        if (response.isSuccessful()) {
+            Assertions.assertTrue(response.isSuccessful());
+        } else {
+            Assertions.assertFalse(response.isSuccessful());
+        }
     }
 
     @Test
-    void testDelete() {
-        Call<ResponseBody> response = globalField.update(GlobalFiledUid,
-                new JSONObject());
+    @Disabled
+    void testImport() throws IOException {
+        JSONObject globalFieldBody = new JSONObject();
+        JSONObject otherDetails = new JSONObject();
+        otherDetails.put("title", "technology");
+        globalFieldBody.put("global_field", otherDetails);
+        Response<ResponseBody> response = globalField.imports(globalFieldBody).execute();
+        if (response.isSuccessful()) {
+            Assertions.assertTrue(response.isSuccessful());
+        } else {
+            Assertions.assertFalse(response.isSuccessful());
+        }
     }
 
     @Test
-    void testImport() {
-        Call<ResponseBody> response = globalField.update(GlobalFiledUid,
-                new JSONObject());
-    }
+    void testExport() throws IOException {
+        Response<ResponseBody> response = globalField.export().execute();
+        if (response.isSuccessful()) {
+            Assertions.assertTrue(response.isSuccessful());
+        } else {
+            Assertions.assertFalse(response.isSuccessful());
+        }
 
-    @Test
-    void testExport() {
-        Call<ResponseBody> response = globalField.update(GlobalFiledUid,
-                new JSONObject());
     }
 
 }

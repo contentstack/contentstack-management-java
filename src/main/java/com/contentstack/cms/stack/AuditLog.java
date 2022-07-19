@@ -28,12 +28,24 @@ public class AuditLog {
     protected final AuditLogService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    private String logItemUid;
 
-    protected AuditLog(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+    protected AuditLog(Retrofit retrofit) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.service = retrofit.create(AuditLogService.class);
+    }
+
+    protected AuditLog(Retrofit retrofit, String uid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.logItemUid = uid;
+        this.service = retrofit.create(AuditLogService.class);
+    }
+
+    void validate() {
+        if (this.logItemUid == null || this.logItemUid.isEmpty())
+            throw new IllegalStateException("LogItem Uid can not be null or empty");
     }
 
     /**
@@ -95,12 +107,11 @@ public class AuditLog {
     /**
      * The Get audit log item request is used to retrieve a specific item from the audit log of a stack.
      *
-     * @param logItemUid
-     *         The UID of a specific log item you want to retrieve the details of
      * @return Call
      */
-    public Call<ResponseBody> fetch(@NotNull String logItemUid) {
-        return this.service.fetch(this.headers, logItemUid);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.fetch(this.headers, this.logItemUid);
     }
 
 

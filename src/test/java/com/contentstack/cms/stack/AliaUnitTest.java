@@ -17,8 +17,8 @@ class AliaUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static Alias alias;
     protected static JSONObject body;
 
@@ -38,7 +38,7 @@ class AliaUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        alias = stack.alias();
+        alias = stack.alias(_uid);
 
         try {
             JSONParser parser = new JSONParser();
@@ -54,7 +54,7 @@ class AliaUnitTest {
     @Test
     void fetchBranch() {
         Request request = alias.find().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -74,7 +74,7 @@ class AliaUnitTest {
         alias.addParam("skip", 2);
         alias.addParam("include_count", false);
         Request request = alias.find().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -94,7 +94,7 @@ class AliaUnitTest {
         alias.addParam("include_rules", true);
         alias.addParam("include_permissions", true);
         Request request = alias.find().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -109,8 +109,8 @@ class AliaUnitTest {
 
     @Test
     void singleRole() {
-        Request request = alias.fetch(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = alias.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -129,7 +129,7 @@ class AliaUnitTest {
     @Test
     void updateRole() {
         Request request = alias.update(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -146,8 +146,8 @@ class AliaUnitTest {
 
     @Test
     void deleteBranch() {
-        Request request = alias.delete(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = alias.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

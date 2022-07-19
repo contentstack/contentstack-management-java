@@ -14,8 +14,8 @@ class PublishQueueUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("workflow_uid");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("workflowUid");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static PublishQueue publishQueue;
 
 
@@ -25,14 +25,14 @@ class PublishQueueUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        publishQueue = stack.publishQueue();
+        publishQueue = stack.publishQueue(_uid);
     }
 
     @Test
     @Order(1)
     void publishQueueHeaders() {
         publishQueue.addHeader("Content-Type", "application/json");
-        Assertions.assertEquals(3, publishQueue.headers.size());
+        Assertions.assertEquals(1, publishQueue.headers.size());
     }
 
     @Test
@@ -58,7 +58,7 @@ class PublishQueueUnitTest {
     @Order(5)
     void publishQueueFetchAll() {
         Request request = publishQueue.find().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -72,8 +72,8 @@ class PublishQueueUnitTest {
     @Test
     @Order(6)
     void publishQueueFetchByWorkflowId() {
-        Request request = publishQueue.fetchActivity(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = publishQueue.fetchActivity().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -87,8 +87,8 @@ class PublishQueueUnitTest {
     @Test
     @Order(7)
     void publishQueueCancelScheduledAction() {
-        Request request = publishQueue.cancelScheduledAction(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = publishQueue.cancelScheduledAction().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
