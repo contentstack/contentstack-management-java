@@ -30,14 +30,25 @@ public class Workflow {
     protected final WorkflowService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    private String workflowUid;
 
-    protected Workflow(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+    protected Workflow(Retrofit retrofit) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.service = retrofit.create(WorkflowService.class);
     }
 
+    protected Workflow(Retrofit retrofit, @NotNull String uid) {
+        this.workflowUid = uid;
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.service = retrofit.create(WorkflowService.class);
+    }
+
+    void validate() {
+        if (this.workflowUid == null || this.workflowUid.isEmpty())
+            throw new IllegalStateException("Workflow uid can not be null or empty");
+    }
 
     /**
      * Sets header for the request
@@ -101,8 +112,6 @@ public class Workflow {
     /**
      * Get a Single Workflow request retrieves the comprehensive details of a specific Workflow of a stack.
      *
-     * @param workflowUid
-     *         The UID of your workflow that you want to retrieve
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-workflow">Get a
@@ -111,8 +120,9 @@ public class Workflow {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch(@NotNull String workflowUid) {
-        return this.service.single(this.headers, workflowUid);
+    public Call<ResponseBody> fetch() {
+        this.validate();
+        return this.service.single(this.headers, this.workflowUid);
     }
 
     /**
@@ -169,8 +179,6 @@ public class Workflow {
      * Note: Workflow superusers, organization owners, and stack owners/admins can edit or delete the entry in any
      * workflow stage, irrespective of the stage access rules set for that stage.
      *
-     * @param workflowUid
-     *         The UID of your workflow whose details you want to update
      * @param requestBody
      *         The body should be of @{@link JSONObject} type
      * @return Call
@@ -181,16 +189,14 @@ public class Workflow {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(
-            @NotNull String workflowUid, @NotNull JSONObject requestBody) {
-        return this.service.update(this.headers, workflowUid, requestBody);
+    public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
+        this.validate();
+        return this.service.update(this.headers, this.workflowUid, requestBody);
     }
 
     /**
      * Disable Workflow request allows you to disable a workflow.
      *
-     * @param workflowUid
-     *         The UID of your workflow that you want to disable
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#disable-workflow">Disable
      * workflow
@@ -199,16 +205,15 @@ public class Workflow {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> disable(@NotNull String workflowUid) {
-        return this.service.disable(this.headers, workflowUid);
+    public Call<ResponseBody> disable() {
+        this.validate();
+        return this.service.disable(this.headers, this.workflowUid);
     }
 
 
     /**
      * Enable Workflow request allows you to enable a workflow.
      *
-     * @param workflowUid
-     *         The UID of the workflow that you want to enable
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#enable-workflow">Enable
      * Workflow
@@ -217,15 +222,14 @@ public class Workflow {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> enable(@NotNull String workflowUid) {
-        return this.service.enable(this.headers, workflowUid);
+    public Call<ResponseBody> enable() {
+        this.validate();
+        return this.service.enable(this.headers, this.workflowUid);
     }
 
     /**
      * Delete Workflow request allows you to delete a workflow.
      *
-     * @param workflowUid
-     *         The UID of the workflow that you want to delete
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-workflow">Delete
      * Workflow
@@ -234,8 +238,9 @@ public class Workflow {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String workflowUid) {
-        return this.service.delete(this.headers, workflowUid);
+    public Call<ResponseBody> delete() {
+        this.validate();
+        return this.service.delete(this.headers, this.workflowUid);
     }
 
 
@@ -270,14 +275,14 @@ public class Workflow {
 
 
     /**
-     * Add or Update Publish Rules request allows you to add a publish rule or update the details of the existing
-     * publish rules of a workflow.
+     * Add or Update Publish Rules request allows you to add a publishing rule or update the details of the existing
+     * publishing rules of a workflow.
      * <p>
      * To define the branch scope, specify the unique IDs of the branches for which the publishing rule will be
      * applicable in the following schema in the request body:
      *
      * @param ruleUid
-     *         The UID of the publish rule that you want to update
+     *         The UID of the publishing rule that you want to update
      * @param requestBody
      *         The request body
      * @return Call
@@ -288,14 +293,13 @@ public class Workflow {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> updatePublishRule(@NotNull String ruleUid,
-                                                @NotNull JSONObject requestBody) {
+    public Call<ResponseBody> updatePublishRule(@NotNull String ruleUid, @NotNull JSONObject requestBody) {
         return this.service.updatePublishRules(this.headers, ruleUid, requestBody);
     }
 
 
     /**
-     * The Delete Publish Rules request allows you to delete an existing publish rule.
+     * To Delete Publish Rules request allows you to delete an existing publish rule.
      *
      * @param ruleUid
      *         The UID of the publish rule that you want to delete
@@ -313,7 +317,7 @@ public class Workflow {
     }
 
     /**
-     * The Get all Publish Rules request retrieves the details of all the Publish rules of a workflow.
+     * The Get all Publish Rules request retrieves the details of all the Publishing rules of a workflow.
      *
      * @param contentTypes
      *         comma-separated list of content type UIDs for filtering publish rules on its basis
@@ -372,6 +376,9 @@ public class Workflow {
      * @since 1.0.0
      */
     public Call<ResponseBody> fetchPublishRuleContentType(@NotNull String contentTypeUid) {
+        if (contentTypeUid.isEmpty()){
+            throw new IllegalArgumentException("Content Type can not be empty");
+        }
         return this.service.fetchPublishRuleContentType(this.headers, contentTypeUid, this.params);
     }
 
@@ -382,16 +389,12 @@ public class Workflow {
      * When executing the API request, in the 'Header' section, you need to provide the API Key of your stack and the
      * authtoken that you receive after logging into your account.
      *
-     * @param authtoken
-     *         The authtoken
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-tasks">Get all
      * Tasks</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetchTasks(@NotNull String authtoken) {
-        this.headers.put("authtoken", authtoken);
-        this.headers.put(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
+    public Call<ResponseBody> fetchTasks() {
         return this.service.fetchTasks(this.headers, this.params);
     }
 

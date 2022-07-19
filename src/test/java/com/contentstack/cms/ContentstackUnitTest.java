@@ -24,7 +24,7 @@ public class ContentstackUnitTest {
 
     @Test
     void testCredentialsAuthtoken() {
-        String authToken = dotenv.get("auth_token");
+        String authToken = dotenv.get("authToken");
         Assertions.assertNotNull(authToken, "authToken is not null");
     }
 
@@ -42,14 +42,13 @@ public class ContentstackUnitTest {
 
     @Test
     void testCredentialsDeliveryToken() {
-        Assertions.assertNotNull(
-                dotenv.get("delivery_token"), "deliveryToekn is not null");
+        Assertions.assertNotNull(dotenv.get("deliveryToken"), "deliveryToekn is not null");
     }
 
     @Test
     void testCredentialsApiKey() {
-        Assertions.assertNotNull(
-                dotenv.get("apiKey"), "apikey is not null");
+        String apiKey = dotenv.get("apiKey");
+        Assertions.assertNotNull(apiKey, "apikey is not null");
     }
 
     @Test
@@ -244,7 +243,7 @@ public class ContentstackUnitTest {
     }
 
     @Test
-    void testSetAuthtokenLogin() throws IOException {
+    void testSetAuthtokenLogin() {
         Contentstack client = new Contentstack.Builder()
                 .setAuthtoken("fake@authtoken")
                 .build();
@@ -257,10 +256,8 @@ public class ContentstackUnitTest {
     }
 
     @Test
-    void testSetAuthtokenLoginWithTfa() throws IOException {
-        Contentstack client = new Contentstack.Builder()
-                .setAuthtoken("fake@authtoken")
-                .build();
+    void testSetAuthtokenLoginWithTfa() {
+        Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
         try {
             client.login("fake@email.com", "fake@password", "fake@tfa");
         } catch (Exception e) {

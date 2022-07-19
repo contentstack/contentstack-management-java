@@ -120,7 +120,7 @@ public interface AssetService {
     Call<ResponseBody> singleFolder(
             @HeaderMap Map<String, Object> headers,
             @Path("folder_uid") String folderUid,
-            @QueryMap(encoded = true) Map<String, Object> query);
+            @QueryMap Map<String, Object> query);
 
     @GET("assets")
     Call<ResponseBody> singleFolderByName(

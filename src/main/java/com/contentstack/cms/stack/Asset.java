@@ -28,14 +28,29 @@ public class Asset {
     protected Map<String, Object> params;
     protected final AssetService service;
     private final Retrofit instance;
+    private String assetUid;
 
-    protected Asset(Retrofit instance, @NotNull Map<String, Object> stackHeaders) {
+    protected Asset(Retrofit instance) {
         this.headers = new HashMap<>();
         this.headers.put("Content-Type", "application/json");
-        this.headers.putAll(stackHeaders);
-        params = new HashMap<>();
+        this.params = new HashMap<>();
         this.instance = instance;
         this.service = instance.create(AssetService.class);
+    }
+
+    protected Asset(Retrofit instance, String uid) {
+        this.instance = instance;
+        this.assetUid = uid;
+        this.headers = new HashMap<>();
+        this.headers.put("Content-Type", "application/json");
+        this.params = new HashMap<>();
+        this.service = instance.create(AssetService.class);
+    }
+
+
+    void validate() {
+        if (this.assetUid == null || this.assetUid.isEmpty())
+            throw new IllegalStateException("Asset Uid can not be null or empty");
     }
 
     /**
@@ -82,8 +97,22 @@ public class Asset {
     }
 
 
+    /**
+     * Gets folder instance
+     * @return Folder
+     */
     public Folder folder() {
-        return new Folder(this.instance, this.headers);
+        return new Folder(this.instance);
+    }
+
+    /**
+     * Gets folder instance
+     * @param folderUid
+     *         The UID of the folder that you want to either update or move
+     * @return Folder
+     */
+    public Folder folder(@NotNull String folderUid) {
+        return new Folder(this.instance, folderUid);
     }
 
     /**
@@ -146,15 +175,14 @@ public class Asset {
      * the include_publish_details parameter and set its value to ‘true’. This query will return the publishing details
      * of the entry in every environment along with the version number that is published in each of the environment.
      *
-     * @param uid
-     *         The unique ID of the asset of which you wish to retrieve details
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-asset">Get a
      * single asset</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch(@NotNull String uid) {
-        return this.service.single(this.headers, uid, this.params);
+    public Call<ResponseBody> fetch() {
+        this.validate();
+        return this.service.single(this.headers, this.assetUid, this.params);
     }
 
     /**
@@ -256,8 +284,6 @@ public class Asset {
      * parameters such as asset[title] and asset[description] which let you enter a title and a description for the
      * uploaded asset, respectively.
      *
-     * @param uid
-     *         The unique ID of the asset of which you wish to retrieve details, or that you wish to update or delete
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#replace-asset"> Replace
      * Asset</a>
@@ -265,8 +291,9 @@ public class Asset {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0<br>
      */
-    public Call<ResponseBody> replace(String uid) {
-        return this.service.replace(this.headers, uid, this.params);
+    public Call<ResponseBody> replace() {
+        this.validate();
+        return this.service.replace(this.headers, this.assetUid, this.params);
     }
 
     /**
@@ -283,8 +310,6 @@ public class Asset {
      * }
      * </pre>
      *
-     * @param uid
-     *         The unique ID of the asset of which you wish to retrieve details, or that you wish to update or delete
      * @param body
      *         the JSONObject request body
      * @return Call
@@ -294,8 +319,9 @@ public class Asset {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0<br>
      */
-    public Call<ResponseBody> generatePermanentUrl(String uid, JSONObject body) {
-        return this.service.generatePermanentUrl(this.headers, uid, body);
+    public Call<ResponseBody> generatePermanentUrl(JSONObject body) {
+        this.validate();
+        return this.service.generatePermanentUrl(this.headers, this.assetUid, body);
     }
 
     /**
@@ -309,8 +335,6 @@ public class Asset {
      * Note: Before executing this API request, ensure to create a permanent URL for the asset you want to download.
      * <br>
      *
-     * @param uid
-     *         The UID of the asset you want to download. Use the Get All Assets request to get the UID of the asset.
      * @param slugUrl
      *         The unique identifier of the asset.
      * @return Call
@@ -321,15 +345,14 @@ public class Asset {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> getPermanentUrl(String uid, String slugUrl) {
-        return this.service.downloadPermanentUrl(this.headers, uid, slugUrl, this.params);
+    public Call<ResponseBody> getPermanentUrl(String slugUrl) {
+        this.validate();
+        return this.service.downloadPermanentUrl(this.headers, this.assetUid, slugUrl, this.params);
     }
 
     /**
      * Delete asset call will delete an existing asset from the stack.
      *
-     * @param uid
-     *         the UID of the asset you want to delete asset
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-asset"> Delete
      * Asset
@@ -337,8 +360,9 @@ public class Asset {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String uid) {
-        return this.service.delete(this.headers, uid);
+    public Call<ResponseBody> delete() {
+        this.validate();
+        return this.service.delete(this.headers, this.assetUid);
     }
 
     /**
@@ -370,8 +394,6 @@ public class Asset {
      * In the request body, you need to specify the version name to be assigned to the asset version.
      * <br>
      *
-     * @param assetUid
-     *         asset uid
      * @param versionNumber
      *         asset version number
      * @param requestBody
@@ -383,9 +405,9 @@ public class Asset {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> setVersionName(@NotNull String assetUid, int versionNumber,
+    public Call<ResponseBody> setVersionName(int versionNumber,
                                              @NotNull JSONObject requestBody) {
-        return this.service.setVersionName(this.headers, assetUid, versionNumber, requestBody);
+        return this.service.setVersionName(this.headers, this.assetUid, versionNumber, requestBody);
     }
 
     /**
@@ -397,20 +419,18 @@ public class Asset {
      * The details returned include the actual version number of the asset; the version name along with details such as
      * the assigned version name, the UID of the user who assigned the name, and the time when the version was assigned
      * a name; and the count of the versions.
+     * <p>
+     * #addParam request parameters are below - skip(optional):Enter the number of version details to be skipped.
+     * <br>
+     * <b>Example:</b>
+     * <p>
+     * - limit(optional): Enter the maximum number of version details to be returned. Example:5
+     * <p>
+     * - named(optional):Set to <b>true</b> if you want to retrieve only the named versions of your asset.
+     * Example:false
+     * <p>
+     * - include_count(optional):Enter 'true' to get the total count of the asset version details. Example:false
      *
-     * @param assetUid
-     *         the asset uid #addParam request parameters are below - skip(optional):Enter the number of version details
-     *         to be skipped.
-     *         <br>
-     *         <b>Example:</b>
-     *         <p>
-     *         - limit(optional): Enter the maximum number of version details to be returned. Example:5
-     *         <p>
-     *         - named(optional):Set to <b>true</b> if you want to retrieve only the named versions of your asset.
-     *         Example:false
-     *         <p>
-     *         - include_count(optional):Enter 'true' to get the total count of the asset version details.
-     *         Example:false
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-asset">
@@ -419,8 +439,9 @@ public class Asset {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> getVersionNameDetails(@NotNull String assetUid) {
-        return this.service.getVersionNameDetails(this.headers, assetUid, this.params);
+    public Call<ResponseBody> getVersionNameDetails() {
+        this.validate();
+        return this.service.getVersionNameDetails(this.headers, this.assetUid, this.params);
     }
 
     /**
@@ -429,8 +450,6 @@ public class Asset {
      * Delete Version Name of Asset request allows you to delete the name assigned to a specific version of an asset.
      * This request resets the name of the asset version to the version number.
      *
-     * @param assetUid
-     *         asset uid
      * @param versionNumber
      *         asset version
      * @return Call
@@ -440,24 +459,24 @@ public class Asset {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> deleteVersionName(@NotNull String assetUid, int versionNumber) {
-        return this.service.deleteVersionName(this.headers, assetUid, versionNumber);
+    public Call<ResponseBody> deleteVersionName(int versionNumber) {
+        this.validate();
+        return this.service.deleteVersionName(this.headers, this.assetUid, versionNumber);
     }
 
     /**
      * Get asset references request returns the details of the entries and the content types in which the specified
      * asset is referenced
      *
-     * @param assetUid
-     *         asset uid
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-asset-references">
      * Get Asset References</a>
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> getReferences(@NotNull String assetUid) {
-        return this.service.getReferences(this.headers, assetUid);
+    public Call<ResponseBody> getReferences() {
+        validate();
+        return this.service.getReferences(this.headers, this.assetUid);
     }
 
     /**
@@ -499,8 +518,6 @@ public class Asset {
      *  { "asset": { "title": "Title", "description": "Description" }, "version": 3 }
      * </pre>
      *
-     * @param assetUid
-     *         The UID of the asset that you want to update details.
      * @param requestBody
      *         The request body
      * @return Call
@@ -508,8 +525,9 @@ public class Asset {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> updateDetails(@NotNull String assetUid, JSONObject requestBody) {
-        return this.service.updateDetails(this.headers, assetUid, this.params, requestBody);
+    public Call<ResponseBody> updateDetails(JSONObject requestBody) {
+        validate();
+        return this.service.updateDetails(this.headers, this.assetUid, this.params, requestBody);
     }
 
     /**
@@ -522,8 +540,6 @@ public class Asset {
      * In the 'Body' section, enter the asset details, such as locales and environments, where the assets need to be
      * published. These details should be in JSON format.
      *
-     * @param assetUid
-     *         The UID of the asset that you want to publish.
      * @param requestBody
      *         JSON Request body
      * @return Call
@@ -532,8 +548,9 @@ public class Asset {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> publish(@NotNull String assetUid, @NotNull JSONObject requestBody) {
-        return this.service.publish(this.headers, assetUid, requestBody);
+    public Call<ResponseBody> publish(@NotNull JSONObject requestBody) {
+        validate();
+        return this.service.publish(this.headers, this.assetUid, requestBody);
     }
 
     /**
@@ -545,8 +562,6 @@ public class Asset {
      * In the <b>Body</b> section, enter the asset details, such as locales and environments, from where the assets need
      * to be unpublished. These details should be in JSON format.
      *
-     * @param assetUid
-     *         The UID of the asset that you want to unpublish
      * @param requestBody
      *         JSON Request body
      * @return Call
@@ -556,8 +571,9 @@ public class Asset {
      * @since 1.0.0
      */
     public Call<ResponseBody> unpublish(
-            @NotNull String assetUid, @NotNull JSONObject requestBody) {
-        return this.service.unpublish(this.headers, assetUid, requestBody);
+            @NotNull JSONObject requestBody) {
+        this.validate();
+        return this.service.unpublish(this.headers, this.assetUid, requestBody);
     }
 
 

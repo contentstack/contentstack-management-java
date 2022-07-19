@@ -14,8 +14,8 @@ class AuditLogUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("workflow_uid");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("workflowUid");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static AuditLog auditLog;
 
 
@@ -25,7 +25,7 @@ class AuditLogUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        auditLog = stack.auditLog();
+        auditLog = stack.auditLog(_uid);
 
     }
 
@@ -34,7 +34,7 @@ class AuditLogUnitTest {
     @Order(1)
     void workflowHeaders() {
         auditLog.addHeader("Content-Type", "application/json");
-        Assertions.assertEquals(3, auditLog.headers.size());
+        Assertions.assertEquals(1, auditLog.headers.size());
     }
 
     @Test
@@ -63,7 +63,7 @@ class AuditLogUnitTest {
     @Order(5)
     void workflowFetchAll() {
         Request request = auditLog.find().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -77,8 +77,8 @@ class AuditLogUnitTest {
     @Test
     @Order(6)
     void workflowFetchByWorkflowId() {
-        Request request = auditLog.fetch(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = auditLog.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

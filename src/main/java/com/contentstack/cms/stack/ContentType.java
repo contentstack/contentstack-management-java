@@ -36,13 +36,11 @@ public class ContentType {
      *
      * @param instance
      *         the {@link Retrofit} instance
-     * @param stackHeaders
-     *         the headers
      */
-    protected ContentType(@NotNull Retrofit instance, @NotNull Map<String, Object> stackHeaders) {
+    protected ContentType(@NotNull Retrofit instance, Map<String, Object> headers) {
         this.instance = instance;
         this.headers = new HashMap<>();
-        this.headers.putAll(stackHeaders);
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = instance.create(ContentTypeService.class);
     }
@@ -52,27 +50,24 @@ public class ContentType {
      *
      * @param instance
      *         the {@link Retrofit} instance
-     * @param headers
-     *         headers for content type
-     * @param contentTypeUid
+     * @param uid
      *         the contentTypeUid
      */
-    public ContentType(@NotNull Retrofit instance, @NotNull Map<String, Object> headers, String contentTypeUid) {
+    public ContentType(@NotNull Retrofit instance, Map<String,Object> headers, String uid) {
         this.instance = instance;
         this.headers = new HashMap<>();
-        this.contentTypeUid = contentTypeUid;
         this.headers.putAll(headers);
+        this.contentTypeUid = uid;
         this.params = new HashMap<>();
         this.service = instance.create(ContentTypeService.class);
     }
 
-    public Entry entry() {
-        if (this.contentTypeUid == null) {
-            throw new NullPointerException("Please provide content type uid");
-        }
-        return new Entry(this.instance, this.headers, this.contentTypeUid);
-    }
 
+    private void validate() {
+        if (this.contentTypeUid == null || this.contentTypeUid.isEmpty()) {
+            throw new IllegalArgumentException("contentTypeUid is required");
+        }
+    }
 
     /**
      * Sets header for the request
@@ -115,6 +110,28 @@ public class ContentType {
      */
     protected void clearParams() {
         this.params.clear();
+    }
+
+
+    /**
+     * An entry is the actual piece of content created using one of the defined
+     *
+     * @return Entry
+     */
+    public Entry entry() {
+        validate();
+        return new Entry(this.instance, this.headers, this.contentTypeUid);
+    }
+
+
+    /**
+     * An entry is the actual piece of content created using one of the defined
+     * @param entryUid The entry uid
+     * @return Entry
+     */
+    public Entry entry(@NotNull String entryUid) {
+        validate();
+        return new Entry(this.instance, this.headers, this.contentTypeUid, entryUid);
     }
 
     /**
@@ -186,11 +203,6 @@ public class ContentType {
         return service.single(this.headers, this.contentTypeUid, this.params);
     }
 
-    private void validate() {
-        if (this.contentTypeUid == null) {
-            throw new IllegalArgumentException("contentTypeUid is required");
-        }
-    }
 
     /**
      * <b>Create Content Type</b>
@@ -328,7 +340,7 @@ public class ContentType {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> reference( Boolean isIncludeGlobalField) {
+    public Call<ResponseBody> reference(Boolean isIncludeGlobalField) {
         validate();
         return service.reference(this.contentTypeUid, this.headers, isIncludeGlobalField);
     }
@@ -401,7 +413,7 @@ public class ContentType {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> export( int version) {
+    public Call<ResponseBody> export(int version) {
         validate();
         return service.export(this.contentTypeUid, this.headers, version);
     }
