@@ -16,13 +16,24 @@ public class Folder {
     protected final Map<String, Object> headers;
     protected Map<String, Object> params;
     protected final AssetService service;
+    private String folderUid;
 
-    protected Folder(Retrofit instance, @NotNull Map<String, Object> stackHeaders) {
+    protected Folder(Retrofit instance) {
         this.headers = new HashMap<>();
-        this.headers.put("Content-Type", "application/json");
-        this.headers.putAll(stackHeaders);
         params = new HashMap<>();
         this.service = instance.create(AssetService.class);
+    }
+
+    protected Folder(Retrofit instance, String folderUid) {
+        this.headers = new HashMap<>();
+        params = new HashMap<>();
+        this.folderUid = folderUid;
+        this.service = instance.create(AssetService.class);
+    }
+
+    void validate() {
+        if (this.folderUid == null || this.folderUid.isEmpty())
+            throw new IllegalStateException("Folder uid uid can not be null or empty");
     }
 
     /**
@@ -74,12 +85,12 @@ public class Folder {
      * <p>
      * When executing the API call to search for a subfolder, you need to provide the parent folder UID.
      *
-     * @param folderUid
-     *         folder uid provide query using <p>#addParam query parameters - include_path(optional) Set this parameter
-     *         to ‘true’ to retrieve the complete path of the folder. The path will be displayed as an array of objects
-     *         which includes the names and UIDs of each parent folder.
-     *         <p>
-     *         Example:false
+     * <p>#addParam query parameters - include_path(optional) Set this parameter
+     * to ‘true’ to retrieve the complete path of the folder. The path will be displayed as an array of objects which
+     * includes the names and UIDs of each parent folder.
+     * <p>
+     * Example:false
+     *
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
      * Unpublish An Asset</a>
@@ -87,9 +98,9 @@ public class Folder {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch(
-            @NotNull String folderUid) {
-        return this.service.singleFolder(this.headers, folderUid, this.params);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.singleFolder(this.headers, this.folderUid, this.params);
     }
 
     /**
@@ -136,8 +147,6 @@ public class Folder {
      * A maximum of 300 folders can be created. The maximum level of folder nesting is 5. When nesting folder, you
      * cannot nest a folder within the same folder or within its child folders.
      *
-     * @param folderUid
-     *         The UID of the folder that you want to either update or move
      * @param requestBody
      *         JSONObject request body { "asset": { "name": "Demo" } }
      * @return Call
@@ -147,8 +156,9 @@ public class Folder {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String folderUid, @Nullable JSONObject requestBody) {
-        return this.service.updateFolder(this.headers, folderUid, this.params, requestBody);
+    public Call<ResponseBody> update(@Nullable JSONObject requestBody) {
+        validate();
+        return this.service.updateFolder(this.headers, this.folderUid, this.params, requestBody);
     }
 
     /**
@@ -156,8 +166,6 @@ public class Folder {
      * <p>
      * When executing the API call, provide the parent folder UID.
      *
-     * @param folderUid
-     *         The UID of the asset folder that you want to delete
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-folder">
      * Delete A Folder</a>
@@ -165,8 +173,9 @@ public class Folder {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String folderUid) {
-        return this.service.deleteFolder(this.headers, folderUid);
+    public Call<ResponseBody> delete() {
+        validate();
+        return this.service.deleteFolder(this.headers, this.folderUid);
     }
 
 }

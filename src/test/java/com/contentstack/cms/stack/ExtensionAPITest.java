@@ -8,10 +8,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -20,12 +17,13 @@ import java.util.Map;
 
 
 @Tag("api")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ExtensionAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     static Extensions extension;
 
     @BeforeAll
@@ -34,10 +32,11 @@ class ExtensionAPITest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        extension = stack.extensions();
+        extension = stack.extensions(_uid);
     }
 
     @Test
+    @Disabled
     void extensionGetAll() throws IOException {
         extension.addParam("query", "\"type\":\"field\"");
         extension.addParam("include_branch", true);
@@ -46,30 +45,35 @@ class ExtensionAPITest {
     }
 
     @Test
+    @Disabled
     void getSingleWithUid() throws IOException {
-        Response<ResponseBody> response = extension.fetch(_uid).execute();
+        Response<ResponseBody> response = extension.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
+    @Disabled
     void extensionUpdate() throws IOException {
-        Response<ResponseBody> response = extension.update(_uid, new JSONObject()).execute();
+        Response<ResponseBody> response = extension.update(new JSONObject()).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
+    @Disabled
     void extensionDelete() throws IOException {
-        Response<ResponseBody> response = extension.delete(_uid).execute();
+        Response<ResponseBody> response = extension.delete().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
+    @Disabled
     void extensionGetSingle() throws IOException {
-        Response<ResponseBody> response = extension.fetch(_uid).execute();
+        Response<ResponseBody> response = extension.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
     @Test
+    @Disabled
     void testUploadCustomField() throws IOException {
         Map<String, RequestBody> params = new HashMap<>();
         RequestBody someDataBody = new RequestBody() {
@@ -89,15 +93,11 @@ class ExtensionAPITest {
         Assertions.assertTrue(response.isSuccessful());
     }
 
-    @Test
-    void updateTheExtension() throws IOException {
-        //Response<ResponseBody> response = extension.uploadCustomField(new JSONObject()).execute();
-        //Assertions.assertTrue(response.isSuccessful());
-    }
 
     @Test
+    @Disabled
     void extensionDeleteAgain() throws IOException {
-        Response<ResponseBody> response = extension.delete(_uid).execute();
+        Response<ResponseBody> response = extension.delete().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 

@@ -22,22 +22,24 @@ class ContentTypeUnitTests {
 
     String API_KEY = Dotenv.load().get("apiKey");
     String AUTHTOKEN = Dotenv.load().get("authToken");
-    String managementToken = Dotenv.load().get("auth_token");
+    String managementToken = Dotenv.load().get("authToken");
+    private Stack stack;
 
     @BeforeAll
     public void setUp() {
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, managementToken);
-        Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
+        stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
         contentType = stack.contentType("product");
     }
 
     @Test
     void testFetch() {
-        contentType.addParam("include_count", true);
-        contentType.addParam("include_global_field_schema", true);
-        Request request = contentType.find().request();
+        ContentType ct = stack.contentType();
+        ct.addParam("include_count", true);
+        ct.addParam("include_global_field_schema", true);
+        Request request = ct.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -100,7 +102,7 @@ class ContentTypeUnitTests {
     @Test
     void testGetSingleQueryIncludeGlobalFieldSchema() {
         Request response = contentType.fetch().request();
-        Assertions.assertTrue(Objects.requireNonNull(response.url().query()).contains("include_global_field_schema"));
+        Assertions.assertNull(response.url().query());
     }
 
     @Test
@@ -185,20 +187,20 @@ class ContentTypeUnitTests {
 
     @Test
     void testUpdateHeader() {
-        Request request = contentType.update( new JSONObject()).request();
+        Request request = contentType.update(new JSONObject()).request();
         Assertions.assertEquals(managementToken, request.header("authorization"));
         Assertions.assertEquals(API_KEY, request.header("api_key"));
     }
 
     @Test
     void testUpdateHeaderSize() {
-        Request request = contentType.update( new JSONObject()).request();
+        Request request = contentType.update(new JSONObject()).request();
         Assertions.assertEquals(2, request.headers().size());
     }
 
     @Test
     void testUpdateRequestBody() {
-        Request request = contentType.update( new JSONObject()).request();
+        Request request = contentType.update(new JSONObject()).request();
         assert request.body() != null;
         Assertions.assertEquals("multipart/form-data",
                 Objects.requireNonNull(request.body().contentType()).toString());
@@ -207,7 +209,7 @@ class ContentTypeUnitTests {
     @Test
     void testUpdateIsHttps() {
 
-        Request request = contentType.update( new JSONObject()).request();
+        Request request = contentType.update(new JSONObject()).request();
         Assertions.assertTrue(request.isHttps());
     }
 
@@ -239,7 +241,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testFieldVisibilityRuleHeadersSize() {
-        Request request = contentType.fieldVisibilityRule( requestBody).request();
+        Request request = contentType.fieldVisibilityRule(requestBody).request();
         Assertions.assertEquals(2, request.headers().size());
     }
 
@@ -295,7 +297,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testReference() {
-        Request request = contentType.reference( false).request();
+        Request request = contentType.reference(false).request();
         Assertions.assertEquals("GET", request.method());
     }
 
@@ -308,13 +310,13 @@ class ContentTypeUnitTests {
 
     @Test
     void testReferenceCompleteUrlIsHTTPS() {
-        Request request = contentType.reference( false).request();
+        Request request = contentType.reference(false).request();
         Assertions.assertTrue(request.isHttps());
     }
 
     @Test
     void testReferenceEncodedPath() {
-        Request request = contentType.reference( false).request();
+        Request request = contentType.reference(false).request();
         Assertions.assertEquals("/v3/content_types/product/references", request.url().encodedPath());
     }
 
@@ -363,13 +365,13 @@ class ContentTypeUnitTests {
 
     @Test
     void testExportUrlEncodeQuery() {
-        Request request = contentType.export( 1).request();
+        Request request = contentType.export(1).request();
         Assertions.assertEquals("version=1", request.url().encodedQuery());
     }
 
     @Test
     void testExportIsHttps() {
-        Request request = contentType.export( 1).request();
+        Request request = contentType.export(1).request();
         Assertions.assertTrue(request.isHttps());
     }
 
@@ -381,7 +383,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testExportHeaderAPIKeyAuth() {
-        Request request = contentType.export( 1).request();
+        Request request = contentType.export(1).request();
         Assertions.assertEquals(API_KEY, request.header("api_key"));
         Assertions.assertEquals(managementToken, request.header("authorization"));
     }

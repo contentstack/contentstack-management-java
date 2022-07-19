@@ -37,12 +37,11 @@ public interface GlobalFieldService {
             @HeaderMap Map<String, Object> headers,
             @Path("global_field_uid") String globalFieldUid);
 
-    @Multipart
     @POST("global_fields/import")
     @Headers({"Content-Type: application/json;charset=UTF-8", "Content-Type: multipart/form-data"})
     Call<ResponseBody> imports(
             @HeaderMap Map<String, Object> headers,
-            @Body RequestBody jsonBody);
+            @Body JSONObject jsonBody);
 
     @GET("global_fields/{global_field_uid}/export")
     Call<ResponseBody> export(

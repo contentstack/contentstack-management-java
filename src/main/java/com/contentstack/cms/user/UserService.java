@@ -1,8 +1,8 @@
 package com.contentstack.cms.user;
 
 import com.contentstack.cms.models.LoginDetails;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -10,33 +10,29 @@ import java.util.Map;
 
 public interface UserService {
 
-        @POST("user-session")
-        Call<LoginDetails> login(@Body RequestBody body);
+    @POST("user-session")
+    Call<LoginDetails> login(@HeaderMap Map<String, String> headers, @Body JSONObject body);
 
-        @GET("user")
-        Call<ResponseBody> getUser();
+    @DELETE("user-session")
+    Call<ResponseBody> logout();
 
-        @PUT("user")
-        Call<ResponseBody> updateUser(@Body RequestBody body);
+    @DELETE("user-session")
+    Call<ResponseBody> logout(@Header("authtoken") String authtoken);
 
-        @POST("user/activate/{user_activation_token}")
-        Call<ResponseBody> activateUser(
-                @Path("user_activation_token") String activationToken,
-                @Body RequestBody body);
+    @GET("user")
+    Call<ResponseBody> getUser();
 
-        @POST("user/forgot_password")
-        Call<ResponseBody> requestPassword(@Body RequestBody body);
+    @PUT("user")
+    Call<ResponseBody> update(@HeaderMap Map<String, String> headers, @Body JSONObject body);
 
-        @POST("user/reset_password")
-        Call<ResponseBody> resetPassword(@Body RequestBody body);
+    @POST("user/activate/{user_activation_token}")
+    Call<ResponseBody> activateAccount(@Path("user_activation_token") String token, @Body JSONObject body);
 
-        @DELETE("user-session")
-        Call<ResponseBody> logout(@Header("authtoken") String authtoken);
+    @POST("user/forgot_password")
+    Call<ResponseBody> requestPassword(@Body JSONObject body);
 
-        @DELETE("user-session")
-        Call<ResponseBody> logout();
+    @POST("user/reset_password")
+    Call<ResponseBody> resetPassword(@Body JSONObject body);
 
-        @GET("user")
-        Call<ResponseBody> getUserOrganization(@QueryMap Map<String, Object> options);
 
 }

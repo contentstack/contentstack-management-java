@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("Mock")
 @DisplayName("User class Mock test case")
-class LocaleMockTests {
+class UserMockTests {
 
-    private static final Logger logger = Logger.getLogger(LocaleMockTests.class.getName());
+    private static final Logger logger = Logger.getLogger(UserMockTests.class.getName());
     private JSONObject mockJsonObject;
 
     /**

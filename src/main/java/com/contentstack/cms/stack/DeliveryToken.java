@@ -26,14 +26,26 @@ public class DeliveryToken {
     protected final TokenService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    private String tokenUid;
 
-    protected DeliveryToken(TokenService tokenService, HashMap<String, Object> stack) {
+    protected DeliveryToken(TokenService service) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stack);
-        this.service = tokenService;
+        this.service = service;
     }
 
+    protected DeliveryToken(TokenService service, @NotNull String tokenUid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.tokenUid = tokenUid;
+        this.service = service;
+    }
+
+
+    void validate() {
+        if (this.tokenUid == null || this.tokenUid.isEmpty())
+            throw new IllegalStateException("Token uid can not be null or empty");
+    }
 
     /**
      * Sets header for the request
@@ -98,8 +110,6 @@ public class DeliveryToken {
     /**
      * The Get a single delivery token request returns the details of all the delivery tokens created in a stack.
      *
-     * @param tokenUid
-     *         The UID of the token that you want to retrieve a delivery token
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">Get
@@ -109,8 +119,9 @@ public class DeliveryToken {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch(@NotNull String tokenUid) {
-        return this.service.getDeliveryToken(this.headers, tokenUid);
+    public Call<ResponseBody> fetch() {
+        this.validate();
+        return this.service.getDeliveryToken(this.headers, this.tokenUid);
     }
 
     /**
@@ -143,8 +154,6 @@ public class DeliveryToken {
      * You need to specify the branch and alias scope for your delivery token through the following schema in the
      * request body:
      *
-     * @param tokenUid
-     *         The UID of the token that you want to update
      * @param requestBody
      *         the body should be of @{@link JSONObject} type
      * @return Call
@@ -156,15 +165,14 @@ public class DeliveryToken {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String tokenUid, @NotNull JSONObject requestBody) {
-        return this.service.updateDeliveryToken(this.headers, tokenUid, requestBody);
+    public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
+        this.validate();
+        return this.service.updateDeliveryToken(this.headers, this.tokenUid, requestBody);
     }
 
     /**
      * The Delete delivery token request deletes a specific delivery token
      *
-     * @param tokenUid
-     *         The UID of the token that you want to delete
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-delivery-token">Delete
@@ -174,15 +182,14 @@ public class DeliveryToken {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String tokenUid) {
-        return this.service.deleteDeliveryToken(this.headers, tokenUid, false);
+    public Call<ResponseBody> delete() {
+        this.validate();
+        return this.service.deleteDeliveryToken(this.headers, this.tokenUid, false);
     }
 
     /**
      * The Delete delivery token request deletes a specific delivery token.
      *
-     * @param tokenUid
-     *         The UID of the token that you want to delete
      * @param isForce
      *         provide ‘true’ to force delete a delivery token
      * @return Call
@@ -194,8 +201,8 @@ public class DeliveryToken {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String tokenUid, @NotNull Boolean isForce) {
-        return this.service.deleteDeliveryToken(this.headers, tokenUid, isForce);
+    public Call<ResponseBody> delete(@NotNull Boolean isForce) {
+        return this.service.deleteDeliveryToken(this.headers, this.tokenUid, isForce);
     }
 
 

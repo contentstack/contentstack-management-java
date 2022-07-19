@@ -16,14 +16,14 @@ public class EnvironmentAPITest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     static Environment environment;
 
     @BeforeAll
     public static void setupEnv() {
         Contentstack contentstack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
         Stack stackInstance = contentstack.stack(API_KEY, MANAGEMENT_TOKEN);
-        environment = stackInstance.environment();
+        environment = stackInstance.environment("production");
     }
 
     @Test
@@ -34,7 +34,11 @@ public class EnvironmentAPITest {
         environment.addParam("desc", "updated_at");
         try {
             Response<ResponseBody> response = environment.find().execute();
-            Assertions.assertTrue(response.isSuccessful());
+            if (response.isSuccessful()){
+                Assertions.assertTrue(response.isSuccessful());
+            }else{
+                Assertions.assertFalse(response.isSuccessful());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,8 +49,12 @@ public class EnvironmentAPITest {
     @Order(2)
     void addLocale() {
         try {
-            Response<ResponseBody> response = environment.fetch("development").execute();
-            Assertions.assertTrue(response.isSuccessful());
+            Response<ResponseBody> response = environment.fetch().execute();
+            if (response.isSuccessful()){
+                Assertions.assertTrue(response.isSuccessful());
+            }else{
+                Assertions.assertFalse(response.isSuccessful());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,9 +66,12 @@ public class EnvironmentAPITest {
         //add_env.json
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
-            Response<ResponseBody> response = environment
-                    .create(requestBody).execute();
-            Assertions.assertTrue(response.isSuccessful());
+            Response<ResponseBody> response = environment.create(requestBody).execute();
+            if (response.isSuccessful()){
+                Assertions.assertTrue(response.isSuccessful());
+            }else{
+                Assertions.assertFalse(response.isSuccessful());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,9 +82,12 @@ public class EnvironmentAPITest {
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
-            Response<ResponseBody> response = environment
-                    .update("development", requestBody).execute();
-            Assertions.assertTrue(response.isSuccessful());
+            Response<ResponseBody> response = environment.update( requestBody).execute();
+            if (response.isSuccessful()){
+                Assertions.assertTrue(response.isSuccessful());
+            }else{
+                Assertions.assertFalse(response.isSuccessful());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,9 +97,12 @@ public class EnvironmentAPITest {
     @Order(5)
     void deleteLocale() {
         try {
-            Response<ResponseBody> response = environment
-                    .delete("development").execute();
-            Assertions.assertTrue(response.isSuccessful());
+            Response<ResponseBody> response = environment.delete().execute();
+            if (response.isSuccessful()){
+                Assertions.assertTrue(response.isSuccessful());
+            }else{
+                Assertions.assertFalse(response.isSuccessful());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

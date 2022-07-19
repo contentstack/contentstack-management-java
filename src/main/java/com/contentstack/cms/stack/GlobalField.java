@@ -1,6 +1,5 @@
 package com.contentstack.cms.stack;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -8,7 +7,6 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -32,22 +30,27 @@ public class GlobalField {
     protected final GlobalFieldService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    protected String globalFiledUid;
 
-    /**
-     * Instantiates a new Global field.
-     *
-     * @param retrofit
-     *         the retrofit
-     * @param stackHeaders
-     *         the stack headers
-     */
-    protected GlobalField(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+
+    protected GlobalField(Retrofit retrofit) {
         this.headers = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.params = new HashMap<>();
         this.service = retrofit.create(GlobalFieldService.class);
     }
 
+    protected GlobalField(Retrofit retrofit, String uid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.globalFiledUid = uid;
+        this.service = retrofit.create(GlobalFieldService.class);
+    }
+
+
+    void validate() {
+        if (this.globalFiledUid == null)
+            throw new IllegalStateException("Global Field Uid can not be null or empty");
+    }
 
     /**
      * Sets header for the request
@@ -127,9 +130,6 @@ public class GlobalField {
      * Authtoken (any one is mandatory), along with the stack API key, to make a valid Content Management API request.
      * Read more about authentication.
      *
-     * @param globalFiledUid
-     *         The unique ID of the global field that you wish to update. The UID is generated based on the title of the
-     *         global field. The unique ID of a global field is unique across a stack
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-global-field">Get a
@@ -139,8 +139,9 @@ public class GlobalField {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch(@NotNull String globalFiledUid) {
-        return this.service.single(this.headers, globalFiledUid, this.params);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.single(this.headers, this.globalFiledUid, this.params);
     }
 
     /**
@@ -182,9 +183,6 @@ public class GlobalField {
      * Authtoken (any one is mandatory), along with the stack API key, to make a valid Content Management API request.
      * Read more about authentication.
      *
-     * @param globalFiledUid
-     *         The unique ID of the global field that you wish to update. The UID is generated based on the title of the
-     *         global field. The unique ID of a global field is unique across a stack
      * @param requestBody
      *         the request body
      * @return Call
@@ -196,8 +194,9 @@ public class GlobalField {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String globalFiledUid, @NotNull JSONObject requestBody) {
-        return this.service.update(this.headers, globalFiledUid, requestBody);
+    public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
+        validate();
+        return this.service.update(this.headers, this.globalFiledUid, requestBody);
     }
 
     /**
@@ -210,9 +209,6 @@ public class GlobalField {
      * <p>
      * <b>here</b>: force:true is already applied in this request call
      *
-     * @param globalFiledUid
-     *         The unique ID of the global field that you wish to update. The UID is generated based on the title of the
-     *         global field. The unique ID of a global field is unique across a stack
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-global-field">Delete
@@ -221,8 +217,9 @@ public class GlobalField {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String globalFiledUid) {
-        return this.service.delete(this.headers, globalFiledUid);
+    public Call<ResponseBody> delete() {
+        validate();
+        return this.service.delete(this.headers, this.globalFiledUid);
     }
 
     /**
@@ -234,8 +231,8 @@ public class GlobalField {
      * You need to use either the stack's Management Token or the user Authtoken (any one is mandatory), along with the
      * stack API key, to make a valid Content Management API request.
      *
-     * @param jsonGlobalField
-     *         The Json object to pass as body
+     * @param body
+     *         The request body
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-global-field">Import a
@@ -245,11 +242,7 @@ public class GlobalField {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> imports(@NotNull Map<String, Object> jsonGlobalField) {
-        Map<String, Object> jsonParams = new HashMap<>();
-        jsonParams.put("global_field", jsonGlobalField);
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
-                (new JSONObject(jsonParams)).toString());
+    public Call<ResponseBody> imports(@NotNull JSONObject body) {
         return this.service.imports(this.headers, body);
     }
 
@@ -258,9 +251,6 @@ public class GlobalField {
      * <p>
      * This request is used to export a specific global field and it's schema, The data is exported in JSON format
      *
-     * @param globalFiledUid
-     *         The unique ID of the global field that you wish to update. The UID is generated based on the title of the
-     *         global field. The unique ID of a global field is unique across a stack
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-global-field">Export a
@@ -270,7 +260,8 @@ public class GlobalField {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> export(@NotNull String globalFiledUid) {
-        return this.service.export(this.headers, globalFiledUid);
+    public Call<ResponseBody> export() {
+        validate();
+        return this.service.export(this.headers, this.globalFiledUid);
     }
 }
