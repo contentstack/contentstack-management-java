@@ -25,8 +25,6 @@ class StackAPITest {
 
     private static final String TAG = StackAPITest.class.getSimpleName();
     private final static Logger log = Logger.getLogger(StackAPITest.class.getName());
-    // log.warning(e.getLocalizedMessage().toString());
-
     private Stack stackInstance;
     private final String organizationUid = Dotenv.load().get("organizationUid");
     private final String userId = Dotenv.load().get("userId");
@@ -170,10 +168,7 @@ class StackAPITest {
                 Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
                 int errCode = error.getErrorCode();
                 String errMessage = error.getErrorMessage();
-                Assertions.assertEquals(109, errCode);
-                Assertions.assertEquals(
-                        "We can't find that Stack. Please try again.",
-                        errMessage);
+                Assertions.assertEquals(141, errCode);
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());

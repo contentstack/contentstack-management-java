@@ -16,14 +16,14 @@ public class EnvironmentUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     static Environment environment;
 
     @BeforeAll
     public static void setupEnv() {
         Contentstack contentstack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
         Stack stackInstance = contentstack.stack(API_KEY, MANAGEMENT_TOKEN);
-        environment = stackInstance.environment();
+        environment = stackInstance.environment("development");
     }
 
     @Test
@@ -32,7 +32,7 @@ public class EnvironmentUnitTest {
         environment.addParam("asc", "created_at");
         environment.addParam("desc", "updated_at");
         Request request = environment.find().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -46,8 +46,8 @@ public class EnvironmentUnitTest {
 
     @Test
     void addLocale() {
-        Request request = environment.fetch("development").request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = environment.fetch().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -63,7 +63,7 @@ public class EnvironmentUnitTest {
     void getLocale() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         Request request = environment.create(requestBody).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -78,8 +78,8 @@ public class EnvironmentUnitTest {
     @Test
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
-        Request request = environment.update("development", requestBody).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = environment.update( requestBody).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -93,8 +93,8 @@ public class EnvironmentUnitTest {
 
     @Test
     void deleteLocale() {
-        Request request = environment.delete("development").request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = environment.delete().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

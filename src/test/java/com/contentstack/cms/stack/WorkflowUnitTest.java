@@ -19,9 +19,8 @@ class WorkflowUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _authtoken = Dotenv.load().get("auth_token");
-    protected static String _uid = Dotenv.load().get("workflow_uid");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("workflowUid");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static Workflow workflow;
     protected static JSONObject body;
 
@@ -102,19 +101,18 @@ class WorkflowUnitTest {
 
 
     @BeforeAll
-    static void setup() {
+    public static void setup() {
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        workflow = stack.workflow();
+        workflow = stack.workflow(_uid);
 
         try {
             JSONParser parser = new JSONParser();
             body = (JSONObject) parser.parse(theJsonString);
         } catch (ParseException e) {
             System.out.println(e.getLocalizedMessage());
-            throw new RuntimeException(e);
         }
 
     }
@@ -124,7 +122,7 @@ class WorkflowUnitTest {
     @Order(1)
     void workflowHeaders() {
         workflow.addHeader("Content-Type", "application/json");
-        Assertions.assertEquals(3, workflow.headers.size());
+        Assertions.assertEquals(1, workflow.headers.size());
     }
 
     @Test
@@ -154,7 +152,7 @@ class WorkflowUnitTest {
     void workflowFetchAll() {
         workflow.clearParams();
         Request request = workflow.find().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -168,8 +166,8 @@ class WorkflowUnitTest {
     @Test
     @Order(6)
     void workflowFetchByWorkflowId() {
-        Request request = workflow.fetch(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = workflow.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -184,7 +182,7 @@ class WorkflowUnitTest {
     @Order(7)
     void workflowCreate() {
         Request request = workflow.create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -198,8 +196,8 @@ class WorkflowUnitTest {
     @Test
     @Order(8)
     void workflowUpdate() {
-        Request request = workflow.update(_uid, body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = workflow.update(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -213,8 +211,8 @@ class WorkflowUnitTest {
     @Test
     @Order(9)
     void workflowDisable() {
-        Request request = workflow.disable(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = workflow.disable().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -228,8 +226,8 @@ class WorkflowUnitTest {
     @Test
     @Order(10)
     void workflowEnable() {
-        Request request = workflow.enable(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = workflow.enable().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -243,8 +241,8 @@ class WorkflowUnitTest {
     @Test
     @Order(11)
     void workflowDelete() {
-        Request request = workflow.delete(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = workflow.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -259,7 +257,7 @@ class WorkflowUnitTest {
     @Order(13)
     void workflowCreatePublishRule() {
         Request request = workflow.createPublishRule(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -274,7 +272,7 @@ class WorkflowUnitTest {
     @Order(14)
     void workflowUpdatePublishRule() {
         Request request = workflow.updatePublishRule("ruleUid", body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -289,7 +287,7 @@ class WorkflowUnitTest {
     @Order(15)
     void workflowDeletePublishRule() {
         Request request = workflow.deletePublishRule("ruleUid").request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -305,7 +303,7 @@ class WorkflowUnitTest {
     void workflowFetchPublishRules() {
         List<String> contentTypes = Arrays.asList("contentTypeUid1", "contentTypeUid2", "contentTypeUid3");
         Request request = workflow.fetchPublishRules(contentTypes).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -320,7 +318,7 @@ class WorkflowUnitTest {
     @Order(17)
     void workflowFetchPublishRule() {
         Request request = workflow.fetchPublishRule("ruleUid").request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -335,7 +333,7 @@ class WorkflowUnitTest {
     @Order(17)
     void workflowFetchPublishRuleContentType() {
         Request request = workflow.fetchPublishRuleContentType("contentTypeUid").request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -343,15 +341,15 @@ class WorkflowUnitTest {
         Assertions.assertEquals("workflows", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertNotNull("https://api.contentstack.io/v3/workflows", request.url().toString());
+        Assertions.assertNotNull(request.url().toString());
     }
 
 
     @Test
     @Order(18)
     void workflowFetchTasks() {
-        Request request = workflow.fetchTasks(_authtoken).request();
-        Assertions.assertEquals(4, request.headers().names().size());
+        Request request = workflow.fetchTasks().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

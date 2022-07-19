@@ -23,8 +23,8 @@ class ExtensionUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     static Extensions extension;
     protected static JSONObject body;
 
@@ -49,7 +49,7 @@ class ExtensionUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        extension = stack.extensions();
+        extension = stack.extensions(_uid);
 
         try {
             JSONParser parser = new JSONParser();
@@ -68,7 +68,7 @@ class ExtensionUnitTest {
         extension.addParam("query", "\"type\":\"field\"");
         extension.addParam("include_branch", false);
         Request request = extension.find().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -86,8 +86,8 @@ class ExtensionUnitTest {
         extension.clearParams();
         extension.addParam("include_count", false);
         extension.addParam("include_branch", false);
-        Request request = extension.fetch(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = extension.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -104,8 +104,8 @@ class ExtensionUnitTest {
         extension.clearParams();
         extension.addParam("include_count", false);
         extension.addParam("include_branch", false);
-        Request request = extension.update(_uid, body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = extension.update(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -120,8 +120,8 @@ class ExtensionUnitTest {
 
     @Test
     void extensionDelete() {
-        Request request = extension.delete(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = extension.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -135,8 +135,8 @@ class ExtensionUnitTest {
     void extensionGetSingle() {
         extension.addParam("include_count", false);
         extension.addParam("include_branch", false);
-        Request request = extension.fetch(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = extension.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -164,7 +164,7 @@ class ExtensionUnitTest {
         params.put("DYNAMIC_PARAM_NAME", someDataBody);
         extension.addParam("include_branch", false);
         Request request = extension.uploadCustomField(params).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -192,8 +192,8 @@ class ExtensionUnitTest {
 
     @Test
     void extensionDeleteAgain() {
-        Request request = extension.delete(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = extension.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());
         Assertions.assertTrue(request.url().isHttps());

@@ -16,8 +16,8 @@ class TokenUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static Tokens tokens;
     protected static JSONObject body;
 
@@ -89,7 +89,7 @@ class TokenUnitTest {
     @Test
     void allDeliveryTokens() {
         Request request = tokens.deliveryTokens().find().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -104,8 +104,8 @@ class TokenUnitTest {
 
     @Test
     void singleDeliveryToken() {
-        Request request = tokens.deliveryTokens().fetch(_uid).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = tokens.deliveryTokens(_uid).fetch().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -121,7 +121,7 @@ class TokenUnitTest {
     @Test
     void createDeliveryToken() {
         Request request = tokens.deliveryTokens().create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -136,8 +136,8 @@ class TokenUnitTest {
 
     @Test
     void updateDeliveryToken() {
-        Request request = tokens.deliveryTokens().update(_uid, body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = tokens.deliveryTokens(_uid).update( body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -149,8 +149,8 @@ class TokenUnitTest {
 
     @Test
     void deleteDeliveryToken() {
-        Request request = tokens.deliveryTokens().delete(_uid).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = tokens.deliveryTokens(_uid).delete().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -163,8 +163,8 @@ class TokenUnitTest {
 
     @Test
     void deleteDeliveryTokenForcefully() {
-        Request request = tokens.deliveryTokens().delete(_uid, true).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = tokens.deliveryTokens(_uid).delete( true).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -178,7 +178,7 @@ class TokenUnitTest {
     @Test
     void allManagementToken() {
         Request request = tokens.managementToken().find().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -192,8 +192,8 @@ class TokenUnitTest {
 
     @Test
     void singleManagementToken() {
-        Request request = tokens.managementToken().fetch(_uid).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = tokens.managementToken(_uid).fetch().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -207,7 +207,7 @@ class TokenUnitTest {
     @Test
     void createManagementToken() {
         Request request = tokens.managementToken().create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -220,8 +220,8 @@ class TokenUnitTest {
 
     @Test
     void updateManagementToken() {
-        Request request = tokens.managementToken().update(_uid, body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = tokens.managementToken(_uid).update(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertNotNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -234,8 +234,8 @@ class TokenUnitTest {
 
     @Test
     void deleteManagementToken() {
-        Request request = tokens.managementToken().delete(_uid).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = tokens.managementToken(_uid).delete().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
