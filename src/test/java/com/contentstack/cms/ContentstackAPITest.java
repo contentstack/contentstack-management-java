@@ -29,7 +29,7 @@ public class ContentstackAPITest {
 
     @Test
     void testContentstackUserLogin() throws IOException {
-        String authToken = dotenv.get("auth_token");
+        String authToken = dotenv.get("authToken");
         Contentstack contentstack = new Contentstack.Builder()
                 .setAuthtoken(authToken)
                 .build();

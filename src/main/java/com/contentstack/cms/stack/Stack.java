@@ -155,23 +155,22 @@ public class Stack {
      * @return Asset
      */
     public Asset asset() {
-        return new Asset(this.client, this.headers);
+        return new Asset(this.client);
     }
 
     /**
-     * An entry is the actual piece of content created using one of the defined
+     * <b>Assets</b><br>
+     * Assets refer to all the media files (images, videos, PDFs, audio files, and so on) uploaded in your Contentstack
+     * repository for future use.
+     * <p>
+     * These files can be attached and used in multiple entries.
      *
-     * @param contentTypeUid
-     *         Enter the unique ID of the content type of which you want to retrieve the details. The UID is generated
-     *         based on the title of the content type. The unique ID of a content type is unique across a stack
-     * @return Entry
+     * @return Asset
      */
-    public Entry entry(@NotNull String contentTypeUid) {
-        if (contentTypeUid.isEmpty()) {
-            throw new IllegalArgumentException("Can not provide empty contentTypeUid");
-        }
-        return new Entry(this.client, this.headers, contentTypeUid);
+    public Asset asset(String assetUid) {
+        return new Asset(this.client, assetUid);
     }
+
 
     /**
      * A Global field is a reusable field (or group of fields) that you can define once and reuse in any content type
@@ -181,7 +180,19 @@ public class Stack {
      * @return GlobalField
      */
     public GlobalField globalField() {
-        return new GlobalField(this.client, this.headers);
+        return new GlobalField(this.client);
+    }
+
+
+    /**
+     * A Global field is a reusable field (or group of fields) that you can define once and reuse in any content type
+     * within your stack. This eliminates the need (and thereby time and efforts) to create the same set of fields
+     * repeatedly in multiple content types.
+     *
+     * @return GlobalField
+     */
+    public GlobalField globalField(@NotNull String globalFiledUid) {
+        return new GlobalField(this.client, globalFiledUid);
     }
 
 
@@ -195,7 +206,21 @@ public class Stack {
      * @see <a href="https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
      */
     public Locale locale() {
-        return new Locale(this.client, headers);
+        return new Locale(this.client);
+    }
+
+
+    /**
+     * Contentstack has a sophisticated multilingual capability. It allows you to create and publish entries in any
+     * language. This feature allows you to set up multilingual websites and cater to a wide variety of audience by
+     * serving content in their local language(s).
+     * <p>
+     *
+     * @return Locale
+     * @see <a href="https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
+     */
+    public Locale locale(String code) {
+        return new Locale(this.client, code);
     }
 
 
@@ -209,7 +234,21 @@ public class Stack {
      * @see <a href="https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
      */
     public Environment environment() {
-        return new Environment(this.client, this.headers);
+        return new Environment(this.client);
+    }
+
+
+    /**
+     * A publishing environment corresponds to one or more deployment servers or a content delivery destination where
+     * the entries need to be published.
+     * <p>
+     * Read more about
+     *
+     * @return Environment
+     * @see <a href="https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
+     */
+    public Environment environment(String environment) {
+        return new Environment(this.client, environment);
     }
 
 
@@ -225,7 +264,23 @@ public class Stack {
      * module resides.
      */
     public Label label() {
-        return new Label(this.client, this.headers);
+        return new Label(this.client);
+    }
+
+
+    /**
+     * Labels allow you to group a collection of content within a stack. Using labels you can group content types that
+     * need to work together. Read more about
+     *
+     * @return Label
+     * <p>
+     * You can now pass the branch header in the API request to fetch or manage modules located within specific branches
+     * of the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch
+     * top-level key in the response. This key specifies the unique ID of the branch where the concerned Contentstack
+     * module resides.
+     */
+    public Label label(String labelUid) {
+        return new Label(this.client, labelUid);
     }
 
 
@@ -242,7 +297,28 @@ public class Stack {
      * @return instance of  {@link Extensions}
      */
     public Extensions extensions() {
-        return new Extensions(this.client, this.headers);
+        return new Extensions(this.client);
+    }
+
+
+    /**
+     * Extensions let you create custom fields and custom widgets that lets you customize Contentment's default UI and
+     * behavior. Read more about Extensions.
+     * <p>
+     * You can now pass the branch header in the API request to fetch or manage modules located within specific branches
+     * of the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch
+     * top-level key in the response. This key specifies the unique ID of the branch where the concerned Contentstack
+     * module resides.
+     * <p>
+     *
+     * @param customFieldUid
+     *         The UID of the custom field that you want to update {@link #addParam(String, Object)} Set this to 'true'
+     *         to include the '_branch' top-level key in the response. This key states the unique ID of the branch where
+     *         the concerned Contentstack module resides.
+     * @return instance of  {@link Extensions}
+     */
+    public Extensions extensions(String customFieldUid) {
+        return new Extensions(this.client, customFieldUid);
     }
 
 
@@ -259,7 +335,7 @@ public class Stack {
      * @return Tokens
      */
     public Tokens tokens() {
-        return new Tokens(this.client, this.headers);
+        return new Tokens(this.client);
     }
 
 
@@ -269,8 +345,20 @@ public class Stack {
      * @return Role
      */
     public Roles roles() {
-        return new Roles(this.client, this.headers);
+        return new Roles(this.client);
     }
+
+    /**
+     * A role is a collection of permissions that will be applicable to all the users who are assigned this role
+     *
+     * @param roleUid
+     *         The unique ID of the role of which you want to retrieve the details
+     * @return Role
+     */
+    public Roles roles(String roleUid) {
+        return new Roles(this.client, roleUid);
+    }
+
 
     /**
      * You can pin a set of entries and assets (along with the deploy action, i.e., publish/unpublish) to a
@@ -280,7 +368,21 @@ public class Stack {
      * @return Release
      */
     public Release releases() {
-        return new Release(this.client, this.headers);
+        return new Release(this.client);
+    }
+
+
+    /**
+     * You can pin a set of entries and assets (along with the deploy action, i.e., publish/unpublish) to a
+     * <b>release</b>, and then deploy this release to an environment. This will publish/unpublish all the items of
+     * the release to the specified environment. Read more about Releases.
+     *
+     * @param releaseUid
+     *         The unique ID of the release of which you want to retrieve the details
+     * @return Release
+     */
+    public Release releases(String releaseUid) {
+        return new Release(this.client, releaseUid);
     }
 
 
@@ -292,7 +394,21 @@ public class Stack {
      * @return Workflow
      */
     public Workflow workflow() {
-        return new Workflow(this.client, this.headers);
+        return new Workflow(this.client);
+    }
+
+
+    /**
+     * <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#workflows">Workflow</a> is a
+     * tool that allows you to streamline the process of content creation and publishing, and lets you manage the
+     * content lifecycle of your project smoothly.
+     *
+     * @param workflowUid
+     *         The UID of your workflow that you want to retrieve
+     * @return Workflow
+     */
+    public Workflow workflow(@NotNull String workflowUid) {
+        return new Workflow(this.client, workflowUid);
     }
 
 
@@ -304,7 +420,19 @@ public class Stack {
      * @return AuditLog
      */
     public AuditLog auditLog() {
-        return new AuditLog(this.client, this.headers);
+        return new AuditLog(this.client);
+    }
+
+
+    /**
+     * Audit log displays a record of all the activities performed in a stack and helps you keep a track of all
+     * published items, updates, deletes, and current status of the existing content. Read more about <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">AuditLog</a>.
+     *
+     * @return AuditLog
+     */
+    public AuditLog auditLog(@NotNull String logItemUid) {
+        return new AuditLog(this.client, logItemUid);
     }
 
 
@@ -320,7 +448,26 @@ public class Stack {
      * @return PublishQueue
      */
     public PublishQueue publishQueue() {
-        return new PublishQueue(this.client, this.headers);
+        return new PublishQueue(this.client);
+    }
+
+
+    /**
+     * The Publishing Queue displays the historical and current details of activities such as publish, unpublish, or
+     * delete that can be performed on entries and/or assets. It also shows details of Release deployments. These
+     * details include time, entry, content type, version, language, user, environment, and status.
+     * <p>
+     * For more details, refer the <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">Publish Queue</a>
+     * documentation.
+     *
+     * @param publishQueueUid
+     *         The UID of a specific publish queue activity of which you want to retrieve the details. Execute the Get
+     *         publish queue API request to retrieve the UID of a particular publish queue activity.
+     * @return PublishQueue
+     */
+    public PublishQueue publishQueue(@NotNull String publishQueueUid) {
+        return new PublishQueue(this.client, publishQueueUid);
     }
 
 
@@ -339,7 +486,29 @@ public class Stack {
      * @return Webhook
      */
     public Webhook webhook() {
-        return new Webhook(this.client, this.headers);
+        return new Webhook(this.client);
+    }
+
+
+    /**
+     * A webhook is a mechanism that sends real-time information to any third-party app or service to keep your
+     * application in sync with your Contentstack account. Webhooks allow you to specify a URL to which you would like
+     * Contentstack to post data when an event happens. Read more about <a
+     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#webhooks">Webhooks</a>
+     *
+     * <p>
+     * <b>Note:</b> If any key name in the response data sent to a notification URL begins with a dollar sign ($), it
+     * will be prefixed with the acronym "cs" as a wildcard. For example, the key named "$success" would be replaced
+     * with "cs$success." For more information, refer to our API Change Log documentation. The option to define
+     * stack-level scope for webhooks is not available when using the classic Contentstack interface.
+     *
+     * @param webhookUid
+     *         Enter the unique ID of the webhook of which you want to retrieve the details. Execute the <b>Get all
+     *         webhooks</b> call to retrieve the UID of a webhook
+     * @return Webhook
+     */
+    public Webhook webhook(String webhookUid) {
+        return new Webhook(this.client, webhookUid);
     }
 
 
@@ -354,7 +523,24 @@ public class Stack {
      * @return Branch
      */
     public Branch branch() {
-        return new Branch(this.client, this.headers);
+        return new Branch(this.client);
+    }
+
+
+    /**
+     * <b>Branches</b>
+     * <br>
+     * <b>Branches</b> allows you to isolate and easily manage your <b>in-progress</b> work from your stable, live work
+     * in the production environment. It helps multiple development teams to work in parallel in a more collaborative,
+     * organized, and structured manner without impacting each other.
+     * <br>
+     *
+     * @param branchUid
+     *         The unique ID of the branch of which you want to retrieve the details.
+     * @return Branch
+     */
+    public Branch branch(String branchUid) {
+        return new Branch(this.client, branchUid);
     }
 
 
@@ -365,8 +551,23 @@ public class Stack {
      * @return Alias
      */
     public Alias alias() {
-        return new Alias(this.client, this.headers);
+        return new Alias(this.client);
     }
+
+
+    /**
+     * An alias acts as a pointer to a particular branch. You can specify the alias ID in your frontend code to pull
+     * content from the target branch associated with an alias.
+     *
+     * @param aliasUid
+     *         The unique ID of the alias of which you want to retrieve the details. The UID of an alias is unique
+     *         across a stack. Execute the Get all aliases call to retrieve the UID of an alias
+     * @return Alias
+     */
+    public Alias alias(String aliasUid) {
+        return new Alias(this.client, aliasUid);
+    }
+
 
     /**
      * <b>Get stacks</b>
@@ -403,7 +604,7 @@ public class Stack {
      * single Stack</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -431,6 +632,7 @@ public class Stack {
             @NotNull String organizationUid, @NotNull JSONObject requestBody) {
         return service.create(organizationUid, requestBody);
     }
+
 
     /**
      * <b>Update Stack</b>

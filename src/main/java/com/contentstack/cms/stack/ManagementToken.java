@@ -10,8 +10,7 @@ import java.util.HashMap;
 
 /**
  * <b>Management tokens: </b> <br>To authenticate Content Management API (CMA) requests over your stack content, you
- * can
- * use Management Tokens
+ * can use Management Tokens
  * <br>
  *
  * @author ishaileshmishra
@@ -23,14 +22,26 @@ public class ManagementToken {
     protected final TokenService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    private String tokenUid;
 
-    protected ManagementToken(TokenService tokenService, HashMap<String, Object> stackHeaders) {
+    protected ManagementToken(TokenService service) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
-        this.service = tokenService;
+        this.service = service;
     }
 
+    protected ManagementToken(TokenService service, String tokenUid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.service = service;
+        this.tokenUid = tokenUid;
+    }
+
+
+    void validate() {
+        if (this.tokenUid == null || this.tokenUid.isEmpty())
+            throw new IllegalStateException("Token uid can not be null or empty");
+    }
 
     /**
      * Sets header for the request
@@ -77,21 +88,6 @@ public class ManagementToken {
 
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *         header key for the request
-     * @param value
-     *         header value for the request
-     * @return Tokens
-     */
-    public ManagementToken addHeader(@NotNull String key, @NotNull String value) {
-        this.headers.put(key, value);
-        return this;
-    }
-
-
-    /**
      * The Get all management tokens request returns the details of all the management tokens generated in a stack and
      * NOT the actual management tokens.
      *
@@ -104,7 +100,7 @@ public class ManagementToken {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetchManagementToken(this.headers, this.params);
     }
 
@@ -112,8 +108,6 @@ public class ManagementToken {
      * The Get a single management token request returns the details of a specific management token generated in a stack
      * and NOT the actual management token.
      *
-     * @param tokenUid
-     *         the UID of the token that you want to retrieve
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-management-token">Get
@@ -122,8 +116,9 @@ public class ManagementToken {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String tokenUid) {
-        return this.service.getSingleManagementToken(this.headers, tokenUid);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.getSingleManagementToken(this.headers, this.tokenUid);
     }
 
     /**
@@ -154,8 +149,6 @@ public class ManagementToken {
      * To specify the updated branch and alias scope for your management token, use the following schema in the request
      * body:
      *
-     * @param tokenUid
-     *         the UID of the token that you want to retrieve
      * @param requestBody
      *         details of the management token in @{@link JSONObject} format
      * @return Call
@@ -166,15 +159,14 @@ public class ManagementToken {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String tokenUid, @NotNull JSONObject requestBody) {
-        return this.service.updateManagementToken(this.headers, tokenUid, requestBody);
+    public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
+        validate();
+        return this.service.updateManagementToken(this.headers, this.tokenUid, requestBody);
     }
 
     /**
      * The Delete management token request deletes a specific management token
      *
-     * @param tokenUid
-     *         the UID of the token that you want to retrieve
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-management-token">Delete
@@ -183,8 +175,9 @@ public class ManagementToken {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String tokenUid) {
-        return this.service.deleteManagementToken(this.headers, tokenUid);
+    public Call<ResponseBody> delete() {
+        validate();
+        return this.service.deleteManagementToken(this.headers, this.tokenUid);
     }
 
 }

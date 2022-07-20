@@ -30,14 +30,27 @@ public class Release {
     protected final ReleaseService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    protected String releaseUid;
     private final Retrofit retrofit;
 
-    protected Release(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+    protected Release(Retrofit retrofit) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.retrofit = retrofit;
         this.service = this.retrofit.create(ReleaseService.class);
+    }
+
+    protected Release(Retrofit retrofit, String uid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.releaseUid = uid;
+        this.retrofit = retrofit;
+        this.service = this.retrofit.create(ReleaseService.class);
+    }
+
+    void validate() {
+        if (this.releaseUid == null || this.releaseUid.isEmpty())
+            throw new IllegalStateException("Release Uid can not be null or empty");
     }
 
     /**
@@ -95,7 +108,7 @@ public class Release {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -104,8 +117,6 @@ public class Release {
      * <p>
      * When executing the API request, provide the Release UID as parameter
      *
-     * @param releaseUid
-     *         The unique ID of the release of which you want to retrieve the details
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-release">Get
      * a singel release
@@ -114,8 +125,9 @@ public class Release {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String releaseUid) {
-        return this.service.single(this.headers, releaseUid);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.single(this.headers, this.releaseUid);
     }
 
     /**
@@ -142,8 +154,6 @@ public class Release {
      * When executing this API request, provide the Release UID as parameter. In the 'Body' section, you need to provide
      * the new name and description of the Release that you want to update.
      *
-     * @param releaseUid
-     *         The UID of the role that you want to retrieve
      * @param requestBody
      *         The body should be of @{@link JSONObject} type
      * @return Call
@@ -154,9 +164,9 @@ public class Release {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(
-            @NotNull String releaseUid, @NotNull JSONObject requestBody) {
-        return this.service.update(this.headers, releaseUid, requestBody);
+    public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
+        validate();
+        return this.service.update(this.headers, this.releaseUid, requestBody);
     }
 
     /**
@@ -164,8 +174,6 @@ public class Release {
      * <p>
      * When executing the API request, provide the Release UID.
      *
-     * @param releaseUid
-     *         The UID of the role that you want to retrieve
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-release">Delete
      * a release
@@ -174,8 +182,9 @@ public class Release {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String releaseUid) {
-        return this.service.delete(this.headers, releaseUid);
+    public Call<ResponseBody> delete() {
+        validate();
+        return this.service.delete(this.headers, this.releaseUid);
     }
 
 
@@ -186,8 +195,6 @@ public class Release {
      * Read more about <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Release Items</a>
      *
-     * @param releaseUid
-     *         The UID of the role that you want to retrieve
      * @return ReleaseItem
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Get
      * a release item
@@ -196,8 +203,9 @@ public class Release {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public ReleaseItem item(@NotNull String releaseUid) {
-        return new ReleaseItem(this.retrofit, this.headers, releaseUid);
+    public ReleaseItem item() {
+        validate();
+        return new ReleaseItem(this.retrofit, this.releaseUid);
     }
 
 
@@ -209,8 +217,6 @@ public class Release {
      * the locale(s) on which the Release should be deployed.
      * <p>
      *
-     * @param releaseUid
-     *         unique ID of the release that you want to deploy
      * @param requestBody
      *         The JSONObject request body
      * @return Call
@@ -221,9 +227,9 @@ public class Release {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> deploy(
-            @NotNull String releaseUid, @NotNull JSONObject requestBody) {
-        return this.service.deploy(this.headers, releaseUid, requestBody);
+    public Call<ResponseBody> deploy(@NotNull JSONObject requestBody) {
+        validate();
+        return this.service.deploy(this.headers, this.releaseUid, requestBody);
     }
 
     /**
@@ -232,8 +238,6 @@ public class Release {
      * When executing the API request, provide the Release UID. In the <b>Body</b> section, you need to provide the new
      * name and description of the cloned Release.
      *
-     * @param releaseUid
-     *         unique ID of the release that you want to clone
      * @param requestBody
      *         The JSONObject request body
      * @return Call
@@ -243,9 +247,9 @@ public class Release {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> clone(
-            @NotNull String releaseUid, @NotNull JSONObject requestBody) {
-        return this.service.clone(this.headers, releaseUid, this.params, requestBody);
+    public Call<ResponseBody> clone(@NotNull JSONObject requestBody) {
+        validate();
+        return this.service.clone(this.headers, this.releaseUid, this.params, requestBody);
     }
 
 

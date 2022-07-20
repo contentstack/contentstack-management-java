@@ -12,7 +12,7 @@ public interface OrganizationService {
     @GET("organizations")
     Call<ResponseBody> fetch(
             @HeaderMap Map<String, String> headers,
-            @QueryMap Map<String, Object> options);
+            @QueryMap Map<String, Object> query);
 
     @GET("organizations/{organization_uid}")
     Call<ResponseBody> getSingle(

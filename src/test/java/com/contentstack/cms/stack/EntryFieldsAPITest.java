@@ -18,159 +18,212 @@ import static com.contentstack.cms.Utils.toJson;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EntryFieldsAPITest {
 
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("managementToken1");
-    protected static String emailId = Dotenv.load().get("username");
-    protected static String password = Dotenv.load().get("password");
-    protected static String _uid = Dotenv.load().get("uid");
-    protected static Entry entry;
-    protected static String contentTypeUid;
+    private static Entry entry;
+    private static String contentTypeUid;
+    private static ContentType contentType;
 
     @BeforeAll
-    static void setup() throws IOException {
-        Contentstack client = new Contentstack.Builder().setAuthtoken(MANAGEMENT_TOKEN).build();
-        HashMap<String, Object> headers = new HashMap<>();
-        headers.put("api_key", API_KEY);
-        headers.put("authorization", MANAGEMENT_TOKEN);
-        Stack stack = client.stack(headers);
-        Response<ResponseBody> response = stack.contentType(MANAGEMENT_TOKEN).fetch().execute();
-        JsonObject jsonResp = toJson(response);
-        JsonArray allCT = jsonResp.getAsJsonArray("content_types");
-        if (allCT.size() > 0) {
-            int count = allCT.size();
-            count--; // to avoid java.lang.IndexOutOfBoundsException
-            contentTypeUid = String.valueOf(allCT.get(count).getAsJsonObject().get("uid").getAsString());
+    public static void setup() throws IOException {
+        String username = Dotenv.load().get("username");
+        String password = Dotenv.load().get("password");
+        String apiKey = Dotenv.load().get("apiKey");
+        String managementToken = Dotenv.load().get("managementToken");
+        Contentstack client = new Contentstack.Builder().build();
+        client.login(username, password);
+        Stack stack = client.stack();
+        assert apiKey != null;
+        assert managementToken != null;
+
+        contentType = client.stack(apiKey, managementToken).contentType();
+        Response<ResponseBody> response = contentType.find().execute();
+        if (response.isSuccessful()){
+            JsonObject contentTypesResp = toJson(response);
+            JsonArray listCT = contentTypesResp.getAsJsonArray("content_types");
+            if (listCT.size() > 0) {
+                int index = (listCT.size() - 1);
+                contentTypeUid = String.valueOf(listCT.get(index).getAsJsonObject().get("uid").getAsString());
+            }
+        }else{
+            JsonObject error = toJson(response);
+            System.out.println(error.getAsJsonObject());
         }
-        entry = stack.entry(contentTypeUid);
+        contentType = client.stack(apiKey, managementToken).contentType(contentTypeUid);
     }
 
     @Test
     @Order(1)
-    void testGetAllCT() throws IOException {
+    void testEntryFindAll() throws IOException {
+        Response<ResponseBody> response = contentType.entry().find().execute();
+        JsonObject jsonResp = toJson(response);
+        JsonArray allCT = jsonResp.getAsJsonArray("entries");
+        String entryUid = allCT.get(0).getAsJsonObject().get("uid").getAsString();
+        entry = contentType.entry(entryUid);
+        Assertions.assertTrue(allCT.size() > 0);
+    }
+
+    @Order(2)
+    @Test
+    void testEntryFetch() throws IOException {
         Response<ResponseBody> response = entry.fetch().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(3)
     @Test
-    void testFetch() {
-        try {
-            Response<ResponseBody> response = entry.fetch().execute();
-            Assertions.assertTrue(response.isSuccessful());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
-    void testSingle() throws IOException {
-        Response<ResponseBody> response = entry.single(_uid).execute();
-        Assertions.assertTrue(response.isSuccessful());
-    }
-
-    @Test
-    void testCreate() throws IOException {
+    @Disabled
+    void testEntryCreate() throws IOException {
         JSONObject body = new JSONObject();
-        body.put("param", "paramValue");
-        Response<ResponseBody> response = entry.create(body).execute();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryCreate = new JSONObject();
+        entryCreate.put("entry", body);
+        Response<ResponseBody> response = entry.create(entryCreate).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(4)
     @Test
     void testUpdate() throws IOException {
         JSONObject body = new JSONObject();
-        body.put("param", "paramValue");
-        Response<ResponseBody> response = entry.update(_uid, body).execute();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryUpdate = new JSONObject();
+        entryUpdate.put("entry", body);
+        Response<ResponseBody> response = entry.update(entryUpdate).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(5)
     @Test
     void testAtomicOperation() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        JSONObject body = new JSONObject();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryBody = new JSONObject();
+        entryBody.put("entry", body);
+        Response<ResponseBody> response = entry.atomicOperation(entryBody).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(6)
     @Test
-    void testDelete() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    @Disabled
+    void testEntryDelete() throws IOException {
+        Response<ResponseBody> response = entry.delete().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(7)
     @Test
-    void testVersionName() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    @Disabled
+    void testEntryVersionName() throws IOException {
+        JSONObject body = new JSONObject();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryBody = new JSONObject();
+        entryBody.put("entry", body);
+        Response<ResponseBody> response = entry.versionName(1, entryBody).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(8)
     @Test
-    void testDetailOfAllVersion() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    void testEntryDetailOfAllVersion() throws IOException {
+        Response<ResponseBody> response = entry.detailOfAllVersion().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(9)
     @Test
-    void testDeleteVersionName() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    @Disabled
+    void testEntryDeleteVersionName() throws IOException {
+        JSONObject body = new JSONObject();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryBody = new JSONObject();
+        entryBody.put("entry", body);
+        Response<ResponseBody> response = entry.deleteVersionName(1, entryBody).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(10)
     @Test
-    void testReference() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    void testEntryGetReference() throws IOException {
+        Response<ResponseBody> response = entry.getReference().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(11)
     @Test
-    void testLanguage() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    void testEntryLocalise() throws IOException {
+        JSONObject body = new JSONObject();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryBody = new JSONObject();
+        entryBody.put("entry", body);
+        Response<ResponseBody> response = entry.localize(entryBody, "en-us").execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(12)
     @Test
-    void testLocalise() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    void testEntryExport() throws IOException {
+        Response<ResponseBody> response = entry.export().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(13)
     @Test
-    void testUnLocalise() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    @Disabled
+    void testEntryImports() throws IOException {
+        Response<ResponseBody> response = entry.imports().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(14)
     @Test
-    void testExport() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    @Disabled
+    void testEntryImportExisting() throws IOException {
+        Response<ResponseBody> response = entry.importExisting().execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(15)
     @Test
-    void testImport() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    @Disabled
+    void testEntryPublish() throws IOException {
+        JSONObject body = new JSONObject();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryBody = new JSONObject();
+        entryBody.put("entry", body);
+        Response<ResponseBody> response = entry.publish(entryBody).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(16)
     @Test
-    void testImportExisting() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+    @Disabled
+    void testEntryPublishWithReference() throws IOException {
+        JSONObject body = new JSONObject();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryBody = new JSONObject();
+        entryBody.put("entry", body);
+        Response<ResponseBody> response = entry.publishWithReference(entryBody).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 
+    @Order(17)
     @Test
-    void testPublish() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
-        Assertions.assertTrue(response.isSuccessful());
-    }
-
-    @Test
+    @Disabled
     void testPublishWithReference() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
-        Assertions.assertTrue(response.isSuccessful());
-    }
-
-    @Test
-    void testUnpublish() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
+        JSONObject body = new JSONObject();
+        body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
+        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        JSONObject entryBody = new JSONObject();
+        entryBody.put("entry", body);
+        Response<ResponseBody> response = entry.unpublish(entryBody).execute();
         Assertions.assertTrue(response.isSuccessful());
     }
 

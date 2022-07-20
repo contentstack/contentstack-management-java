@@ -34,7 +34,7 @@ import static com.contentstack.cms.core.Util.*;
  */
 public class Contentstack {
 
-    public static final Logger logger = Logger.getLogger(Contentstack.class.getName());
+    public final Logger logger = Logger.getLogger(Contentstack.class.getName());
     protected final String host;
     protected final String port;
     protected final String version;
@@ -55,16 +55,16 @@ public class Contentstack {
      * <b>Example:</b>
      *
      * <pre>
-     * Contentstack client = new Contentstack.Builder().setAuthtoken("authtoken").build();
-     * User userInstance = client.user();
+     * Contentstack contentstack = new Contentstack.Builder().setAuthtoken("authtoken").build();
+     * User userInstance = contentstack.user();
      * </pre>
      *
      * <br>
      * <b>OR: </b>
      *
      * <pre>
-     * Client client = new Client.Builder().build();
-     * User userInstance = client.user();
+     * Contentstack contentstack = new Contentstack.Builder().setAuthtoken("authtoken").build();
+     * User user = contentstack.user();
      * </pre>
      * <br>
      *
@@ -106,8 +106,8 @@ public class Contentstack {
      * <b>OR</b>
      *
      * <pre>
-     * Contentstack client = new Contentstack.Builder().build();
-     * Response login = client.login("emailId", "password");
+     * Contentstack contentstack = new Contentstack.Builder().build();
+     * Response login = contentstack.login("emailId", "password");
      * </pre>
      * <br>
      *
@@ -156,8 +156,8 @@ public class Contentstack {
      * <b>OR: </b>
      *
      * <pre>
-     * Contentstack client = new Contentstack.Builder().build();
-     * Response login = client.login("emailId", "password");
+     * Contentstack contentstack = new Contentstack.Builder().build();
+     * Response login = contentstack.login("emailId", "password");
      * </pre>
      * <br>
      *
@@ -184,6 +184,7 @@ public class Contentstack {
         user = new User(this.instance);
         Response<LoginDetails> response = user.login(emailId, password, tfaToken).execute();
         setupLoginCredentials(response);
+        user = new User(this.instance);
         return response;
     }
 
@@ -194,9 +195,9 @@ public class Contentstack {
             this.authtoken = loginResponse.body().getUser().getAuthtoken();
             this.interceptor.setAuthtoken(this.authtoken);
         } else {
-            logger.info("logging failed");
             assert loginResponse.errorBody() != null;
             String errorJsonString = loginResponse.errorBody().string();
+            logger.info(errorJsonString);
             new Gson().fromJson(errorJsonString, Error.class);
         }
     }
@@ -207,8 +208,8 @@ public class Contentstack {
      * <b> Example </b>
      *
      * <pre>
-     * Contentstack client = new Contentstack.Builder().build();
-     * User userInstance = client.logout();
+     * Contentstack contentstack = new Contentstack.Builder().build();
+     * User user = contentstack.logout();
      * </pre>
      * <p>
      *
@@ -227,8 +228,8 @@ public class Contentstack {
      * <b> Example </b>
      *
      * <pre>
-     * Contentstack client = new Contentstack.Builder().build();
-     * User userInstance = client.logoutWithAuthtoken("authtoken");
+     * Contentstack contentstack = new Contentstack.Builder().build();
+     * User userInstance = contentstack.logoutWithAuthtoken("authtoken");
      * </pre>
      * <p>
      *
@@ -254,8 +255,8 @@ public class Contentstack {
      * <b> Example </b>
      *
      * <pre>
-     * Contentstack client = new Contentstack.Builder().build();
-     * Organization org = client.organization();
+     *  Contentstack contentstack = new Contentstack.Builder().build();
+     *  Organization org = contentstack.organization();
      * </pre>
      *
      * @return the organization
@@ -263,7 +264,32 @@ public class Contentstack {
     public Organization organization() {
         if (this.authtoken == null)
             throw new IllegalStateException("Please Login to access user instance");
-        return new Organization(this.instance, this.authtoken);
+        return new Organization(this.instance);
+    }
+
+
+    /**
+     * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources,
+     * and users. Organization allows easy management of projects as well as users within the Organization.
+     *
+     * <b> Example </b>
+     *
+     * @param organizationUid
+     *         The UID of the organization that you want to retrieve
+     * @return the organization
+     * <br>
+     * <b>Example</b>
+     * <pre>
+     * Contentstack contentstack = new Contentstack.Builder().build();
+     * Organization org = contentstack.organization();
+     *     </pre>
+     */
+    public Organization organization(@NotNull String organizationUid) {
+        if (this.authtoken == null)
+            throw new IllegalStateException("Please Login to access user instance");
+        if (organizationUid.isEmpty())
+            throw new IllegalStateException("organizationUid can not be empty");
+        return new Organization(this.instance, organizationUid);
     }
 
     /**
@@ -518,8 +544,7 @@ public class Contentstack {
 
         private void validateClient(Contentstack contentstack) {
             String baseUrl = Util.PROTOCOL + "://" + this.hostname + "/" + version + "/";
-            this.instance = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
+            this.instance = new Retrofit.Builder().baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient(contentstack, this.retry)).build();
             contentstack.instance = this.instance;
@@ -527,8 +552,7 @@ public class Contentstack {
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
             this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
-            return new OkHttpClient.Builder()
-                    .addInterceptor(this.authInterceptor)
+            return new OkHttpClient.Builder().addInterceptor(this.authInterceptor)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
                     .retryOnConnectionFailure(retryOnFailure)
