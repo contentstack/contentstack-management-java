@@ -17,8 +17,8 @@ class BranchUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static Branch branch;
     protected static JSONObject body;
 
@@ -38,7 +38,7 @@ class BranchUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        branch = stack.branch();
+        branch = stack.branch(_uid);
 
         try {
             JSONParser parser = new JSONParser();
@@ -53,8 +53,8 @@ class BranchUnitTest {
 
     @Test
     void fetchBranch() {
-        Request request = branch.fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = branch.find().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -73,8 +73,8 @@ class BranchUnitTest {
         branch.addParam("limit", 2);
         branch.addParam("skip", 2);
         branch.addParam("include_count", false);
-        Request request = branch.fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = branch.find().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -93,8 +93,8 @@ class BranchUnitTest {
         branch.clearParams();
         branch.addParam("include_rules", true);
         branch.addParam("include_permissions", true);
-        Request request = branch.fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = branch.find().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -109,8 +109,8 @@ class BranchUnitTest {
 
     @Test
     void singleRole() {
-        Request request = branch.single(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = branch.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -127,7 +127,7 @@ class BranchUnitTest {
     @Test
     void createRole() {
         Request request = branch.create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -144,8 +144,8 @@ class BranchUnitTest {
 
     @Test
     void deleteBranch() {
-        Request request = branch.delete(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = branch.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

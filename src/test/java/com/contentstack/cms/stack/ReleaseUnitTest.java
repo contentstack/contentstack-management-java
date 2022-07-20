@@ -17,8 +17,8 @@ class ReleaseUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static Release release;
     protected static JSONObject body;
 
@@ -40,7 +40,7 @@ class ReleaseUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        release = stack.releases();
+        release = stack.releases(_uid);
 
         try {
             JSONParser parser = new JSONParser();
@@ -57,7 +57,7 @@ class ReleaseUnitTest {
     @Order(1)
     void allReleaseHeaders() {
         release.addHeader("Content-Type", "application/json");
-        Assertions.assertEquals(3, release.headers.size());
+        Assertions.assertEquals(1, release.headers.size());
     }
 
     @Test
@@ -85,8 +85,8 @@ class ReleaseUnitTest {
     @Test
     @Order(5)
     void releaseQueryParams() {
-        Request request = release.fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = release.find().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -104,8 +104,8 @@ class ReleaseUnitTest {
     void fetchSingleUrl() {
         release.addParam("include_rules", true);
         release.addParam("include_permissions", true);
-        Request request = release.single(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = release.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -121,7 +121,7 @@ class ReleaseUnitTest {
     @Order(7)
     void createRelease() {
         Request request = release.create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -137,8 +137,8 @@ class ReleaseUnitTest {
     @Test
     @Order(8)
     void updateRelease() {
-        Request request = release.update(_uid, body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = release.update(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -155,8 +155,8 @@ class ReleaseUnitTest {
     @Test
     @Order(9)
     void deleteRelease() {
-        Request request = release.delete(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = release.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -170,8 +170,8 @@ class ReleaseUnitTest {
     @Test
     @Order(10)
     void getReleaseItems() {
-        Request request = release.item(_uid).fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = release.item().find().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -185,8 +185,8 @@ class ReleaseUnitTest {
     @Test
     @Order(10)
     void createItemRelease() {
-        Request request = release.item(_uid).create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = release.item().create(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -200,8 +200,8 @@ class ReleaseUnitTest {
     @Test
     @Order(10)
     void createMultipleReleaseItems() {
-        Request request = release.item(_uid).createMultiple(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = release.item().createMultiple(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -215,8 +215,8 @@ class ReleaseUnitTest {
     @Test
     @Order(10)
     void updateReleaseItems() {
-        Request request = release.item(_uid).update(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = release.item().update(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -230,8 +230,8 @@ class ReleaseUnitTest {
     @Test
     @Order(10)
     void deleteReleaseItems() {
-        Request request = release.item(_uid).delete().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = release.item().delete().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

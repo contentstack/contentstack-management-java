@@ -17,7 +17,8 @@ import java.util.HashMap;
 /**
  * A webhook is a mechanism that sends real-time information to any third-party app or service to keep your application
  * in sync with your Contentstack account. Webhooks allow you to specify a URL to which you would like Contentstack to
- * post data when an event happens. <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token"> Read
+ * post data when an event happens. <a
+ * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token"> Read
  * more about Webhooks.</a>
  *
  * @author ***REMOVED***
@@ -32,12 +33,26 @@ public class Webhook {
     protected final WebhookService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    private String webhookUid;
 
-    protected Webhook(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+    protected Webhook(Retrofit retrofit) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.service = retrofit.create(WebhookService.class);
+    }
+
+
+    protected Webhook(Retrofit retrofit, String uid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.webhookUid = uid;
+        this.service = retrofit.create(WebhookService.class);
+    }
+
+
+    void validate() {
+        if (this.webhookUid == null || this.webhookUid.isEmpty())
+            throw new IllegalStateException("Webhook uid can not be null or empty");
     }
 
     /**
@@ -99,7 +114,7 @@ public class Webhook {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -107,9 +122,6 @@ public class Webhook {
     /**
      * The Get webhook request returns comprehensive information on a specific webhook.
      *
-     * @param webhookUid
-     *         Enter the unique ID of the webhook of which you want to retrieve the details. Execute the <b>Get all
-     *         webhooks</b> call to retrieve the UID of a webhook
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">Get
@@ -118,8 +130,9 @@ public class Webhook {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String webhookUid) {
-        return this.service.single(this.headers, webhookUid);
+    public Call<ResponseBody> fetch() {
+        this.validate();
+        return this.service.single(this.headers, this.webhookUid);
     }
 
 
@@ -157,7 +170,6 @@ public class Webhook {
      * @since 1.0.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
-        this.headers.put(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
         return this.service.create(this.headers, requestBody);
     }
 
@@ -187,9 +199,6 @@ public class Webhook {
      * with the stack API key, to make valid Content Management API requests. For more information, refer to
      * Authentication
      *
-     * @param webhookUid
-     *         The UID of the webhook that you want to update. Execute the <b>Get all webhooks</b> request to retrieve
-     *         the UID of a webhook.
      * @param requestBody
      *         the request body @JSONObject
      * @return Call
@@ -199,8 +208,9 @@ public class Webhook {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String webhookUid, JSONObject requestBody) {
-        return this.service.update(this.headers, webhookUid, requestBody);
+    public Call<ResponseBody> update(JSONObject requestBody) {
+        this.validate();
+        return this.service.update(this.headers, this.webhookUid, requestBody);
     }
 
     /**
@@ -209,8 +219,6 @@ public class Webhook {
      * When executing the API call, under the 'Header' section, you need to enter the API key of your stack and the
      * authtoken that you receive after logging into your account
      *
-     * @param webhookUid
-     *         The unique ID of the webhook of which you want to retrieve the details.
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-webhook">Delete
      * Webhook
@@ -219,8 +227,9 @@ public class Webhook {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String webhookUid) {
-        return this.service.delete(this.headers, webhookUid);
+    public Call<ResponseBody> delete() {
+        this.validate();
+        return this.service.delete(this.headers, this.webhookUid);
     }
 
 
@@ -228,11 +237,10 @@ public class Webhook {
      * The Export a Webhook request exports an existing webhook. The exported webhook data is saved in a downloadable
      * JSON file.
      *
-     * @param webhookUid
-     *         Enter the unique ID of the webhook that you want to export.<br>
      *
-     *         <b>Note:</b> In case you do not know the UID of the webhook, use the <b>Get all webhooks</b> request to
-     *         get all the webhooks (along with the UIDs).
+     * <b>Note:</b> In case you do not know the UID of the webhook, use the <b>Get all webhooks</b> request to
+     * get all the webhooks (along with the UIDs).
+     *
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-webhook">Export
      * Webhook
@@ -241,8 +249,9 @@ public class Webhook {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> export(@NotNull String webhookUid) {
-        return this.service.export(this.headers, webhookUid);
+    public Call<ResponseBody> export() {
+        this.validate();
+        return this.service.export(this.headers, this.webhookUid);
     }
 
 
@@ -326,8 +335,6 @@ public class Webhook {
      * webhook. Previously, there was no limit on the number of records returned. You can use the <b>skip</b> parameter
      * to fetch older records. To limit the number of records returned, you can use the “limit” parameter.
      *
-     * @param webhookUid
-     *         The unique ID of the webhook of which you want to retrieve the details
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-executions-of-a-webhook">Get
@@ -337,8 +344,9 @@ public class Webhook {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> getExecutions(@NotNull String webhookUid) {
-        return this.service.getExecutions(this.headers, webhookUid, this.params);
+    public Call<ResponseBody> getExecutions() {
+        this.validate();
+        return this.service.getExecutions(this.headers, this.webhookUid, this.params);
     }
 
     /**

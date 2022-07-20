@@ -45,34 +45,34 @@ class StackUnitTests {
 
     @Test
     void testSingleStackMethod() {
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals("GET", request.method());
     }
 
     @Test
     void testSingleStackHeaders() {
         stack.clearParams();
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals(2, request.headers().size());
         Assertions.assertEquals(stack.headers.get("api_key").toString(), request.headers("api_key").get(0));
     }
 
     @Test
     void testSingleStackHost() {
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals("api.contentstack.io", request.url().host());
     }
 
     @Test
     void testSingleStackPort() {
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals(443, request.url().port());
     }
 
     @Test
     void testSingleStackUrl() {
         stack.clearParams();
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks",
                 request.url().toString());
@@ -80,7 +80,7 @@ class StackUnitTests {
 
     @Test
     void testSingleStackPathSegment() {
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals("/v3/stacks", request.url().encodedPath());
     }
 
@@ -89,7 +89,7 @@ class StackUnitTests {
         String orgId = env.get("organizationUid");
         assert orgId != null;
         stack.addHeader("organization_uid", orgId);
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals(2, request.headers().size());
     }
 
@@ -98,7 +98,7 @@ class StackUnitTests {
         String orgId = env.get("organizationUid");
         assert orgId != null;
         stack.addHeader("organization_uid", orgId);
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Set<String> headers = request.headers().names();
         Assertions.assertEquals(2, headers.size());
     }
@@ -108,7 +108,7 @@ class StackUnitTests {
         String orgId = env.get("organizationUid");
         assert orgId != null;
         stack.addHeader("organization_uid", orgId);
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         String headerAPIKey = request.headers().name(0);
         String headerOrgKey = request.headers().name(1);
         Assertions.assertEquals("api_key", headerAPIKey);
@@ -125,7 +125,7 @@ class StackUnitTests {
         assert orgId != null;
         stack.addHeader("organization_uid", orgId);
         //stack.clearParams();
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals(
                 "include_collaborators=true&include_discrete_variables=true&include_stack_variables=true&include_count=true",
                 request.url().encodedQuery());
@@ -138,7 +138,7 @@ class StackUnitTests {
         stack.clearParams();
         stack.addParam("include_count", true);
         stack.addHeader("organization_uid", orgId);
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals(
                 "include_count=true",
                 request.url().encodedQuery());
@@ -151,7 +151,7 @@ class StackUnitTests {
         stack.addParam("include_count", true);
         assert orgId != null;
         stack.addHeader("organization_uid", orgId);
-        Request request = stack.fetch().request();
+        Request request = stack.find().request();
         Assertions.assertEquals(
                 "include_count=true",
                 request.url().encodedQuery());

@@ -25,12 +25,24 @@ public class Label {
     protected final LabelService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    protected String labelUid;
 
-    protected Label(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+    protected Label(Retrofit retrofit) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.service = retrofit.create(LabelService.class);
+    }
+
+    protected Label(Retrofit retrofit, String labelUid) {
+        this.labelUid = labelUid;
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.service = retrofit.create(LabelService.class);
+    }
+
+    void validate() {
+        if (this.labelUid == null)
+            throw new IllegalStateException("Label Uid can not be null or empty");
     }
 
     /**
@@ -108,7 +120,7 @@ public class Label {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.get(this.headers, this.params);
     }
 
@@ -116,8 +128,6 @@ public class Label {
      * The Get label call returns information about a particular label of a stack.
      * <p>
      *
-     * @param labelUid
-     *         Provide the unique ID of the label that you want to retrieve
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-label">Get a
      * single label
@@ -127,8 +137,9 @@ public class Label {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String labelUid) {
-        return this.service.get(this.headers, labelUid, this.params);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.get(this.headers, this.labelUid, this.params);
     }
 
 
@@ -166,8 +177,6 @@ public class Label {
      * in JSON format
      * <p>
      *
-     * @param labelUid
-     *         The unique ID of the label that you want to retrieve.
      * @param body
      *         the request body to update the {@link Label}
      * @return Call
@@ -179,8 +188,9 @@ public class Label {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String labelUid, @NotNull JSONObject body) {
-        return this.service.update(this.headers, labelUid, body);
+    public Call<ResponseBody> update(@NotNull JSONObject body) {
+        validate();
+        return this.service.update(this.headers, this.labelUid, body);
     }
 
     /**
@@ -190,8 +200,6 @@ public class Label {
      * logging into your account
      * <p>
      *
-     * @param labelUid
-     *         The unique ID of the label that you want to retrieve.
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-label">Delete
      * label
@@ -201,8 +209,9 @@ public class Label {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String labelUid) {
-        return this.service.delete(this.headers, labelUid);
+    public Call<ResponseBody> delete() {
+        validate();
+        return this.service.delete(this.headers, this.labelUid);
     }
 
 

@@ -17,8 +17,8 @@ class WebhookUnitTest {
 
     private static final String AUTHTOKEN = Dotenv.load().get("authToken");
     private static final String API_KEY = Dotenv.load().get("apiKey");
-    private static final String _webhook_uid = Dotenv.load().get("workflow_uid");
-    private static final String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    private static final String _webhook_uid = Dotenv.load().get("workflowUid");
+    private static final String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     private static Webhook webhook;
     private static final String wehooksHost = "https://api.contentstack.io/v3/webhooks";
 
@@ -31,7 +31,7 @@ class WebhookUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        webhook = stack.webhook();
+        webhook = stack.webhook(_webhook_uid);
 
         try {
             JSONParser parser = new JSONParser();
@@ -74,7 +74,7 @@ class WebhookUnitTest {
     @Order(1)
     void webhookHeaders() {
         webhook.addHeader("Content-Type", "application/json");
-        Assertions.assertEquals(3, webhook.headers.size());
+        Assertions.assertEquals(1, webhook.headers.size());
     }
 
     @Test
@@ -106,8 +106,8 @@ class WebhookUnitTest {
         webhook.clearParams();
         webhook.addParam("include_rules", true);
         webhook.addParam("include_permissions", true);
-        Request request = webhook.fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = webhook.find().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -124,8 +124,8 @@ class WebhookUnitTest {
         webhook.removeParam("include_rules");
         webhook.removeParam("include_permissions");
         assert _webhook_uid != null;
-        Request request = webhook.single(_webhook_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = webhook.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -140,7 +140,7 @@ class WebhookUnitTest {
     @Order(7)
     void createWebhook() {
         Request request = webhook.create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -154,8 +154,8 @@ class WebhookUnitTest {
     @Test
     void updateWebhook() {
         assert _webhook_uid != null;
-        Request request = webhook.update(_webhook_uid, body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = webhook.update(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -169,8 +169,8 @@ class WebhookUnitTest {
     @Test
     void deleteWebhook() {
         assert _webhook_uid != null;
-        Request request = webhook.delete(_webhook_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = webhook.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -185,8 +185,8 @@ class WebhookUnitTest {
     @Test
     void exportWebhook() {
         assert _webhook_uid != null;
-        Request request = webhook.export(_webhook_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = webhook.export().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -198,6 +198,7 @@ class WebhookUnitTest {
     }
 
     @Test
+    @Disabled
     void importWebhook() {
         assert _webhook_uid != null;
         Request request = webhook.importWebhook("webhookFile", "/Application/Library/***REMOVED***/filename.json").request();
@@ -215,7 +216,7 @@ class WebhookUnitTest {
     @Test
     void importExistingWebhook() {
         Request request = webhook.importExisting().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -228,8 +229,8 @@ class WebhookUnitTest {
 
     @Test
     void getExecutionWebhook() {
-        Request request = webhook.getExecutions(_webhook_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = webhook.getExecutions().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -244,7 +245,7 @@ class WebhookUnitTest {
     @Test
     void retryLogWebhook() {
         Request request = webhook.retry(_webhook_uid).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -258,7 +259,7 @@ class WebhookUnitTest {
     @Test
     void getExecutionLogWebhook() {
         Request request = webhook.getExecutionLog(_webhook_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
