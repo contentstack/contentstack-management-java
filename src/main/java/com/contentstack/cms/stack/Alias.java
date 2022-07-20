@@ -25,12 +25,27 @@ public class Alias {
     protected final Map<String, Object> headers;
     protected Map<String, Object> params;
     protected final AliasService service;
+    private String uid;
 
-    protected Alias(Retrofit instance, @NotNull Map<String, Object> stackHeaders) {
+
+    void validate() {
+        if (this.uid == null)
+            throw new IllegalStateException("Global Field Uid can not be null or empty");
+    }
+
+    protected Alias(Retrofit instance) {
         this.headers = new HashMap<>();
         this.headers.put("Content-Type", "application/json");
-        this.headers.putAll(stackHeaders);
         params = new HashMap<>();
+        this.service = instance.create(AliasService.class);
+    }
+
+
+    protected Alias(Retrofit instance, String aliasUid) {
+        this.headers = new HashMap<>();
+        this.headers.put("Content-Type", "application/json");
+        params = new HashMap<>();
+        this.uid = aliasUid;
         this.service = instance.create(AliasService.class);
     }
 
@@ -88,23 +103,21 @@ public class Alias {
      * aliases</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
     /**
      * The Get a single alias request returns information of a specific alias.
      *
-     * @param uid
-     *         The unique ID of the alias of which you want to retrieve the details. The UID of an alias is unique
-     *         across a stack. Execute the Get all aliases call to retrieve the UID of an alias
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-branch">
      * Get a single branch</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String uid) {
-        return this.service.single(this.headers, uid);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.single(this.headers, this.uid);
     }
 
     /**
@@ -130,14 +143,12 @@ public class Alias {
     }
 
     /**
-     * The Delete an alias request deletes an existing alias.
+     * Delete an alias request deletes an existing alias.
      * <p>
      * To confirm deletion of an alias, you need to specify the force=true query parameter.
      * <p>
      * When executing the API call, in the “URL Parameters” section, provide the UID of your alias.
      *
-     * @param branchUid
-     *         the branch uid
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-alias">Delete a
      * branch</a>
@@ -145,8 +156,9 @@ public class Alias {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String branchUid) {
-        return this.service.delete(this.headers, branchUid, this.params);
+    public Call<ResponseBody> delete() {
+        validate();
+        return this.service.delete(this.headers, this.uid, this.params);
     }
 
 }

@@ -20,8 +20,8 @@ class LabelUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     static Label label;
     protected static JSONObject body;
 
@@ -44,7 +44,7 @@ class LabelUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        label = stack.label();
+        label = stack.label(_uid);
 
         try {
             JSONParser parser = new JSONParser();
@@ -58,8 +58,8 @@ class LabelUnitTest {
 
     @Test
     void getAllLabels() {
-        Request request = label.fetch().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = label.find().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -73,8 +73,8 @@ class LabelUnitTest {
     void fetchLabels() {
         label.addParam("include_count", false);
         label.addParam("include_branch", false);
-        Request request = label.fetch().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = label.find().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -89,8 +89,8 @@ class LabelUnitTest {
         label.clearParams();
         label.addParam("include_count", false);
         label.addParam("include_branch", false);
-        Request request = label.addBranch("main").fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = label.addBranch("main").find().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -103,8 +103,8 @@ class LabelUnitTest {
     @Test
     void getLabel() {
         label.clearParams();
-        Request request = label.single(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = label.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -117,8 +117,8 @@ class LabelUnitTest {
     @Test
     void getLabelWithQuery() {
         label.addParam("include_branch", false);
-        Request request = label.single(_uid).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = label.fetch().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -131,7 +131,7 @@ class LabelUnitTest {
     @Test
     void addLabelPost() {
         Request request = label.create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -145,8 +145,8 @@ class LabelUnitTest {
 
     @Test
     void labelUpdate() {
-        Request request = label.update(_uid, body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = label.update( body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertNotNull(request.body());
         Assertions.assertTrue(request.url().isHttps());
@@ -159,8 +159,8 @@ class LabelUnitTest {
 
     @Test
     void labelDelete() {
-        Request request = label.delete(_uid).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = label.delete().request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());
         Assertions.assertTrue(request.url().isHttps());

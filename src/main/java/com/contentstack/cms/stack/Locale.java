@@ -28,6 +28,7 @@ public class Locale {
     protected final LocaleService localeService;
     protected Map<String, Object> headers;
     protected Map<String, Object> params;
+    protected String code;
 
 
     /**
@@ -35,17 +36,25 @@ public class Locale {
      *
      * @param client
      *         the retrofit client
-     * @param headers
-     *         the headers
      */
-    public Locale(Retrofit client, Map<String, Object> headers) {
+    public Locale(Retrofit client) {
         this.headers = new HashMap<>();
-        this.headers.putAll(headers);
+        this.params = new HashMap<>();
+        this.localeService = client.create(LocaleService.class);
+    }
+
+    public Locale(Retrofit client, String code) {
+        this.headers = new HashMap<>();
+        this.code = code;
         this.params = new HashMap<>();
         this.localeService = client.create(LocaleService.class);
     }
 
 
+    void validate() {
+        if (this.code == null)
+            throw new IllegalStateException("The Locale code can not be null or empty");
+    }
     /**
      * Sets header for the request
      *
@@ -111,9 +120,30 @@ public class Locale {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return localeService.locales(this.headers, this.params);
     }
+
+
+    /**
+     * The Get a language call returns information about a specific language available on the stack.
+     * <p>
+     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
+     * logging into your account.
+     *
+     * @return Call
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
+     * @see #addHeader(String, Object) to add headers
+     * @see #addParam(String, Object) to add query parameters
+     * @since 1.0.0
+     */
+    public Call<ResponseBody> fetch() {
+        validate();
+        return localeService.singel(this.headers, this.code, this.params);
+    }
+
 
     /**
      * <b>Add a language</b>
@@ -141,25 +171,6 @@ public class Locale {
         return localeService.create(this.headers, body);
     }
 
-    /**
-     * The Get a language call returns information about a specific language available on the stack.
-     * <p>
-     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
-     * logging into your account.
-     *
-     * @param code
-     *         The code of the language that you want to retrieve
-     * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
-     * all languages
-     * </a>
-     * @see #addHeader(String, Object) to add headers
-     * @see #addParam(String, Object) to add query parameters
-     * @since 1.0.0
-     */
-    public Call<ResponseBody> single(@NotNull String code) {
-        return localeService.singel(this.headers, code, this.params);
-    }
 
     /**
      * The Update language call will let you update the details (such as display name) and the fallback language of an
@@ -170,8 +181,6 @@ public class Locale {
      * <p>
      * In the 'Body' section, enter the updated details of your language name and fallback language in JSON format.
      *
-     * @param code
-     *         The code of the language that you want to retrieve
      * @param body
      *         the request body
      * @return Call
@@ -183,8 +192,9 @@ public class Locale {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String code, @NotNull JSONObject body) {
-        return localeService.update(this.headers, code, this.params, body);
+    public Call<ResponseBody> update(@NotNull JSONObject body) {
+        validate();
+        return localeService.update(this.headers, this.code, this.params, body);
     }
 
     /**
@@ -195,8 +205,6 @@ public class Locale {
      * <p>
      * Fallback Languages
      *
-     * @param code
-     *         The code of the language that you want to retrieve
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-language">Delete
      * language
@@ -206,8 +214,9 @@ public class Locale {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(String code) {
-        return localeService.delete(this.headers, code);
+    public Call<ResponseBody> delete() {
+        validate();
+        return localeService.delete(this.headers, this.code);
     }
 
     /**
@@ -245,8 +254,6 @@ public class Locale {
      * <p>
      * In the <b>Body</b> section, enter the updated details of the fallback language in JSON format
      *
-     * @param localeUid
-     *         the locale uid
      * @param body
      *         the request body
      * @return Call
@@ -256,8 +263,9 @@ public class Locale {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> updateFallback(@NotNull String localeUid, @NotNull JSONObject body) {
-        return localeService.updateFallback(this.headers, localeUid, body);
+    public Call<ResponseBody> updateFallback( @NotNull JSONObject body) {
+        validate();
+        return localeService.updateFallback(this.headers, this.code, body);
     }
 
 }

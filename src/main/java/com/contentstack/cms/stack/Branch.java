@@ -26,13 +26,26 @@ public class Branch {
     protected final Map<String, Object> headers;
     protected Map<String, Object> params;
     protected final BranchService service;
+    private String branchUid;
 
-    protected Branch(Retrofit instance, @NotNull Map<String, Object> stackHeaders) {
+    protected Branch(Retrofit instance) {
         this.headers = new HashMap<>();
         this.headers.put("Content-Type", "application/json");
-        this.headers.putAll(stackHeaders);
-        params = new HashMap<>();
+        this.params = new HashMap<>();
         this.service = instance.create(BranchService.class);
+    }
+
+    protected Branch(Retrofit instance, String uid) {
+        this.headers = new HashMap<>();
+        this.headers.put("Content-Type", "application/json");
+        this.branchUid = uid;
+        this.params = new HashMap<>();
+        this.service = instance.create(BranchService.class);
+    }
+
+    void validate() {
+        if (this.branchUid == null || this.branchUid.isEmpty())
+            throw new IllegalStateException("Branch uid can not be null or empty");
     }
 
     /**
@@ -90,28 +103,28 @@ public class Branch {
      * branches</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
     /**
      * The Get a single branch request returns information of a specific branch.
      *
-     * @param uid
-     *         The unique ID of the branch of which you want to retrieve the details. The UID of a branch is unique
-     *         across a stack. Execute the <b>Get all branches</b> call to retrieve the UID of a branch
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-branch">
      * Get a single branch</a>
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String uid) {
-        return this.service.single(this.headers, uid);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.single(this.headers, this.branchUid);
     }
 
     /**
      * The Create a branch request creates a new branch in a particular stack of your organization.
-     * @param body the request body
+     *
+     * @param body
+     *         the request body
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-branch">Create a
      * branch</a>
@@ -126,8 +139,6 @@ public class Branch {
      * The Get assets and folders of a parent folder retrieves details of both assets and asset subfolders within a
      * specific parent asset folder.
      *
-     * @param branchUid
-     *         The unique ID of the branch of which you want to retrieve the details.
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-branch">Delete a
      * branch</a>
@@ -135,8 +146,9 @@ public class Branch {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String branchUid) {
-        return this.service.delete(this.headers, branchUid, this.params);
+    public Call<ResponseBody> delete() {
+        validate();
+        return this.service.delete(this.headers, this.branchUid, this.params);
     }
 
 }

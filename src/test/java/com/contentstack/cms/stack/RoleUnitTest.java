@@ -1,7 +1,6 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
-
 import com.contentstack.cms.core.Util;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
@@ -18,8 +17,8 @@ class RoleUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static Roles roles;
     protected static JSONObject body;
 
@@ -108,19 +107,19 @@ class RoleUnitTest {
 
 
     @BeforeAll
-    static void setup() {
+    public static void setup() {
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        roles = stack.roles();
+        roles = stack.roles(_uid);
 
         try {
             JSONParser parser = new JSONParser();
             body = (JSONObject) parser.parse(theJsonString);
         } catch (ParseException e) {
             System.out.println(e.getLocalizedMessage());
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
 
     }
@@ -130,7 +129,7 @@ class RoleUnitTest {
     @Order(1)
     void allRoleHeaders() {
         roles.addHeader("Content-Type", "application/json");
-        Assertions.assertEquals(3, roles.headers.size());
+        Assertions.assertEquals(1, roles.headers.size());
     }
 
     @Test
@@ -158,8 +157,8 @@ class RoleUnitTest {
     @Test
     @Order(5)
     void rolesQueryParams() {
-        Request request = roles.fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = roles.find().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -177,8 +176,8 @@ class RoleUnitTest {
     void allRoles() {
         roles.addParam("include_rules", true);
         roles.addParam("include_permissions", true);
-        Request request = roles.fetch().request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = roles.find().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -193,8 +192,8 @@ class RoleUnitTest {
     @Test
     @Order(7)
     void singleRole() {
-        Request request = roles.single(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = roles.fetch().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -211,7 +210,7 @@ class RoleUnitTest {
     @Order(8)
     void createRole() {
         Request request = roles.create(body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -227,8 +226,8 @@ class RoleUnitTest {
     @Test
     @Order(9)
     void updateRole() {
-        Request request = roles.update(_uid, body).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Request request = roles.update(body).request();
+        Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -241,15 +240,15 @@ class RoleUnitTest {
     @Test
     @Order(10)
     void deleteRole() {
-        Request request = roles.delete(_uid).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Request request = roles.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("roles", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/roles/" + _uid ,
+        Assertions.assertEquals("https://api.contentstack.io/v3/roles/" + _uid,
                 request.url().toString());
     }
 
