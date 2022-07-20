@@ -25,8 +25,6 @@ class StackAPITest {
 
     private static final String TAG = StackAPITest.class.getSimpleName();
     private final static Logger log = Logger.getLogger(StackAPITest.class.getName());
-    // log.warning(e.getLocalizedMessage().toString());
-
     private Stack stackInstance;
     private final String organizationUid = Dotenv.load().get("organizationUid");
     private final String userId = Dotenv.load().get("userId");
@@ -54,7 +52,7 @@ class StackAPITest {
     void testStackFetchAll() {
         try {
             assert apiKey != null;
-            Response<ResponseBody> response = stackInstance.fetch().execute();
+            Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 log.fine(jsonResp.get("stack").getAsJsonObject().toString());
@@ -71,7 +69,7 @@ class StackAPITest {
             assert apiKey != null;
             assert organizationUid != null;
             stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.fetch().execute();
+            Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -91,7 +89,7 @@ class StackAPITest {
             stackInstance.addParam("include_count", false);
             assert organizationUid != null;
             stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.fetch().execute();
+            Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -111,7 +109,7 @@ class StackAPITest {
             assert apiKey != null;
             assert organizationUid != null;
             stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.fetch().execute();
+            Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -170,10 +168,7 @@ class StackAPITest {
                 Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
                 int errCode = error.getErrorCode();
                 String errMessage = error.getErrorMessage();
-                Assertions.assertEquals(109, errCode);
-                Assertions.assertEquals(
-                        "We can't find that Stack. Please try again.",
-                        errMessage);
+                Assertions.assertEquals(141, errCode);
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());

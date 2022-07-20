@@ -29,14 +29,18 @@ public class ReleaseItem {
     protected HashMap<String, Object> params;
     private final String releaseUid;
 
-    protected ReleaseItem(Retrofit retrofit, HashMap<String, Object> stackHeaders, String releaseUid) {
+    protected ReleaseItem(Retrofit retrofit, String releaseUid) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.releaseUid = releaseUid;
         this.service = retrofit.create(ReleaseService.class);
     }
 
+
+    void validate() {
+        if (this.releaseUid == null || this.releaseUid.isEmpty())
+            throw new IllegalStateException("Release Uid can not be null or empty");
+    }
 
     /**
      * Sets header for the request
@@ -89,8 +93,8 @@ public class ReleaseItem {
      *
      * @return Call
      */
-    public Call<ResponseBody> fetch() {
-        this.headers.put(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
+    public Call<ResponseBody> find() {
+        validate();
         return this.service.fetch(this.headers, this.releaseUid, this.params);
     }
 
@@ -107,6 +111,7 @@ public class ReleaseItem {
      * @return Call
      */
     public Call<ResponseBody> create(@NotNull JSONObject jsonBody) {
+        validate();
         return this.service.addItem(this.headers, this.releaseUid, this.params, jsonBody);
     }
 
@@ -122,6 +127,7 @@ public class ReleaseItem {
      * @return Call
      */
     public Call<ResponseBody> createMultiple(@NotNull JSONObject jsonBody) {
+        validate();
         return this.service.addItems(this.headers, this.releaseUid, this.params, jsonBody);
     }
 
@@ -162,6 +168,7 @@ public class ReleaseItem {
      * @return Call
      */
     public Call<ResponseBody> update(@NotNull JSONObject jsonBody) {
+        validate();
         return this.service.updateItems(this.headers, this.releaseUid, this.params, jsonBody);
     }
 
@@ -185,6 +192,7 @@ public class ReleaseItem {
      * @return Call
      */
     public Call<ResponseBody> delete() {
+        validate();
         return this.service.removeItem(this.headers, this.releaseUid);
     }
 

@@ -6,7 +6,7 @@
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.1.0-alpha-SNAPSHOT</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
@@ -164,12 +164,10 @@
             <version>1.1.1</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
-
             <!--mvn clean install -U -Dmaven.test.failure.ignore=true-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

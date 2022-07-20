@@ -32,14 +32,28 @@ public class PublishQueue {
     protected final PublishQueueService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    private String publishQueueUid;
     private final Retrofit retrofit;
 
-    protected PublishQueue(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+    protected PublishQueue(Retrofit retrofit) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.retrofit = retrofit;
         this.service = this.retrofit.create(PublishQueueService.class);
+    }
+
+
+    protected PublishQueue(Retrofit retrofit, String uid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.retrofit = retrofit;
+        this.publishQueueUid = uid;
+        this.service = this.retrofit.create(PublishQueueService.class);
+    }
+
+    void validate() {
+        if (this.publishQueueUid == null || this.publishQueueUid.isEmpty())
+            throw new IllegalStateException("Publish Queue Uid can not be null or empty");
     }
 
     /**
@@ -110,7 +124,7 @@ public class PublishQueue {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.fetch(this.headers, this.params);
     }
 
@@ -122,9 +136,6 @@ public class PublishQueue {
      * <p>
      * Add addional query parameters to the request using {@link #addParam(String, Object)}
      *
-     * @param publishQueueUid
-     *         the UID of a specific publish queue activity of which you want to retrieve the details. Execute the Get
-     *         publish queue API request to retrieve the UID of a particular publish queue activity.
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue-activity">Get
@@ -134,8 +145,9 @@ public class PublishQueue {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetchActivity(@NotNull String publishQueueUid) {
-        return this.service.fetchActivity(this.headers, publishQueueUid, this.params);
+    public Call<ResponseBody> fetchActivity() {
+        validate();
+        return this.service.fetchActivity(this.headers, this.publishQueueUid, this.params);
     }
 
 
@@ -143,8 +155,6 @@ public class PublishQueue {
      * The <b>Cancel Scheduled Action</b> request will allow you to cancel any scheduled publishing or unpublishing
      * activity of entries and/or assets and also cancel the deployment of releases
      *
-     * @param publishQueueUid
-     *         The UID of the event to be cancelled in the publish queue.
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#cancel-scheduled-action">Cancel
@@ -155,7 +165,8 @@ public class PublishQueue {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> cancelScheduledAction(String publishQueueUid) {
-        return this.service.cancelScheduledAction(this.headers, publishQueueUid, this.params);
+    public Call<ResponseBody> cancelScheduledAction() {
+        validate();
+        return this.service.cancelScheduledAction(this.headers, this.publishQueueUid, this.params);
     }
 }

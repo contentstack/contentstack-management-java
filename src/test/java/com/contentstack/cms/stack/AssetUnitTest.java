@@ -17,15 +17,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 @Tag("unit")
 class AssetUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
     protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("auth_token");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("auth_token");
+    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String _uid = Dotenv.load().get("authToken");
     static Asset asset;
 
     @BeforeAll
@@ -34,7 +33,7 @@ class AssetUnitTest {
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        asset = stack.asset();
+        asset = stack.asset(_uid);
     }
 
     @Test
@@ -49,15 +48,14 @@ class AssetUnitTest {
         asset.addParam("relative_urls", false);
         asset.addParam("asc_field_uid", "created_at");
         asset.addParam("desc_field_uid", 230);
-        Request resp = asset.fetch().request();
+        Request resp = asset.find().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -79,15 +77,14 @@ class AssetUnitTest {
         asset.addParam("environment", "production");
         asset.addParam("relative_urls", false);
 
-        Request resp = asset.single(_uid).request();
+        Request resp = asset.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid,
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -104,12 +101,11 @@ class AssetUnitTest {
         Request resp = asset.byFolderUid(_uid).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -128,12 +124,11 @@ class AssetUnitTest {
         Request resp = asset.subfolder(_uid, true).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -169,12 +164,11 @@ class AssetUnitTest {
         Request resp = asset.uploadAsset(filePath, description).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -193,15 +187,14 @@ class AssetUnitTest {
         asset.addParam("relative_urls", true);
         asset.addParam("include_dimension", true);
 
-        Request resp = asset.replace(_uid).request();
+        Request resp = asset.replace().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid,
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -221,15 +214,14 @@ class AssetUnitTest {
         asset.addParam("relative_urls", true);
         asset.addParam("include_dimension", true);
         JSONObject body = new JSONObject();
-        Request resp = asset.generatePermanentUrl(_uid, body).request();
+        Request resp = asset.generatePermanentUrl(body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid,
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -244,15 +236,14 @@ class AssetUnitTest {
     @Test
     void testAssetDownloadPermanentUrl() {
         asset.clearParams();
-        Request resp = asset.getPermanentUrl(_uid, "www.google.com/search").request();
+        Request resp = asset.getPermanentUrl( "www.google.com/search").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid + "/www.google.com%2Fsearch",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -267,15 +258,14 @@ class AssetUnitTest {
     @Test
     void testAssetDelete() {
         asset.clearParams();
-        Request resp = asset.delete(_uid).request();
+        Request resp = asset.delete().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid,
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -292,12 +282,11 @@ class AssetUnitTest {
         Request resp = asset.rteInformation().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/rt",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -315,15 +304,14 @@ class AssetUnitTest {
         JSONObject versionNameBody = new JSONObject();
         versionNameBody.put("_version_name", "versionName...");
         body.put("upload", versionNameBody);
-        Request resp = asset.setVersionName(_uid, 2, body).request();
+        Request resp = asset.setVersionName( 2, body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid + "/versions/2/name",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -342,15 +330,14 @@ class AssetUnitTest {
         asset.addParam("limit", 5);
         asset.addParam("named", false);
         asset.addParam("include_count", false);
-        Request resp = asset.getVersionNameDetails(_uid).request();
+        Request resp = asset.getVersionNameDetails().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid + "/versions",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -365,20 +352,18 @@ class AssetUnitTest {
 
     @Test
     void testAssetDeleteVersionName() {
-        Request resp = asset.deleteVersionName(_uid, 2).request();
+        Request resp = asset.deleteVersionName( 2).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid + "/versions/2/name",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
-                resp.url().query());
+        Assertions.assertNull(resp.url().query());
         Assertions.assertNull(resp.body());
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/assets/" + _uid + "/versions/2/name",
@@ -387,15 +372,14 @@ class AssetUnitTest {
 
     @Test
     void testAssetGetReference() {
-        Request resp = asset.getReferences(_uid).request();
+        Request resp = asset.getReferences().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid + "/references",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -412,12 +396,11 @@ class AssetUnitTest {
         Request resp = asset.getByType("images").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/images",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -434,12 +417,11 @@ class AssetUnitTest {
         Request resp = asset.getByType("videos").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/videos",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -460,15 +442,14 @@ class AssetUnitTest {
         _body.put("asset", _bodyContent);
         _body.put("version", 2);
         asset.clearParams();
-        Request resp = asset.updateDetails(_uid, _body).request();
+        Request resp = asset.updateDetails(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid,
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -489,15 +470,14 @@ class AssetUnitTest {
         _bodyContent.put("environments", "development");
         _body.put("asset", _bodyContent);
 
-        Request resp = asset.publish(_uid, _body).request();
+        Request resp = asset.publish(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid + "/publish",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -518,15 +498,14 @@ class AssetUnitTest {
         _bodyContent.put("environments", "development");
         _body.put("asset", _bodyContent);
 
-        Request resp = asset.unpublish(_uid, _body).request();
+        Request resp = asset.unpublish(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/" + _uid + "/unpublish",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -541,21 +520,20 @@ class AssetUnitTest {
     @Test
     void testAssetSingleFolder() {
         asset.clearParams();
-        asset.addParam("include_path", false);
-        Request resp = asset.folder().singleFolder(_uid).request();
+        Folder assetFolder =asset.folder(_uid);
+        assetFolder.addParam("include_path", false);
+        Request resp = assetFolder.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/folders/" + _uid,
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("include_path=false",
-                resp.url().query());
+        Assertions.assertEquals("include_path=false", resp.url().query());
         Assertions.assertNull(resp.body());
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/assets/folders/" + _uid + "?include_path=false",
@@ -572,12 +550,11 @@ class AssetUnitTest {
         Request resp = asset.getSingleFolderByName().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -597,16 +574,14 @@ class AssetUnitTest {
         asset.addParam("query", queryContent);
         asset.addParam("folder", _uid);
         asset.addParam("include_folders", true);
-
         Request resp = asset.getSubfolder().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(1, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -625,15 +600,14 @@ class AssetUnitTest {
         _bodyContent.put("environments", "development");
         _body.put("asset", _bodyContent);
         asset.clearParams();
-        Request resp = asset.folder().createFolder(_body).request();
+        Request resp = asset.folder().create(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/folders",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -655,15 +629,14 @@ class AssetUnitTest {
         _body.put("asset", _bodyContent);
 
         asset.clearParams();
-        Request resp = asset.folder().updateFolder(_uid, _body).request();
+        Request resp = asset.folder(_uid).update(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/folders/" + _uid,
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
@@ -677,15 +650,14 @@ class AssetUnitTest {
 
     @Test
     void testAssetDeleteFolder() {
-        Request resp = asset.folder().deleteFolder(_uid).request();
+        Request resp = asset.folder(_uid).delete().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(0, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
-        Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/assets/folders/" + _uid,
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());

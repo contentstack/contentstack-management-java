@@ -2,7 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.core.CMARuntimeException;
 import com.contentstack.cms.core.Util;
-
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -30,12 +29,25 @@ public class Extensions {
     protected final ExtensionsService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    protected String customFieldUid;
 
-    protected Extensions(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+    protected Extensions(Retrofit retrofit) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.service = retrofit.create(ExtensionsService.class);
+    }
+
+    protected Extensions(Retrofit retrofit, String fieldUid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.customFieldUid = fieldUid;
+        this.service = retrofit.create(ExtensionsService.class);
+    }
+
+
+    void validate() {
+        if (this.customFieldUid == null || this.customFieldUid.isEmpty())
+            throw new IllegalStateException("Custom Field uid can not be null or empty");
     }
 
     /**
@@ -102,19 +114,12 @@ public class Extensions {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.getAll(this.headers, this.params);
     }
 
 
     /**
-     * @param customFieldUid
-     *         Enter the UID of the custom field of which you want to retrieve the details.<br>
-     *          <dl>
-     *            <dt>include_branch</dt>
-     *            <dd>Set this to 'true' to include the '_branch' top-level key in the response.
-     *            This key states the unique ID of the branch where the concerned Contentstack module resides.</dd>
-     *         </dl>
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-custom-field">Get a
@@ -124,9 +129,10 @@ public class Extensions {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String customFieldUid) {
+    public Call<ResponseBody> fetch() {
         this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
-        return this.service.getSingle(this.headers, customFieldUid, this.params);
+        this.validate();
+        return this.service.getSingle(this.headers, this.customFieldUid, this.params);
     }
 
     /**
@@ -192,12 +198,6 @@ public class Extensions {
 
 
     /**
-     * @param customFieldUid
-     *         The UID of the custom field that you want to update {@link #addParam(String, Object)} Set this to 'true'
-     *         to include the '_branch' top-level key in the response. This key states the unique ID of the branch where
-     *         the concerned Contentstack module resides.
-     *         <br>
-     *         <b>Example:false</b>
      * @param body
      *         JSON requestBody
      * @return Call
@@ -208,7 +208,7 @@ public class Extensions {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String customFieldUid, JSONObject body) {
+    public Call<ResponseBody> update(JSONObject body) {
         if (body == null) {
             try {
                 throw new CMARuntimeException("body can not be Null");
@@ -216,15 +216,14 @@ public class Extensions {
                 throw new IllegalArgumentException(e.getLocalizedMessage());
             }
         }
-        return this.service.update(this.headers, customFieldUid, this.params, body);
+        this.validate();
+        return this.service.update(this.headers, this.customFieldUid, this.params, body);
     }
 
 
     /**
      * Delete custom field request is used to delete a specific custom field
      *
-     * @param customFieldUid
-     *         UID of the custom field that you want to update
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-custom-field">Delete a
@@ -233,7 +232,8 @@ public class Extensions {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String customFieldUid) {
-        return this.service.delete(this.headers, customFieldUid);
+    public Call<ResponseBody> delete() {
+        this.validate();
+        return this.service.delete(this.headers, this.customFieldUid);
     }
 }

@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -19,23 +20,23 @@ import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Tag("api")
-class OrgApiTests {
+public class OrgApiTests {
 
-    private Organization organization;
-    private final String organizationUid = Dotenv.load().get("organizationUid");
-
+    private String organizationUid;
+    private static Contentstack contentstack;
+    private static Organization organization;
 
     private JSONObject theJSONBody(@NotNull String _body) {
         try {
             JSONParser parser = new JSONParser();
-            JSONObject body = (JSONObject) parser.parse(_body);
+            return (JSONObject) parser.parse(_body);
         } catch (ParseException e) {
             return null;
         }
-        return null;
     }
 
     private JsonObject toJson(Response<ResponseBody> response) throws IOException {
@@ -44,32 +45,34 @@ class OrgApiTests {
     }
 
     @BeforeAll
-    public void setUp() throws IOException {
-        Contentstack contentstack = new Contentstack.Builder().build();
+    public static void setUp() throws IOException {
         String emailId = Dotenv.load().get("username");
         String password = Dotenv.load().get("password");
+        contentstack = new Contentstack.Builder().build();
         contentstack.login(emailId, password);
         organization = contentstack.organization();
     }
 
+    @Order(1)
     @Test
     void testGetAll() throws IOException {
-        Response<ResponseBody> response = organization.fetch().execute();
+        Response<ResponseBody> response = organization.find().execute();
         if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("organizations"));
-            JsonArray isJsonArray = respJson.get("organizations").getAsJsonArray();
-            Assertions.assertTrue(isJsonArray.isJsonArray());
+            JSONObject jsonOrgs = theJSONBody(response.body().string());
+            JSONArray array = (JSONArray) jsonOrgs.get("organizations");
+            organizationUid = ((JSONObject) array.get(0)).get("uid").toString();
+            organization = contentstack.organization(organizationUid);
+            Assertions.assertTrue(array.size() > 0);
         } else {
             Assertions.fail("should be passed");
         }
-
     }
 
+    @Order(2)
     @Test
     void testGetAllWithParams() throws IOException {
         organization.addParam("include_plan", true);
-        Response<ResponseBody> response = organization.fetch().execute();
+        Response<ResponseBody> response = organization.find().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organizations"));
@@ -81,11 +84,10 @@ class OrgApiTests {
         }
     }
 
+    @Order(3)
     @Test
     void testGetSingle() throws IOException {
-        String orgUid = Dotenv.load().get("organizationUid");
-        assert orgUid != null;
-        Response<ResponseBody> response = organization.single(orgUid).execute();
+        Response<ResponseBody> response = organization.fetch().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organization"));
@@ -96,12 +98,11 @@ class OrgApiTests {
         }
     }
 
+    @Order(4)
     @Test
     void testGetSingleWithInclude() throws IOException {
         organization.addParam("include_plan", true);
-        String orgUid = Dotenv.load().get("organizationUid");
-        assert orgUid != null;
-        Response<ResponseBody> response = organization.single(orgUid).execute();
+        Response<ResponseBody> response = organization.fetch().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("organization"));
@@ -112,6 +113,7 @@ class OrgApiTests {
         }
     }
 
+    @Order(5)
     @Test
     void testRole() throws IOException {
         organization.addParam("limit", 2);
@@ -120,8 +122,7 @@ class OrgApiTests {
         organization.addParam("desc", true);
         organization.addParam("include_count", true);
         organization.addParam("include_stack_roles", true);
-        String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.roles(orgUid).execute();
+        Response<ResponseBody> response = organization.roles().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("roles"));
@@ -136,6 +137,7 @@ class OrgApiTests {
         }
     }
 
+    @Order(6)
     @Test
     void testRoleWithQueryPrams() throws IOException {
         organization.addParam("limit", 2);
@@ -144,8 +146,7 @@ class OrgApiTests {
         organization.addParam("desc", true);
         organization.addParam("include_count", true);
         organization.addParam("include_stack_roles", false);
-        String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.roles(orgUid).execute();
+        Response<ResponseBody> response = organization.roles().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("roles"));
@@ -160,29 +161,31 @@ class OrgApiTests {
         }
     }
 
+    @Order(7)
     @Test
+    @Disabled
     void testInviteUser() throws IOException {
         organization.addParam("include_plan", true);
         String requestBody = "{\n" +
                 "\t\"share\": {\n" +
                 "\t\t\"users\": {\n" +
-                "\t\t\t\"abc@sample.com\": [\"{{orgAdminRoleUid}}\"],\n" +
-                "\t\t\t\"xyz@sample.com\": [\"{{orgMemberRoleUid}}\"]\n" +
+                "\t\t\t\"abc@sample.com\": [\"{{technology}}\"],\n" +
+                "\t\t\t\"xyz@sample.com\": [\"{{technology}}\"]\n" +
                 "\t\t},\n" +
                 "\t\t\"stacks\": {\n" +
                 "\t\t\t\"abc@sample.com\": {\n" +
                 "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
                 "\t\t\t},\n" +
                 "\t\t\t\"xyz@sample.com\": {\n" +
-                "\t\t\t\t\"edjnekdnekjdnkejd\": [\"kdnkwendkewdjekwnd\"],\n" +
-                "\t\t\t\t\"dkejndkenjdkejnd\": [\"edekwdnkejndkej\", \"ednekjdnekjndkejnd\"]\n" +
+                "\t\t\t\t\"technology\": [\"technology\"],\n" +
+                "\t\t\t\t\"technology\": [\"technology\", \"technology\"]\n" +
                 "\t\t\t}\n" +
                 "\t\t},\n" +
                 "\t\t\"message\": \"Invitation message\"\n" +
                 "\t}\n" +
                 "}";
         JSONObject body = theJSONBody(requestBody);
-        Response<ResponseBody> response = organization.inviteUser(organizationUid, body).execute();
+        Response<ResponseBody> response = organization.inviteUser(body).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("shares"));
@@ -197,7 +200,9 @@ class OrgApiTests {
         }
     }
 
+    @Order(8)
     @Test
+    @Disabled
     void testRemoveUser() throws IOException {
         String _body = "{\n" +
                 "\t\"share\": {\n" +
@@ -218,7 +223,7 @@ class OrgApiTests {
                 "\t}\n" +
                 "}";
         JSONObject body = theJSONBody(_body);
-        Response<ResponseBody> response = organization.removeUsers(organizationUid, body).execute();
+        Response<ResponseBody> response = organization.removeUsers(body).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("notice"));
@@ -232,12 +237,13 @@ class OrgApiTests {
         }
     }
 
+    @Order(9)
     @Test
+    @Disabled
     void testResendInvitation() throws IOException {
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
-        String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.resendInvitation(orgUid, "shareUid").execute();
+        Response<ResponseBody> response = organization.resendInvitation("shareUid").execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("notice"));
@@ -252,16 +258,17 @@ class OrgApiTests {
     }
 
 
+    @Order(10)
     @Test
+    @Disabled
     void testTransferOwnership() throws IOException {
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
-        String orgUid = Dotenv.load().get("organizationUid");
         String strBody = "{\n" +
                 "\t\"transfer_to\": \"ishaileshmishra@gmail.com\"\n" +
                 "}";
         JSONObject body = theJSONBody(strBody);
-        Response<ResponseBody> response = organization.transferOwnership(orgUid, body).execute();
+        Response<ResponseBody> response = organization.transferOwnership(body).execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("notice"));
@@ -274,10 +281,11 @@ class OrgApiTests {
         }
     }
 
+    @Order(11)
     @Test
+    @Disabled
     void testStacks() throws IOException {
-        String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.stacks(orgUid).execute();
+        Response<ResponseBody> response = organization.stacks().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("stacks"));
@@ -291,9 +299,10 @@ class OrgApiTests {
     }
 
     @Test
+    @Order(12)
+    @Disabled
     void testLogDetails() throws IOException {
-        String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.logsDetails(orgUid).execute();
+        Response<ResponseBody> response = organization.logsDetails().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("logs"));
@@ -306,10 +315,11 @@ class OrgApiTests {
         }
     }
 
+    @Order(13)
     @Test
+    @Disabled
     void testLogsItem() throws IOException {
-        String orgUid = Dotenv.load().get("organizationUid");
-        Response<ResponseBody> response = organization.logItem(orgUid, "fake@loguid").execute();
+        Response<ResponseBody> response = organization.logItem("fake@loguid").execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("stacks"));
@@ -322,12 +332,14 @@ class OrgApiTests {
         }
     }
 
+    @Order(14)
     @Test
+    @Disabled
     void testAllInvitation() throws IOException {
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
         Response<ResponseBody> response =
-                organization.allInvitations(organizationUid).execute();
+                organization.allInvitations().execute();
         if (response.isSuccessful()) {
             JsonObject respJson = toJson(response);
             Assertions.assertTrue(respJson.has("shares"));
@@ -335,20 +347,16 @@ class OrgApiTests {
             Error error = new Gson().fromJson(response.errorBody().string(),
                     Error.class);
             Assertions.assertEquals(
-                    "Couldn't find the organization. Please check input parameters.",
+                    "You're not allowed in here unless you're logged in.",
                     error.getErrorMessage());
             Assertions.assertEquals(309, error.getErrorCode());
         }
     }
 
+    @Order(15)
     @Test
     void testAllInvitationWithQuery() {
-        HashMap<String, Object> query = new HashMap<>();
-        query.put("include_plan", true);
-        // Java Code
-        Call<ResponseBody> response = organization.allInvitations(organizationUid);
-        // Android Code
-        organization.allInvitations(organizationUid).enqueue(new Callback<ResponseBody>() {
+        organization.allInvitations().enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 // This is android thing

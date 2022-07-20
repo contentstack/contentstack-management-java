@@ -28,12 +28,24 @@ public class Roles {
     protected final RolesService service;
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
+    protected String roleUid;
 
-    protected Roles(Retrofit retrofit, HashMap<String, Object> stackHeaders) {
+    protected Roles(Retrofit retrofit) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.headers.putAll(stackHeaders);
         this.service = retrofit.create(RolesService.class);
+    }
+
+    protected Roles(Retrofit retrofit, String roleUid) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.roleUid = roleUid;
+        this.service = retrofit.create(RolesService.class);
+    }
+
+    void validate() {
+        if (this.roleUid == null || this.roleUid.isEmpty())
+            throw new IllegalStateException("Role uid can not be null or empty");
     }
 
     /**
@@ -95,15 +107,13 @@ public class Roles {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
         return this.service.getRoles(this.headers, this.params);
     }
 
     /**
      * The Get a single role request returns comprehensive information on a specific role.
      *
-     * @param roleUid
-     *         The unique ID of the role of which you want to retrieve the details.
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-role">Get
      * a single Roles
@@ -112,8 +122,9 @@ public class Roles {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> single(@NotNull String roleUid) {
-        return this.service.getRole(this.headers, roleUid);
+    public Call<ResponseBody> fetch() {
+        validate();
+        return this.service.getRole(this.headers, this.roleUid);
     }
 
     /**
@@ -133,7 +144,6 @@ public class Roles {
      * @since 1.0.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
-        this.headers.put(CONTENT_TYPE, CONTENT_TYPE_VALUE);
         return this.service.createRole(this.headers, requestBody);
     }
 
@@ -145,8 +155,6 @@ public class Roles {
      * roles, rules (includes the actions that can be performed on entries, fields, and/or assets), and permissions
      * (which include the details of the content types, environments, and languages that are accessible).
      *
-     * @param roleUid
-     *         The unique ID of the role of which you want to retrieve the details
      * @param requestBody
      *         the body should be of @{@link JSONObject} type
      * @return Call
@@ -157,16 +165,14 @@ public class Roles {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(@NotNull String roleUid, @NotNull JSONObject requestBody) {
-        this.headers.put(CONTENT_TYPE, CONTENT_TYPE_VALUE);
-        return this.service.updateRole(this.headers, roleUid, requestBody);
+    public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
+        this.validate();
+        return this.service.updateRole(this.headers, this.roleUid, requestBody);
     }
 
     /**
      * The Delete role call deletes an existing role from your stack.
      *
-     * @param roleUid
-     *         The unique ID of the role of which you want to retrieve the details
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-role">Delete
      * a Role
@@ -174,8 +180,9 @@ public class Roles {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(@NotNull String roleUid) {
-        return this.service.deleteRole(this.headers, roleUid);
+    public Call<ResponseBody> delete() {
+        this.validate();
+        return this.service.deleteRole(this.headers, this.roleUid);
     }
 
 

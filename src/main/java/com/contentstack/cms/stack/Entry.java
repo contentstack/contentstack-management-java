@@ -25,21 +25,40 @@ public class Entry {
     protected final HashMap<String, Object> headers;
     protected final HashMap<String, Object> params;
     protected final EntryService service;
-    // Enter the unique ID of the content type of which you wish to retrieve the
-    // details.
-    // The uid is generated based on the title of the content type, and it is unique
-    // across a stack.
     protected final String contentTypeUid;
+    protected final String entryUid;
 
-    protected Entry(Retrofit instance, @NotNull Map<String, Object> stackHeaders, String contentTypeUid) {
+
+    protected Entry(Retrofit instance, Map<String, Object> headers, String contentTypeUid) {
         this.contentTypeUid = contentTypeUid;
+        this.entryUid = "";
         this.headers = new HashMap<>();
-        this.headers.put("Content-Type", "application/json");
-        this.headers.putAll(stackHeaders);
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = instance.create(EntryService.class);
     }
 
+
+    protected Entry(Retrofit instance, Map<String, Object> headers, String contentType, String uid) {
+        this.contentTypeUid = contentType;
+        this.entryUid = uid;
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.headers.putAll(headers);
+        this.service = instance.create(EntryService.class);
+    }
+
+    private void validateContentType() {
+        if (this.contentTypeUid == null || this.contentTypeUid.isEmpty()) {
+            throw new IllegalArgumentException("Content Type uid is required");
+        }
+    }
+
+    private void validateEntryUid() {
+        if (this.entryUid == null || this.entryUid.isEmpty()) {
+            throw new IllegalArgumentException("entry uid is required");
+        }
+    }
 
     /**
      * Sets header for the request
@@ -110,7 +129,8 @@ public class Entry {
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-entries">Get
      * All Entry</a>
      */
-    public Call<ResponseBody> fetch() {
+    public Call<ResponseBody> find() {
+        validateContentType();
         return this.service.fetch(this.headers, this.contentTypeUid, this.params);
     }
 
@@ -120,17 +140,18 @@ public class Entry {
      * <p>
      * The content of the entry is returned in JSON format. You can also specify the environment and locale of which you
      * wish to retrieve the entries.
+     * <p>
+     * Use: #addParam(String, Object)} To add Query Parameters in the request <br> - version={version_number} <br> -
+     * locale={language_code} <br> - include_workflow={boolean_value} <br> - include_publish_details={boolean_value}
      *
-     * @param entryUid
-     *         Entry uid {@link #addParam(String, Object)} The Query Parameters are <br> - version={version_number} <br>
-     *         - locale={language_code} <br> - include_workflow={boolean_value} <br> -
-     *         include_publish_details={boolean_value}
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-entry">Get A
      * Single Entry</a>
      */
-    public Call<ResponseBody> single(@NotNull String entryUid) {
-        return this.service.single(headers, this.contentTypeUid, entryUid, this.params);
+    public Call<ResponseBody> fetch() {
+        validateContentType();
+        validateEntryUid();
+        return this.service.single(headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
     /**
@@ -149,9 +170,9 @@ public class Entry {
      *
      * @param requestBody
      *         Provide the Json Body to create entry: <pre>
-     *                 { "entry": { "title": "Entry title", "url": "Entry URL", "reference_field_uid": [{ "uid": "the_uid",
-     *                 "_content_type_uid": "referred_content_type_uid" }] } }
-     *                 </pre>
+     *                                                                                                                                         { "entry": { "title": "Entry title", "url": "Entry URL", "reference_field_uid": [{ "uid": "the_uid",
+     *                                                                                                                                         "_content_type_uid": "referred_content_type_uid" }] } }
+     *                                                                                                                                         </pre>
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">Create A
      * Entry</a>
@@ -160,6 +181,7 @@ public class Entry {
      * @since 1.0.0
      */
     public Call<ResponseBody> create(JSONObject requestBody) {
+        validateContentType();
         return this.service.create(this.headers, this.contentTypeUid, requestBody, this.params);
     }
 
@@ -172,9 +194,6 @@ public class Entry {
      * workflow stage for an entry. To update the workflow stage for the entry, use the Set Entry Workflow Stage call.
      * <br>
      *
-     * @param entryUId
-     *         the unique ID of the content type of which you wish to retrieve the details. The uid is generated based
-     *         on the title of the content type and it is unique across a stack
      * @param requestBody
      *         request body for the entry update <code>{ "entry": { "title": "example", "url": "/example" } } </code>
      * @return Call
@@ -184,8 +203,10 @@ public class Entry {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> update(String entryUId, JSONObject requestBody) {
-        return this.service.update(this.headers, this.contentTypeUid, entryUId, requestBody, this.params);
+    public Call<ResponseBody> update(JSONObject requestBody) {
+        validateContentType();
+        validateEntryUid();
+        return this.service.update(this.headers, this.contentTypeUid, this.entryUid, requestBody, this.params);
     }
 
     /**
@@ -199,8 +220,6 @@ public class Entry {
      * <br>
      * <b>PUSH, PULL, UPDATE, ADD, and SUB</b>.
      *
-     * @param entryUId
-     *         The entry you want to update
      * @param requestBody
      *         request body <br>
      *         <b>PUSH operation:</b> The PUSH operation allows you to
@@ -229,8 +248,10 @@ public class Entry {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> atomicOperation(String entryUId, JSONObject requestBody) {
-        return this.service.atomicOperations(this.headers, this.contentTypeUid, entryUId, requestBody);
+    public Call<ResponseBody> atomicOperation(JSONObject requestBody) {
+        validateContentType();
+        validateEntryUid();
+        return this.service.atomicOperations(this.headers, this.contentTypeUid, this.entryUid, requestBody);
     }
 
     /**
@@ -242,18 +263,19 @@ public class Entry {
      * (recommended) or the user Authtoken, along with the stack API key, to make valid Content Management API requests.
      * For more information, refer to Authentication.
      * </p>
+     * <p>
+     * <p>
+     * The entry you want to update {@link #addParam(String, Object)} - Delete specific localized entry: <br>
+     * <p>
+     * For this request, you need to only specify the locale code of the language in the locale query parameter. If the
+     * locale parameter is not been specified, by default, the master language entry will be deleted.
+     * </p>
+     * <br>
+     * <b>Delete master language along with all its localized:
+     * </b>For this request, instead of the locale
+     * query parameter, you need to pass the delete_all_localized:true query parameter
+     * <br>
      *
-     * @param entryUId
-     *         The entry you want to update {@link #addParam(String, Object)} - Delete specific localized entry: <br>
-     *         <p>
-     *         For this request, you need to only specify the locale code of the language in the locale query parameter.
-     *         If the locale parameter is not been specified, by default, the master language entry will be deleted.
-     *         </p>
-     *         <br>
-     *         <b>Delete master language along with all its localized:
-     *         </b>For this request, instead of the locale
-     *         query parameter, you need to pass the delete_all_localized:true query parameter
-     *         <br>
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">Get
      * Delete An Entry</a>
@@ -261,8 +283,10 @@ public class Entry {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(String entryUId) {
-        return this.service.delete(this.headers, this.contentTypeUid, entryUId, new JSONObject(), this.params);
+    public Call<ResponseBody> delete() {
+        validateContentType();
+        validateEntryUid();
+        return this.service.delete(this.headers, this.contentTypeUid, this.entryUid, new JSONObject(), this.params);
     }
 
     /**
@@ -274,21 +298,22 @@ public class Entry {
      * (recommended) or the user Authtoken, along with the stack API key, to make valid Content Management API requests.
      * For more information, refer to Authentication.
      * </p>
+     * <p>
+     * <p>
+     * The entry you want to update {@link #addParam(String, Object)} - Delete specific localized entry: <br>
+     * <p>
+     * For this request, you need to only specify the locale code of the language in the locale query parameter. If the
+     * locale parameter is not been specified, by default, the master language entry will be deleted.
+     * </p>
+     * <br>
+     * <b>Delete master language along with all its localized:
+     * </b>For this request, instead of the locale
+     * query parameter, you need to pass the delete_all_localized:true query parameter
+     * <br>
+     * <b>Delete multiple localized entry:</b>Additionally,
+     * you can delete specific localized entries by passing the locale codes in the Request body using the locales key
+     * as follows:
      *
-     * @param entryUId
-     *         The entry you want to update {@link #addParam(String, Object)} - Delete specific localized entry: <br>
-     *         <p>
-     *         For this request, you need to only specify the locale code of the language in the locale query parameter.
-     *         If the locale parameter is not been specified, by default, the master language entry will be deleted.
-     *         </p>
-     *         <br>
-     *         <b>Delete master language along with all its localized:
-     *         </b>For this request, instead of the locale
-     *         query parameter, you need to pass the delete_all_localized:true query parameter
-     *         <br>
-     *         <b>Delete multiple localized entry:</b>Additionally,
-     *         you can delete specific localized entries by passing the locale codes in the Request body using the
-     *         locales key as follows:
      * @param requestBody
      *         you can delete specific localized entries by passing the locale codes in the Request body using the
      *         locales key as follows ``` { "entry": { "locales": ["hi-in", "mr-in", "es"] } } ```
@@ -299,8 +324,10 @@ public class Entry {
      * @see #addParam(String, Object) to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> delete(String entryUId, JSONObject requestBody) {
-        return this.service.delete(this.headers, this.contentTypeUid, entryUId, requestBody, this.params);
+    public Call<ResponseBody> delete(JSONObject requestBody) {
+        validateContentType();
+        validateEntryUid();
+        return this.service.delete(this.headers, this.contentTypeUid, this.entryUid, requestBody, this.params);
     }
 
     /**
@@ -308,8 +335,6 @@ public class Entry {
      * information, refer to the Name Entry Version documentation.
      * <br>
      *
-     * @param entryUId
-     *         The entry Uid
      * @param version
      *         Enter the version number of the entry to which you want to assign a name.
      * @param requestBody
@@ -322,8 +347,10 @@ public class Entry {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> versionName(String entryUId, int version, JSONObject requestBody) {
-        return this.service.versionName(this.headers, this.contentTypeUid, entryUId, String.valueOf(version),
+    public Call<ResponseBody> versionName(int version, JSONObject requestBody) {
+        validateContentType();
+        validateEntryUid();
+        return this.service.versionName(this.headers, this.contentTypeUid, this.entryUid, String.valueOf(version),
                 requestBody);
     }
 
@@ -339,15 +366,14 @@ public class Entry {
      * <b>Note:</b> If an entry is unlocalized, the version details of entries
      * published in the master locale will be returned.
      *
-     * @param entryUId::
-     *         The UID of the entry to which you want to assign a specific version name.
-     *         <p>
-     *         {@link #addParam(String, Object)} - skip(optional) Enter the number of version details to be skipped. -
-     *         limit(optional): Enter the maximum number of version details to be returned. - named(optional): Set to
-     *         ‘true’ if you want to retrieve only the named versions of your entry. - include_count(optional): Enter
-     *         'true' to get the total count of the entry version details. - locale(optional): Enter the code of the
-     *         language of which the entries need to be included. Only the version details of entries published in this
-     *         locale will be displayed
+     *
+     * <p>
+     * {@link #addParam(String, Object)} - skip(optional) Enter the number of version details to be skipped. -
+     * limit(optional): Enter the maximum number of version details to be returned. - named(optional): Set to ‘true’ if
+     * you want to retrieve only the named versions of your entry. - include_count(optional): Enter 'true' to get the
+     * total count of the entry version details. - locale(optional): Enter the code of the language of which the entries
+     * need to be included. Only the version details of entries published in this locale will be displayed
+     *
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-entry">
@@ -355,13 +381,13 @@ public class Entry {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> detailOfAllVersion(String entryUId) {
-        return this.service.detailOfAllVersion(this.headers, this.contentTypeUid, entryUId, this.params);
+    public Call<ResponseBody> detailOfAllVersion() {
+        validateContentType();
+        validateEntryUid();
+        return this.service.detailOfAllVersion(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
     /**
-     * @param entryUId
-     *         The UID of the entry of which you want to delete the version name.
      * @param versionNumber:
      *         Enter the version number of the entry that you want to delete.
      * @param requestBody
@@ -373,8 +399,10 @@ public class Entry {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> deleteVersionName(String entryUId, int versionNumber, JSONObject requestBody) {
-        return this.service.deleteVersionName(this.headers, this.contentTypeUid, entryUId, versionNumber, requestBody);
+    public Call<ResponseBody> deleteVersionName(int versionNumber, JSONObject requestBody) {
+        validateContentType();
+        validateEntryUid();
+        return this.service.deleteVersionName(this.headers, this.contentTypeUid, this.entryUid, versionNumber, requestBody);
     }
 
     /**
@@ -382,11 +410,11 @@ public class Entry {
      * entry.
      * <br>
      *
-     * @param entryUId
-     *         The entry uid
-     *         <p>
-     *         {@link #addParam(String, Object)} The Query parameter: Locale: Enter the code of the language of which
-     *         the entries need to be included. Only the entries published in this locale will be displayed
+     *
+     * <p>
+     * {@link #addParam(String, Object)} The Query parameter: Locale: Enter the code of the language of which the
+     * entries need to be included. Only the entries published in this locale will be displayed
+     *
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-references-of-an-entry"> Get
@@ -395,17 +423,18 @@ public class Entry {
      * @see #addParam(String, Object)  to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> getReference(String entryUId) {
-        return this.service.reference(this.headers, this.contentTypeUid, entryUId, this.params);
+    public Call<ResponseBody> getReference() {
+        validateContentType();
+        validateEntryUid();
+        return this.service.reference(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
     /**
      * The Get languages of an entry call returns the details of all the languages that an entry exists in
+     * <p>
+     * {@link #addParam(String, Object)} the query parameter The Query parameter: Locale: Enter the code of the language
+     * of which the entries need to be included. Only the entries published in this locale will be displayed
      *
-     * @param entryUId
-     *         the entry uid {@link #addParam(String, Object)} the query parameter The Query parameter: Locale: Enter
-     *         the code of the language of which the entries need to be included. Only the entries published in this
-     *         locale will be displayed
      * @return Call
      * @see <a
      * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-languages-of-an-entry"> Get
@@ -414,8 +443,10 @@ public class Entry {
      * @see #addParam(String, Object)  to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> getLanguage(String entryUId) {
-        return this.service.language(this.headers, this.contentTypeUid, entryUId, this.params);
+    public Call<ResponseBody> getLanguage() {
+        validateContentType();
+        validateEntryUid();
+        return this.service.language(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
     /**
@@ -428,8 +459,6 @@ public class Entry {
      * the respective locale code in the locale={locale_code} parameter.
      * </p>
      *
-     * @param entryUId
-     *         The entry uid
      * @param requestBody
      *         In the "Body" parameter, you need to provide the content of your entry based on the content type.
      * @param localeCode
@@ -441,16 +470,16 @@ public class Entry {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> localize(@NotNull String entryUId, @NotNull JSONObject requestBody,
+    public Call<ResponseBody> localize(@NotNull JSONObject requestBody,
                                        @NotNull String localeCode) {
-        return this.service.localize(this.headers, this.contentTypeUid, entryUId, localeCode, requestBody);
+        validateContentType();
+        validateEntryUid();
+        return this.service.localize(this.headers, this.contentTypeUid, this.entryUid, localeCode, requestBody);
     }
 
     /**
      * The Unlocalize an entry request is used to unlocalize an existing entry. Read more about Localization.
      *
-     * @param entryUId
-     *         The entry uid
      * @param localeCode
      *         Enter the code of the language to localize the entry of that particular language
      * @return Call
@@ -460,17 +489,16 @@ public class Entry {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> unLocalize(@NotNull String entryUId, @NotNull String localeCode) {
-        return this.service.unLocalize(this.headers, this.contentTypeUid, entryUId, localeCode);
+    public Call<ResponseBody> unLocalize(@NotNull String localeCode) {
+        validateContentType();
+        validateEntryUid();
+        return this.service.unLocalize(this.headers, this.contentTypeUid, this.entryUid, localeCode);
     }
 
     /**
      * The Export an entry call is used to export an entry. The exported entry data is saved in a downloadable JSON
      * file.
      *
-     * @param entryUId
-     *         The unique ID of the content type of which you wish to retrieve the details. The uid is generated based
-     *         on the title of the content type and it is unique across a stack.
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-an-entry">
      * Export an entry
@@ -479,8 +507,10 @@ public class Entry {
      * @see #addParam(String, Object)  to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> export(@NotNull String entryUId) {
-        return this.service.export(this.headers, this.contentTypeUid, entryUId, this.params);
+    public Call<ResponseBody> export() {
+        validateContentType();
+        validateEntryUid();
+        return this.service.export(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
     /**
@@ -507,19 +537,20 @@ public class Entry {
      * @since 1.0.0
      */
     public Call<ResponseBody> imports() {
+        validateContentType();
         return this.service.imports(this.headers, this.contentTypeUid, this.params);
     }
 
     /**
      * The Import an existing entry call will import a new version of an existing entry. You can create multiple
      * versions of an entry.
+     * <p>
+     * {@link #addParam(String, Object)} the query parameter
+     * <br>
+     * locale (optional): Enter the code of the language to localize the entry of that particular
+     * <br>
+     * overwrite (optional): Select 'true' to replace an existing entry with the imported entry file. language
      *
-     * @param entryUId
-     *         the entry uid {@link #addParam(String, Object)} the query parameter
-     *         <br>
-     *         locale (optional): Enter the code of the language to localize the entry of that particular
-     *         <br>
-     *         overwrite (optional): Select 'true' to replace an existing entry with the imported entry file. language
      * @return Call
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
      * Import an entry
@@ -528,8 +559,10 @@ public class Entry {
      * @see #addParam(String, Object)  to add query parameters
      * @since 1.0.0
      */
-    public Call<ResponseBody> importExisting(@NotNull String entryUId) {
-        return this.service.importExisting(this.headers, this.contentTypeUid, entryUId, this.params);
+    public Call<ResponseBody> importExisting() {
+        validateContentType();
+        validateEntryUid();
+        return this.service.importExisting(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
     /**
@@ -554,8 +587,6 @@ public class Entry {
      * Along with the above details, you also need to mention the master locale and the version number of your entry
      * that you want to publish.
      *
-     * @param entryUId
-     *         The entry uid
      * @param requestBody
      *         The requestBody in JSONObject
      * @return Call
@@ -565,8 +596,10 @@ public class Entry {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> publish(@NotNull String entryUId, @NotNull JSONObject requestBody) {
-        return this.service.publish(this.headers, this.contentTypeUid, entryUId, requestBody);
+    public Call<ResponseBody> publish(@NotNull JSONObject requestBody) {
+        validateContentType();
+        validateEntryUid();
+        return this.service.publish(this.headers, this.contentTypeUid, this.entryUid, requestBody);
     }
 
     /**
@@ -606,8 +639,6 @@ public class Entry {
      * In case of Scheduled Unpublished, add the scheduled_at key and provide the date/time in the ISO format as its
      * value. Example: "scheduled_at":"2016-10-07T12:34:36.000Z"
      *
-     * @param entryUid
-     *         The entry uid
      * @param requestBody
      *         The requestBody in JSONObject
      * @return Call
@@ -617,8 +648,10 @@ public class Entry {
      * @see #addHeader(String, Object) to add headers
      * @since 1.0.0
      */
-    public Call<ResponseBody> unpublish(@NotNull String entryUid, @NotNull JSONObject requestBody) {
-        return this.service.unpublish(this.headers, this.contentTypeUid, entryUid, requestBody);
+    public Call<ResponseBody> unpublish(@NotNull JSONObject requestBody) {
+        validateContentType();
+        validateEntryUid();
+        return this.service.unpublish(this.headers, this.contentTypeUid, this.entryUid, requestBody);
     }
 
 }
