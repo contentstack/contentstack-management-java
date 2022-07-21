@@ -30,19 +30,19 @@ public class Asset {
     private final Retrofit instance;
     private String assetUid;
 
-    protected Asset(Retrofit instance) {
+    protected Asset(Retrofit instance, Map<String, Object> header) {
         this.headers = new HashMap<>();
-        this.headers.put("Content-Type", "application/json");
+        this.headers.putAll(header);
         this.params = new HashMap<>();
         this.instance = instance;
         this.service = instance.create(AssetService.class);
     }
 
-    protected Asset(Retrofit instance, String uid) {
+    protected Asset(Retrofit instance, Map<String, Object> header, String uid) {
         this.instance = instance;
         this.assetUid = uid;
         this.headers = new HashMap<>();
-        this.headers.put("Content-Type", "application/json");
+        this.headers.putAll(header);
         this.params = new HashMap<>();
         this.service = instance.create(AssetService.class);
     }
@@ -99,6 +99,7 @@ public class Asset {
 
     /**
      * Gets folder instance
+     *
      * @return Folder
      */
     public Folder folder() {
@@ -107,6 +108,7 @@ public class Asset {
 
     /**
      * Gets folder instance
+     *
      * @param folderUid
      *         The UID of the folder that you want to either update or move
      * @return Folder
@@ -258,17 +260,18 @@ public class Asset {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0<br>
      */
-    public Call<ResponseBody> uploadAsset(@NotNull String filePath, @NotNull RequestBody requestBody) {
+    public Call<ResponseBody> uploadAsset(@NotNull String filePath, String description) {
+        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), description);
         MultipartBody.Part assetPath = uploadFile(filePath);
-        return this.service.uploadAsset(this.headers, assetPath, requestBody, this.params);
+        return this.service.uploadAsset(this.headers, assetPath, body, this.params);
     }
 
     private MultipartBody.Part uploadFile(@NotNull String filePath) {
         if (!filePath.isEmpty()) {
             File file = new File(filePath);
             if (file.exists()) {
-                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                return MultipartBody.Part.createFormData("asset[upload]", file.getName(), requestFile);
+                RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                return MultipartBody.Part.createFormData("asset[upload]", file.getName(), body);
             }
         }
         return null;
@@ -291,9 +294,43 @@ public class Asset {
      * @see #addParam(String, Object) to add query params
      * @since 1.0.0<br>
      */
-    public Call<ResponseBody> replace() {
+    public Call<ResponseBody> replace(@NotNull String filePath, @NotNull String description) {
         this.validate();
-        return this.service.replace(this.headers, this.assetUid, this.params);
+        MultipartBody.Part assetPath = uploadFile(filePath);
+//        if (this.headers.containsKey(Util.CONTENT_TYPE)) {
+//            this.headers.remove(Util.CONTENT_TYPE);
+//            this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
+//        }
+
+        RequestBody body = RequestBody.create(MediaType.parse(String.valueOf(MultipartBody.FORM)), description);
+        return this.service.replace(this.headers, this.assetUid, assetPath, body, this.params);
+    }
+
+    /**
+     * It helps to replace data with custom file title, file description and path
+     *
+     * @param filePath
+     *         The filePath of the payload
+     * @param fileTitle
+     *         Title of the payload
+     * @param fileDescription
+     *         Description of the payload
+     * @return RequestBody
+     */
+    private RequestBody createPayload(@NotNull String filePath, String fileTitle, String fileDescription) {
+        if (!filePath.isEmpty()) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                fileTitle = (fileTitle != null) ? fileTitle : file.getName();
+                return new MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("asset[upload]", file.getName(),
+                                RequestBody.create(MediaType.parse("application/octet-stream"), file))
+                        .addFormDataPart("asset[title]", fileTitle)
+                        .addFormDataPart("asset[description]", fileDescription).build();
+            }
+            return null;
+        }
+        return null;
     }
 
     /**
