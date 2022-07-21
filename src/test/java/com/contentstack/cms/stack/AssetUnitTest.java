@@ -158,10 +158,7 @@ class AssetUnitTest {
                 requestFile);
 
         String filePath = "src/test/resources/assets/pexels.jpg";
-        RequestBody description = RequestBody.create(MediaType.parse("multipart/form-data"),
-                "descriptionString");
-
-        Request resp = asset.uploadAsset(filePath, description).request();
+        Request resp = asset.uploadAsset(filePath, "the fake description").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(0, resp.headers().size());
@@ -187,7 +184,8 @@ class AssetUnitTest {
         asset.addParam("relative_urls", true);
         asset.addParam("include_dimension", true);
 
-        Request resp = asset.replace().request();
+        String filePath = "/Users/shaileshmishra/Downloads/calendar.png";
+        Request resp = asset.replace(filePath, "The calender has been placed to assets by ishaileshmishra").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
         Assertions.assertEquals(0, resp.headers().size());
@@ -236,7 +234,7 @@ class AssetUnitTest {
     @Test
     void testAssetDownloadPermanentUrl() {
         asset.clearParams();
-        Request resp = asset.getPermanentUrl( "www.google.com/search").request();
+        Request resp = asset.getPermanentUrl("www.google.com/search").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(1, resp.headers().size());
@@ -304,7 +302,7 @@ class AssetUnitTest {
         JSONObject versionNameBody = new JSONObject();
         versionNameBody.put("_version_name", "versionName...");
         body.put("upload", versionNameBody);
-        Request resp = asset.setVersionName( 2, body).request();
+        Request resp = asset.setVersionName(2, body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(0, resp.headers().size());
@@ -352,7 +350,7 @@ class AssetUnitTest {
 
     @Test
     void testAssetDeleteVersionName() {
-        Request resp = asset.deleteVersionName( 2).request();
+        Request resp = asset.deleteVersionName(2).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
         Assertions.assertEquals(1, resp.headers().size());
@@ -520,7 +518,7 @@ class AssetUnitTest {
     @Test
     void testAssetSingleFolder() {
         asset.clearParams();
-        Folder assetFolder =asset.folder(_uid);
+        Folder assetFolder = asset.folder(_uid);
         assetFolder.addParam("include_path", false);
         Request resp = assetFolder.fetch().request();
         Assertions.assertTrue(resp.isHttps());
