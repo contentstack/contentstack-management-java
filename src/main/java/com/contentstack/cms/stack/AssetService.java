@@ -40,10 +40,13 @@ public interface AssetService {
             @Part("asset[description]") RequestBody description,
             @QueryMap(encoded = true) Map<String, Object> query);
 
+    @Multipart
     @PUT("assets/{asset_uid}")
     Call<ResponseBody> replace(
             @HeaderMap Map<String, Object> headers,
             @Path("asset_uid") String uid,
+            @Part MultipartBody.Part file,
+            @Part("asset[description]") RequestBody description,
             @QueryMap(encoded = true) Map<String, Object> query);
 
     @PUT("assets/{asset_uid}")
@@ -65,8 +68,9 @@ public interface AssetService {
             @Path("asset_uid") String uid);
 
     @GET("assets/rt")
-    Call<ResponseBody> rteInfo(@HeaderMap Map<String, Object> headers,
-                               @QueryMap(encoded = true) Map<String, Object> query);
+    Call<ResponseBody> rteInfo(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap(encoded = true) Map<String, Object> query);
 
     @POST("assets/{asset_uid}/versions/{version_number}/name")
     Call<ResponseBody> setVersionName(

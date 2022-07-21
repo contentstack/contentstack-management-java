@@ -3,7 +3,6 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.Utils;
 import com.contentstack.cms.models.Error;
-import com.contentstack.cms.core.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -13,9 +12,7 @@ import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.logging.Logger;
-
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -43,20 +40,18 @@ class StackAPITest {
         String password = Dotenv.load().get("password");
         contentstack.login(emailId, password);
         assert apiKey != null;
-        HashMap<String, Object> headers = new HashMap<>();
-        headers.put(Util.API_KEY, apiKey);
-        stackInstance = contentstack.stack(headers);
+        stackInstance = contentstack.stack();
     }
 
     @Test
     void testStackFetchAll() {
         try {
+            stackInstance.clearParams();
             assert apiKey != null;
             Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
-                log.fine(jsonResp.get("stack").getAsJsonObject().toString());
-                Assertions.assertTrue(jsonResp.has("stack"));
+                Assertions.assertTrue(jsonResp.has("stacks"));
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -72,7 +67,7 @@ class StackAPITest {
             Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
-                Assertions.assertTrue(jsonResp.has("stack"));
+                Assertions.assertTrue(jsonResp.has("stacks"));
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -92,7 +87,7 @@ class StackAPITest {
             Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
-                Assertions.assertTrue(jsonResp.has("stack"));
+                Assertions.assertTrue(jsonResp.has("stacks"));
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -112,7 +107,7 @@ class StackAPITest {
             Response<ResponseBody> response = stackInstance.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
-                Assertions.assertTrue(jsonResp.has("stack"));
+                Assertions.assertTrue(jsonResp.has("stacks"));
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -168,7 +163,7 @@ class StackAPITest {
                 Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
                 int errCode = error.getErrorCode();
                 String errMessage = error.getErrorMessage();
-                Assertions.assertEquals(141, errCode);
+                Assertions.assertEquals(109, errCode);
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -177,10 +172,9 @@ class StackAPITest {
 
     @Test
     void testStackAcceptOwnership() throws IOException {
-        assert apiKey != null;
-        assert userId != null;
-        assert ownershipToken != null;
-        Response<ResponseBody> response = stackInstance.acceptOwnership(ownershipToken, userId).execute();
+        stackInstance.addParam("api_key", apiKey);
+        stackInstance.addParam("uid", userId);
+        Response<ResponseBody> response = stackInstance.acceptOwnership(ownershipToken).execute();
         if (response.isSuccessful()) {
             JsonObject jsonResp = toJson(response);
             Assertions.assertTrue(jsonResp.has("notice"));
@@ -206,7 +200,7 @@ class StackAPITest {
                             .request()
                             .url()
                             .query());
-            Assertions.assertEquals(6,
+            Assertions.assertEquals(5,
                     response.raw().request().headers().size());
 
         }
@@ -279,7 +273,7 @@ class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/share",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(6,
+                Assertions.assertEquals(5,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
@@ -301,7 +295,7 @@ class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/unshare",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(6,
+                Assertions.assertEquals(5,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
@@ -318,7 +312,7 @@ class StackAPITest {
         Response<ResponseBody> response = stackInstance.allUsers().execute();
         if (response.isSuccessful()) {
             JsonObject jsonResp = toJson(response);
-            Assertions.assertTrue(jsonResp.has("stack"));
+            Assertions.assertTrue(jsonResp.has("stacks"));
         } else {
             Assertions.assertTrue(true,
                     response.raw().request().url()
@@ -342,7 +336,7 @@ class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/users/roles",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(6,
+                Assertions.assertEquals(5,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
