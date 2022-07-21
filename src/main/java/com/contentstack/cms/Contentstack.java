@@ -282,7 +282,7 @@ public class Contentstack {
      * <pre>
      * Contentstack contentstack = new Contentstack.Builder().build();
      * Organization org = contentstack.organization();
-     *     </pre>
+     *  </pre>
      */
     public Organization organization(@NotNull String organizationUid) {
         if (this.authtoken == null)
@@ -309,7 +309,7 @@ public class Contentstack {
     public Stack stack() {
         if (this.authtoken == null)
             throw new IllegalStateException(ILLEGAL_USER);
-        return new Stack(this.instance, this.authtoken);
+        return new Stack(this.instance);
     }
 
 
@@ -321,10 +321,8 @@ public class Contentstack {
      * <b> Example </b>
      *
      * <pre>
-     * ```
      * Contentstack client = new Contentstack.Builder().build();
      * Stack org = client.stack();
-     * ```
      * </pre>
      *
      * @param header

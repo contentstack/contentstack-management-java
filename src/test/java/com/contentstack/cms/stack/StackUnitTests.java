@@ -546,12 +546,14 @@ class StackUnitTests {
 
     @Test
     void testAcceptOwnership() {
+        stack.clearParams();
         String userId = env.get("userId");
         String ownershipToken = env.get("ownershipToken");
         assert ownershipToken != null;
         assert userId != null;
-        stack.clearParams();
-        Request request = stack.acceptOwnership(ownershipToken, userId).request();
+        stack.addParam("uid", userId);
+        stack.addParam("api_key", apiKey);
+        Request request = stack.acceptOwnership(ownershipToken).request();
         Assertions.assertEquals("GET", request.method());
         Assertions.assertEquals(443, request.url().port());
         Assertions.assertEquals("/v3/stacks/accept_ownership/" + ownershipToken, request.url().encodedPath());
@@ -568,7 +570,7 @@ class StackUnitTests {
         String ownershipToken = env.get("ownershipToken");
         assert ownershipToken != null;
         assert userId != null;
-        Request request = stack.acceptOwnership(ownershipToken, userId).request();
+        Request request = stack.acceptOwnership(ownershipToken).request();
         Assertions.assertEquals("GET", request.method());
     }
 
@@ -578,7 +580,7 @@ class StackUnitTests {
         String ownershipToken = env.get("ownershipToken");
         assert ownershipToken != null;
         assert userId != null;
-        Request request = stack.acceptOwnership(ownershipToken, userId).request();
+        Request request = stack.acceptOwnership(ownershipToken).request();
         Assertions.assertEquals(443, request.url().port());
     }
 
@@ -588,18 +590,20 @@ class StackUnitTests {
         String ownershipToken = env.get("ownershipToken");
         assert ownershipToken != null;
         assert userId != null;
-        Request request = stack.acceptOwnership(ownershipToken, userId).request();
+        Request request = stack.acceptOwnership(ownershipToken).request();
         Assertions.assertEquals("/v3/stacks/accept_ownership/" + ownershipToken, request.url().encodedPath());
     }
 
     @Test
     void testAcceptOwnershipCompleteUrl() {
+        stack.clearParams();
         String userId = env.get("userId");
         String ownershipToken = env.get("ownershipToken");
         assert ownershipToken != null;
         assert userId != null;
-        stack.clearParams();
-        Request request = stack.acceptOwnership(ownershipToken, userId).request();
+        stack.addParam("api_key", apiKey);
+        stack.addParam("uid", userId);
+        Request request = stack.acceptOwnership(ownershipToken).request();
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks/accept_ownership/" + ownershipToken + "?uid=" + userId
                         + "&api_key=" + stack.headers.get("api_key").toString() + "",
