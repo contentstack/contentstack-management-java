@@ -256,8 +256,16 @@
                     <source>8</source>
                     <target>8</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                        <!-- We turn off:
+                            - `serial` because we don't use Java serialization
+                              (and all it does is stupidly complain about the serialVersionUID)
+                            - `processing` because it complains about every annotation
+                        -->
+                        <arg>-Xlint:all,-serial,-processing</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
