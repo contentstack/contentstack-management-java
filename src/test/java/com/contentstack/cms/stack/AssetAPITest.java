@@ -151,17 +151,17 @@ class AssetAPITest {
         asset.addHeader("api_key", API_KEY);
         asset.addHeader("authorization", MANAGEMENT_TOKEN);
         // Create Asset Instance to find all assets
-        String filePath = "/Users/shaileshmishra/Downloads/calendar.png";
+        String filePath = "/Users/shaileshmishra/Desktop/pexels.jpeg";
         String description =
                 "The calender has been placed to assets by ishaileshmishra";
         Response<ResponseBody> resp = asset.uploadAsset(filePath, description).execute();
 
         // The assertions
-        Assertions.assertEquals(5, resp.raw().request().headers().size());
+        Assertions.assertEquals(6, resp.raw().request().headers().size());
         Assertions.assertTrue(resp.raw().request().headers().names().contains("api_key"));
         Assertions.assertTrue(resp.raw().request().headers().names().contains("authtoken"));
         Assertions.assertTrue(resp.raw().request().isHttps(), "always works on https");
-        Assertions.assertEquals("GET", resp.raw().request().method(), "works with GET call");
+        Assertions.assertEquals("POST", resp.raw().request().method(), "works with GET call");
         Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");
         Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(), "host should be anything but not null");
         Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
