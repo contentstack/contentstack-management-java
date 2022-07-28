@@ -69,6 +69,11 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
+<!--        <repository>-->
+<!--            <id>github</id>-->
+<!--            <name>GitHub Contentstack Apache Maven Packages</name>-->
+<!--            <url>https://maven.pkg.github.com/contentstack/contentstack-management-java</url>-->
+<!--        </repository>-->
     </distributionManagement>
 
     <properties>
