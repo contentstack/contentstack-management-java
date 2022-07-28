@@ -68,7 +68,7 @@ public class Util {
         try {
             throw new CMARuntimeException(field + " cannot take in an empty String or null value");
         } catch (CMARuntimeException e) {
-            e.printStackTrace();
+            System.out.println("Exception: "+e.getLocalizedMessage());
         }
     }
 

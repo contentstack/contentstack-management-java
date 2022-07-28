@@ -40,7 +40,7 @@ public class EnvironmentAPITest {
                 Assertions.assertFalse(response.isSuccessful());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Exception: "+e.getLocalizedMessage());
         }
 
     }
@@ -56,7 +56,7 @@ public class EnvironmentAPITest {
                 Assertions.assertFalse(response.isSuccessful());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Exception: "+e.getLocalizedMessage());
         }
     }
 
@@ -68,12 +68,12 @@ public class EnvironmentAPITest {
         try {
             Response<ResponseBody> response = environment.create(requestBody).execute();
             if (response.isSuccessful()){
-                Assertions.assertTrue(response.isSuccessful());
+                Assertions.assertTrue(true);
             }else{
-                Assertions.assertFalse(response.isSuccessful());
+                Assertions.assertFalse(false);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Exception: "+e.getLocalizedMessage());
         }
     }
 
@@ -89,7 +89,7 @@ public class EnvironmentAPITest {
                 Assertions.assertFalse(response.isSuccessful());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Exception: "+e.getLocalizedMessage());
         }
     }
 
@@ -99,12 +99,12 @@ public class EnvironmentAPITest {
         try {
             Response<ResponseBody> response = environment.delete().execute();
             if (response.isSuccessful()){
-                Assertions.assertTrue(response.isSuccessful());
+                Assertions.assertTrue(true);
             }else{
-                Assertions.assertFalse(response.isSuccessful());
+                Assertions.assertFalse(false);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Exception: "+e.getLocalizedMessage());
         }
     }
 

@@ -10,6 +10,8 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -237,8 +239,8 @@ public class Asset {
      *
      * @param filePath
      *         the file path
-     * @param requestBody
-     *         Request body for the asset file
+     * @param description
+     *         The description of the asset file
      *         <ul>
      *         <li>asset[upload] (mandatory) Select the input type as 'File'. Then, browse and select the asset file that
      *         you want to import. Supported file types include JPG, GIF, PNG, XML, WebP, BMP, TIFF, SVG, and PSD</li>
@@ -269,8 +271,14 @@ public class Asset {
     private MultipartBody.Part uploadFile(@NotNull String filePath) {
         if (!filePath.isEmpty()) {
             File file = new File(filePath);
+            URLConnection connection = null;
+            try {
+                connection = file.toURL().openConnection();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             if (file.exists()) {
-                RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                RequestBody body = RequestBody.create(MediaType.parse(connection.getContentType()), file);
                 return MultipartBody.Part.createFormData("asset[upload]", file.getName(), body);
             }
         }
@@ -297,11 +305,6 @@ public class Asset {
     public Call<ResponseBody> replace(@NotNull String filePath, @NotNull String description) {
         this.validate();
         MultipartBody.Part assetPath = uploadFile(filePath);
-//        if (this.headers.containsKey(Util.CONTENT_TYPE)) {
-//            this.headers.remove(Util.CONTENT_TYPE);
-//            this.headers.put(Util.CONTENT_TYPE, "multipart/form-data");
-//        }
-
         RequestBody body = RequestBody.create(MediaType.parse(String.valueOf(MultipartBody.FORM)), description);
         return this.service.replace(this.headers, this.assetUid, assetPath, body, this.params);
     }
