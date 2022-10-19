@@ -10,8 +10,8 @@ import java.util.logging.Logger;
  * The Contentstack RetryCallback
  *
  * @author ishaileshmishra
- * @version 1.0.0
- * @since 2022-05-19
+ * @version v0.1.0
+ * @since 2022-10-20
  */
 public abstract class RetryCallback<T> implements Callback<T> {
 
@@ -24,7 +24,7 @@ public abstract class RetryCallback<T> implements Callback<T> {
      * Instantiates a new Callback with retry.
      *
      * @param call
-     *         the call
+     *             the call
      */
     protected RetryCallback(Call<T> call) {
         this.call = call;
