@@ -42,6 +42,7 @@ public class Organization {
      *
      * @param client
      *               The retrofit client
+     * @param uid The uid of the organisation
      */
     public Organization(Retrofit client, String uid) {
         this.headers = new HashMap<>();

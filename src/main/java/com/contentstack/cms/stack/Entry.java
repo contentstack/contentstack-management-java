@@ -300,7 +300,7 @@ public class Entry {
      * valid Content Management API requests.
      * For more information, refer to Authentication.
      * </p>
-     * <p>
+
      * <p>
      * The entry you want to update {@link #addParam(String, Object)} - Delete
      * specific localized entry: <br>
@@ -342,7 +342,6 @@ public class Entry {
      * valid Content Management API requests.
      * For more information, refer to Authentication.
      * </p>
-     * <p>
      * <p>
      * The entry you want to update {@link #addParam(String, Object)} - Delete
      * specific localized entry: <br>
@@ -426,7 +425,6 @@ public class Entry {
      *
      * <b>Note:</b> If an entry is unlocalized, the version details of entries
      * published in the master locale will be returned.
-     * <p>
      *
      * <p>
      * {@link #addParam(String, Object)} - skip(optional) Enter the number of
