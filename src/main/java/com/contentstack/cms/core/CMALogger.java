@@ -8,8 +8,8 @@ import java.util.logging.Logger;
  * The Contentstack Logger
  *
  * @author ***REMOVED***
- * @version 1.0.0
- * @since 2022-05-19
+ * @version v0.1.0
+ * @since 2022-10-20
  */
 public class CMALogger {
 

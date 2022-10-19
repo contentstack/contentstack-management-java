@@ -12,8 +12,8 @@ import java.lang.reflect.Type;
  * The Contentstack ResponseResult class that accepts different types of Models
  *
  * @author ***REMOVED***
- * @version 1.0.0
- * @since 2022-05-19
+ * @version v0.1.0
+ * @since 2022-10-20
  */
 class ResponseResult<T> {
 

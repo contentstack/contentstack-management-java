@@ -27,11 +27,11 @@ class AssetAPITest {
     static void setup() throws IOException {
         String _USERNAME = Dotenv.load().get("username");
         String _PASSWORD = Dotenv.load().get("password");
-        client = new Contentstack.Builder().build();
-        Response<LoginDetails> response = client.login(_USERNAME, _PASSWORD);
-        assert response.body() != null;
-        _uid = response.body().getUser().getUid();
-        asset = client.stack().asset();
+        client = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
+       // Response<LoginDetails> response = client.login(_USERNAME, _PASSWORD);
+        //assert response.body() != null;
+        //_uid = response.body().getUser().getUid();
+        asset = client.stack(API_KEY, MANAGEMENT_TOKEN).asset();
     }
 
     @Order(1)
@@ -148,10 +148,10 @@ class AssetAPITest {
         asset.addParam("relative_urls", true);
         asset.addParam("include_dimension", true);
         // Headers api_key(required) & authorization(required)
-        asset.addHeader("api_key", API_KEY);
-        asset.addHeader("authorization", MANAGEMENT_TOKEN);
+        //asset.addHeader("api_key", API_KEY);
+        //asset.addHeader("authorization", MANAGEMENT_TOKEN);
         // Create Asset Instance to find all assets
-        String filePath = "/Users/shaileshmishra/Desktop/pexels.jpeg";
+        String filePath = "/Users/shaileshmishra/Desktop/pexels.png";
         String description =
                 "The calender has been placed to assets by ***REMOVED***";
         Response<ResponseBody> resp = asset.uploadAsset(filePath, description).execute();
