@@ -27,8 +27,8 @@ import static com.contentstack.cms.core.Util.*;
 /**
  * <b>Contentstack Java Management SDK</b>
  * <br>
- * <b>Contentstack Java Management SDK</b> interact with the Content Management APIs and allow you to create, update,
- * delete, and fetch content from your Contentstack account. They are read-write in nature.
+ * <b>Java Management SDK</b> Interact with the Content Management APIs and allow you to create, update,
+ * delete, and fetch content from your Contentstack account. (They are read-write in nature.)
  * <br>
  * You can use them to build your own apps and manage your content from Contentstack.
  */
@@ -330,7 +330,7 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack(@NotNull Map<String, Object> header) {
-        if (this.authtoken == null && header.size() == 0)
+        if (this.authtoken == null && !header.containsKey(AUTHORIZATION) && header.get(AUTHORIZATION) == null)
             throw new IllegalStateException(PLEASE_LOGIN);
         return new Stack(this.instance, header);
     }
@@ -355,11 +355,38 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken) {
-        if (this.authtoken == null)
-            throw new IllegalStateException(PLEASE_LOGIN);
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(API_KEY, apiKey);
         headers.put(AUTHORIZATION, managementToken);
+        return new Stack(this.instance, headers);
+    }
+
+
+    /**
+     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
+     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * structures, content entries, users, etc. related to the project
+     * <p>
+     * <b> Example </b>
+     *
+     * <pre>
+     * Contentstack client = new Contentstack.Builder().build();
+     * Stack org = client.stack();
+     * </pre>
+     *
+     * @param key
+     *         You can provide apiKey of the stack or branchKey
+     * @return the stack instance
+     */
+    public Stack stack(@NotNull String key) {
+        HashMap<String, Object> headers = new HashMap<>();
+        if (key.startsWith("blt")) {
+            // In the case of API_Key provided
+            headers.put(API_KEY, key);
+        } else {
+            // In case of branch provided
+            headers.put(BRANCH, key);
+        }
         return new Stack(this.instance, headers);
     }
 
@@ -384,8 +411,6 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken, @NotNull String branch) {
-        if (this.authtoken == null)
-            throw new IllegalStateException(PLEASE_LOGIN);
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(API_KEY, apiKey);
         headers.put(AUTHORIZATION, managementToken);

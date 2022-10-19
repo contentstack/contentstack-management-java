@@ -8,14 +8,15 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 
-
 /**
- * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources, and
- * users. Organization allows easy management of projects as well as users within the Organization.
+ * Organization is the top-level entity in the hierarchy of Contentstack,
+ * consisting of stacks and stack resources, and
+ * users. Organization allows easy management of projects as well as users
+ * within the Organization.
  *
  * @author ***REMOVED***
- * @version 1.0.0
- * @since 2022-05-19
+ * @version v0.1.0
+ * @since 2022-10-20
  */
 public class Organization {
 
@@ -24,12 +25,11 @@ public class Organization {
     protected HashMap<String, Object> params;
     private String organizationUid;
 
-
     /**
      * Instantiates a new Organization.
      *
      * @param client
-     *         The retrofit client
+     *               The retrofit client
      */
     public Organization(Retrofit client) {
         this.headers = new HashMap<>();
@@ -37,12 +37,11 @@ public class Organization {
         this.service = client.create(OrganizationService.class);
     }
 
-
     /**
      * Instantiates a new Organization.
      *
      * @param client
-     *         The retrofit client
+     *               The retrofit client
      */
     public Organization(Retrofit client, String uid) {
         this.headers = new HashMap<>();
@@ -51,14 +50,13 @@ public class Organization {
         this.service = client.create(OrganizationService.class);
     }
 
-
     /**
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *              header key for the request
      * @param value
-     *         header value for the request
+     *              header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
@@ -68,9 +66,9 @@ public class Organization {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *              header key for the request
      * @param value
-     *         header value for the request
+     *              header value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -83,24 +81,24 @@ public class Organization {
         this.params.clear();
     }
 
-
     /**
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *            header key for the request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
     }
 
-
     /**
      * <b>Gets all organizations.</b><br>
-     * The <b>Get all organizations</b> call lists all organizations related to the system user in the order that they
+     * The <b>Get all organizations</b> call lists all organizations related to the
+     * system user in the order that they
      * were created
      * <br>
-     * {@link #addParam(String, Object)} queryParams the query params query parameters are below <br>
+     * {@link #addParam(String, Object)} queryParams the query params query
+     * parameters are below <br>
      * <ul>
      * <li>limit(optional) The
      * <b>limit</b> parameter will return a specific number of
@@ -137,16 +135,17 @@ public class Organization {
         return this.service.fetch(this.headers, this.params);
     }
 
-
     /**
      * Get a single organization
      * <br>
-     * The Get a single organization call gets the comprehensive details of a specific organization related to the
+     * The Get a single organization call gets the comprehensive details of a
+     * specific organization related to the
      * system user
      * <br>
      *
      * <br>
-     * {@link #addParam(String, Object)} the Query Parameters include_plan(optional) = true
+     * {@link #addParam(String, Object)} the Query Parameters include_plan(optional)
+     * = true
      *
      * @return Call
      */
@@ -154,7 +153,6 @@ public class Organization {
         validate();
         return service.getSingle(this.headers, organizationUid, this.params);
     }
-
 
     void validate() {
         if (this.organizationUid == null)
@@ -165,7 +163,8 @@ public class Organization {
      * Gets organization role.
      *
      * <br>
-     * {@link #addParam(String, Object)} the query params query parameters are below <br>
+     * {@link #addParam(String, Object)} the query params query parameters are below
+     * <br>
      * <ul>
      * <li>limit(optional) The
      * <b>limit</b> parameter will return a specific number
@@ -209,13 +208,14 @@ public class Organization {
     /**
      * Gets organization users.
      * <p>
-     * The Add users to organization call allows you to send invitations to add users to your organization. Only the
+     * The Add users to organization call allows you to send invitations to add
+     * users to your organization. Only the
      * owner or the admin of the organization can add users
      * <p>
      * When executing the API call, provide the Organization UID
      *
      * @param body
-     *         the request body JSONObject
+     *             the request body JSONObject
      * @return Call
      */
     public Call<ResponseBody> inviteUser(JSONObject body) {
@@ -228,11 +228,12 @@ public class Organization {
      * <br>
      * Note: Only the owner or the admin of the organization can remove users
      * <br>
-     * The Remove users from organization request allows you to remove existing users from your organization
+     * The Remove users from organization request allows you to remove existing
+     * users from your organization
      * <br>
      *
      * @param body
-     *         the request body JSONObject
+     *             the request body JSONObject
      * @return Call
      */
     public Call<ResponseBody> removeUsers(JSONObject body) {
@@ -243,12 +244,14 @@ public class Organization {
     /**
      * Resend pending organization invitations call.
      * <br>
-     * Resend pending organization invitation call allows you to resend Organization invitations to users who have not
-     * yet accepted the earlier invitation. Only the owner or the admin of the Organization can resend the invitation to
+     * Resend pending organization invitation call allows you to resend Organization
+     * invitations to users who have not
+     * yet accepted the earlier invitation. Only the owner or the admin of the
+     * Organization can resend the invitation to
      * add users to an Organization
      *
      * @param shareUid
-     *         the share uid
+     *                 the share uid
      * @return Call
      */
     public Call<ResponseBody> resendInvitation(String shareUid) {
@@ -256,18 +259,20 @@ public class Organization {
         return service.resendInvitation(this.headers, this.organizationUid, shareUid);
     }
 
-
     /**
      * Get all organization invitations
      * <br>
-     * The Get all organization invitations call gives you a list of all the Organization invitations. Only the owner or
-     * the admin of the Organization can resend the invitation to add users to an Organization.
+     * The Get all organization invitations call gives you a list of all the
+     * Organization invitations. Only the owner or
+     * the admin of the Organization can resend the invitation to add users to an
+     * Organization.
      * <br>
      * <p>
      * When executing the API call, provide the Organization UID
      *
      * <br>
-     * {@link #addParam(String, Object)} the query params query parameters are below <br>
+     * {@link #addParam(String, Object)} the query params query parameters are below
+     * <br>
      * <ul>
      * <li>limit(optional) The
      * 'limit' parameter will return a specific number of
@@ -326,12 +331,14 @@ public class Organization {
     }
 
     /**
-     * Transfer organizations ownership call.<br> The Transfer organization ownership call transfers the ownership of an
-     * Organization to another user. When the call is executed, an email invitation for accepting the ownership of a
+     * Transfer organizations ownership call.<br>
+     * The Transfer organization ownership call transfers the ownership of an
+     * Organization to another user. When the call is executed, an email invitation
+     * for accepting the ownership of a
      * particular Organization is sent to the specified user<br>
      *
      * @param body
-     *         The request body @codes { "transfer_to": "abc@sample.com" }
+     *             The request body @codes { "transfer_to": "abc@sample.com" }
      * @return Call
      */
     public Call<ResponseBody> transferOwnership(JSONObject body) {
@@ -342,10 +349,12 @@ public class Organization {
     /**
      * Gets all stacks in an organizations.
      * <br>
-     * The Get all stacks in an organization call fetches the list of all stacks in an Organization
+     * The Get all stacks in an organization call fetches the list of all stacks in
+     * an Organization
      *
      * <br>
-     * {@link #addParam(String, Object)} the query params query parameters are below <br>
+     * {@link #addParam(String, Object)} the query params query parameters are below
+     * <br>
      * <ul>
      * <li>limit(optional) The
      * 'limit' parameter will return a specific number of
@@ -388,11 +397,14 @@ public class Organization {
     /**
      * Gets organization logs.
      * <br>
-     * The Get organization log details request is used to retrieve the audit log details of an organization
+     * The Get organization log details request is used to retrieve the audit log
+     * details of an organization
      * <br>
      * <b>
-     * Tip: This request returns only the first 25 audit log items of the specified organization. If you get more than
-     * 25 items in your response, refer the Pagination section to retrieve all the log items in paginated form
+     * Tip: This request returns only the first 25 audit log items of the specified
+     * organization. If you get more than
+     * 25 items in your response, refer the Pagination section to retrieve all the
+     * log items in paginated form
      * </b>
      * <br>
      *
@@ -405,22 +417,24 @@ public class Organization {
     /**
      * Gets organization logs.
      * <br>
-     * The Get organization log details request is used to retrieve the audit log details of an organization
+     * The Get organization log details request is used to retrieve the audit log
+     * details of an organization
      * <br>
      * <b>
-     * Tip: This request returns only the first 25 audit log items of the specified organization. If you get more than
-     * 25 items in your response, refer the Pagination section to retrieve all the log items in paginated form
+     * Tip: This request returns only the first 25 audit log items of the specified
+     * organization. If you get more than
+     * 25 items in your response, refer the Pagination section to retrieve all the
+     * log items in paginated form
      * </b>
      * <br>
      *
      * @param logUid
-     *         the log uid
+     *               the log uid
      * @return Call
      */
     public Call<ResponseBody> logItem(String logUid) {
         validate();
         return service.getLogItems(this.headers, this.organizationUid, logUid);
     }
-
 
 }
