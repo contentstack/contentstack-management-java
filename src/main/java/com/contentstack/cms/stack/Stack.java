@@ -309,7 +309,7 @@ public class Stack {
      * <p>
      * Example:false
      * </ul>
-     *
+     * @param assetUid the assetUid
      * @return Asset
      */
     public Asset asset(String assetUid) {
@@ -335,7 +335,7 @@ public class Stack {
      * within your stack. This eliminates the need (and thereby time and efforts) to
      * create the same set of fields
      * repeatedly in multiple content types.
-     *
+     * @param globalFiledUid the globalField uid
      * @return GlobalField
      */
     public GlobalField globalField(@NotNull String globalFiledUid) {
@@ -365,7 +365,7 @@ public class Stack {
      * to a wide variety of audience by
      * serving content in their local language(s).
      * <p>
-     *
+     * @param code the locale code.
      * @return Locale
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
@@ -395,7 +395,7 @@ public class Stack {
      * the entries need to be published.
      * <p>
      * Read more about
-     *
+     * @param environment uid
      * @return Environment
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
@@ -427,7 +427,7 @@ public class Stack {
      * Labels allow you to group a collection of content within a stack. Using
      * labels you can group content types that
      * need to work together. Read more about
-     *
+     * @param labelUid The label
      * @return Label
      *         <p>
      *         You can now pass the branch header in the API request to fetch or
@@ -612,7 +612,7 @@ public class Stack {
      * content. Read more about <a
      * href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">AuditLog</a>.
-     *
+     * @param logItemUid the logItemUid
      * @return AuditLog
      */
     public AuditLog auditLog(@NotNull String logItemUid) {

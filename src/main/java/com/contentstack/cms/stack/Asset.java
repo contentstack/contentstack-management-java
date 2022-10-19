@@ -348,7 +348,8 @@ public class Asset {
      *      Asset</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @author ***REMOVED***
+     * @param filePath the filepath
+     * @param description the file description
      * @version v0.1.0
      * @since 2022-10-20
      */
