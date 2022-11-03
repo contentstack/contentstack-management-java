@@ -11,16 +11,15 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- * All accounts registered with Contentstack are known as <a
- * href="https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-users">Users</a>. A <a
- * href="https://www.contentstack.com/docs/developers/set-up-stack/about-stack">Stack</a> can have many users with
- * varying permissions and roles.
+ * All accounts registered with Contentstack are known as <a href=
+ * "https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-users">Users</a>. A <a href=
+ * "https://www.contentstack.com/docs/developers/set-up-stack/about-stack">Stack</a> can have many users with varying
+ * permissions and roles.
  *
  * @author ishaileshmishra
- * @version 1.0.0
- * @since 2022-05-19
+ * @version v0.1.0
+ * @since 2022-10-22
  */
 public class User {
 
@@ -33,11 +32,11 @@ public class User {
      *         requests are made. Create instances using {@linkplain Retrofit.Builder the builder} and pass your
      *         interface to to generate an implementation.
      *         <br>
-     *         For example<br> <pre Contentstack contentstack = new Contentstack.Builder().build();<br>
+     *         For example<br> Contentstack contentstack = new Contentstack.Builder().build();<br>
      *         contentstack.login("EMAIL_ID", "PASSWORD");
-     *         <br> Response&lt;LoginDetails&gt; user =
-     *         contentstack.user().execute();<br>
-     *         </pre>
+     *         <br>
+     *         Response&lt;LoginDetails&gt; user = contentstack.user().execute();<br>
+     *
      *         <br>
      * @author ishaileshmishra
      */
@@ -47,7 +46,9 @@ public class User {
 
     /**
      * The Log in to your account request is used to sign in to your Contentstack account and obtain the authtoken.
-     * <br><b>Note:</b> The authtoken is a mandatory parameter when executing Content Management API calls.
+     * <br>
+     * <b>Note:</b> The authtoken is a mandatory parameter when executing Content
+     * Management API calls.
      *
      * @param email
      *         email for user to login
@@ -61,7 +62,6 @@ public class User {
         JSONObject userDetail = new JSONObject(userSession);
         return this.userService.login(loginHeader(), userDetail);
     }
-
 
     private HashMap<String, String> loginHeader() {
         HashMap<String, String> loginHeader = new HashMap<>();
@@ -107,7 +107,6 @@ public class User {
         return this.userService.getUser();
     }
 
-
     /**
      * The Update User API Request updates the details of an existing user account. Only the information entered here
      * will be updated, the existing data will remain unaffected. <br> When executing the API call, under the 'Body'
@@ -128,8 +127,10 @@ public class User {
      * you will require the token received in the activation email. <br>
      *
      * @param activationToken
-     *         The  activation token received on the registered email address. You can find the activation token in the
+     *         The activation token received on the registered email address. You can find the activation token in the
      *         activation URL sent to the email address used while signing up
+     * @param body
+     *         the {@link JSONObject} body
      * @return Call
      */
     public Call<ResponseBody> activateAccount(@NotNull String activationToken, JSONObject body) {

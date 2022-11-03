@@ -6,14 +6,14 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
-
 /**
- * The ContentstackResponse is the response when we execute the API Response, ContentstackResponse contains different
+ * The ContentstackResponse is the response when we execute the API Response,
+ * ContentstackResponse contains different
  * response type
  *
  * @author ishaileshmishra
- * @version 1.0.0
- * @since 2022-05-19
+ * @version v0.1.0
+ * @since 2022-10-20
  */
 class ContentstackResponse<T> {
 

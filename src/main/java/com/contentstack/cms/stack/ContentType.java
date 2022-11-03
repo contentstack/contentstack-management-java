@@ -13,14 +13,15 @@ import java.util.Map;
  * Content type defines the structure or schema of a page or a section of your web or mobile property. To create content
  * for your application, you are required to first create a content type, and then create entries using the content
  * type.
- * <br><br>
+ * <br>
+ * <br>
  * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
  * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
  * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
  *
  * @author ishaileshmishra
- * @version 1.0.0
- * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#content-types">Content
+ * @version v0.1.0
+ * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#content-types">Content
  * Types</a>
  */
 public class ContentType {
@@ -36,6 +37,8 @@ public class ContentType {
      *
      * @param instance
      *         the {@link Retrofit} instance
+     * @param headers
+     *         the headers
      */
     protected ContentType(@NotNull Retrofit instance, Map<String, Object> headers) {
         this.instance = instance;
@@ -50,10 +53,12 @@ public class ContentType {
      *
      * @param instance
      *         the {@link Retrofit} instance
+     * @param headers
+     *         the headers
      * @param uid
      *         the contentTypeUid
      */
-    public ContentType(@NotNull Retrofit instance, Map<String,Object> headers, String uid) {
+    public ContentType(@NotNull Retrofit instance, Map<String, Object> headers, String uid) {
         this.instance = instance;
         this.headers = new HashMap<>();
         this.headers.putAll(headers);
@@ -61,7 +66,6 @@ public class ContentType {
         this.params = new HashMap<>();
         this.service = instance.create(ContentTypeService.class);
     }
-
 
     private void validate() {
         if (this.contentTypeUid == null || this.contentTypeUid.isEmpty()) {
@@ -93,7 +97,6 @@ public class ContentType {
         this.params.put(key, value);
     }
 
-
     /**
      * Sets header for the request
      *
@@ -104,14 +107,12 @@ public class ContentType {
         this.params.remove(key);
     }
 
-
     /**
      * To clear all the query parameters of request
      */
     protected void clearParams() {
         this.params.clear();
     }
-
 
     /**
      * An entry is the actual piece of content created using one of the defined
@@ -123,10 +124,11 @@ public class ContentType {
         return new Entry(this.instance, this.headers, this.contentTypeUid);
     }
 
-
     /**
      * An entry is the actual piece of content created using one of the defined
-     * @param entryUid The entry uid
+     *
+     * @param entryUid
+     *         The entry uid
      * @return Entry
      */
     public Entry entry(@NotNull String entryUid) {
@@ -145,16 +147,16 @@ public class ContentType {
      * stack API key, to make a valid Content Management API request.
      * <br>
      * <br>
-     * Read more about <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types">Content
+     * Read more about <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types">Content
      * Types</a>
      *
      * @return the call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types">
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types">
      * Get all content types</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> find() {
         return service.fetch(this.headers, this.params);
@@ -191,18 +193,17 @@ public class ContentType {
      * the latest version of the content type.
      *
      * @return Call
-     * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-content-type"> Get a
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-content-type"> Get a
      * single content type</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
         validate();
         return service.single(this.headers, this.contentTypeUid, this.params);
     }
-
 
     /**
      * <b>Create Content Type</b>
@@ -234,11 +235,11 @@ public class ContentType {
      * @param requestBody
      *         the request body
      * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-content-type">
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-content-type">
      * Create A Content Type</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> create(JSONObject requestBody) {
         return service.create(this.headers, this.params, requestBody);
@@ -258,11 +259,11 @@ public class ContentType {
      * @param requestBody
      *         the request body
      * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-content-type">
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-content-type">
      * Update Content Type</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> update(JSONObject requestBody) {
         validate();
@@ -283,18 +284,17 @@ public class ContentType {
      * @param requestBody
      *         the request body JSONBody
      * @return Call
-     * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#set-field-visibility-rule-for-content-type">
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-field-visibility-rule-for-content-type">
      * Set Field Visibility Rule for Content Type</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> fieldVisibilityRule(JSONObject requestBody) {
         validate();
         return service.visibilityRule(this.contentTypeUid, this.headers, this.params, requestBody);
     }
-
 
     /**
      * <b>Delete Content Type</b>.
@@ -307,11 +307,11 @@ public class ContentType {
      * the stack API key, to make a valid Content Management API request. Read more about Authentication.
      *
      * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-content-type">
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-content-type">
      * Delete Content Type</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
         validate();
@@ -334,11 +334,11 @@ public class ContentType {
      * @param isIncludeGlobalField
      *         Include Global Field true/false
      * @return Call
-     * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
      * Get All References Of Content Type</a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> reference(Boolean isIncludeGlobalField) {
         validate();
@@ -358,11 +358,11 @@ public class ContentType {
      * authentication.
      *
      * @return Call
-     * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
      * Get All References Of Content Type</a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> referenceIncludeGlobalField() {
         validate();
@@ -382,10 +382,10 @@ public class ContentType {
      * Read more about authentication.
      *
      * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
      * Export A Content Type</a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> export() {
         validate();
@@ -408,10 +408,10 @@ public class ContentType {
      *         The version of content type you want to retrieve. If no version is specified, you will get the latest
      *         version of the content type
      * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
      * Export A Content Type</a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> export(int version) {
         validate();
@@ -425,10 +425,10 @@ public class ContentType {
      * <br>
      *
      * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
      * Import A Content Type</a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> imports() {
         return service.imports(this.headers, this.params);
@@ -444,10 +444,10 @@ public class ContentType {
      * Read more about authentication.
      *
      * @return Call
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
      * Import A Content Type</a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> importOverwrite() {
         this.headers.put("Content-Type", "multipart/form-data");

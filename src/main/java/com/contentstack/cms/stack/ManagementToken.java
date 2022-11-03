@@ -7,15 +7,16 @@ import retrofit2.Call;
 
 import java.util.HashMap;
 
-
 /**
- * <b>Management tokens: </b> <br>To authenticate Content Management API (CMA) requests over your stack content, you
+ * <b>Management tokens: </b> <br>
+ * To authenticate Content Management API (CMA) requests over your stack
+ * content, you
  * can use Management Tokens
  * <br>
  *
  * @author ishaileshmishra
- * @version 1.0.0
- * @since 2022-05-19
+ * @version v0.1.0
+ * @since 2022-10-22
  */
 public class ManagementToken {
 
@@ -37,7 +38,6 @@ public class ManagementToken {
         this.tokenUid = tokenUid;
     }
 
-
     void validate() {
         if (this.tokenUid == null || this.tokenUid.isEmpty())
             throw new IllegalStateException("Token uid can not be null or empty");
@@ -47,9 +47,9 @@ public class ManagementToken {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *              header key for the request
      * @param value
-     *         header value for the request
+     *              header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -59,25 +59,23 @@ public class ManagementToken {
      * Sets header for the request
      *
      * @param key
-     *         query param key for the request
+     *              query param key for the request
      * @param value
-     *         query param value for the request
+     *              query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
     }
 
-
     /**
      * Set header for the request
      *
      * @param key
-     *         Removes query param using key of request
+     *            Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
     }
-
 
     /**
      * To clear all the query params
@@ -86,35 +84,38 @@ public class ManagementToken {
         this.params.clear();
     }
 
-
     /**
-     * The Get all management tokens request returns the details of all the management tokens generated in a stack and
+     * The Get all management tokens request returns the details of all the
+     * management tokens generated in a stack and
      * NOT the actual management tokens.
      *
      * @return Call
      * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens">Get
-     * all Management Tokens
-     * </a>
+     *      href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens">Get
+     *      all Management Tokens
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> find() {
         return this.service.fetchManagementToken(this.headers, this.params);
     }
 
     /**
-     * The Get a single management token request returns the details of a specific management token generated in a stack
+     * The Get a single management token request returns the details of a specific
+     * management token generated in a stack
      * and NOT the actual management token.
      *
      * @return Call
      * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-management-token">Get
-     * a single management token
-     * </a>
+     *      href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-management-token">Get
+     *      a single management token
+     *      </a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
         validate();
@@ -122,42 +123,52 @@ public class ManagementToken {
     }
 
     /**
-     * The Create management token request is used to create a management token in a stack. This token provides you with
+     * The Create management token request is used to create a management token in a
+     * stack. This token provides you with
      * read-write access to the content of your stack.
      *
      * @param requestBody
-     *         details of the management token in @{@link JSONObject} format
+     *                    details of the management token in @{@link JSONObject}
+     *                    format
      * @return Call
      * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-management-token">Create a
-     * management token
-     * </a>
+     *      href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-management-token">Create
+     *      a
+     *      management token
+     *      </a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
         return this.service.createManagementToken(this.headers, requestBody);
     }
 
     /**
-     * The Update management token request lets you update the details of a management token. You can change the name
-     * and description of the token; update the stack-level permissions assigned to the token; and change the expiry
+     * The Update management token request lets you update the details of a
+     * management token. You can change the name
+     * and description of the token; update the stack-level permissions assigned to
+     * the token; and change the expiry
      * date of the token (if set).
      * <p>
-     * In the Request Body, you need to pass the updated details of the management token in JSON format.
+     * In the Request Body, you need to pass the updated details of the management
+     * token in JSON format.
      * <p>
-     * To specify the updated branch and alias scope for your management token, use the following schema in the request
+     * To specify the updated branch and alias scope for your management token, use
+     * the following schema in the request
      * body:
      *
      * @param requestBody
-     *         details of the management token in @{@link JSONObject} format
+     *                    details of the management token in @{@link JSONObject}
+     *                    format
      * @return Call
      * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-management-token">Update
-     * management token
-     * </a>
+     *      href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-management-token">Update
+     *      management token
+     *      </a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
         validate();
@@ -169,11 +180,12 @@ public class ManagementToken {
      *
      * @return Call
      * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-management-token">Delete
-     * management token
-     * </a>
+     *      href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-management-token">Delete
+     *      management token
+     *      </a>
      * @see #addHeader(String, Object) to add headers
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
         validate();
