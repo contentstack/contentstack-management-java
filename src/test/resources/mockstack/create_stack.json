@@ -1,7 +1,7 @@
 {
   "stack": {
-    "name": "My New Stack",
-    "description": "My new test stack",
+    "name": "Content Management Stack",
+    "description": "The New way to sun testcases",
     "master_locale": "en-us"
   }
 }

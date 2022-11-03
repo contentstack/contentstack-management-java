@@ -75,8 +75,6 @@ Stack stack = contentstack.stack("API_KEY", "MANAGEMENT_TOKEN");
 To use the Java CMA SDK, you need to first initialize it. To do this, use the following code:
 
 ```java
-package com.contentstack.cms;
-
 Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
 ```
 
@@ -94,18 +92,12 @@ Response<ResponseBody> response = stack.fetch().execute();
 To create an entry in a specific content type of a stack, use the following lines of code:
 
 ```java
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
 Stack stack = contentstack.stack("API_KEY");
-// Create JSONObject to upload
-JSONObject jsonBody = new JSONObject()
-jsonBody.put("key", "value");
-
-// Add Query parameters to the entry
-entry.addParam("locale", "en-us");
-Response<ResponseBody> response = entry.create(jsonBody).execute();
+JSONObject body = ....
+Response<ResponseBody> response = entry.create(body).execute();
 if (response.isSuccessful()){
     System.out.println(response.body());
-}else {
-    System.out.println(response.errorBody());
 }
 ```
 
@@ -114,11 +106,9 @@ if (response.isSuccessful()){
 The following lines of code can be used to upload assets to your stack:
 
 ```java
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
 Stack stack = contentstack.stack("API_KEY");
 Asset asset = stack.asset();
-
-// Add Query parameters to the entry
-asset.addParam("title'","headeline")
 Response<ResponseBody> response = asset.uploadAsset("filePath", "description").execute();
 if (response.isSuccessful()){
     System.out.println(response.body());
