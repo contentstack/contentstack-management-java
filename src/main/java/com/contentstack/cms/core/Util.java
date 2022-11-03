@@ -6,13 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-
 /**
  * The utility class that contains utility common functions
  *
  * @author ***REMOVED***
- * @version 1.0.0
- * @since 2022-05-19
+ * @version v0.1.0
+ * @since 2022-10-20
  */
 public class Util {
 
@@ -24,13 +23,12 @@ public class Util {
     public static final String VERSION = "v3";
     public static final int TIMEOUT = 30;
     public static final String SDK_NAME = "contentstack-management-java";
-    public static final String SDK_VERSION = "1.0.0";
+    public static final String SDK_VERSION = "0.1.0";
     public static final String ILLEGAL_USER = "Please Login to access stack instance";
     public static final String USER_ALREADY_LOGGED_IN = "User is already loggedIn, "
             + "Please logout then try to login again";
     public static final String LOGIN_FLAG = "Please login to access user instance";
     public static final String PLEASE_LOGIN = "Please Login to access stack instance";
-
 
     // KEYS
     public static final String API_KEY = "api_key";
@@ -42,7 +40,6 @@ public class Util {
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String MULTIPART = "multipart/form-data";
     public static final String CONTENT_TYPE_VALUE = "application/json";
-
 
     Util() throws IllegalAccessException {
         throw new IllegalAccessException("private=modifier");
@@ -68,7 +65,7 @@ public class Util {
         try {
             throw new CMARuntimeException(field + " cannot take in an empty String or null value");
         } catch (CMARuntimeException e) {
-            e.printStackTrace();
+            System.out.println("Exception: " + e.getLocalizedMessage());
         }
     }
 
