@@ -204,7 +204,7 @@ public class Contentstack {
 
     /**
      * The Log out of your account call is used to sign out the user of Contentstack account
-     *
+     * <p>
      * <b> Example </b>
      *
      * <pre>
@@ -224,7 +224,7 @@ public class Contentstack {
 
     /**
      * The Log out of your account using authtoken is used to sign out the user of Contentstack account
-     *
+     * <p>
      * <b> Example </b>
      *
      * <pre>
@@ -251,7 +251,7 @@ public class Contentstack {
     /**
      * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources,
      * and users. Organization allows easy management of projects as well as users within the Organization.
-     *
+     * <p>
      * <b> Example </b>
      *
      * <pre>
@@ -271,7 +271,7 @@ public class Contentstack {
     /**
      * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources,
      * and users. Organization allows easy management of projects as well as users within the Organization.
-     *
+     * <p>
      * <b> Example </b>
      *
      * @param organizationUid
