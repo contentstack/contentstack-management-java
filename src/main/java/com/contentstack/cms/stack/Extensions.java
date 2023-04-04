@@ -13,16 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Extensions let you create custom fields and custom widgets that lets you
- * customize Contentstack default UI and
+ * Extensions let you create custom fields and custom widgets that lets you customize Contentstack default UI and
  * behavior. Read more about Extensions.
  * <p>
- * You can now pass the branch header in the API request to fetch or manage
- * modules located within specific branches of
- * the stack. Additionally, you can also set the include_branch query parameter
- * to true to include the _branch top-level
- * key in the response. This key specifies the unique ID of the branch where the
- * concerned Contentstack module resides.
+ * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
+ * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
+ * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
  *
  * @author ishaileshmishra
  * @version v0.1.0
@@ -57,9 +53,9 @@ public class Extensions {
      * Sets header for the request
      *
      * @param key
-     *              header key for the request
+     *         header key for the request
      * @param value
-     *              header value for the request
+     *         header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -69,9 +65,9 @@ public class Extensions {
      * Sets header for the request
      *
      * @param key
-     *              query param key for the request
+     *         query param key for the request
      * @param value
-     *              query param value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -81,7 +77,7 @@ public class Extensions {
      * Set header for the request
      *
      * @param key
-     *            Removes query param using key of request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -95,8 +91,7 @@ public class Extensions {
     }
 
     /**
-     * The Get all custom fields request is used to get the information of all
-     * custom fields created in a stack.
+     * The Get all custom fields request is used to get the information of all custom fields created in a stack.
      *
      * <dl>
      * <dt>query</dt>
@@ -108,12 +103,10 @@ public class Extensions {
      * </dl>
      *
      * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-custom-fields">Get
-     *      all
-     *      Custom Field
-     *      </a>
+     * @see <a href= href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-custom-fields">Get all Custom
+     * Field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -124,12 +117,10 @@ public class Extensions {
 
     /**
      * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-custom-field">Get
-     *      a
-     *      Single Custom Field
-     *      </a>
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-custom-field">Get a
+     * Single Custom Field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -141,41 +132,28 @@ public class Extensions {
     }
 
     /**
-     * The Upload a custom field request is used to upload a custom field to
-     * Contentstack.
+     * The Upload a custom field request is used to upload a custom field to Contentstack.
      * <p>
-     * - extension[upload]: Select the HTML file of the custom field that you want
-     * to upload<br>
-     * - extension[title]:
-     * Enter the title of the custom field that you want to upload<br>
-     * - extension[data_type]: Enter the data type for
-     * the input field of the custom field<br>
-     * - extension[tags]: Enter the tags that you want to assign to the custom
-     * field<br>
-     * - extension[multiple]: Enter ‘true’ if you want your custom field to store
-     * multiple values<br>
-     * -
-     * extension[type]: Enter type as ‘field’, since this is a custom field
-     * extension.<br>
+     * - extension[upload]: Select the HTML file of the custom field that you want to upload<br> - extension[title]:
+     * Enter the title of the custom field that you want to upload<br> - extension[data_type]: Enter the data type for
+     * the input field of the custom field<br> - extension[tags]: Enter the tags that you want to assign to the custom
+     * field<br> - extension[multiple]: Enter ‘true’ if you want your custom field to store multiple values<br> -
+     * extension[type]: Enter type as ‘field’, since this is a custom field extension.<br>
      * <br>
      * <br>
      * <p>
-     * {@link #addParam(String, Object)} Set this to 'true' to include the '_branch'
-     * top-level key in the response. This
-     * key states the unique ID of the branch where the concerned Contentstack
-     * module resides.
+     * {@link #addParam(String, Object)} Set this to 'true' to include the '_branch' top-level key in the response. This
+     * key states the unique ID of the branch where the concerned Contentstack module resides.
      * <p>
      * <b>Example:false</b>
      *
      * @param body
-     *             the request body
+     *         the request body
      * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
-     *      a
-     *      custom field
-     *      </a>
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload a custom
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -186,39 +164,26 @@ public class Extensions {
     }
 
     /**
-     * The Upload a custom field request is used to upload a custom field to
-     * Contentstack.
+     * The Upload a custom field request is used to upload a custom field to Contentstack.
      * <p>
-     * - extension[upload]: Select the HTML file of the custom field that you want
-     * to upload<br>
-     * - extension[title]:
-     * Enter the title of the custom field that you want to upload<br>
-     * - extension[data_type]: Enter the data type for
-     * the input field of the custom field<br>
-     * - extension[tags]: Enter the tags that you want to assign to the custom
-     * field<br>
-     * - extension[multiple]: Enter ‘true’ if you want your custom field to store
-     * multiple values<br>
-     * -
-     * extension[type]: Enter type as ‘field’, since this is a custom field
-     * extension.<br>
+     * - extension[upload]: Select the HTML file of the custom field that you want to upload<br> - extension[title]:
+     * Enter the title of the custom field that you want to upload<br> - extension[data_type]: Enter the data type for
+     * the input field of the custom field<br> - extension[tags]: Enter the tags that you want to assign to the custom
+     * field<br> - extension[multiple]: Enter ‘true’ if you want your custom field to store multiple values<br> -
+     * extension[type]: Enter type as ‘field’, since this is a custom field extension.<br>
      * <p>
-     * {@link #addParam(String, Object)} Set this to 'true' to include the '_branch'
-     * top-level key in the response. This
-     * key states the unique ID of the branch where the concerned Contentstack
-     * module resides.
+     * {@link #addParam(String, Object)} Set this to 'true' to include the '_branch' top-level key in the response. This
+     * key states the unique ID of the branch where the concerned Contentstack module resides.
      * <p>
      * <b>Example:false</b>
      *
      * @param body
-     *             the request body
+     *         the request body
      * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
-     *      a
-     *      custom field
-     *      </a>
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload a custom
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -230,14 +195,12 @@ public class Extensions {
 
     /**
      * @param body
-     *             JSON requestBody
+     *         JSON requestBody
      * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-custom-field">Update
-     *      a
-     *      custom field
-     *      </a>
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-custom-field">Update a custom
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -257,12 +220,10 @@ public class Extensions {
      * Delete custom field request is used to delete a specific custom field
      *
      * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-custom-field">Delete
-     *      a
-     *      custom field
-     *      </a>
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-custom-field">Delete a custom
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
