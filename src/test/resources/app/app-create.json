@@ -21,6 +21,16 @@
           ]
         },
         {
+          "type": "cs.cm.stack.config.fake",
+          "meta": [
+            {
+              "signed": true,
+              "path": "/config_i",
+              "name": "Fake Configuration_2"
+            }
+          ]
+        },
+        {
           "type": "cs.cm.stack.custom_field",
           "meta": [
             {
