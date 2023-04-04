@@ -23,6 +23,10 @@ public class App {
     protected HashMap<String, Object> params;
     private String appUid;
     private Retrofit client;
+    /**
+     * Error message for internal uses
+     */
+    private final String ErrorMessage = "App/Manifest uid is required";
 
     /**
      * Instantiates a new Organization.
@@ -34,7 +38,7 @@ public class App {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
         if (organizationUid.isEmpty()) {
-            throw new IllegalArgumentException("Organization UID could not be empty");
+            throw new IllegalArgumentException("Organization uid could not be empty");
         }
         this.headers.put("organization_uid", organizationUid);
         this.client = client;
@@ -54,7 +58,7 @@ public class App {
     public App(Retrofit client, @NotNull String organizationUid, @NotNull String uid) {
         this.headers = new HashMap<>();
         if (organizationUid.isEmpty()) {
-            throw new IllegalArgumentException("Organization UID could not be empty for app/manifest operations");
+            throw new IllegalArgumentException("Organization uid could not be empty");
         }
         this.headers.put("organization_uid", organizationUid);
         this.appUid = uid;
@@ -65,7 +69,7 @@ public class App {
 
     public Installation installation() {
         if (this.appUid == null || this.appUid.isEmpty()) {
-            throw new BadArgumentException("app uid/Manifest uid is required");
+            throw new BadArgumentException(ErrorMessage);
         }
         return new Installation(this.client, this.headers.get("organization_uid"), this.appUid);
     }
@@ -150,7 +154,7 @@ public class App {
 
     private void validate() {
         if (!this.headers.containsKey("organization_uid"))
-            throw new IllegalStateException("organization uid can not be null or empty");
+            throw new IllegalStateException("Organization uid can not be null or empty");
     }
 
     /**
@@ -212,7 +216,7 @@ public class App {
         validate();
         isValidJSON(body);
         if (this.appUid == null || this.appUid.isEmpty()) {
-            throw new BadArgumentException("appUid/ManifestUid is required");
+            throw new BadArgumentException(ErrorMessage);
         }
         return service.updateById(this.headers, this.appUid, body);
     }
@@ -233,7 +237,7 @@ public class App {
     public Call<ResponseBody> delete() {
         validate();
         if (this.appUid == null || this.appUid.isEmpty()) {
-            throw new BadArgumentException("appUid/ManifestUid is required");
+            throw new BadArgumentException(ErrorMessage);
         }
         return service.delete(this.headers, this.appUid);
     }
@@ -306,7 +310,7 @@ public class App {
     public Call<ResponseBody> updateOauth(JSONObject body) {
         validate();
         if (this.appUid == null || this.appUid.isEmpty()) {
-            throw new BadArgumentException("app uid / manifest uid required");
+            throw new BadArgumentException(ErrorMessage);
         }
         return service.updateAuthConfiguration(this.headers, this.appUid, body);
     }
