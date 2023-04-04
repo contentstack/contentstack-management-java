@@ -9,14 +9,14 @@ import java.util.Map;
 
 public interface AppService {
 
-    @POST("manifest")
+    @POST("manifests")
     Call<ResponseBody> create(
             @HeaderMap Map<String, String> headers,
             @QueryMap Map<String, Object> query,
             @Body JSONObject body
     );
 
-    @GET("manifest/{uid}")
+    @GET("manifests/{uid}")
     Call<ResponseBody> fetch(
             @HeaderMap Map<String, String> headers,
             @Path("uid") String uid,
