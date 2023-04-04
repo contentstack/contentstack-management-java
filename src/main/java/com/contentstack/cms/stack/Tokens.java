@@ -21,16 +21,13 @@ public class Tokens {
     }
 
     /**
-     * You can use Delivery Tokens to authenticate Content Delivery API (CDA)
-     * requests and retrieve the published
+     * You can use Delivery Tokens to authenticate Content Delivery API (CDA) requests and retrieve the published
      * content of an environment.
      *
      * @return DeliveryToken
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/create-tokens/about-delivery-tokens">About
-     *      Delivery
-     *      Tokens
-     *      </a>
+     * @see <a href= "https://www.contentstack.com/docs/developers/create-tokens/about-delivery-tokens">About Delivery
+     * Tokens
+     * </a>
      * @since 0.1.0
      */
     public DeliveryToken deliveryTokens() {
@@ -38,19 +35,15 @@ public class Tokens {
     }
 
     /**
-     * You can use Delivery Tokens to authenticate Content Delivery API (CDA)
-     * requests and retrieve the published
+     * You can use Delivery Tokens to authenticate Content Delivery API (CDA) requests and retrieve the published
      * content of an environment.
      *
      * @param tokenUid
-     *                 The UID of the token that you want to retrieve a delivery
-     *                 token
+     *         The UID of the token that you want to retrieve a delivery token
      * @return DeliveryToken
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/create-tokens/about-delivery-tokens">About
-     *      Delivery
-     *      Tokens
-     *      </a>
+     * @see <a href= "https://www.contentstack.com/docs/developers/create-tokens/about-delivery-tokens">About Delivery
+     * Tokens
+     * </a>
      * @since 0.1.0
      */
     public DeliveryToken deliveryTokens(@NotNull String tokenUid) {
@@ -58,14 +51,12 @@ public class Tokens {
     }
 
     /**
-     * To authenticate Content Management API (CMA) requests over your stack
-     * content, you can use Management Tokens
+     * To authenticate Content Management API (CMA) requests over your stack content, you can use Management Tokens
      *
      * @return ManagementToken
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens">About
-     *      Management Tokens
-     *      </a>
+     * @see <a href= "https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens">About
+     * Management Tokens
+     * </a>
      * @since 0.1.0
      */
     public ManagementToken managementToken() {
@@ -73,14 +64,14 @@ public class Tokens {
     }
 
     /**
-     * To authenticate Content Management API (CMA) requests over your stack
-     * content, you can use Management Tokens
-     * @param managementTokenUid the managementTokenUid
+     * To authenticate Content Management API (CMA) requests over your stack content, you can use Management Tokens
+     *
+     * @param managementTokenUid
+     *         the managementTokenUid
      * @return ManagementToken
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens">About
-     *      Management Tokens
-     *      </a>
+     * @see <a href= "https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens">About
+     * Management Tokens
+     * </a>
      * @since 0.1.0
      */
     public ManagementToken managementToken(@NotNull String managementTokenUid) {

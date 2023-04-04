@@ -1,0 +1,86 @@
+{
+  "data": {
+    "framework_version": "1.0",
+    "version": 1,
+    "icon": "data:image.png",
+    "description": "Description of the app",
+    "target_type": "stack",
+    "name": "Name of the app",
+    "ui_location": {
+      "signed": true,
+      "base_url": "https://659c-122-170-41-207.ngrok.io",
+      "locations": [
+        {
+          "type": "cs.cm.stack.config",
+          "meta": [
+            {
+              "signed": true,
+              "path": "/config",
+              "name": "Fake Configuration"
+            }
+          ]
+        },
+        {
+          "type": "cs.cm.stack.custom_field",
+          "meta": [
+            {
+              "signed": true,
+              "path": "/custom-field",
+              "name": "Field",
+              "data_type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    "webhook": {
+      "signed": true,
+      "name": "Algolia",
+      "enabled": true,
+      "target_url": "https://webhook.site/5eb294c0-9eda-495a-9e4f-7feb73892bce",
+      "channels": [
+        "content_types.entries.environments.publish.success",
+        "assets.environments.publish.success",
+        "content_types.entries.environments.unpublish.success",
+        "assets.environments.unpublish.success",
+        "content_types.entries.delete",
+        "content_types.delete",
+        "assets.delete"
+      ],
+      "retry_policy": "manual"
+    },
+    "visibility": "private",
+    "created_by": {
+      "uid": "testuid_0",
+      "first_name": "deena",
+      "last_name": "dudekula"
+    },
+    "updated_by": {
+      "uid": "testuid",
+      "first_name": "deena",
+      "last_name": "dudekula"
+    },
+    "organization_uid": "23b123c",
+    "created_at": "2021-10-25T06:48:42.772Z",
+    "updated_at": "2021-10-25T06:48:42.772Z",
+    "uid": "testuid_1",
+    "oauth": {
+      "redirect_uri": "http://localhost:5000/callback",
+      "app_token_config": {
+        "enabled": true,
+        "scopes": [
+          "user:read",
+          "user:write",
+          "user.profile:read"
+        ]
+      },
+      "user_token_config": {
+        "allow_pkce": false,
+        "enabled": true,
+        "scopes": [
+          "user.profile:read"
+        ]
+      }
+    }
+  }
+}

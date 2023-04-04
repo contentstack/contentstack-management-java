@@ -1,9 +1,11 @@
 package com.contentstack.cms.stack;
 
 import okhttp3.ResponseBody;
-import org.json.simple.JSONObject;
 import retrofit2.Call;
-import retrofit2.http.*;
+import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
+import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
 
 import java.util.HashMap;
 import java.util.Map;
