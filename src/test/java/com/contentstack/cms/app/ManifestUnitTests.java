@@ -152,7 +152,7 @@ class ManifestUnitTests {
 
     @Test
     void testGetHosting() {
-        Request request = app.hetHosting(organizationUid).request();
+        Request request = app.getHosting(organizationUid).request();
         Assertions.assertEquals("/v3/manifests/"+organizationUid+"/hosting",
                 request.url().encodedPath());
         Assertions.assertEquals("GET",
