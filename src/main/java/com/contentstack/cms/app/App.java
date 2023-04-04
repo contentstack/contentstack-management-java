@@ -319,9 +319,10 @@ public class App {
      *         The ID of the app for which OAuth details are required.
      * @return Call
      */
-    public Call<ResponseBody> hetHosting(@NotNull String uid) {
+    public Call<ResponseBody> getHosting(@NotNull String uid) {
         validate();
-        return service.getHosting(this.headers, appUid);
+        this.appUid = uid;
+        return service.getHosting(this.headers, this.appUid);
     }
 
 }
