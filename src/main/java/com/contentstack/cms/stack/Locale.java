@@ -12,19 +12,15 @@ import java.util.Map;
 /**
  * <b>Languages</b>
  * <br>
- * Contentstack has a sophisticated multilingual capability. It allows you to
- * create and publish entries in any
- * language. This feature allows you to set up multilingual websites and cater
- * to a wide variety of audience by serving
+ * Contentstack has a sophisticated multilingual capability. It allows you to create and publish entries in any
+ * language. This feature allows you to set up multilingual websites and cater to a wide variety of audience by serving
  * content in their local language(s).
  *
  * @author ***REMOVED***
  * @version v0.1.0
- * @see <a href=
- *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#languages">
- *      Read more about
- *      Languages
- *      </a>
+ * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#languages"> Read more about
+ * Languages
+ * </a>
  * @since 2022-10-22
  */
 public class Locale {
@@ -38,7 +34,7 @@ public class Locale {
      * Instantiates a new Language
      *
      * @param client
-     *               the retrofit client
+     *         the retrofit client
      */
     public Locale(Retrofit client) {
         this.headers = new HashMap<>();
@@ -62,9 +58,9 @@ public class Locale {
      * Sets header for the request
      *
      * @param key
-     *              header key for the request
+     *         header key for the request
      * @param value
-     *              header value for the request
+     *         header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -74,9 +70,9 @@ public class Locale {
      * Sets header for the request
      *
      * @param key
-     *              query param key for the request
+     *         query param key for the request
      * @param value
-     *              query param value for the request
+     *         query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -86,7 +82,7 @@ public class Locale {
      * Set header for the request
      *
      * @param key
-     *            Removes query param using key of request
+     *         Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -102,25 +98,20 @@ public class Locale {
     /**
      * <b>Get all languages</b>
      * <br>
-     * This call fetches the list of all languages (along with the language codes)
-     * available for a stack.
+     * This call fetches the list of all languages (along with the language codes) available for a stack.
      * <p>
-     * When executing the API call, under the <b>Header</b> section, you need to
-     * enter the authtoken that you receive
+     * When executing the API call, under the <b>Header</b> section, you need to enter the authtoken that you receive
      * after logging into your account.
      * <p>
-     * You can add queries to extend the functionality of this API call. Under the
-     * URI Parameters section, insert a
+     * You can add queries to extend the functionality of this API call. Under the URI Parameters section, insert a
      * parameter named query and provide a query in JSON format as the value.
      * <p>
-     * To learn more about the queries, refer to the <b>Queries</b> section of the
-     * Content Delivery API doc.
+     * To learn more about the queries, refer to the <b>Queries</b> section of the Content Delivery API doc.
      *
      * @return Call
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
-     *      all languages
-     *      </a>
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -130,18 +121,15 @@ public class Locale {
     }
 
     /**
-     * The Get a language call returns information about a specific language
-     * available on the stack.
+     * The Get a language call returns information about a specific language available on the stack.
      * <p>
-     * When executing the API call, under the 'Header' section, you need to enter
-     * the authtoken that you receive after
+     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
      * logging into your account.
      *
      * @return Call
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
-     *      all languages
-     *      </a>
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -154,25 +142,21 @@ public class Locale {
     /**
      * <b>Add a language</b>
      * <br>
-     * This call lets you add a new language to your stack. You can either add a
-     * supported language or a custom language
+     * This call lets you add a new language to your stack. You can either add a supported language or a custom language
      * of your choice.
      * <p>
-     * When executing the API call, under the <b>Header</b> section, you need to
-     * enter the API key of your stack and the
+     * When executing the API call, under the <b>Header</b> section, you need to enter the API key of your stack and the
      * authtoken that you receive after logging into your account.
      * <p>
-     * In the 'Body' section, enter the language name and code in JSON format. You
-     * can also specify the fallback
+     * In the 'Body' section, enter the language name and code in JSON format. You can also specify the fallback
      * language you want to assign to the new language within the same JSON.
      *
      * @param body
-     *             the request body
+     *         the request body
      * @return Call
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
-     *      all languages
-     *      </a>
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -182,25 +166,21 @@ public class Locale {
     }
 
     /**
-     * The Update language call will let you update the details (such as display
-     * name) and the fallback language of an
+     * The Update language call will let you update the details (such as display name) and the fallback language of an
      * existing language of your stack.
      * <p>
-     * When executing the API call, under the 'Header' section, you need to enter
-     * the authtoken that you receive after
+     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
      * logging into your account.
      * <p>
-     * In the 'Body' section, enter the updated details of your language name and
-     * fallback language in JSON format.
+     * In the 'Body' section, enter the updated details of your language name and fallback language in JSON format.
      *
      * @param body
-     *             the request body
+     *         the request body
      * @return Call
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-language">Update
-     *      language
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-language">Update
+     * language
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -213,18 +193,16 @@ public class Locale {
     /**
      * Delete language call deletes an existing language from your stack.
      * <p>
-     * When executing the API call, under the 'Header' section, you need to enter
-     * the API key of your stack and the
+     * When executing the API call, under the 'Header' section, you need to enter the API key of your stack and the
      * authtoken that you receive after logging into your account.
      * <p>
      * Fallback Languages
      *
      * @return Call
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-language">Delete
-     *      language
+     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-language">Delete
+     * language
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -235,27 +213,23 @@ public class Locale {
     }
 
     /**
-     * The <b>Set a fallback language</b> request allows you to assign a fallback
-     * language for an entry in a particular
+     * The <b>Set a fallback language</b> request allows you to assign a fallback language for an entry in a particular
      * language.
      * <p>
-     * When executing the API call, under the <b>Header</b> section, you need to
-     * enter the API key of your stack and the
+     * When executing the API call, under the <b>Header</b> section, you need to enter the API key of your stack and the
      * authtoken that you receive after logging in to your account.
      * <p>
      * In the <b>Body</b> section, enter the language codes in JSON format
      *
      * @param body
-     *             the request body
+     *         the request body
      * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-a-fallback-language">Set
-     *      a
-     *      fallback language
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-a-fallback-language">Set a
+     * fallback language
      *
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -265,24 +239,20 @@ public class Locale {
     }
 
     /**
-     * The <b>Update fallback language</b> request allows you to update the fallback
-     * language for an existing language
+     * The <b>Update fallback language</b> request allows you to update the fallback language for an existing language
      * of your stack.
      * <p>
-     * When executing the API call, under the <b>Header</b> section, you need to
-     * enter the API key of your stack and the
+     * When executing the API call, under the <b>Header</b> section, you need to enter the API key of your stack and the
      * authtoken that you receive after logging in to your account.
      * <p>
-     * In the <b>Body</b> section, enter the updated details of the fallback
-     * language in JSON format
+     * In the <b>Body</b> section, enter the updated details of the fallback language in JSON format
      *
      * @param body
-     *             the request body
+     *         the request body
      * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-fallback-language">Update
-     *      fallback language</a>
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-fallback-language">Update
+     * fallback language</a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
