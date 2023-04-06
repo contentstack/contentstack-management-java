@@ -41,7 +41,7 @@ class ManifestUnitTests {
     void testFetch() {
         assert organizationUid != null;
         Request request = app.fetch(organizationUid).request();
-        Assertions.assertEquals("/v3/manifest/"+organizationUid,
+        Assertions.assertEquals("/v3/manifest/" + organizationUid,
                 request.url().encodedPath());
         Assertions.assertEquals("GET",
                 request.method());
@@ -89,7 +89,7 @@ class ManifestUnitTests {
     @Test
     void testDelete() {
         Request request = app.delete(organizationUid).request();
-        Assertions.assertEquals("/v3/manifests/"+organizationUid,
+        Assertions.assertEquals("/v3/manifests/" + organizationUid,
                 request.url().encodedPath());
         Assertions.assertEquals("DELETE",
                 request.method());
@@ -101,7 +101,7 @@ class ManifestUnitTests {
     @Test
     void testDeleteWithoutId() {
         Request request = app.delete().request();
-        Assertions.assertEquals("/v3/manifests/"+organizationUid,
+        Assertions.assertEquals("/v3/manifests/" + organizationUid,
                 request.url().encodedPath());
         Assertions.assertEquals("DELETE",
                 request.method());
@@ -112,7 +112,7 @@ class ManifestUnitTests {
     @Test
     void testGetOuth() {
         Request request = app.getOauth(organizationUid).request();
-        Assertions.assertEquals("/v3/manifests/"+organizationUid+"/oauth",
+        Assertions.assertEquals("/v3/manifests/" + organizationUid + "/oauth",
                 request.url().encodedPath());
         Assertions.assertEquals("GET",
                 request.method());
@@ -126,7 +126,7 @@ class ManifestUnitTests {
         requestBody.put("target_type", "dev");
         requestBody.put("name", "test");
         Request request = app.updateOauth(organizationUid, requestBody).request();
-        Assertions.assertEquals("/v3/manifests/"+organizationUid+"/oauth",
+        Assertions.assertEquals("/v3/manifests/" + organizationUid + "/oauth",
                 request.url().encodedPath());
         Assertions.assertEquals("PUT",
                 request.method());
@@ -141,7 +141,7 @@ class ManifestUnitTests {
         requestBody.put("target_type", "dev");
         requestBody.put("name", "test");
         Request request = app.updateOauth(requestBody).request();
-        Assertions.assertEquals("/v3/manifests/"+organizationUid+"/oauth",
+        Assertions.assertEquals("/v3/manifests/" + organizationUid + "/oauth",
                 request.url().encodedPath());
         Assertions.assertEquals("PUT",
                 request.method());
@@ -153,7 +153,7 @@ class ManifestUnitTests {
     @Test
     void testGetHosting() {
         Request request = app.getHosting(organizationUid).request();
-        Assertions.assertEquals("/v3/manifests/"+organizationUid+"/hosting",
+        Assertions.assertEquals("/v3/manifests/" + organizationUid + "/hosting",
                 request.url().encodedPath());
         Assertions.assertEquals("GET",
                 request.method());
