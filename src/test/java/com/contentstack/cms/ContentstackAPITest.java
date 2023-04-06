@@ -76,7 +76,6 @@ public class ContentstackAPITest {
 
     @Test
     void testContentstackUserLoginWhenAlreadyLoggedIn() throws IOException {
-        String authToken = dotenv.get("auth_token");
         Contentstack contentstack = new Contentstack.Builder()
                 .setAuthtoken(null)
                 .build();
@@ -93,9 +92,11 @@ public class ContentstackAPITest {
                 .build();
         Response<ResponseBody> status = contentstack.logoutWithAuthtoken(authToken);
         if (status.isSuccessful()) {
+            assert status.body() != null;
             System.out.println(status.body().string());
             Assertions.assertEquals(200, status.code());
         } else {
+            assert status.errorBody() != null;
             Error error = new Gson().fromJson(status.errorBody().string(), Error.class);
             Assertions.assertEquals(105, error.getErrorCode());
         }
@@ -108,6 +109,7 @@ public class ContentstackAPITest {
         if (logout.isSuccessful()) {
             Assertions.assertEquals(200, logout.code());
         } else {
+            assert logout.errorBody() != null;
             Error error = new Gson().fromJson(logout.errorBody().string(), Error.class);
             Assertions.assertEquals(105, error.getErrorCode());
         }
@@ -120,29 +122,17 @@ public class ContentstackAPITest {
         client.login(dotenv.get("username"), dotenv.get("password"));
         Response<ResponseBody> response = client.user().getUser().execute();
         if (response.isSuccessful()) {
-
             CMAResponseConvertor csr = new CMAResponseConvertor(response);
             String csrStr = csr.asString();
             String csrStrOne = csr.asJson();
             String csrStrTwo = csr.asJson(csrStr);
-            UserDetail userModel = csr.toModel(UserDetail.class);
             UserDetail srJson = csr.toModel(UserDetail.class, csrStr);
-            UserDetail csrResp = csr.toModel(UserDetail.class, response);
-
             Assertions.assertNotNull(csrStr);
             Assertions.assertNotNull(csrStrOne);
             Assertions.assertNotNull(csrStrTwo);
-            Assertions.assertEquals(dotenv.get("userId"), srJson.getUser().uid.toString());
+            Assertions.assertEquals(dotenv.get("userId"), srJson.getUser().uid);
         }
     }
 
-    // @Test
-    // void testCallback() throws IOException {
-    // User client = new
-    // Contentstack.Builder().setAuthtoken("notnull@fake").build().user();
-    // Response<LoginDetails> response = client.login("***REMOVED***@gmail.com",
-    // "password").execute();
-    // System.out.println(response);
-    // }
 
 }

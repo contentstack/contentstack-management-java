@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 
 /**
- * App/Manifest is used  for creating/updating/deleting app in your Contentstack organization.
+ * App/Manifest is used for creating/updating/deleting app in your Contentstack organization.
  *
  * @author ***REMOVED***
  * @version v1.0.0
@@ -22,11 +22,12 @@ public class App {
     protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
     private String appUid;
-    private Retrofit client;
+    private final Retrofit client;
     /**
      * Error message for internal uses
      */
-    private final String ErrorMessage = "App/Manifest uid is required";
+    private static final String ERROR_MESSAGE = "App/Manifest uid is required";
+    private static final String ORGANIZATION_UID = "organization_uid";
 
     /**
      * Instantiates a new Organization.
@@ -40,7 +41,7 @@ public class App {
         if (organizationUid.isEmpty()) {
             throw new IllegalArgumentException("Organization uid could not be empty");
         }
-        this.headers.put("organization_uid", organizationUid);
+        this.headers.put(ORGANIZATION_UID, organizationUid);
         this.client = client;
         this.service = this.client.create(AppService.class);
     }
@@ -60,7 +61,7 @@ public class App {
         if (organizationUid.isEmpty()) {
             throw new IllegalArgumentException("Organization uid could not be empty");
         }
-        this.headers.put("organization_uid", organizationUid);
+        this.headers.put(ORGANIZATION_UID, organizationUid);
         this.appUid = uid;
         this.params = new HashMap<>();
         this.client = client;
@@ -69,9 +70,16 @@ public class App {
 
     public Installation installation() {
         if (this.appUid == null || this.appUid.isEmpty()) {
-            throw new BadArgumentException(ErrorMessage);
+            throw new BadArgumentException(ERROR_MESSAGE);
         }
-        return new Installation(this.client, this.headers.get("organization_uid"), this.appUid);
+        return new Installation(this.client, this.headers.get(ORGANIZATION_UID), this.appUid);
+    }
+
+    public Installation installation(@NotNull String installationId) {
+        if (this.appUid == null || this.appUid.isEmpty()) {
+            throw new BadArgumentException(ERROR_MESSAGE);
+        }
+        return new Installation(this.client, this.headers.get(ORGANIZATION_UID), this.appUid, installationId);
     }
 
     /**
@@ -79,9 +87,9 @@ public class App {
      * about the request or response:
      *
      * @param key
-     *         header key are being sent in the request
+     *         header key is being sent in the request
      * @param value
-     *         header value are being sent in the request against to the header key
+     *         header value is being sent in the request against to the header key
      */
     public App addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
@@ -153,7 +161,7 @@ public class App {
     }
 
     private void validate() {
-        if (!this.headers.containsKey("organization_uid"))
+        if (!this.headers.containsKey(ORGANIZATION_UID))
             throw new IllegalStateException("Organization uid can not be null or empty");
     }
 
@@ -170,7 +178,7 @@ public class App {
     }
 
     /**
-     * The create manifest call is used for creating a new app/manifest in your Contentstack
+     * To create a new app/manifest in your Contentstack
      *
      * @param body
      *         <b>The request body, should contain params like</b>
@@ -216,7 +224,7 @@ public class App {
         validate();
         isValidJSON(body);
         if (this.appUid == null || this.appUid.isEmpty()) {
-            throw new BadArgumentException(ErrorMessage);
+            throw new BadArgumentException(ERROR_MESSAGE);
         }
         return service.updateById(this.headers, this.appUid, body);
     }
@@ -237,7 +245,7 @@ public class App {
     public Call<ResponseBody> delete() {
         validate();
         if (this.appUid == null || this.appUid.isEmpty()) {
-            throw new BadArgumentException(ErrorMessage);
+            throw new BadArgumentException(ERROR_MESSAGE);
         }
         return service.delete(this.headers, this.appUid);
     }
@@ -310,7 +318,7 @@ public class App {
     public Call<ResponseBody> updateOauth(JSONObject body) {
         validate();
         if (this.appUid == null || this.appUid.isEmpty()) {
-            throw new BadArgumentException(ErrorMessage);
+            throw new BadArgumentException(ERROR_MESSAGE);
         }
         return service.updateAuthConfiguration(this.headers, this.appUid, body);
     }
