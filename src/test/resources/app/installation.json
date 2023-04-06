@@ -1,0 +1,8 @@
+{
+  "status": "installed",
+  "installation_uid": "installation_uid_1234",
+  "redirect_to": "config",
+  "target_type": "target_type_000",
+  "target_uid": "target_uid_1234",
+  "redirect_uri": "https://app.contentstack.com/installed-apps/{installation-uid}/stacks/{stack-uid}/config"
+}
