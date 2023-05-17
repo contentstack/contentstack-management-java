@@ -24,8 +24,6 @@ public class CMAResponseConvertor {
     private final Response<ResponseBody> response;
 
     /**
-     * CMAResponseConvertor accepts Response<ResponseBody>
-     *
      * @param response
      *         this is response body
      */

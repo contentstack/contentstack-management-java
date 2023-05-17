@@ -168,7 +168,6 @@ public class Entry {
      * @param requestBody
      *         Provide the Json Body to create entry:
      *         <p>
-     *         <p>
      *         { "entry": { "title": "Entry title", "url": "Entry URL", "reference_field_uid": [{ "uid": "the_uid",
      *         "_content_type_uid": "referred_content_type_uid" }] } }
      * @return Call
