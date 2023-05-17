@@ -1,6 +1,6 @@
 package com.contentstack.cms.organization;
 
-import com.contentstack.cms.app.App;
+import com.contentstack.cms.marketplace.Marketplace;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -424,20 +424,14 @@ public class Organization {
 
 
     /**
-     * The create manifest call is used for creating a new app/manifest in your Contentstack organization.
+     * Marketplace is the one-stop shop for ready-made extensions and one-click integrations with the industry's leading
+     * technology and service providers. Discover an extensive ecosystem of features, services, apps, and accelerators
+     * and combine the best technologies to achieve your desired business outcomes.
      *
-     * @return App: the app instance
+     * @return An instance of the Marketplace class.
      */
-    public App app() {
-        return new App(this.clientInstance, this.organizationUid);
+    public Marketplace marketplace() {
+        return new Marketplace(this.clientInstance, this.organizationUid);
     }
 
-    /**
-     * The create manifest call is used for creating a new app/manifest in your Contentstack organization.
-     *
-     * @return App: the app instance
-     */
-    public App app(@NotNull String uid) {
-        return new App(this.clientInstance, this.organizationUid, uid);
-    }
 }

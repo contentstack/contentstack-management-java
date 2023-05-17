@@ -6,7 +6,7 @@
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
@@ -65,17 +65,10 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-        <!--Publish to the maven repository-->
         <repository>
             <id>ossrh</id>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <!--        &lt;!&ndash;Publish to the GitHub repository&ndash;&gt;-->
-        <!--        <repository>-->
-        <!--            <id>github</id>-->
-        <!--            <name>Github Packages</name>-->
-        <!--            <url>https://maven.pkg.github.com/developshint/contentstack-management-java</url>-->
-        <!--        </repository>-->
     </distributionManagement>
 
     <properties>
