@@ -102,13 +102,9 @@ public class Extensions {
      * of the branch where the concerned Contentstack module resides</dd>
      * </dl>
      *
-     * @return Call
-     * @see <a href= href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-custom-fields">Get all Custom
-     * Field
-     * </a>
-     * @see #addHeader(String, Object) to add headers
-     * @see #addParam(String, Object) to add query parameters
+     * @return Call call
+     * @see #addHeader(String, Object) #addHeader(String, Object)#addHeader(String, Object)to add headers
+     * @see #addParam(String, Object) #addParam(String, Object)#addParam(String, Object)to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {

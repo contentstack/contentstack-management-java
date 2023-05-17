@@ -1,4 +1,4 @@
 /**
  * Useful to access contentstack's app components
  */
-package com.contentstack.cms.app;
+package com.contentstack.cms.marketplace;
