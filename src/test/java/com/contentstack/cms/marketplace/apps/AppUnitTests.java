@@ -1,4 +1,4 @@
-package com.contentstack.cms.app;
+package com.contentstack.cms.marketplace.apps;
 
 import com.contentstack.cms.Contentstack;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.*;
 
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ManifestUnitTests {
+class AppUnitTests {
 
     private static App app;
     private final static String authtoken = Dotenv.load().get("authToken");
@@ -32,7 +32,7 @@ class ManifestUnitTests {
         app = new Contentstack.Builder()
                 .setAuthtoken(authtoken)
                 .build()
-                .organization(organizationUid)
+                .organization(organizationUid).marketplace()
                 .app(organizationUid).addHeader("authtoken", authtoken);
     }
 
@@ -109,56 +109,5 @@ class ManifestUnitTests {
         Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
     }
 
-    @Test
-    void testGetOuth() {
-        Request request = app.getOauth(organizationUid).request();
-        Assertions.assertEquals("/v3/manifests/" + organizationUid + "/oauth",
-                request.url().encodedPath());
-        Assertions.assertEquals("GET",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
-    }
-
-    @Test
-    void testUpdateOuth() {
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("target_type", "dev");
-        requestBody.put("name", "test");
-        Request request = app.updateOauth(organizationUid, requestBody).request();
-        Assertions.assertEquals("/v3/manifests/" + organizationUid + "/oauth",
-                request.url().encodedPath());
-        Assertions.assertEquals("PUT",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
-        Assertions.assertNotNull(request.body());
-    }
-
-    @Test
-    void testUpdateOuthWithoutAppUid() {
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("target_type", "dev");
-        requestBody.put("name", "test");
-        Request request = app.updateOauth(requestBody).request();
-        Assertions.assertEquals("/v3/manifests/" + organizationUid + "/oauth",
-                request.url().encodedPath());
-        Assertions.assertEquals("PUT",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
-        Assertions.assertNotNull(request.body());
-    }
-
-    @Test
-    void testGetHosting() {
-        Request request = app.getHosting(organizationUid).request();
-        Assertions.assertEquals("/v3/manifests/" + organizationUid + "/hosting",
-                request.url().encodedPath());
-        Assertions.assertEquals("GET",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
-    }
 
 }

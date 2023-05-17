@@ -15,6 +15,8 @@ import java.util.Objects;
  */
 public class Util {
 
+    public static final String SDK_VERSION = "1.0.0";
+
     static final String PRIVATE_CONSTRUCTOR = "private constructor can't be accessed outside the class";
     public static final Boolean RETRY_ON_FAILURE = true;
     public static final String PROTOCOL = "https";
@@ -23,14 +25,13 @@ public class Util {
     public static final String VERSION = "v3";
     public static final int TIMEOUT = 30;
     public static final String SDK_NAME = "contentstack-management-java";
-    public static final String SDK_VERSION = "0.1.0";
     public static final String ILLEGAL_USER = "Please Login to access stack instance";
     public static final String USER_ALREADY_LOGGED_IN = "User is already loggedIn, "
             + "Please logout then try to login again";
     public static final String LOGIN_FLAG = "Please login to access user instance";
     public static final String PLEASE_LOGIN = "Please Login to access stack instance";
 
-    // KEYS
+    // CONSTANT KEYS
     public static final String API_KEY = "api_key";
     public static final String AUTHORIZATION = "authorization";
     public static final String AUTHTOKEN = "authtoken";
