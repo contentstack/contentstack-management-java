@@ -17,8 +17,7 @@ public interface OauthService {
 
     @GET("manifests/oauth/scopes")
     Call<ResponseBody> findScopes(
-            @HeaderMap Map<String, String> headers,
-            @Path("uid") String uid
+            @HeaderMap Map<String, String> headers
     );
 
     @PUT("manifests/{uid}/oauth")

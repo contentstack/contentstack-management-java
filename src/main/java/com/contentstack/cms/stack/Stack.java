@@ -45,8 +45,9 @@ public class Stack {
      * @param value
      *         header value for the request
      */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
+    public Stack addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
+        return this;
     }
 
     /**
@@ -57,8 +58,9 @@ public class Stack {
      * @param value
      *         header value for the request
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    public Stack addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
     }
 
     /**
@@ -67,15 +69,17 @@ public class Stack {
      * @param key
      *         header key for the request
      */
-    public void removeParam(@NotNull String key) {
+    public Stack removeParam(@NotNull String key) {
         this.params.remove(key);
+        return this;
     }
 
     /**
      * To clear all the query params
      */
-    protected void clearParams() {
+    protected Stack clearParams() {
         this.params.clear();
+        return this;
     }
 
     /**
@@ -576,6 +580,21 @@ public class Stack {
      */
     public PublishQueue publishQueue() {
         return new PublishQueue(this.client);
+    }
+
+
+    /**
+     * You can perform bulk operations such as Publish, Unpublish, and Delete on multiple entries or assets, or Change
+     * the Workflow Details of multiple entries or assets at the same time.
+     * <p>
+     * For more details, refer the <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-operations">Bulk Operation</a>
+     * documentation.
+     *
+     * @return BulkOperation
+     */
+    public BulkOperation bulkOperation() {
+        return new BulkOperation(this.client);
     }
 
     /**

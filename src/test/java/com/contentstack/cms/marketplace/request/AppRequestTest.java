@@ -1,6 +1,8 @@
 package com.contentstack.cms.marketplace.request;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
+import com.contentstack.cms.marketplace.installations.webhook.Webhook;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
@@ -19,12 +21,12 @@ public class AppRequestTest {
     static AppRequest appRequest;
 
     @BeforeAll
-    public static void init() {
-        final String authtoken = Dotenv.load().get("authToken");
-        final String orgId = Dotenv.load().get("authToken");
-        Contentstack client = new Contentstack.Builder().setAuthtoken(authtoken).build();
-        appRequest = client.organization(orgId).marketplace().request();
+    static void setUp() {
+        Contentstack client = TestClient.getClient();
+        appRequest = client.organization(TestClient.ORGANIZATION_UID).marketplace().request();
     }
+
+
 
     @Test
     void testCreateRequest() {
@@ -39,13 +41,13 @@ public class AppRequestTest {
         matcher.add("authtoken");
         matcher.add("organization_uid");
         boolean contains = request.headers().names().containsAll(matcher);
-        Assertions.assertEquals("/v3/requests",
+        Assertions.assertEquals("/requests",
                 request.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertNull(request.url().query());
         Assertions.assertNotNull(request.body());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/requests",
+                "https://api.contentstack.io/requests",
                 request.url().toString());
     }
 
@@ -60,13 +62,13 @@ public class AppRequestTest {
         matcher.add("authtoken");
         matcher.add("organization_uid");
         boolean contains = request.headers().names().containsAll(matcher);
-        Assertions.assertEquals("/v3/requests/view/stacks",
+        Assertions.assertEquals("/requests/view/stacks",
                 request.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertNull(request.url().query());
         Assertions.assertNull(request.body());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/requests/view/stacks",
+                "https://api.contentstack.io/requests/view/stacks",
                 request.url().toString());
     }
 
@@ -81,13 +83,13 @@ public class AppRequestTest {
         matcher.add("authtoken");
         matcher.add("organization_uid");
         boolean contains = request.headers().names().containsAll(matcher);
-        Assertions.assertEquals("/v3/requests",
+        Assertions.assertEquals("/requests",
                 request.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertNull(request.url().query());
         Assertions.assertNull(request.body());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/requests",
+                "https://api.contentstack.io/requests",
                 request.url().toString());
     }
 
@@ -103,13 +105,13 @@ public class AppRequestTest {
         matcher.add("authtoken");
         matcher.add("organization_uid");
         boolean contains = request.headers().names().containsAll(matcher);
-        Assertions.assertEquals("/v3/requests/" + requestId,
+        Assertions.assertEquals("/requests/bltba87adc6be076d26",
                 request.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertNull(request.url().query());
         Assertions.assertNull(request.body());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/requests/" + requestId,
+                "https://api.contentstack.io/requests/bltba87adc6be076d26",
                 request.url().toString());
     }
 

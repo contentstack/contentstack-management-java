@@ -25,9 +25,9 @@ public class App implements Parametron {
     protected HashMap<String, Object> params;
     private String appUid;
     private final Retrofit client;
-    private final String errorMessage = "App/Manifest uid is required";
-    private final String ORGANIZATION_UID = "organization_uid";
-    private final String ERROR_NO_ORGANIZATION_UID = "Organization uid could not be empty";
+    protected final static String errorMessage = "App/Manifest uid is required";
+    private final static String ORGANIZATION_UID = "organization_uid";
+    private final static String ERROR_NO_ORGANIZATION_UID = "Organization uid could not be empty";
 
     /**
      * Instantiates a new Organization.
@@ -63,11 +63,11 @@ public class App implements Parametron {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
         if (organizationUid.isEmpty()) {
-            throw new IllegalArgumentException("Organization uid could not be empty");
+            throw new IllegalArgumentException(ERROR_NO_ORGANIZATION_UID);
         }
         this.headers.put(ORGANIZATION_UID, organizationUid);
         if (uid.isEmpty()) {
-            throw new NullPointerException(errorMessage);
+            throw new NullPointerException("Manifest uid is required");
         }
         this.appUid = uid;
         this.service = client.create(AppService.class);
@@ -85,8 +85,9 @@ public class App implements Parametron {
      * @throws NullPointerException
      *         if the key or value argument is null
      */
+    @SuppressWarnings("unknown")
     @Override
-    public App addParam(@NotNull String key, @NotNull String value) {
+    public App addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
         return this;
     }
@@ -102,6 +103,7 @@ public class App implements Parametron {
      * @throws NullPointerException
      *         if the key or value argument is null
      */
+    @SuppressWarnings("unknown")
     @Override
     public App addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
@@ -117,6 +119,7 @@ public class App implements Parametron {
      * @throws NullPointerException
      *         if the params argument is null
      */
+    @SuppressWarnings("unknown")
     @Override
     public App addParams(@NotNull HashMap params) {
         this.params.putAll(params);
@@ -132,12 +135,12 @@ public class App implements Parametron {
      * @throws NullPointerException
      *         if the params argument is null
      */
+    @SuppressWarnings("unknown")
     @Override
     public App addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
         return this;
     }
-
 
 
     /**
@@ -148,7 +151,7 @@ public class App implements Parametron {
      * @return the call
      */
     public Call<ResponseBody> createInstallation(@NotNull JSONObject body) {
-        return this.service.createInstallation(this.headers, this.appUid, body);
+        return this.service.createInstallation(this.headers, this.appUid, body, this.params);
     }
 
     /**
@@ -168,7 +171,7 @@ public class App implements Parametron {
      * @return the call
      */
     public Call<ResponseBody> findAppAuthorizations() {
-        return service.findAppAuthorizations(this.headers, this.appUid);
+        return service.findAppAuthorizations(this.headers, this.appUid, this.params);
     }
 
     /**
@@ -246,29 +249,29 @@ public class App implements Parametron {
      * @return the call
      */
     public Call<ResponseBody> findAppRequests() {
-        return service.listAppRequests(this.headers, this.appUid);
+        return service.listAppRequests(this.headers, this.appUid, this.params);
     }
 
     /**
-     * Oauth oauth.
+     * Returns Instance of oauth
      *
      * @return the oauth
      */
     public Oauth oauth() {
         String orgId = this.headers.get(ORGANIZATION_UID);
-        return new Oauth(this.client, orgId, this.appUid);
+        return new Oauth(this.client, orgId, appUid);
     }
 
     /**
-     * Oauth oauth.
+     * Returns Instance of oauth
      *
-     * @param appId
-     *         the app id
+     * @param id
+     *         the app uid
      * @return the oauth
      */
-    public Oauth oauth(@NotNull String appId) {
+    public Oauth oauth(@NotNull String id) {
         String orgId = this.headers.get(ORGANIZATION_UID);
-        return new Oauth(this.client, orgId, appId);
+        return new Oauth(this.client, orgId, id);
     }
 
     /**

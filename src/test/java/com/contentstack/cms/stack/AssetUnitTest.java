@@ -1,8 +1,7 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
@@ -21,10 +20,10 @@ import java.util.HashMap;
 @Tag("unit")
 class AssetUnitTest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
-    protected static String _uid = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String MANAGEMENT_TOKEN = TestClient.AUTHTOKEN;
+    protected static String _uid = TestClient.AUTHTOKEN;
     static Asset asset;
 
     @BeforeAll
@@ -32,7 +31,7 @@ class AssetUnitTest {
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-        Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
+        Stack stack = TestClient.getClient().stack(headers);
         asset = stack.asset(_uid);
     }
 
@@ -51,7 +50,7 @@ class AssetUnitTest {
         Request resp = asset.find().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -80,7 +79,7 @@ class AssetUnitTest {
         Request resp = asset.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -101,7 +100,7 @@ class AssetUnitTest {
         Request resp = asset.byFolderUid(_uid).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -124,7 +123,7 @@ class AssetUnitTest {
         Request resp = asset.subfolder(_uid, true).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -161,7 +160,7 @@ class AssetUnitTest {
         Request resp = asset.uploadAsset(filePath, "the fake description").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -188,7 +187,7 @@ class AssetUnitTest {
         Request resp = asset.replace(filePath, "The calender has been placed to assets by ishaileshmishra").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -215,7 +214,7 @@ class AssetUnitTest {
         Request resp = asset.generatePermanentUrl(body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -237,7 +236,7 @@ class AssetUnitTest {
         Request resp = asset.getPermanentUrl("www.google.com/search").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -259,7 +258,7 @@ class AssetUnitTest {
         Request resp = asset.delete().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -280,7 +279,7 @@ class AssetUnitTest {
         Request resp = asset.rteInformation().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -305,7 +304,7 @@ class AssetUnitTest {
         Request resp = asset.setVersionName(2, body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -331,7 +330,7 @@ class AssetUnitTest {
         Request resp = asset.getVersionNameDetails().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -353,7 +352,7 @@ class AssetUnitTest {
         Request resp = asset.deleteVersionName(2).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -373,7 +372,7 @@ class AssetUnitTest {
         Request resp = asset.getReferences().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -394,7 +393,7 @@ class AssetUnitTest {
         Request resp = asset.getByType("images").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -415,7 +414,7 @@ class AssetUnitTest {
         Request resp = asset.getByType("videos").request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -443,7 +442,7 @@ class AssetUnitTest {
         Request resp = asset.updateDetails(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -471,7 +470,7 @@ class AssetUnitTest {
         Request resp = asset.publish(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -499,7 +498,7 @@ class AssetUnitTest {
         Request resp = asset.unpublish(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -548,7 +547,7 @@ class AssetUnitTest {
         Request resp = asset.getSingleFolderByName().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -575,7 +574,7 @@ class AssetUnitTest {
         Request resp = asset.getSubfolder().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(1, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");

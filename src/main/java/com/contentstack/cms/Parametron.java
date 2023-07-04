@@ -21,7 +21,7 @@ public interface Parametron {
      *         the value
      * @return the t
      */
-    public <T> T addParam(@NotNull String key, @NotNull String value);
+    public <T> T addParam(@NotNull String key, @NotNull Object value);
 
     /**
      * Add header t.
@@ -46,7 +46,7 @@ public interface Parametron {
      *         the params
      * @return the t
      */
-    public <T> T addParams(@NotNull HashMap params);
+    public <T> T addParams(@NotNull HashMap<String, Object> params);
 
 
     /**
@@ -58,5 +58,5 @@ public interface Parametron {
      *         the headers
      * @return the t
      */
-    public <T> T addHeaders(@NotNull HashMap headers);
+    public <T> T addHeaders(@NotNull HashMap<String, String> headers);
 }

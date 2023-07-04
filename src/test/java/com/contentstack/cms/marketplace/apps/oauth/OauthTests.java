@@ -1,11 +1,9 @@
 package com.contentstack.cms.marketplace.apps.oauth;
 
 import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.marketplace.apps.App;
-import io.github.cdimascio.dotenv.Dotenv;
+import com.contentstack.cms.TestClient;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.*;
 
 
@@ -13,91 +11,71 @@ import org.junit.jupiter.api.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class OauthTests {
 
-    private static Contentstack client;
-    private static App app;
-    private final static String AUTHTOKEN = Dotenv.load().get("authToken");
-    private final static String ORGANIZATION_UID = Dotenv.load().get("organizationUid");
+    static Oauth oauth;
+    static String ORG_UID = TestClient.ORGANIZATION_UID;
+    static String APP_UID = TestClient.AUTHTOKEN;
 
     @BeforeAll
-    public static void setUp() {
-        client = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
+    static void loadBeforeAll() {
+        oauth = TestClient.getClient().organization(ORG_UID)
+                .marketplace("api.contentstack.io")
+                .app(APP_UID)
+                .oauth();
     }
 
-    @BeforeClass
-    public static void onlyOnce() {
-        app = client.organization(ORGANIZATION_UID).marketplace().app(ORGANIZATION_UID).addHeader("authtoken", AUTHTOKEN);
-    }
 
     @Test
-    void testFetch() {
-        assert ORGANIZATION_UID != null;
-        Request request = app.fetch(ORGANIZATION_UID).request();
-        Assertions.assertEquals("/v3/manifest/" + ORGANIZATION_UID, request.url().encodedPath());
+    void testFetchOauthConfiguration() {
+        Request request = oauth.addHeader("authtoken", ORG_UID)
+        .fetchOauthConfiguration(ORG_UID).request();
+        Assertions.assertEquals("/manifests/"+ORG_UID+"/oauth", request.url().encodedPath());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertEquals(ORG_UID, request.url().pathSegments().get(1));
+        Assertions.assertEquals("oauth", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertNull( request.url().query());
     }
 
     @Test
-    void testFind() {
-        Request request = app.find().request();
-        Assertions.assertEquals("/v3/manifests",
-                request.url().encodedPath());
-        Assertions.assertEquals("GET",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
-
-    }
-
-    @Test
-    void testCreate() {
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("target_type", "dev");
-        requestBody.put("name", "test");
-        Request request = app.create(requestBody).request();
-        Assertions.assertEquals("/v3/manifest",
-                request.url().encodedPath());
-        Assertions.assertEquals("POST",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
+    void testUpdateOauthConfiguration() {
+        JSONObject body = new JSONObject();
+        body.put("obj1", "objValue");
+        oauth.addHeader("authtoken", ORG_UID);
+        Request request = oauth.updateOauthConfiguration(body).request();
+        Assertions.assertEquals("/manifests/"+APP_UID+"/oauth", request.url().encodedPath());
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertEquals(APP_UID, request.url().pathSegments().get(1));
+        Assertions.assertEquals("oauth", request.url().pathSegments().get(2));
         Assertions.assertNotNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
     }
 
     @Test
-    void testUpdate() {
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("target_type", "dev");
-        requestBody.put("name", "test");
-        Request request = app.fetch(ORGANIZATION_UID).request();
-        Assertions.assertEquals("/v3/manifest/" + ORGANIZATION_UID,
-                request.url().encodedPath());
+    void testFindScopes() {
+        oauth.addHeader("authtoken", ORG_UID);
+        Request request = oauth.findScopes().request();
+        Assertions.assertEquals("/manifests/oauth/scopes", request.url().encodedPath());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertEquals("oauth", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
     }
-
-    @Test
-    void testDelete() {
-        Request request = app.delete(ORGANIZATION_UID).request();
-        Assertions.assertEquals("/v3/manifests/" + ORGANIZATION_UID,
-                request.url().encodedPath());
-        Assertions.assertEquals("DELETE",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
-
-    }
-
-    @Test
-    void testDeleteWithoutId() {
-        Request request = app.delete().request();
-        Assertions.assertEquals("/v3/manifests/" + ORGANIZATION_UID,
-                request.url().encodedPath());
-        Assertions.assertEquals("DELETE",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
-    }
-
 
 
 }

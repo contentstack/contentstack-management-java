@@ -1,6 +1,7 @@
 package com.contentstack.cms.marketplace.installations.location;
 
 import com.contentstack.cms.Parametron;
+import com.contentstack.cms.core.BadArgumentException;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -39,6 +40,9 @@ public class Location implements Parametron {
 
 
     Call<ResponseBody> fetchConfigurationLocation() {
+        if (this.installationId == null || this.installationId.isEmpty()) {
+            throw new BadArgumentException("Installation Id is required");
+        }
         return this.service.getConfigurationLocation(this.headers, this.installationId, this.params);
     }
 
@@ -55,7 +59,7 @@ public class Location implements Parametron {
      *         if the key or value argument is null
      */
     @Override
-    public Location addParam(@NotNull String key, @NotNull String value) {
+    public Location addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
         return this;
     }

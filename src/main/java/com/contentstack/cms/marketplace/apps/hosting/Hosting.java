@@ -10,14 +10,14 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 
+/**
+ * The type Hosting.
+ */
 public class Hosting implements Parametron {
-
-
-    private final String ERROR_NO_ORGANIZATION_UID = "Organization uid could not be empty";
     private final HostingService service;
     protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
-    private String appId;
+    private final String appId;
 
     /**
      * Instantiates a new Hosting.
@@ -33,25 +33,24 @@ public class Hosting implements Parametron {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
         if (appId.isEmpty()) {
-            throw new NullPointerException("App Id is required");
+            throw new NullPointerException("app id/manifest uid is required");
         }
         this.appId = appId;
         if (organizationId.isEmpty()) {
-            throw new IllegalArgumentException(ERROR_NO_ORGANIZATION_UID);
+            throw new IllegalArgumentException("Organization uid could not be empty");
         }
         this.headers.put("organization_uid", organizationId);
         this.service = client.create(HostingService.class);
     }
 
     /**
-     * Fetch hosting call.
+     * Get hosting configuration of your App Manifest
      *
      * @return the call
      */
     Call<ResponseBody> fetchHosting() {
-        return this.service.getHosting(this.headers, this.appId);
+        return this.service.getHosting(this.headers, this.appId, this.params);
     }
-
 
     /**
      * Create signed upload url call.
@@ -159,12 +158,44 @@ public class Hosting implements Parametron {
     }
 
     /**
-     * Toogle hosting call.
+     * The toggle hosting call is used to enable or disable the hosting of an app.
+     * <br>
+     *
+     * <b>ACL:</b>
+     * <p>
+     * Organisation Admins
+     * <p>
+     * Organisation Owners
+     * <p>
+     * Stack Owners
+     * <p>
+     * Stack Admins
      *
      * @return the call
      */
-    Call<ResponseBody> toogleHosting() {
-        return this.service.toggleHosting(this.headers, this.appId);
+    Call<ResponseBody> enableToggleHosting() {
+        return this.service.toggleEnableHosting(this.headers, this.appId);
+    }
+
+
+    /**
+     * The toggle hosting call is used to enable or disable the hosting of an app.
+     * <br>
+     *
+     * <b>ACL:</b>
+     * <p>
+     * Organisation Admins
+     * <p>
+     * Organisation Owners
+     * <p>
+     * Stack Owners
+     * <p>
+     * Stack Admins
+     *
+     * @return the call
+     */
+    Call<ResponseBody> disableToggleHosting() {
+        return this.service.toggleDisableHosting(this.headers, this.appId);
     }
 
 
@@ -179,8 +210,9 @@ public class Hosting implements Parametron {
      * @throws NullPointerException
      *         if the key or value argument is null
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public Hosting addParam(@NotNull String key, @NotNull String value) {
+    public Hosting addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
         return this;
     }
@@ -196,6 +228,7 @@ public class Hosting implements Parametron {
      * @throws NullPointerException
      *         if the key or value argument is null
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Hosting addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
@@ -211,6 +244,7 @@ public class Hosting implements Parametron {
      * @throws NullPointerException
      *         if the params argument is null
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Hosting addParams(@NotNull HashMap params) {
         this.params.putAll(params);
@@ -226,6 +260,7 @@ public class Hosting implements Parametron {
      * @throws NullPointerException
      *         if the params argument is null
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Hosting addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);

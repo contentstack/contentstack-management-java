@@ -23,7 +23,7 @@ public class Organization {
     protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
     private String organizationUid;
-    private Retrofit clientInstance;
+    private final Retrofit clientInstance;
 
     /**
      * Instantiates a new Organization.
@@ -62,8 +62,9 @@ public class Organization {
      * @param value
      *         header value for the request
      */
-    public void addHeader(@NotNull String key, @NotNull String value) {
+    public Organization addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
+        return this;
     }
 
     /**
@@ -74,15 +75,17 @@ public class Organization {
      * @param value
      *         header value for the request
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    public Organization addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
     }
 
     /**
      * Clear all params
      */
-    protected void clearParams() {
+    protected Organization clearParams() {
         this.params.clear();
+        return this;
     }
 
     /**
@@ -431,7 +434,20 @@ public class Organization {
      * @return An instance of the Marketplace class.
      */
     public Marketplace marketplace() {
-        return new Marketplace(this.clientInstance, this.organizationUid);
+        return new Marketplace(this.clientInstance, this.organizationUid, null);
+    }
+
+    /**
+     * Marketplace is the one-stop shop for ready-made extensions and one-click integrations with the industry's leading
+     * technology and service providers. Discover an extensive ecosystem of features, services, apps, and accelerators
+     * and combine the best technologies to achieve your desired business outcomes.
+     *
+     * @param endpoint
+     *         the base url for making marketplace request
+     * @return An instance of the Marketplace class.
+     */
+    public Marketplace marketplace(@NotNull String endpoint) {
+        return new Marketplace(this.clientInstance, this.organizationUid, endpoint);
     }
 
 }

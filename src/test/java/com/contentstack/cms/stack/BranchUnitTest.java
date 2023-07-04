@@ -1,29 +1,23 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.core.Util;
+import com.contentstack.cms.TestClient;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
-
-import java.util.HashMap;
+import retrofit2.Call;
 
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BranchUnitTest {
 
     protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("authToken");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
     protected static Branch branch;
     protected static JSONObject body;
 
-    // Create a JSONObject, JSONObject could be created in multiple ways.
-    // We choose JSONParser that converts string to JSONObject
     static String theJsonString = "{\n" +
             "    \"branch\": {\n" +
             "        \"uid\": \"release\",\n" +
@@ -34,12 +28,7 @@ class BranchUnitTest {
 
     @BeforeAll
     static void setup() {
-        HashMap<String, Object> headers = new HashMap<>();
-        headers.put(Util.API_KEY, API_KEY);
-        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-        Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        branch = stack.branch(_uid);
-
+        branch = TestClient.getClient().stack().branch(AUTHTOKEN);
         try {
             JSONParser parser = new JSONParser();
             body = (JSONObject) parser.parse(theJsonString);
@@ -120,7 +109,7 @@ class BranchUnitTest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branches/" + _uid,
+                "https://api.contentstack.io/v3/stacks/branches/" + AUTHTOKEN,
                 request.url().toString());
     }
 
@@ -155,7 +144,196 @@ class BranchUnitTest {
         Assertions.assertNull(request.body());
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branches/" + _uid,
+                "https://api.contentstack.io/v3/stacks/branches/" + AUTHTOKEN,
+                request.url().toString());
+    }
+
+
+    @Test
+    void getBranchCompareInstance() {
+        Compare compare = branch.compare("dev");
+        Assertions.assertNotNull(compare);
+    }
+
+    @Test
+    void getCompareBranches() {
+        Request request = branch.compare("dev")
+                .addHeader("authtoken", AUTHTOKEN)
+                .addParam("skip", 4).addParam("limit", 20)
+                .all().request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branches_compare", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branches_compare?base_branch=bltba87adc6be076d26&compare_branch=dev&limit=20&skip=4",
+                request.url().toString());
+    }
+
+
+    @Test
+    void branchCompareContentType() {
+        Request request = branch.compare("dev")
+                .addHeader("authtoken", AUTHTOKEN)
+                .addParam("skip", 4).addParam("limit", 20)
+                .contentType().request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branches_compare", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branches_compare/content_types?base_branch=bltba87adc6be076d26&compare_branch=dev&limit=20&skip=4",
+                request.url().toString());
+    }
+
+
+    @Test
+    void testSpecificToGlobalField() {
+        Request request = branch.compare("dev")
+                .addHeader("authtoken", AUTHTOKEN)
+                .addParam("skip", 4).addParam("limit", 20)
+                .specificGlobalField("global_field").request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branches_compare", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branches_compare/global_fields/global_field?base_branch=bltba87adc6be076d26&compare_branch=dev&limit=20&skip=4",
+                request.url().toString());
+    }
+
+
+    @Test
+    void testSpecificToContentType() {
+        Request request = branch.compare("dev")
+                .addHeader("authtoken", AUTHTOKEN)
+                .addParam("skip", 4).addParam("limit", 20)
+                .specificContentType("ct_type").request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branches_compare", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branches_compare/content_types/ct_type?base_branch=bltba87adc6be076d26&compare_branch=dev&limit=20&skip=4",
+                request.url().toString());
+    }
+
+
+    @Test
+    void branchCompareGlobalField() {
+        Request request = branch.compare("dev")
+                .addHeader("authtoken", AUTHTOKEN)
+                .addParam("skip", 4).addParam("limit", 20)
+                .globalField().request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branches_compare", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branches_compare/global_fields?base_branch=bltba87adc6be076d26&compare_branch=dev&limit=20&skip=4",
+                request.url().toString());
+    }
+
+
+    @Test
+    void testCreateBranch() {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("uid", "global_field_uid");
+        requestBody.put("type", "global_field");
+        requestBody.put("merge_strategy", "merge_prefer_base");
+
+        Call<ResponseBody> createBranch = TestClient.getClient().stack().branch("main").
+                mergeQueue().addHeader("authtoken", "authtoken")
+                .addHeader("authorization", "managementToken")
+                .addHeader("apiKey", "the_api_kay")
+                .branch("redesign",
+                        requestBody,
+                        "merge_prefer_compare",
+                        "sample comment");
+
+        Request request = createBranch.request();
+        System.out.println("request: " + request);
+        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branches_merge", request.url().pathSegments().get(2));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "default_merge_strategy=merge_prefer_compare&merge_comment=sample comment&base_branch=main&compare_branch=redesign",
+                request.url().query());
+    }
+
+    @Test
+    void branchMergeFind() {
+        Request request = branch.mergeQueue()
+                .addHeader("authtoken", AUTHTOKEN)
+                .addParam("skip", 4).addParam("limit", 20).find().request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branches_queue", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branches_queue?base_branch=bltba87adc6be076d26&limit=20&skip=4",
+                request.url().toString());
+    }
+
+    @Test
+    void branchMergeFetch() {
+        Request request = branch.mergeQueue()
+                .addHeader("authtoken", AUTHTOKEN)
+                .addParam("skip", 4).addParam("limit", 20).fetch("jobId98344").request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branches_queue", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branches_queue/jobId98344?base_branch=bltba87adc6be076d26&limit=20&skip=4",
                 request.url().toString());
     }
 
