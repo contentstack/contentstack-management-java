@@ -1,5 +1,6 @@
 package com.contentstack.cms.user;
 
+import com.contentstack.cms.Parametron;
 import com.contentstack.cms.core.Util;
 import com.contentstack.cms.models.LoginDetails;
 import okhttp3.ResponseBody;
@@ -9,7 +10,6 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * All accounts registered with Contentstack are known as <a href=
@@ -21,10 +21,11 @@ import java.util.Map;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class User {
+public class User implements Parametron {
 
-    private final UserService userService;
-    private Map<String, Object> headers;
+    protected final UserService userService;
+    protected HashMap<String, String> headers;
+    protected HashMap<String, Object> params;
 
     /**
      * @param client
@@ -184,6 +185,36 @@ public class User {
      */
     public Call<ResponseBody> logout() {
         return userService.logout();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public User addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public User addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public User addParams(@NotNull HashMap params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public User addHeaders(@NotNull HashMap headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
 }

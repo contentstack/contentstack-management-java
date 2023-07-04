@@ -36,7 +36,7 @@ public class AuthInterceptor implements Interceptor {
     @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {
-        final String xUserAgent = Util.SDK_NAME + "/" + Util.SDK_VERSION;
+        final String xUserAgent = Util.SDK_NAME + "/v" + Util.SDK_VERSION;
         Request.Builder request = chain.request().newBuilder()
                 .header(Util.X_USER_AGENT, xUserAgent)
                 .header(Util.USER_AGENT, Util.defaultUserAgent())

@@ -100,12 +100,12 @@ public interface EntryService {
             @Query("locale") String localeCode,
             @Body JSONObject body);
 
-    @POST("content_types/{content_type_uid}/entries/{entry_uid}")
+    @POST("content_types/{content_type_uid}/entries/{entry_uid}/unlocalize")
     Call<ResponseBody> unLocalize(
             @HeaderMap Map<String, Object> headers,
             @Path("content_type_uid") String contentTypeUid,
             @Path("entry_uid") String entryUid,
-            @Query("unlocalize") String localeCode);
+            @Query("locale") String localeCode);
 
     @GET("content_types/{content_type_uid}/entries/{entry_uid}/export")
     Call<ResponseBody> export(
