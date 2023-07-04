@@ -18,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.net.Proxy;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -447,6 +448,7 @@ public class Contentstack {
          */
         protected Proxy proxy;
         private AuthInterceptor authInterceptor;
+
         private String authtoken; // authtoken for client
         private Retrofit instance; // client instance
         private String hostname = Util.HOST; // Default Host for Contentstack API (default: api.contentstack.io)
@@ -554,6 +556,7 @@ public class Contentstack {
             return this;
         }
 
+
         /**
          * Build contentstack.
          *
@@ -578,6 +581,7 @@ public class Contentstack {
             return new OkHttpClient.Builder().addInterceptor(this.authInterceptor)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
+                    .connectTimeout(Duration.ofSeconds(this.timeout))
                     .retryOnConnectionFailure(retryOnFailure)
                     .build();
         }

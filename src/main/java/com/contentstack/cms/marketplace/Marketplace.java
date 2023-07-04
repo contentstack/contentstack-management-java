@@ -6,15 +6,16 @@ import com.contentstack.cms.marketplace.installations.Installation;
 import com.contentstack.cms.marketplace.request.AppRequest;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * The type Marketplace.
  */
 public class Marketplace {
 
-    private final Retrofit client;
+    private Retrofit client;
     private final String orgId;
-    private final String ERR_MESSAGE = "To access the marketplace, the organization_uid parameter is required. " +
+    private final static String ERR_MESSAGE = "To access marketplace instance, the organization_uid parameter is required. " +
             "Please ensure that you provide a valid organization_uid value when calling the marketplace() method";
 
     /**
@@ -24,15 +25,35 @@ public class Marketplace {
      *         the client
      * @param orgId
      *         the org id
+     * @param baseUrl
+     *         the base url
      */
-    public Marketplace(@NotNull Retrofit client, @NotNull String orgId) {
+    public Marketplace(@NotNull Retrofit client, @NotNull String orgId, String baseUrl) {
         this.client = client;
         this.orgId = orgId;
+        if (baseUrl == null) {
+            String parentEndpoint = String.valueOf(this.client.baseUrl());
+            if (parentEndpoint.contains("v3/")) {
+                parentEndpoint = parentEndpoint.replaceFirst("v3/", "");
+            }
+            this.client = updateClient(this.client, parentEndpoint);
+        } else {
+            this.client = updateClient(this.client, baseUrl);
+        }
+
         if (this.orgId.isEmpty()) {
             throw new NullPointerException(ERR_MESSAGE);
         }
     }
 
+
+    private Retrofit updateClient(Retrofit client, String baseUrl) {
+        if (!baseUrl.startsWith("http")) {
+            baseUrl = "https://" + baseUrl;
+        }
+        return client.newBuilder()
+                .baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build();
+    }
 
     /**
      * App app.
@@ -64,12 +85,24 @@ public class Marketplace {
     }
 
     /**
-     * Installation installation.
+     * returns instance of Installation.
      *
-     * @return the instance of installation
+     * @return the instance of {@link Installation}
      */
     public Installation installation() {
         return new Installation(this.client, this.orgId);
+    }
+
+
+    /**
+     * returns instance of Installation.
+     *
+     * @param installationId
+     *         the installation uid
+     * @return instance of {@link Installation}
+     */
+    public Installation installation(String installationId) {
+        return new Installation(this.client, this.orgId, installationId);
     }
 
     /**

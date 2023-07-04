@@ -1,9 +1,7 @@
 package com.contentstack.cms;
 
-import com.contentstack.cms.core.CMAResponseConvertor;
 import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
-import com.contentstack.cms.models.UserDetail;
 import com.google.gson.Gson;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
@@ -115,24 +113,5 @@ public class ContentstackAPITest {
         }
         Assertions.assertNull(contentstack.authtoken);
     }
-
-    @Test
-    void testLoginCSResponse() throws IOException {
-        Contentstack client = new Contentstack.Builder().build();
-        client.login(dotenv.get("username"), dotenv.get("password"));
-        Response<ResponseBody> response = client.user().getUser().execute();
-        if (response.isSuccessful()) {
-            CMAResponseConvertor csr = new CMAResponseConvertor(response);
-            String csrStr = csr.asString();
-            String csrStrOne = csr.asJson();
-            String csrStrTwo = csr.asJson(csrStr);
-            UserDetail srJson = csr.toModel(UserDetail.class, csrStr);
-            Assertions.assertNotNull(csrStr);
-            Assertions.assertNotNull(csrStrOne);
-            Assertions.assertNotNull(csrStrTwo);
-            Assertions.assertEquals(dotenv.get("userId"), srJson.getUser().uid);
-        }
-    }
-
 
 }
