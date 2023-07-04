@@ -1,63 +1,63 @@
 package com.contentstack.cms.marketplace.apps;
 
-import com.contentstack.cms.Contentstack;
-import io.github.cdimascio.dotenv.Dotenv;
+import com.contentstack.cms.TestClient;
 import okhttp3.Request;
-import org.jetbrains.annotations.NotNull;
+import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-@Tag("unit")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+import java.io.IOException;
+
 class AppUnitTests {
 
     private static App app;
-    private final static String authtoken = Dotenv.load().get("authToken");
-    private final static String organizationUid = Dotenv.load().get("organizationUid");
-
-    private JSONObject theJSONBody(@NotNull String _body) {
-        try {
-            JSONParser parser = new JSONParser();
-            return (JSONObject) parser.parse(_body);
-        } catch (ParseException e) {
-            System.out.println("Json Reading Error: " + e.getLocalizedMessage());
-            return null;
-        }
-    }
+    final static String ORG_UID = TestClient.ORGANIZATION_UID;
+    final String AUTH = TestClient.AUTHTOKEN;
 
     @BeforeAll
-    public static void setUp() {
-        app = new Contentstack.Builder()
-                .setAuthtoken(authtoken)
-                .build()
-                .organization(organizationUid).marketplace()
-                .app(organizationUid).addHeader("authtoken", authtoken);
+    static void setup() {
+        app = TestClient.getClient().organization(ORG_UID).marketplace().app(ORG_UID);
+        app.addParam("search", "paramValue").
+                addParam("limit", 10).
+                addParam("skip", 3).
+                addParam("order", "asc").
+                addParam("sort", "updated_at").
+                addParam("target_type", "stack").addHeader("authtoken", ORG_UID);
     }
 
 
     @Test
-    void testFetch() {
-        assert organizationUid != null;
-        Request request = app.fetch(organizationUid).request();
-        Assertions.assertEquals("/v3/manifest/" + organizationUid,
-                request.url().encodedPath());
-        Assertions.assertEquals("GET",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
+    void testFetchEnqueue() throws IOException {
+        Response<ResponseBody> response = app.addHeader("authtoken", AUTH).findApps().execute();
+        Assertions.assertFalse(response.isSuccessful());
+    }
+
+
+    @Test
+    void testFetchExcecute() throws IOException {
+        Response<ResponseBody> response = app.addHeader("authtoken", AUTH).findApps().execute();
+        System.out.println("isSuccessful: " + response.isSuccessful());
+        System.out.println("response: " + response.body());
+        Assertions.assertFalse(response.isSuccessful());
     }
 
     @Test
     void testFind() {
-        Request request = app.find().request();
-        Assertions.assertEquals("/v3/manifests",
-                request.url().encodedPath());
-        Assertions.assertEquals("GET",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
+        Request request = app.findApps().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(1, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
 
     }
 
@@ -66,47 +66,185 @@ class AppUnitTests {
         JSONObject requestBody = new JSONObject();
         requestBody.put("target_type", "dev");
         requestBody.put("name", "test");
-        Request request = app.create(requestBody).request();
-        Assertions.assertEquals("/v3/manifest",
-                request.url().encodedPath());
-        Assertions.assertEquals("POST",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
+        app.addHeader("authtoken", ORG_UID);
+        Request request = app.createApp(requestBody).request();
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(1, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
         Assertions.assertNotNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
     }
 
+
     @Test
-    void testUpdate() {
+    void testCreateInstallation() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("target_type", "dev");
         requestBody.put("name", "test");
-        Request request = app.fetch(organizationUid).request();
-        Assertions.assertEquals("/v3/manifest/" + organizationUid,
-                request.url().encodedPath());
+        Request request = app.createInstallation(requestBody).request();
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
+    }
+
+
+    @Test
+    void testUpdateVersion() {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("target_type", "dev");
+        requestBody.put("name", "test");
+        Request request = app.updateVersion(requestBody).request();
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
     }
 
     @Test
-    void testDelete() {
-        Request request = app.delete(organizationUid).request();
-        Assertions.assertEquals("/v3/manifests/" + organizationUid,
-                request.url().encodedPath());
-        Assertions.assertEquals("DELETE",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
-
+    void testFindAppAuthorizations() {
+        Request request = app.findAppAuthorizations().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
     }
 
     @Test
-    void testDeleteWithoutId() {
-        Request request = app.delete().request();
-        Assertions.assertEquals("/v3/manifests/" + organizationUid,
-                request.url().encodedPath());
-        Assertions.assertEquals("DELETE",
-                request.method());
-        Assertions.assertFalse(request.headers().get("organization_uid").isEmpty());
-        Assertions.assertFalse(request.headers().get("authtoken").isEmpty());
+    void testDeleteAuthorization() {
+        Request request = app.deleteAuthorization(ORG_UID).request();
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+    }
+
+
+    @Test
+    void testFindAppInstallations() {
+        Request request = app.findAppInstallations().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
+    }
+
+    @Test
+    void testFindApps() {
+        Request request = app.findApps().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(1, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
+    }
+
+    @Test
+    void testCreateApps() {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("target_type", "dev");
+        requestBody.put("name", "test");
+        Request request = app.createApp(requestBody).request();
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(1, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
+    }
+
+
+    @Test
+    void testFetchApps() {
+        Request request = app.fetchApp().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
+    }
+
+
+    @Test
+    void testUpdateApp() {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("target_type", "dev");
+        requestBody.put("name", "test");
+        Request request = app.updateApp(requestBody).request();
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+    }
+
+    @Test
+    void testDeleteApp() {
+        Request request = app.deleteApp().request();
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+    }
+
+    @Test
+    void testFindAppRequests() {
+        Request request = app.findAppRequests().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("manifests", request.url().pathSegments().get(0));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("search=paramValue&limit=10&target_type=stack&skip=3&sort=updated_at&order=asc", request.url().query());
     }
 
 

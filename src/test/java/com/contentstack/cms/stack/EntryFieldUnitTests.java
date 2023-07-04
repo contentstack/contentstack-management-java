@@ -592,13 +592,13 @@ class EntryFieldUnitTests {
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
-        Assertions.assertEquals("/v3/content_types/product/entries/" + _uid,
+        Assertions.assertEquals("/v3/content_types/product/entries/" + _uid+"/unlocalize",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("unlocalize=fr-fr", resp.url().query());
+        Assertions.assertEquals("locale=fr-fr", resp.url().query());
         Assertions.assertNotNull(resp.body());
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "?unlocalize=fr-fr", resp.url().toString());
+                + "/unlocalize?locale=fr-fr", resp.url().toString());
     }
 
     @Test

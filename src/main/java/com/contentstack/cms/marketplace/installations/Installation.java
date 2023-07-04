@@ -1,10 +1,12 @@
 package com.contentstack.cms.marketplace.installations;
 
 import com.contentstack.cms.Parametron;
+import com.contentstack.cms.core.Util;
 import com.contentstack.cms.marketplace.installations.location.Location;
 import com.contentstack.cms.marketplace.installations.webhook.Webhook;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
@@ -17,12 +19,11 @@ import java.util.HashMap;
 public class Installation implements Parametron {
 
     private String installationId;
-    protected HashMap<String, String> headers;
+    private String organisationId;
     private InstallationService service;
+    protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
     private Retrofit client;
-    private final String MISSING_INSTALLATION_ID = "installation uid is required";
-    private final String MISSING_ORG_ID = "organization uid is required";
 
 
     /**
@@ -30,25 +31,26 @@ public class Installation implements Parametron {
      *
      * @param client
      *         the client
-     * @param orgId
+     * @param organisationId
      *         the org id
      * @param installationId
      *         the installation id
      */
-    public Installation(Retrofit client, @NotNull String orgId, @NotNull String installationId) {
-        if (orgId.isEmpty()) {
-            throw new NullPointerException(MISSING_ORG_ID);
-        }
-        this.headers.put("organization_uid", orgId);
-        init(client, installationId);
+    public Installation(Retrofit client, @NotNull String organisationId, @NotNull String installationId) {
+        checkOrganisationId(organisationId);
+        init(client, organisationId, installationId);
     }
 
-    private void init(Retrofit client, String installationId) {
-        this.headers = new HashMap<>();
-        this.params = new HashMap<>();
-        this.installationId = installationId;
-        this.client = client;
-        this.service = this.client.create(InstallationService.class);
+    private void checkOrganisationId(String organisationId) {
+        if (organisationId.isEmpty()) {
+            throw new NullPointerException(Util.MISSING_ORG_ID);
+        }
+    }
+
+    private void validateInstallationId(String installationId) {
+        if (installationId == null || installationId.isEmpty()) {
+            throw new IllegalArgumentException("installationId is requirement");
+        }
     }
 
     /**
@@ -56,17 +58,24 @@ public class Installation implements Parametron {
      *
      * @param client
      *         the client
-     * @param organizationUid
+     * @param organisationId
      *         the organization uid
      */
-    public Installation(@NotNull Retrofit client, @NotNull String organizationUid) {
-        if (organizationUid.isEmpty()) {
-            throw new NullPointerException(MISSING_ORG_ID);
-        }
-        this.headers.put("organization_uid", organizationUid);
-        init(client, null);
+    public Installation(@NotNull Retrofit client, @NotNull String organisationId) {
+        checkOrganisationId(organisationId);
+        init(client, organisationId, null);
     }
 
+
+    private void init(Retrofit client, @NotNull String organisationId, String installationId) {
+        this.headers = new HashMap<>();
+        this.params = new HashMap<>();
+        this.installationId = installationId;
+        this.organisationId = organisationId;
+        this.client = client;
+        this.headers.put("organization_uid", organisationId);
+        this.service = this.client.create(InstallationService.class);
+    }
 
     /**
      * Find installed apps call.
@@ -92,9 +101,11 @@ public class Installation implements Parametron {
      *
      * @return the call
      */
-    Call<ResponseBody> findInstallation() {
+    Call<ResponseBody> fetchInstallation() {
+        validateInstallationId(this.installationId);
         return this.service.getInstallations(this.headers, installationId, this.params);
     }
+
 
     /**
      * Fetch installation data call.
@@ -102,21 +113,18 @@ public class Installation implements Parametron {
      * @return the call
      */
     Call<ResponseBody> fetchInstallationData() {
-        return this.service.getInstallationData(this.headers, installationId, this.params);
+        validateInstallationId(this.installationId);
+        return this.service.getInstallationData(this.headers, this.installationId, this.params);
     }
 
     /**
      * Update installation call.
      *
-     * @param installationId
-     *         the installation id
      * @return the call
      */
-    Call<ResponseBody> updateInstallation(@NotNull String installationId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        return this.service.updateInstallation(this.headers, installationId, this.params);
+    Call<ResponseBody> updateInstallation(JSONObject body) {
+        validateInstallationId(this.installationId);
+        return this.service.updateInstallation(this.headers, this.installationId, body, this.params);
     }
 
 
@@ -142,117 +150,81 @@ public class Installation implements Parametron {
     /**
      * Uninstall call.
      *
-     * @param installationId
-     *         the installation id
      * @return the call
      */
-    Call<ResponseBody> uninstall(@NotNull String installationId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        return this.service.uninstall(this.headers, installationId);
+    Call<ResponseBody> uninstall() {
+        validateInstallationId(this.installationId);
+        return this.service.uninstall(this.headers, this.installationId);
     }
 
     /**
      * Fetch app configuration call.
      *
-     * @param installationId
-     *         the installation id
      * @return the call
      */
-    Call<ResponseBody> fetchAppConfiguration(@NotNull String installationId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        return this.service.getAppConfiguration(this.headers, installationId, this.params);
+    Call<ResponseBody> fetchAppConfiguration() {
+        validateInstallationId(this.installationId);
+        return this.service.getAppConfiguration(this.headers, this.installationId, this.params);
     }
 
     /**
      * Fetch server configuration call.
      *
-     * @param installationId
-     *         the installation id
      * @return the call
      */
-    Call<ResponseBody> fetchServerConfiguration(@NotNull String installationId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        return this.service.getServerConfiguration(this.headers, installationId, this.params);
+    Call<ResponseBody> fetchServerConfiguration() {
+        validateInstallationId(this.installationId);
+        return this.service.getServerConfiguration(this.headers, this.installationId, this.params);
     }
 
-    /**
-     * Update server configuration call.
-     *
-     * @param installationId
-     *         the installation id
-     * @return the call
-     */
-    Call<ResponseBody> updateServerConfiguration(@NotNull String installationId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        return this.service.updateServerConfiguration(this.headers, installationId, this.params);
+    Call<ResponseBody> updateServerConfiguration(JSONObject body) {
+        validateInstallationId(this.installationId);
+        return this.service.updateServerConfiguration(this.headers, this.installationId, body, this.params);
     }
 
     /**
      * Update stack configuration call.
      *
-     * @param installationId
-     *         the installation id
+     * @param body
+     *         The request Body
      * @return the call
      */
-    Call<ResponseBody> updateStackConfiguration(@NotNull String installationId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        return this.service.updateStackConfiguration(this.headers, installationId, this.params);
+    Call<ResponseBody> updateStackConfiguration(JSONObject body) {
+        validateInstallationId(this.installationId);
+        return this.service.updateStackConfiguration(this.headers, this.installationId, body, this.params);
     }
+
 
     /**
      * Create installation token call.
      *
-     * @param installationId
-     *         the installation id
      * @return the call
      */
-    Call<ResponseBody> createInstallationToken(@NotNull String installationId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        return this.service.createInstallationToken(this.headers, installationId, this.params);
+    Call<ResponseBody> createInstallationToken() {
+        validateInstallationId(this.installationId);
+        return this.service.createInstallationToken(this.headers, this.installationId, this.params);
     }
 
     /**
-     * Location location.
+     * Location.
      *
-     * @param installationId
-     *         the installation id
      * @return the location
      */
-    public Location location(@NotNull String installationId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        String organizationId = this.headers.get("organization_id");
-        return new Location(this.client, organizationId, installationId);
+    public Location location() {
+        validateInstallationId(this.installationId);
+        return new Location(this.client, this.organisationId, this.installationId);
     }
 
     /**
      * Webhook webhook.
      *
-     * @param installationId
-     *         the installation id
      * @param webhookId
      *         the webhook id
      * @return the webhook
      */
-    public Webhook webhook(@NotNull String installationId, @NotNull String webhookId) {
-        if (installationId.isEmpty()) {
-            throw new NullPointerException(MISSING_INSTALLATION_ID);
-        }
-        String organizationId = this.headers.get("organization_id");
-        return new Webhook(this.client, organizationId, installationId);
+    public Webhook webhook(@NotNull String webhookId) {
+        validateInstallationId(this.installationId);
+        return new Webhook(this.client, this.organisationId, webhookId, this.installationId);
     }
 
     /**
@@ -266,8 +238,9 @@ public class Installation implements Parametron {
      * @throws NullPointerException
      *         if the key or value argument is null
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public Installation addParam(@NotNull String key, @NotNull String value) {
+    public Installation addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
         return this;
     }
@@ -283,6 +256,7 @@ public class Installation implements Parametron {
      * @throws NullPointerException
      *         if the key or value argument is null
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Installation addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
@@ -298,6 +272,7 @@ public class Installation implements Parametron {
      * @throws NullPointerException
      *         if the params argument is null
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Installation addParams(@NotNull HashMap params) {
         this.params.putAll(params);
@@ -313,6 +288,7 @@ public class Installation implements Parametron {
      * @throws NullPointerException
      *         if the params argument is null
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Installation addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);

@@ -42,6 +42,11 @@ public class Util {
     public static final String MULTIPART = "multipart/form-data";
     public static final String CONTENT_TYPE_VALUE = "application/json";
 
+    // Error Messages
+    public static final String MISSING_INSTALLATION_ID = "installation uid is required";
+    public static final String ERROR_INSTALLATION = "installation uid is required";
+    public static final String MISSING_ORG_ID = "organization uid is required";
+
     Util() throws IllegalAccessException {
         throw new IllegalAccessException("private=modifier");
     }

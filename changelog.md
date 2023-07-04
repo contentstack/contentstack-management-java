@@ -2,14 +2,17 @@
 
 ## v1.0.0
 
-### 30-APR-2023
+### 30-June-2023
 
-- Added support for marketplace API
+- Bug Fixed For Unlocalize An Entry
 - General improvements
-- code coverage improvements
-- code quality improvements
+- Code coverage improvements
+- Code quality improvements
+- Fixed Timeout Issue
 
 ## v0.1.0
+
+### Initial Release
 
 ### 20-OCT-2022
 

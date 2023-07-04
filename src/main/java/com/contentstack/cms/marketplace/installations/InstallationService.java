@@ -1,6 +1,7 @@
 package com.contentstack.cms.marketplace.installations;
 
 import okhttp3.ResponseBody;
+import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -25,7 +26,6 @@ public interface InstallationService {
             @QueryMap Map<String, Object> queryParams
     );
 
-
     @GET("installations/{id}")
     Call<ResponseBody> getInstallations(
             @HeaderMap Map<String, String> headers,
@@ -44,6 +44,7 @@ public interface InstallationService {
     Call<ResponseBody> updateInstallation(
             @HeaderMap Map<String, String> headers,
             @Path("id") String id,
+            @Body JSONObject requestBody,
             @QueryMap Map<String, Object> queryParams
     );
 
@@ -84,6 +85,7 @@ public interface InstallationService {
     Call<ResponseBody> updateServerConfiguration(
             @HeaderMap Map<String, String> headers,
             @Path("id") String id,
+            @Body JSONObject body,
             @QueryMap Map<String, Object> queryParams
     );
 
@@ -92,6 +94,7 @@ public interface InstallationService {
     Call<ResponseBody> updateStackConfiguration(
             @HeaderMap Map<String, String> headers,
             @Path("id") String id,
+            @Body JSONObject body,
             @QueryMap Map<String, Object> queryParams
     );
 

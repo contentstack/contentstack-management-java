@@ -30,7 +30,7 @@ public class Auth implements Parametron {
      * @return the call
      */
     Call<ResponseBody> findAuthorizedApp() {
-        return this.service.findAuthorizedApps(this.headers);
+        return this.service.findAuthorizedApps(this.headers, this.params);
     }
 
 
@@ -46,7 +46,7 @@ public class Auth implements Parametron {
      *         if the key or value argument is null
      */
     @Override
-    public Auth addParam(@NotNull String key, @NotNull String value) {
+    public Auth addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
         return this;
     }

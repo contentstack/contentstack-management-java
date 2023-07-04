@@ -14,7 +14,9 @@ public interface AppService {
     Call<ResponseBody> createInstallation(
             @HeaderMap Map<String, String> headers,
             @Path("uid") String uid,
-            @Body JSONObject body);
+            @Body JSONObject body,
+            @QueryMap Map<String, Object> param
+            );
 
     @PUT("manifests/{id}/reinstall")
     Call<ResponseBody> updateVersion(
@@ -27,16 +29,16 @@ public interface AppService {
     @GET("manifests/{uid}/authorizations")
     Call<ResponseBody> findAppAuthorizations(
             @HeaderMap Map<String, String> headers,
-            @Path("uid") String uid);
+            @Path("uid") String uid, @QueryMap Map<String, Object> queryParams);
 
-    @DELETE("manifests/{uid}/authorizations/{organization_uid}")
+    @DELETE("manifests/{uid}/authorizations/{uid}")
     Call<ResponseBody> deleteAuthorization(
             @HeaderMap Map<String, String> headers,
             @Path("uid") String uid,
-            @Path("organization_uid") String orgId);
+            @Path("uid") String orgId);
 
 
-    @GET("manifests/{id}/installations")
+    @GET("manifests/{uid}/installations")
     Call<ResponseBody> listAppInstallations(
             @HeaderMap Map<String, String> headers,
             @Path("uid") String uid,
@@ -73,9 +75,9 @@ public interface AppService {
             @Path("uid") String uid);
 
 
-    @GET("manifests/{id}/requests")
+    @GET("manifests/{uid}/requests")
     Call<ResponseBody> listAppRequests(
             @HeaderMap Map<String, String> headers,
-            @Path("uid") String uid);
+            @Path("uid") String uid, @QueryMap Map<String, Object> params);
 
 }

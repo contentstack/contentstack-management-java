@@ -15,16 +15,14 @@ public class AppRequest implements Parametron {
 
 
     private final RequestService service;
-    private final String organizationUid;
-    private Map<String, String> headers;
-    private Map<String, Object> queryParams;
+    private final Map<String, String> headers;
+    private final Map<String, Object> queryParams;
 
 
     public AppRequest(@NotNull Retrofit client, @NotNull String orgId) {
         this.service = client.create(RequestService.class);
-        this.organizationUid = orgId;
         this.headers = new HashMap<>();
-        this.headers.put("organization_uid", this.organizationUid);
+        this.headers.put("organization_uid", orgId);
         this.queryParams = new HashMap<>();
     }
 
@@ -46,18 +44,21 @@ public class AppRequest implements Parametron {
         return this.service.deleteRequest(this.headers, requestId);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public AppRequest addParam(@NotNull String key, @NotNull String value) {
+    public AppRequest addParam(@NotNull String key, @NotNull Object value) {
         this.queryParams.put(key, value);
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AppRequest addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AppRequest addParams(@NotNull HashMap params) {
         this.queryParams.putAll(params);
@@ -65,6 +66,7 @@ public class AppRequest implements Parametron {
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public AppRequest addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
