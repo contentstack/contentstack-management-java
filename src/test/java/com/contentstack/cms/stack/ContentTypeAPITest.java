@@ -7,8 +7,6 @@ import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.io.IOException;
-
 @Tag("unit")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContentTypeAPITest {
@@ -18,6 +16,7 @@ class ContentTypeAPITest {
     protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static String contentTypeUid = "contentType";
     protected static Stack stack;
+    private int _COUNT = 3;
 
 
     @BeforeAll
@@ -28,10 +27,10 @@ class ContentTypeAPITest {
 
     @Order(1)
     @Test
-    void setupBeforeStart() throws IOException {
+    void setupBeforeStart() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.find().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -48,7 +47,7 @@ class ContentTypeAPITest {
         JSONObject requestBody = Utils.readJson("mockcontenttype/create.json");
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.create(requestBody).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -68,7 +67,7 @@ class ContentTypeAPITest {
         contentType.addParam("include_global_field_schema", true);
 
         Request request = contentType.find().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -86,7 +85,7 @@ class ContentTypeAPITest {
     void testSingleApi() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.fetch().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -103,7 +102,7 @@ class ContentTypeAPITest {
         contentType = stack.contentType(contentTypeUid);
         JSONObject requestBody = Utils.readJson("mockcontenttype/update.json");
         Request request = contentType.update(requestBody).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -120,7 +119,7 @@ class ContentTypeAPITest {
         contentType = stack.contentType(contentTypeUid);
         JSONObject requestBody = Utils.readJson("mockcontenttype/visibility.json");
         Request request = contentType.fieldVisibilityRule(requestBody).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -137,7 +136,7 @@ class ContentTypeAPITest {
     void testReference() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.reference(false).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -153,7 +152,7 @@ class ContentTypeAPITest {
     void testReferenceIncludingGlobalField() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.referenceIncludeGlobalField().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -170,7 +169,7 @@ class ContentTypeAPITest {
     void testExport() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.export().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -186,7 +185,7 @@ class ContentTypeAPITest {
     void testExportByVersion() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.export(1).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -203,7 +202,7 @@ class ContentTypeAPITest {
     void testImport() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.imports().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -219,7 +218,7 @@ class ContentTypeAPITest {
     void testImportOverwrite() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.importOverwrite().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -236,7 +235,7 @@ class ContentTypeAPITest {
     void testDeleteContentType() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.delete().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -252,7 +251,7 @@ class ContentTypeAPITest {
     void testDeleteForcefully() {
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.delete().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

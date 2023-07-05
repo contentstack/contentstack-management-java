@@ -1,6 +1,7 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
@@ -18,16 +19,17 @@ class StackUnitTests {
 
     protected Stack stack;
     protected Dotenv env = Dotenv.load();
-    String orgId = env.get("organizationUid");
-    protected String apiKey = env.get("apiKey");
-    protected String authtoken = env.get("auth_token");
+    String orgId = TestClient.ORGANIZATION_UID;
+    protected String apiKey = TestClient.API_KEY;
+    protected String authtoken = TestClient.AUTHTOKEN;
     protected JSONObject requestBody = Utils.readJson("mockstack/create_stack.json");
 
     @BeforeAll
     public void setUp() {
         HashMap<String, Object> headers = new HashMap<>();
         headers.put("api_key", apiKey);
-        stack = new Contentstack.Builder().setAuthtoken(authtoken).build().stack(headers);
+        headers.put("authtoken", authtoken);
+        stack = TestClient.getClient().stack(headers);
     }
 
     @Test
@@ -53,7 +55,7 @@ class StackUnitTests {
     void testSingleStackHeaders() {
         stack.clearParams();
         Request request = stack.find().request();
-        Assertions.assertEquals(2, request.headers().size());
+        Assertions.assertEquals(3, request.headers().size());
         Assertions.assertEquals(stack.headers.get("api_key").toString(), request.headers("api_key").get(0));
     }
 
@@ -90,7 +92,7 @@ class StackUnitTests {
         assert orgId != null;
         stack.addHeader("organization_uid", orgId);
         Request request = stack.find().request();
-        Assertions.assertEquals(2, request.headers().size());
+        Assertions.assertEquals(3, request.headers().size());
     }
 
     @Test
@@ -100,7 +102,7 @@ class StackUnitTests {
         stack.addHeader("organization_uid", orgId);
         Request request = stack.find().request();
         Set<String> headers = request.headers().names();
-        Assertions.assertEquals(2, headers.size());
+        Assertions.assertEquals(3, headers.size());
     }
 
     @Test
@@ -111,8 +113,8 @@ class StackUnitTests {
         Request request = stack.find().request();
         String headerAPIKey = request.headers().name(0);
         String headerOrgKey = request.headers().name(1);
-        Assertions.assertEquals("api_key", headerAPIKey);
-        Assertions.assertEquals("organization_uid", headerOrgKey);
+        Assertions.assertEquals("authtoken", headerAPIKey);
+        Assertions.assertEquals("api_key", headerOrgKey);
     }
 
     @Test
@@ -155,7 +157,7 @@ class StackUnitTests {
         Assertions.assertEquals(
                 "include_count=true",
                 request.url().encodedQuery());
-        Assertions.assertEquals(2, request.headers().size());
+        Assertions.assertEquals(3, request.headers().size());
     }
 
     @Test
