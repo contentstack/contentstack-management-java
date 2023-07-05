@@ -5,36 +5,70 @@ on:
     branches:
       - feat/CS-36689-compare-merge-branch
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Configure settings.xml
+        run: |
+          mkdir -p $HOME/.m2
+          echo "<settings><servers><server><id>deployment</id><username>\${env.DEPLOY_USERNAME}</username><password>\${env.DEPLOY_PASSWORD}</password></server></servers></settings>" > $HOME/.m2/settings.xml
+
+      - name: Import GPG private key
+        run: |
+          echo "$GPG_PRIVATE_KEY" > private.key
+          gpg --batch --import private.key
+
+      - name: Maven deploy with GPG signing
+        run: |
+          mvn clean deploy -P release
+        env:
+          DEPLOY_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          DEPLOY_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+
+
 #on:
 #  release:
 #    types: [ created ]
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Java for publishing to Maven Central Repository
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-      - name: Publish to the Maven Central Repository
-        run: mvn --batch-mode deploy
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-      - name: Set up Java for publishing to GitHub Packages
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-      - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#jobs:
+#  publish:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      packages: write
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up Java for publishing to Maven Central Repository
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '11'
+#          distribution: 'adopt'
+#          server-id: ossrh
+#          server-username: MAVEN_USERNAME
+#          server-password: MAVEN_PASSWORD
+#
+#      - name: Publish to the Maven Central Repository
+#        run: mvn --batch-mode deploy
+#        env:
+#          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+#          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+#      - name: Set up Java for publishing to GitHub Packages
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '11'
+#          distribution: 'adopt'
+#      - name: Publish to GitHub Packages
+#        run: mvn --batch-mode deploy
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
