@@ -9,6 +9,8 @@
 - Code coverage improvements
 - Code quality improvements
 - Fixed Timeout Issue
+- Few breaking changes
+- Basic code improvements
 
 ## v0.1.0
 
