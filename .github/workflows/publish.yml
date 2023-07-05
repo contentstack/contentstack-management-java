@@ -35,10 +35,10 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Import GPG private key
-        run: |
-          echo "$GPG_PRIVATE_KEY" > private.key
-          gpg --batch --import private.key
+#      - name: Import GPG private key
+      #        run: |
+      #          echo "$GPG_PRIVATE_KEY" > private.key
+      #          gpg --batch --import private.key
 
       - name: Maven deploy with GPG signing
         run: |
