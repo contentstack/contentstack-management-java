@@ -83,7 +83,7 @@ public class Merge implements Parametron {
 
     /**
      * The Merge branches request merges the specified two branches as per the merge strategy selected.
-     *
+     * <br>
      * <b>Additional Resource:</b> To learn how to select and use the merge strategies, refer to our documentation on
      * Merging Branches.
      * <br>
@@ -128,8 +128,8 @@ public class Merge implements Parametron {
      *
      * @return the call
      * @see <a href=
-     * "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#get-all-merge-jobs"></a>Get all Merge
-     * Jobs
+     * "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#get-all-merge-jobs"></a>Get all
+     * Merge Jobs
      */
     public Call<ResponseBody> find() {
         return this.service.find(this.headers, this.params);

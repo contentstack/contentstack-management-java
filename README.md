@@ -109,7 +109,7 @@ To create an entry in a specific content type of a stack, use the following line
         JSONObject body=....
         Response<ResponseBody> response=entry.create(body).execute();
         if(response.isSuccessful()){
-             System.out.println(response.body());
+        System.out.println(response.body());
         }
 ```
 
@@ -123,9 +123,9 @@ The following lines of code can be used to upload assets to your stack:
         Asset asset=stack.asset();
         Response<ResponseBody> response=asset.uploadAsset("filePath","description").execute();
         if(response.isSuccessful()){
-            System.out.println(response.body());
+        System.out.println(response.body());
         }else{
-            System.out.println(response.errorBody());
+        System.out.println(response.errorBody());
         }
 ```
 

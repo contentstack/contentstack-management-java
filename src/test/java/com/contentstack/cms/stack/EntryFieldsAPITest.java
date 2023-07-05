@@ -1,230 +1,348 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Contentstack;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import io.github.cdimascio.dotenv.Dotenv;
-import okhttp3.ResponseBody;
+import com.contentstack.cms.TestClient;
+import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
-import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.HashMap;
 
-import static com.contentstack.cms.Utils.toJson;
-
-@Tag("api")
+@Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EntryFieldsAPITest {
 
     private static Entry entry;
-    private static String contentTypeUid;
-    private static ContentType contentType;
+    private static int _COUNT = 2;
+    private static String apiKey = TestClient.API_KEY;
+    private static String managementToken = TestClient.MANAGEMENT_TOKEN;
+    private static ContentType contentType = TestClient.getClient().stack(apiKey, managementToken).contentType("test");
 
     @BeforeAll
     public static void setup() throws IOException {
-        String username = Dotenv.load().get("username");
-        String password = Dotenv.load().get("password");
-        String apiKey = Dotenv.load().get("apiKey");
-        String managementToken = Dotenv.load().get("managementToken");
-        Contentstack client = new Contentstack.Builder().build();
-        client.login(username, password);
-        Stack stack = client.stack();
-        assert apiKey != null;
-        assert managementToken != null;
-
-        contentType = client.stack(apiKey, managementToken).contentType();
-        Response<ResponseBody> response = contentType.find().execute();
-        if (response.isSuccessful()){
-            JsonObject contentTypesResp = toJson(response);
-            JsonArray listCT = contentTypesResp.getAsJsonArray("content_types");
-            if (listCT.size() > 0) {
-                int index = (listCT.size() - 1);
-                contentTypeUid = String.valueOf(listCT.get(index).getAsJsonObject().get("uid").getAsString());
-            }
-        }else{
-            JsonObject error = toJson(response);
-            System.out.println(error.getAsJsonObject());
-        }
-        contentType = client.stack(apiKey, managementToken).contentType(contentTypeUid);
+        entry = contentType.entry();
     }
 
     @Test
     @Order(1)
-    void testEntryFindAll() throws IOException {
-        Response<ResponseBody> response = contentType.entry().find().execute();
-        JsonObject jsonResp = toJson(response);
-        JsonArray allCT = jsonResp.getAsJsonArray("entries");
-        String entryUid = allCT.get(0).getAsJsonObject().get("uid").getAsString();
-        entry = contentType.entry(entryUid);
-        Assertions.assertTrue(allCT.size() > 0);
+    void testEntryFindAll() {
+        Request request = entry.find().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries", request.url().toString());
     }
 
     @Order(2)
     @Test
-    void testEntryFetch() throws IOException {
-        Response<ResponseBody> response = entry.fetch().execute();
-        Assertions.assertTrue(response.isSuccessful());
+    void testEntryFetch() {
+        entry = contentType.entry(apiKey);
+        Request request = entry.fetch().request();
+        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY, request.url().toString());
     }
 
     @Order(3)
     @Test
-    @Disabled
-    void testEntryCreate() throws IOException {
+    void testEntryCreate() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryCreate = new JSONObject();
         entryCreate.put("entry", body);
-        Response<ResponseBody> response = entry.create(entryCreate).execute();
-        Assertions.assertTrue(response.isSuccessful());
+        Request request = entry.create(entryCreate).request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries", request.url().toString());
     }
 
     @Order(4)
     @Test
-    void testUpdate() throws IOException {
+    void testUpdate() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryUpdate = new JSONObject();
         entryUpdate.put("entry", body);
-        Response<ResponseBody> response = entry.update(entryUpdate).execute();
-        Assertions.assertTrue(response.isSuccessful());
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.update(entryUpdate).request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY, request.url().toString());
     }
 
     @Order(5)
     @Test
-    void testAtomicOperation() throws IOException {
+    void testAtomicOperation() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
-        Response<ResponseBody> response = entry.atomicOperation(entryBody).execute();
-        Assertions.assertTrue(response.isSuccessful());
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.atomicOperation(entryBody).request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY, request.url().toString());
     }
 
     @Order(6)
     @Test
-    @Disabled
-    void testEntryDelete() throws IOException {
-        Response<ResponseBody> response = entry.delete().execute();
-        Assertions.assertTrue(response.isSuccessful());
+    void testEntryDelete() {
+        entry = contentType.entry(apiKey);
+        Request request = entry.delete().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/blta6f1fdf46fe97007", request.url().toString());
     }
 
     @Order(7)
     @Test
-    @Disabled
-    void testEntryVersionName() throws IOException {
+    void testEntryVersionName() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
-        Response<ResponseBody> response = entry.versionName(1, entryBody).execute();
-        Assertions.assertTrue(response.isSuccessful());
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.versionName(1, entryBody).request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(8, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY + "/versions/1/name", request.url().toString());
     }
 
     @Order(8)
     @Test
-    void testEntryDetailOfAllVersion() throws IOException {
-        Response<ResponseBody> response = entry.detailOfAllVersion().execute();
-        Assertions.assertTrue(response.isSuccessful());
+    void testEntryDetailOfAllVersion() {
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.detailOfAllVersion().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/versions", request.url().toString());
     }
 
     @Order(9)
     @Test
-    @Disabled
-    void testEntryDeleteVersionName() throws IOException {
+    void testEntryDeleteVersionName() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
-        Response<ResponseBody> response = entry.deleteVersionName(1, entryBody).execute();
-        Assertions.assertTrue(response.isSuccessful());
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.deleteVersionName(1, entryBody).request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(8, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/versions/1/name", request.url().toString());
     }
 
     @Order(10)
     @Test
-    void testEntryGetReference() throws IOException {
-        Response<ResponseBody> response = entry.getReference().execute();
-        Assertions.assertTrue(response.isSuccessful());
+    void testEntryGetReference() {
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.getReference().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/references", request.url().toString());
     }
 
     @Order(11)
     @Test
-    void testEntryLocalise() throws IOException {
+    void testEntryLocalise() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
-        Response<ResponseBody> response = entry.localize(entryBody, "en-us").execute();
-        Assertions.assertTrue(response.isSuccessful());
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.localize(entryBody, "en-us").request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "?locale=en-us", request.url().toString());
     }
 
     @Order(12)
     @Test
-    void testEntryExport() throws IOException {
-        Response<ResponseBody> response = entry.export().execute();
-        Assertions.assertTrue(response.isSuccessful());
+    void testEntryExport() {
+        entry = contentType.entry(apiKey);
+        Request request = entry.export().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/blta6f1fdf46fe97007/export", request.url().toString());
     }
 
     @Order(13)
     @Test
-    @Disabled
-    void testEntryImports() throws IOException {
-        Response<ResponseBody> response = entry.imports().execute();
-        Assertions.assertTrue(response.isSuccessful());
+    void testEntryImports() {
+        Request request = entry.imports().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/import", request.url().toString());
     }
 
     @Order(14)
     @Test
-    @Disabled
-    void testEntryImportExisting() throws IOException {
-        Response<ResponseBody> response = entry.importExisting().execute();
-        Assertions.assertTrue(response.isSuccessful());
+    void testEntryImportExisting() {
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.importExisting().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/import", request.url().toString());
     }
 
     @Order(15)
     @Test
-    @Disabled
-    void testEntryPublish() throws IOException {
+    void testEntryPublish() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
-        Response<ResponseBody> response = entry.publish(entryBody).execute();
-        Assertions.assertTrue(response.isSuccessful());
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.publish(entryBody).request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/publish", request.url().toString());
     }
 
     @Order(16)
     @Test
-    @Disabled
-    void testEntryPublishWithReference() throws IOException {
+    void testEntryPublishWithReference() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
-        Response<ResponseBody> response = entry.publishWithReference(entryBody).execute();
-        Assertions.assertTrue(response.isSuccessful());
+        Request request = entry.publishWithReference(entryBody).request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
+        Assertions.assertEquals("x-bulk-action=publish", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/bulk/publish?x-bulk-action=publish", request.url().toString());
     }
 
     @Order(17)
     @Test
-    @Disabled
-    void testPublishWithReference() throws IOException {
+    void testPublishWithReference() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
-        Response<ResponseBody> response = entry.unpublish(entryBody).execute();
-        Assertions.assertTrue(response.isSuccessful());
+
+        entry = contentType.entry(apiKey);
+        Request request = entry.unpublish(entryBody).request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/unpublish", request.url().toString());
     }
 
 }
