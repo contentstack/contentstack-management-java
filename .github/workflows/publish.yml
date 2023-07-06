@@ -17,7 +17,7 @@ jobs:
           distribution: 'adopt'
           server-id: ossrh
           server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-password: ${{ secrets.OSSRH_TOKEN }}
+          server-password: ${{ secrets.OSSRH_PASSWORD }}
 
       - name: Configure settings.xml
         run: |
@@ -28,25 +28,12 @@ jobs:
         run: mvn --batch-mode deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       - name: Set up Java for publishing to GitHub Packages
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'adopt'
-
-#      - name: Import GPG private key
-      #        run: |
-      #          echo "$GPG_PRIVATE_KEY" > private.key
-      #          gpg --batch --import private.key
-
-#      - name: Maven deploy with GPG signing
-#        run: |
-#          mvn clean deploy -P release
-#        env:
-#          DEPLOY_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-#          DEPLOY_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-#          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Publish to GitHub Packages
         run: mvn --batch-mode deploy
