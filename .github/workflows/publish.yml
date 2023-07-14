@@ -15,9 +15,9 @@ jobs:
         with:
           java-version: "11"
           distribution: "adopt"
-          server-id: ossrh
-          server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-password: ${{ secrets.OSSRH_PASSWORD }}
+          # server-id: ossrh
+          # server-username: ${{ secrets.OSSRH_USERNAME }}
+          # server-password: ${{ secrets.OSSRH_PASSWORD }}
 
       - name: Publish to GitHub Packages
         run: mvn --batch-mode deploy
