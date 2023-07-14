@@ -15,6 +15,9 @@ import java.util.Objects;
  */
 public class Util {
 
+    // The line `public static final String SDK_VERSION = "1.0.0";`
+    // named `SDK_VERSION` of type `String`. The value of this constant is set to
+    // "1.0.0".
     public static final String SDK_VERSION = "1.0.0";
 
     static final String PRIVATE_CONSTRUCTOR = "private constructor can't be accessed outside the class";
@@ -47,14 +50,27 @@ public class Util {
     public static final String ERROR_INSTALLATION = "installation uid is required";
     public static final String MISSING_ORG_ID = "organization uid is required";
 
+    // The code `Util() throws IllegalAccessException` is a constructor for the
+    // `Util` class that throws an
+    // `IllegalAccessException` when called. This constructor is marked as private,
+    // which means it cannot
+    // be accessed outside the class. The purpose of throwing the
+    // `IllegalAccessException` is to prevent
+    // the instantiation of the `Util` class from outside the class itself.
     Util() throws IllegalAccessException {
         throw new IllegalAccessException("private=modifier");
     }
 
     /**
-     * Default user agent string.
-     *
-     * @return the string
+     * The function returns the default user agent string for a Java application,
+     * including the Java
+     * version and operating system.
+     * 
+     * @return The method is returning a string value. The string value being
+     *         returned is either the value
+     *         of the "http.agent" system property if it is not null, or a default
+     *         string value "Java" concatenated
+     *         with the Java version and the operating system name.
      */
     protected static String defaultUserAgent() {
         String agent = System.getProperty("http.agent");
@@ -63,8 +79,12 @@ public class Util {
     }
 
     /**
-     * @param field
-     *         throws an exception for not providing a valid input
+     * The function checks if a given string is null or empty and throws an
+     * exception if it is.
+     * 
+     * @param field The parameter "field" is of type String and is annotated with
+     *              the "@NotNull"
+     *              annotation.
      */
     public static void nullEmptyThrowsException(@NotNull String field) {
         Objects.requireNonNull(field);
@@ -76,12 +96,22 @@ public class Util {
     }
 
     /**
-     * When private constructor to be initialized {@link AssertionError} otherwise.
+     * The function throws an AssertionError with a private constructor.
      */
     public static void assertionError() {
         throw new AssertionError(PRIVATE_CONSTRUCTOR);
     }
 
+    /**
+     * The function converts a string into a RequestBody object with a specified
+     * media type.
+     * 
+     * @param bodyString The `bodyString` parameter is a string that represents the
+     *                   body of the request. It
+     *                   can contain any data that you want to send in the request
+     *                   body, such as JSON, XML, or plain text.
+     * @return The method is returning a RequestBody object.
+     */
     public static RequestBody toRequestBody(String bodyString) {
         return RequestBody.create(MediaType.parse("application/json; charset=UTF-8"), bodyString);
     }

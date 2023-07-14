@@ -13,9 +13,10 @@ class EntryFieldsAPITest {
 
     private static Entry entry;
     private static int _COUNT = 2;
-    private static String apiKey = TestClient.API_KEY;
-    private static String managementToken = TestClient.MANAGEMENT_TOKEN;
-    private static ContentType contentType = TestClient.getClient().stack(apiKey, managementToken).contentType("test");
+    private static String API_KEY = TestClient.API_KEY;
+    private static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
+    private static ContentType contentType = TestClient.getClient().stack(API_KEY, MANAGEMENT_TOKEN)
+            .contentType("test");
 
     @BeforeAll
     public static void setup() throws IOException {
@@ -40,7 +41,7 @@ class EntryFieldsAPITest {
     @Order(2)
     @Test
     void testEntryFetch() {
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -50,7 +51,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY, request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY,
+                request.url().toString());
     }
 
     @Order(3)
@@ -82,7 +84,7 @@ class EntryFieldsAPITest {
         JSONObject entryUpdate = new JSONObject();
         entryUpdate.put("entry", body);
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.update(entryUpdate).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
@@ -92,7 +94,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY, request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY,
+                request.url().toString());
     }
 
     @Order(5)
@@ -104,7 +107,7 @@ class EntryFieldsAPITest {
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.atomicOperation(entryBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
@@ -114,13 +117,14 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY, request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY,
+                request.url().toString());
     }
 
     @Order(6)
     @Test
     void testEntryDelete() {
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.delete().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
@@ -130,7 +134,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/blta6f1fdf46fe97007", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY,
+                request.url().toString());
     }
 
     @Order(7)
@@ -142,7 +147,7 @@ class EntryFieldsAPITest {
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.versionName(1, entryBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
@@ -152,14 +157,16 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY + "/versions/1/name", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/content_types/test/entries/" + TestClient.API_KEY + "/versions/1/name",
+                request.url().toString());
     }
 
     @Order(8)
     @Test
     void testEntryDetailOfAllVersion() {
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.detailOfAllVersion().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -169,7 +176,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/versions", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY + "/versions",
+                request.url().toString());
     }
 
     @Order(9)
@@ -181,7 +189,7 @@ class EntryFieldsAPITest {
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.deleteVersionName(1, entryBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
@@ -191,14 +199,16 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/versions/1/name", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY + "/versions/1/name",
+                request.url().toString());
     }
 
     @Order(10)
     @Test
     void testEntryGetReference() {
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.getReference().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -208,7 +218,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/references", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY + "/references",
+                request.url().toString());
     }
 
     @Order(11)
@@ -220,7 +231,7 @@ class EntryFieldsAPITest {
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.localize(entryBody, "en-us").request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
@@ -230,13 +241,14 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "?locale=en-us", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY + "?locale=en-us",
+                request.url().toString());
     }
 
     @Order(12)
     @Test
     void testEntryExport() {
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.export().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -246,7 +258,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/blta6f1fdf46fe97007/export", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/"+API_KEY+"/export",
+                request.url().toString());
     }
 
     @Order(13)
@@ -261,14 +274,15 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/import", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/import",
+                request.url().toString());
     }
 
     @Order(14)
     @Test
     void testEntryImportExisting() {
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.importExisting().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
@@ -278,7 +292,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/import", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY + "/import",
+                request.url().toString());
     }
 
     @Order(15)
@@ -290,7 +305,7 @@ class EntryFieldsAPITest {
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.publish(entryBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
@@ -300,7 +315,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/publish", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY + "/publish",
+                request.url().toString());
     }
 
     @Order(16)
@@ -320,7 +336,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("x-bulk-action=publish", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/bulk/publish?x-bulk-action=publish", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/bulk/publish?x-bulk-action=publish",
+                request.url().toString());
     }
 
     @Order(17)
@@ -332,7 +349,7 @@ class EntryFieldsAPITest {
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
-        entry = contentType.entry(apiKey);
+        entry = contentType.entry(API_KEY);
         Request request = entry.unpublish(entryBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
@@ -342,7 +359,8 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + apiKey + "/unpublish", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY + "/unpublish",
+                request.url().toString());
     }
 
 }

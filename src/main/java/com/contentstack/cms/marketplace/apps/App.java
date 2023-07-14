@@ -12,7 +12,8 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 
 /**
- * App/Manifest is used for creating/updating/deleting app in your Contentstack organization.
+ * App/Manifest is used for creating/updating/deleting app in your Contentstack
+ * organization.
  *
  * @author ***REMOVED***
  * @version v1.0.0
@@ -33,9 +34,9 @@ public class App implements Parametron {
      * Instantiates a new Organization.
      *
      * @param client
-     *         The retrofit client
+     *                        The retrofit client
      * @param organizationUid
-     *         the organization uid
+     *                        the organization uid
      */
     public App(Retrofit client, @NotNull String organizationUid) {
         this.client = client;
@@ -51,12 +52,9 @@ public class App implements Parametron {
     /**
      * Instantiates a new App/Manifest.
      *
-     * @param client
-     *         The retrofit client
-     * @param organizationUid
-     *         The uid of the organization
-     * @param uid
-     *         The app uid
+     * @param client           The retrofit client
+     * @param organizationUid= The uid of the organization
+     * @param uid              The app uid
      */
     public App(Retrofit client, @NotNull String organizationUid, @NotNull String uid) {
         this.client = client;
@@ -73,19 +71,16 @@ public class App implements Parametron {
         this.service = client.create(AppService.class);
     }
 
-
     /**
-     * Adds a header with the specified key and value to this location and returns the updated location.
+     * Adds a header with the specified key and value to this location and returns
+     * the updated location.
      *
-     * @param key
-     *         the key of the header to be added
-     * @param value
-     *         the value of the header to be added
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
      * @return a new {@link App} object with the specified header added
-     * @throws NullPointerException
-     *         if the key or value argument is null
+     * @throws NullPointerException if the key or value argument is null
      */
-    @SuppressWarnings("unknown")
+    @SuppressWarnings("unchecked")
     @Override
     public App addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -93,17 +88,18 @@ public class App implements Parametron {
     }
 
     /**
-     * Adds a header with the specified key and value to this location and returns the updated location.
+     * Adds a header with the specified key and value to this location and returns
+     * the updated location.
      *
      * @param key
-     *         the key of the header to be added
+     *              the key of the header to be added
      * @param value
-     *         the value of the header to be added
+     *              the value of the header to be added
      * @return a new {@link App} object with the specified header added
      * @throws NullPointerException
-     *         if the key or value argument is null
+     *                              if the key or value argument is null
      */
-    @SuppressWarnings("unknown")
+    @SuppressWarnings("unchecked")
     @Override
     public App addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
@@ -111,15 +107,15 @@ public class App implements Parametron {
     }
 
     /**
-     * Adds the specified parameters to this location and returns the updated location.
+     * Adds the specified parameters to this location and returns the updated
+     * location.
      *
-     * @param params
-     *         a {@link HashMap} containing the parameters to be added
+     * @param params a {@link HashMap} containing the parameters to be added
      * @return a new {@link App} object with the specified parameters added
      * @throws NullPointerException
-     *         if the params argument is null
+     *                              if the params argument is null
      */
-    @SuppressWarnings("unknown")
+    @SuppressWarnings("unchecked")
     @Override
     public App addParams(@NotNull HashMap params) {
         this.params.putAll(params);
@@ -127,27 +123,27 @@ public class App implements Parametron {
     }
 
     /**
-     * Adds the specified parameters to this location and returns the updated location.
+     * Adds the specified parameters to this location and returns the updated
+     * location.
      *
      * @param headers
-     *         a {@link HashMap} containing the parameters to be added
+     *                a {@link HashMap} containing the parameters to be added
      * @return a new {@link App} object with the specified parameters added
      * @throws NullPointerException
-     *         if the params argument is null
+     *                              if the params argument is null
      */
-    @SuppressWarnings("unknown")
+    @SuppressWarnings("unchecked")
     @Override
     public App addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
         return this;
     }
 
-
     /**
      * Create installation call.
      *
      * @param body
-     *         the body
+     *             the body
      * @return the call
      */
     public Call<ResponseBody> createInstallation(@NotNull JSONObject body) {
@@ -158,7 +154,7 @@ public class App implements Parametron {
      * Update version call.
      *
      * @param body
-     *         the body
+     *             the body
      * @return the call
      */
     public Call<ResponseBody> updateVersion(@NotNull JSONObject body) {
@@ -178,7 +174,7 @@ public class App implements Parametron {
      * Delete authorization call.
      *
      * @param authorizationUid
-     *         the authorization uid
+     *                         the authorization uid
      * @return the call
      */
     public Call<ResponseBody> deleteAuthorization(@NotNull String authorizationUid) {
@@ -207,7 +203,7 @@ public class App implements Parametron {
      * Create app call.
      *
      * @param body
-     *         the body
+     *             the body
      * @return the call
      */
     public Call<ResponseBody> createApp(@NotNull JSONObject body) {
@@ -227,7 +223,7 @@ public class App implements Parametron {
      * Update app call.
      *
      * @param body
-     *         the body
+     *             the body
      * @return the call
      */
     public Call<ResponseBody> updateApp(@NotNull JSONObject body) {
@@ -244,9 +240,11 @@ public class App implements Parametron {
     }
 
     /**
-     * Find app requests call.
-     *
-     * @return the call
+     * The function returns a call to list app requests with specified headers, app
+     * UID, and parameters.
+     * 
+     * @return The method is returning a Call object with a generic type of
+     *         ResponseBody.
      */
     public Call<ResponseBody> findAppRequests() {
         return service.listAppRequests(this.headers, this.appUid, this.params);
@@ -266,7 +264,7 @@ public class App implements Parametron {
      * Returns Instance of oauth
      *
      * @param id
-     *         the app uid
+     *           the app uid
      * @return the oauth
      */
     public Oauth oauth(@NotNull String id) {
@@ -288,13 +286,12 @@ public class App implements Parametron {
      * Hosting hosting.
      *
      * @param appId
-     *         the app id
+     *              the app id
      * @return the instance of hosting
      */
     public Hosting hosting(@NotNull String appId) {
         String orgId = this.headers.get(ORGANIZATION_UID);
         return new Hosting(this.client, orgId, appId);
     }
-
 
 }

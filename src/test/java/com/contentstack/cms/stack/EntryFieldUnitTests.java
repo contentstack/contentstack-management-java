@@ -1,7 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
-import io.github.cdimascio.dotenv.Dotenv;
+import com.contentstack.cms.TestClient;
+
 import okhttp3.Request;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,15 +13,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EntryFieldUnitTests {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("authToken");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String _uid = TestClient.AUTHTOKEN;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static String contentType = "product";
     static Entry entryInstance;
 
@@ -195,7 +195,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryMethod() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update( new JSONObject()).request();
+        Request resp = entryInstance.update(new JSONObject()).request();
         Assertions.assertEquals("PUT", resp.method());
     }
 
@@ -203,7 +203,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryHeaderSize() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update( new JSONObject()).request();
+        Request resp = entryInstance.update(new JSONObject()).request();
         Assertions.assertEquals(2, resp.headers().size());
     }
 
@@ -211,7 +211,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryHeaders() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update( new JSONObject()).request();
+        Request resp = entryInstance.update(new JSONObject()).request();
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -223,13 +223,13 @@ class EntryFieldUnitTests {
     void testUpdateEntryEncodedPath() {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("locale", "en-us");
-        Request resp = entryInstance.update( new JSONObject()).request();
+        Request resp = entryInstance.update(new JSONObject()).request();
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid, resp.url().encodedPath());
     }
 
     @Test
     void testUpdateEntryHost() {
-        Request resp = entryInstance.update( new JSONObject()).request();
+        Request resp = entryInstance.update(new JSONObject()).request();
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
     }
 
@@ -237,13 +237,13 @@ class EntryFieldUnitTests {
     void testUpdateEntryQuery() {
         entryInstance.clearParams();
         entryInstance.addParam("locale", "en-us");
-        Request resp = entryInstance.update( new JSONObject()).request();
+        Request resp = entryInstance.update(new JSONObject()).request();
         Assertions.assertEquals("locale=en-us", resp.url().query());
     }
 
     @Test
     void testUpdateEntryRequestBody() {
-        Request resp = entryInstance.update( updateRequestBody()).request();
+        Request resp = entryInstance.update(updateRequestBody()).request();
         Assertions.assertNotNull(resp.body());
     }
 
@@ -298,7 +298,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testAtomicOperationEncodedPath() {
-        Request resp = entryInstance.atomicOperation( atomicRequestBody()).request();
+        Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid, resp.url().encodedPath());
     }
 
@@ -310,13 +310,13 @@ class EntryFieldUnitTests {
 
     @Test
     void testAtomicOperationQuery() {
-        Request resp = entryInstance.atomicOperation( atomicRequestBody()).request();
+        Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();
         Assertions.assertNull(resp.url().query());
     }
 
     @Test
     void testAtomicOperationRequestBody() {
-        Request resp = entryInstance.atomicOperation( atomicRequestBody()).request();
+        Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();
         Assertions.assertNotNull(resp.body());
     }
 
@@ -407,7 +407,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testVersionNameMethod() {
-        Request resp = entryInstance.versionName( 1, _verRequestBody).request();
+        Request resp = entryInstance.versionName(1, _verRequestBody).request();
         Assertions.assertEquals("POST", resp.method());
     }
 
@@ -419,7 +419,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testVersionNameHeaders() {
-        Request resp = entryInstance.versionName( 1, _verRequestBody).request();
+        Request resp = entryInstance.versionName(1, _verRequestBody).request();
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -467,7 +467,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testDeleteVersionName() {
-        Request resp = entryInstance.deleteVersionName( 1, new JSONObject()).request();
+        Request resp = entryInstance.deleteVersionName(1, new JSONObject()).request();
 
         Assertions.assertEquals("DELETE", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
@@ -584,7 +584,7 @@ class EntryFieldUnitTests {
     @Test
     void testGetUnLocalise() {
 
-        Request resp = entryInstance.unLocalize( "fr-fr").request();
+        Request resp = entryInstance.unLocalize("fr-fr").request();
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
@@ -592,7 +592,7 @@ class EntryFieldUnitTests {
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
-        Assertions.assertEquals("/v3/content_types/product/entries/" + _uid+"/unlocalize",
+        Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/unlocalize",
                 resp.url().encodedPath());
         Assertions.assertEquals("api.contentstack.io", resp.url().host());
         Assertions.assertEquals("locale=fr-fr", resp.url().query());

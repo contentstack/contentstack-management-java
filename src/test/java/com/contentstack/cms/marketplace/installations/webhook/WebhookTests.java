@@ -32,7 +32,7 @@ class WebhookTests {
         webhook.addParam("skip", "5");
 
         Request request = webhook.findExecutionLogs().request();
-        Assertions.assertEquals("/installations/installation_id/webhooks/blte0fdf06879c18c1e/executions", request.url().encodedPath());
+        Assertions.assertEquals("/installations/installation_id/webhooks/"+WEBHOOK_ID+"/executions", request.url().encodedPath());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertTrue(request.url().isHttps());
@@ -56,7 +56,7 @@ class WebhookTests {
         webhook.addParam("skip", "5");
 
         Request request = webhook.fetchExecutionLogs(WEBHOOK_ID).request();
-        Assertions.assertEquals("/installations/installation_id/webhooks/blte0fdf06879c18c1e/executions/blte0fdf06879c18c1e", request.url().encodedPath());
+        Assertions.assertEquals("/installations/installation_id/webhooks/"+WEBHOOK_ID+"/executions/"+WEBHOOK_ID, request.url().encodedPath());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertTrue(request.url().isHttps());
@@ -79,7 +79,7 @@ class WebhookTests {
         webhook.addParam("limit", "10");
         webhook.addParam("skip", "5");
         Request request = webhook.retryExecution("execution_id").request();
-        Assertions.assertEquals("/installations/installation_id/webhooks/blte0fdf06879c18c1e/executions/execution_id/retry", request.url().encodedPath());
+        Assertions.assertEquals("/installations/installation_id/webhooks/"+WEBHOOK_ID+"/executions/execution_id/retry", request.url().encodedPath());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertTrue(request.url().isHttps());
