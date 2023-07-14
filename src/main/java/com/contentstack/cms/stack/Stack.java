@@ -39,12 +39,17 @@ public class Stack {
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * The addHeader function adds a key-value pair to the headers map and returns
+     * the updated Stack
+     * object.
+     * 
+     * @param key   A string representing the key of the header. It is marked
+     *              as @NotNull, which means it
+     *              cannot be null and must be provided.
+     * @param value The value parameter is of type Object, which means it can accept
+     *              any type of object as
+     *              its value.
+     * @return The method is returning a Stack object.
      */
     public Stack addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -52,12 +57,15 @@ public class Stack {
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * The addParam function adds a key-value pair to a stack and returns the
+     * updated stack.
+     * 
+     * @param key   A string representing the key for the parameter.
+     * @param value The value parameter is of type Object, which means it can accept
+     *              any type of object as
+     *              its value.
+     * @return The method is returning a reference to the current instance of the
+     *         Stack object.
      */
     public Stack addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -65,10 +73,12 @@ public class Stack {
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *            header key for the request
+     * The function removes a parameter from a stack and returns the modified stack.
+     * 
+     * @param key The parameter "key" is of type String and is marked with
+     *            the @NotNull annotation,
+     *            indicating that it cannot be null.
+     * @return The method is returning a Stack object.
      */
     public Stack removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -76,21 +86,19 @@ public class Stack {
     }
 
     /**
-     * To clear all the query params
+     * The function clears the parameters in a stack and returns the modified stack.
+     * 
+     * @return The method is returning a reference to the current instance of the
+     *         Stack object.
      */
     protected Stack clearParams() {
         this.params.clear();
         return this;
     }
 
-    /**
-     * Instantiates a new Stack.
-     *
-     * @param client
-     *                the contentstack client
-     * @param headers
-     *                Required headers to get the {@link Stack} information
-     */
+    // The above code is defining a constructor for a class called "Stack". The
+    // constructor takes two
+    // parameters: a Retrofit client and a map of headers.
     public Stack(@NotNull Retrofit client, @NotNull Map<String, Object> headers) {
         this.headers = new HashMap<>();
         this.client = client;
