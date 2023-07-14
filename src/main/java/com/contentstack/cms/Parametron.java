@@ -3,6 +3,7 @@ package com.contentstack.cms;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The interface Parametron.
