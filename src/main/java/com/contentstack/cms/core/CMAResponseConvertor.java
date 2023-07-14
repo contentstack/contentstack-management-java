@@ -25,7 +25,7 @@ public class CMAResponseConvertor {
 
     /**
      * @param response
-     *         this is response body
+     *                 this is response body
      */
     public CMAResponseConvertor(Response<ResponseBody> response) {
         this.response = response;
@@ -36,7 +36,7 @@ public class CMAResponseConvertor {
      *
      * @return stringfy the response
      * @throws IOException
-     *         throws exception when invalid response received
+     *                     throws exception when invalid response received
      */
     public String asString() throws IOException {
         return this.response.body() != null ? this.response.body().string() : null;
@@ -47,7 +47,7 @@ public class CMAResponseConvertor {
      *
      * @return string of json
      * @throws IOException
-     *         the io exception
+     *                     the io exception
      */
     public String asJson() throws IOException {
         String body = this.response.body() != null ? this.response.body().string() : null;
@@ -58,7 +58,7 @@ public class CMAResponseConvertor {
      * It converts to json string to the
      *
      * @param string
-     *         response as string
+     *               response as string
      * @return string type json
      */
     public String asJson(String string) {
@@ -67,15 +67,16 @@ public class CMAResponseConvertor {
     }
 
     /**
-     * It accepts model class you want to convert the data response to the specified model class
+     * It accepts model class you want to convert the data response to the specified
+     * model class
      *
      * @param tClass
-     *         the model class
+     *               the model class
      * @param <T>
-     *         type of the model class
+     *               type of the model class
      * @return the model class
      * @throws IOException
-     *         exception while parsing the response data
+     *                     exception while parsing the response data
      */
     public <T> T toModel(Class<T> tClass) throws IOException {
         Objects.requireNonNull(tClass, MODEL_NULL_CHECK);
@@ -83,16 +84,16 @@ public class CMAResponseConvertor {
         return new Gson().fromJson(body, tClass);
     }
 
-
     /**
-     * It accepts the modal class and the string data response to return the model class
+     * It accepts the modal class and the string data response to return the model
+     * class
      *
      * @param tClass
-     *         the class
+     *                 the class
      * @param response
-     *         data response
+     *                 data response
      * @param <T>
-     *         the model class type
+     *                 the model class type
      * @return the model class
      */
     public <T> T toModel(Class<T> tClass, String response) {

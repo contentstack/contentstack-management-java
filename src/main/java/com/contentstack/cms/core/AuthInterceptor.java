@@ -10,10 +10,14 @@ import java.io.IOException;
 /**
  * <b>The type Header interceptor that extends Interceptor</b>
  * <p>
- * Interceptors are a powerful way to customize requests with Retrofit. A common use-case where you want to intercept
- * the actual request is to observe, modifies, and potentially short-circuits requests going out and the corresponding
- * responses coming back in. Typically, interceptors add, remove, or transform headers on the request. Depending on the
- * API implementation, you'll want to pass the auth token as the value for the Authorization header.
+ * Interceptors are a powerful way to customize requests with Retrofit. A common
+ * use-case where you want to intercept
+ * the actual request is to observe, modifies, and potentially short-circuits
+ * requests going out and the corresponding
+ * responses coming back in. Typically, interceptors add, remove, or transform
+ * headers on the request. Depending on the
+ * API implementation, you'll want to pass the auth token as the value for the
+ * Authorization header.
  *
  * @author ishaileshmishra
  * @since v0.1.0

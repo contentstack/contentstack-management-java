@@ -9,14 +9,16 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 
 /**
- * A role is a collection of permissions that will be applicable to all the users who are assigned this role.
+ * A role is a collection of permissions that will be applicable to all the
+ * users who are assigned this role.
  * <p>
  *
  * @author ishaileshmishra
  * @version v0.1.0
- * @see <a href= "https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-roles">Roles
+ * @see <a href=
+ *      "https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-roles">Roles
  *
- * </a>
+ *      </a>
  * @since 2022-10-22
  */
 public class Roles {
@@ -48,9 +50,9 @@ public class Roles {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *              header key for the request
      * @param value
-     *         header value for the request
+     *              header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -60,9 +62,9 @@ public class Roles {
      * Sets header for the request
      *
      * @param key
-     *         query param key for the request
+     *              query param key for the request
      * @param value
-     *         query param value for the request
+     *              query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -72,7 +74,7 @@ public class Roles {
      * Set header for the request
      *
      * @param key
-     *         Removes query param using key of request
+     *            Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -86,17 +88,22 @@ public class Roles {
     }
 
     /**
-     * The <b>Get all roles</b> request returns comprehensive information about all roles created in a stack.
+     * The <b>Get all roles</b> request returns comprehensive information about all
+     * roles created in a stack.
      * <p>
-     * You can add queries to extend the functionality of this API request. Under the URI Parameters section, insert a
+     * You can add queries to extend the functionality of this API request. Under
+     * the URI Parameters section, insert a
      * parameter named query and provide a query in JSON format as the value.
      * <p>
-     * To learn more about the queries, refer to the Queries section of the Content Delivery API doc
+     * To learn more about the queries, refer to the Queries section of the Content
+     * Delivery API doc
      *
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-roles">Get all
-     * Roles
-     * </a>
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-roles">Get
+     *      all
+     *      Roles
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -106,12 +113,15 @@ public class Roles {
     }
 
     /**
-     * The Get a single role request returns comprehensive information on a specific role.
+     * The Get a single role request returns comprehensive information on a specific
+     * role.
      *
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-role">Get a
-     * single Roles
-     * </a>
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-role">Get
+     *      a
+     *      single Roles
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -124,16 +134,20 @@ public class Roles {
     /**
      * The Create a role request creates a new role in a stack.
      * <p>
-     * In the <b>Body</b> section, mention the role name, description, users, additional roles, rules (includes the
-     * actions that can be performed on entries, fields, and/or assets), and permissions (which include the details of
+     * In the <b>Body</b> section, mention the role name, description, users,
+     * additional roles, rules (includes the
+     * actions that can be performed on entries, fields, and/or assets), and
+     * permissions (which include the details of
      * the content types, environments, and languages that are accessible).
      *
      * @param requestBody
-     *         details of the delivery role in @{@link JSONObject} format
+     *                    details of the delivery role in @{@link JSONObject} format
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-role">Create a
-     * Roles
-     * </a>
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-role">Create
+     *      a
+     *      Roles
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -142,18 +156,24 @@ public class Roles {
     }
 
     /**
-     * The Update role request lets you modify an existing role of your stack. However, the pre-existing system roles
+     * The Update role request lets you modify an existing role of your stack.
+     * However, the pre-existing system roles
      * cannot be modified.
      * <p>
-     * In the 'Body' section, include the updated details of the role which include name, description, users, additional
-     * roles, rules (includes the actions that can be performed on entries, fields, and/or assets), and permissions
-     * (which include the details of the content types, environments, and languages that are accessible).
+     * In the 'Body' section, include the updated details of the role which include
+     * name, description, users, additional
+     * roles, rules (includes the actions that can be performed on entries, fields,
+     * and/or assets), and permissions
+     * (which include the details of the content types, environments, and languages
+     * that are accessible).
      *
      * @param requestBody
-     *         the body should be of @{@link JSONObject} type
+     *                    the body should be of @{@link JSONObject} type
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-role">Update Role
-     * </a>
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-role">Update
+     *      Role
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -167,9 +187,11 @@ public class Roles {
      * The Delete role call deletes an existing role from your stack.
      *
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-role">Delete a
-     * Role
-     * </a>
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-role">Delete
+     *      a
+     *      Role
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */

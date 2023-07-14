@@ -1,8 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
@@ -13,11 +13,10 @@ import java.util.HashMap;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BulkOperationTest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static BulkOperation bulkOperation;
-
 
     @BeforeAll
     static void setup() {
@@ -69,7 +68,9 @@ class BulkOperationTest {
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/bulk/publish?skip_workflow_stage_check=true&approvals=true", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/bulk/publish?skip_workflow_stage_check=true&approvals=true",
+                request.url().toString());
     }
 
     @Test
@@ -84,7 +85,9 @@ class BulkOperationTest {
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("skip_workflow_stage_check=true&approvals=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/bulk/unpublish?skip_workflow_stage_check=true&approvals=true", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/bulk/unpublish?skip_workflow_stage_check=true&approvals=true",
+                request.url().toString());
     }
 
     @Test
@@ -99,7 +102,9 @@ class BulkOperationTest {
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("skip_workflow_stage_check=true&approvals=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/bulk/delete?skip_workflow_stage_check=true&approvals=true", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/bulk/delete?skip_workflow_stage_check=true&approvals=true",
+                request.url().toString());
     }
 
     @Test
@@ -115,8 +120,9 @@ class BulkOperationTest {
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("skip_workflow_stage_check=true&approvals=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/bulk/workflow?skip_workflow_stage_check=true&approvals=true", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/bulk/workflow?skip_workflow_stage_check=true&approvals=true",
+                request.url().toString());
     }
-
 
 }

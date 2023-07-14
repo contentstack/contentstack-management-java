@@ -92,7 +92,7 @@ class RoleAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("roles", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/roles/bltba87adc6be076d26", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/roles/"+AUTHTOKEN, request.url().toString());
     }
 
     @Test

@@ -1,8 +1,9 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
+
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,15 +16,14 @@ import java.util.HashMap;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class WebhookUnitTest {
 
-    private static final String AUTHTOKEN = Dotenv.load().get("authToken");
-    private static final String API_KEY = Dotenv.load().get("apiKey");
-    private static final String _webhook_uid = Dotenv.load().get("workflowUid");
-    private static final String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    private static final String AUTHTOKEN = TestClient.AUTHTOKEN;
+    private static final String API_KEY = TestClient.API_KEY;
+    private static final String _webhook_uid = TestClient.USER_ID;
+    private static final String MANAGEMENT_TOKEN = TestClient.AUTHTOKEN;
     private static Webhook webhook;
     private static final String wehooksHost = "https://api.contentstack.io/v3/webhooks";
 
     protected static JSONObject body;
-
 
     @BeforeAll
     static void setup() {
@@ -68,7 +68,6 @@ class WebhookUnitTest {
             throw new RuntimeException(e);
         }
     }
-
 
     @Test
     @Order(1)
@@ -181,7 +180,6 @@ class WebhookUnitTest {
         Assertions.assertEquals(wehooksHost + "/" + _webhook_uid, request.url().toString());
     }
 
-
     @Test
     void exportWebhook() {
         assert _webhook_uid != null;
@@ -201,7 +199,8 @@ class WebhookUnitTest {
     @Disabled
     void importWebhook() {
         assert _webhook_uid != null;
-        Request request = webhook.importWebhook("webhookFile", "/Application/Library/ishaileshmishra/filename.json").request();
+        Request request = webhook.importWebhook("webhookFile", "/Application/Library/ishaileshmishra/filename.json")
+                .request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -241,7 +240,6 @@ class WebhookUnitTest {
         Assertions.assertEquals(wehooksHost + "/" + _webhook_uid + "/executions", request.url().toString());
     }
 
-
     @Test
     void retryLogWebhook() {
         Request request = webhook.retry(_webhook_uid).request();
@@ -269,6 +267,5 @@ class WebhookUnitTest {
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(wehooksHost + "/" + _webhook_uid + "/logs", request.url().toString());
     }
-
 
 }
