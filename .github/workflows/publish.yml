@@ -4,38 +4,77 @@ on:
   push:
     branches:
       - feat/CS-36689-compare-merge-branch
-
+      
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
+      
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Java for publishing to Maven Central Repository
-        uses: actions/setup-java@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v2
         with:
-          java-version: "11"
-          distribution: "adopt"
-          # server-id: ossrh
-          # OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          # OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-
-      - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure settings.xml
+          java-version: '11'
+      
+      - name: Set up Maven
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          maven-version: '3.x'
+      
+      - name: Configure Maven settings.xml
         run: |
           mkdir -p $HOME/.m2
-          echo "<settings><servers><server><id>deployment</id><username>\${env.OSSRH_USERNAME}</username><password>\${env.OSSRH_PASSWORD}</password></server></servers></settings>" > $HOME/.m2/settings.xml
-
-      - name: Publish to the Maven Central Repository
-        run: mvn --batch-mode deploy
+          echo "<settings xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'>
+            <servers>
+              <server>
+                  <id>ossrh</id>
+                  <username>\${env.OSSRH_USERNAME}</username>
+                  <password>\${env.OSSRH_PASSWORD}</password>
+              </server>
+            </servers>
+          </settings>" > $HOME/.m2/settings.xml
+      
+      - name: Build and Publish to Maven Central
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-      - name: Set up Java for publishing to GitHub Packages
-        uses: actions/setup-java@v3
-        with:
-          java-version: "11"
-          distribution: "adopt"
+        run: |
+          mvn deploy --settings $HOME/.m2/settings.xml
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Set up Java for publishing to Maven Central Repository
+#         uses: actions/setup-java@v3
+#         with:
+#           java-version: "11"
+#           distribution: "adopt"
+#           server-id: ossrh
+#           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+#           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+
+#       - name: Publish to GitHub Packages
+#         run: mvn --batch-mode deploy
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Configure settings.xml
+#         run: |
+#           mkdir -p $HOME/.m2
+#           echo "<settings><servers><server><id>deployment</id><username>\${env.OSSRH_USERNAME}</username><password>\${env.OSSRH_PASSWORD}</password></server></servers></settings>" > $HOME/.m2/settings.xml
+
+#       - name: Publish to the Maven Central Repository
+#         run: mvn --batch-mode deploy
+#         env:
+#           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+#           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+#       - name: Set up Java for publishing to GitHub Packages
+#         uses: actions/setup-java@v3
+#         with:
+#           java-version: "11"
+#           distribution: "adopt"
