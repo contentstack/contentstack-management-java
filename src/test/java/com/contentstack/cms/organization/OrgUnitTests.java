@@ -1,7 +1,8 @@
 package com.contentstack.cms.organization;
 
 import com.contentstack.cms.Contentstack;
-import io.github.cdimascio.dotenv.Dotenv;
+import com.contentstack.cms.TestClient;
+
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -18,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrgUnitTests {
 
     private static Organization organization;
-    private final static String authtoken = Dotenv.load().get("authToken");
-    private final static String organizationUid = Dotenv.load().get("organizationUid");
+    private final static String authtoken = TestClient.AUTHTOKEN;
+    private final static String organizationUid = TestClient.ORGANIZATION_UID;
 
 
     private JSONObject theJSONBody(@NotNull String _body) {

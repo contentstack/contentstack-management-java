@@ -1,6 +1,5 @@
 package com.contentstack.cms.marketplace.apps.oauth;
 
-import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import okhttp3.Request;
 import org.json.simple.JSONObject;

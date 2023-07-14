@@ -5,12 +5,11 @@
 ### 30-June-2023
 
 - Bug Fixed For Unlocalize An Entry
-- General improvements
-- Code coverage improvements
-- Code quality improvements
 - Fixed Timeout Issue
-- Few breaking changes
-- Basic code improvements
+- General improvements with minor breaking changes
+- Code coverage improvements
+- NRP support added
+- 
 
 ## v0.1.0
 

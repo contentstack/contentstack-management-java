@@ -1,11 +1,10 @@
 package com.contentstack.cms;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -14,59 +13,9 @@ import java.net.Proxy;
 
 public class ContentstackUnitTest {
 
-    private static Dotenv dotenv;
-
-    @BeforeAll
-    public static void getCredentials() {
-        dotenv = Dotenv.load();
-    }
-
-    @Test
-    void testCredentialsAuthtoken() {
-        String authToken = dotenv.get("authToken");
-        Assertions.assertNotNull(authToken, "authToken is not null");
-    }
-
-    @Test
-    void testCredentialsUsername() {
-        Assertions.assertNotNull(
-                dotenv.get("username"), "username/ email is not null");
-    }
-
-    @Test
-    void testCredentialsPassword() {
-        Assertions.assertNotNull(
-                dotenv.get("password"), "password is not null");
-    }
-
-    @Test
-    void testCredentialsDeliveryToken() {
-        Assertions.assertNotNull(dotenv.get("deliveryToken"), "deliveryToken is not null");
-    }
-
-    @Test
-    void testCredentialsApiKey() {
-        String apiKey = dotenv.get("apiKey");
-        Assertions.assertNotNull(apiKey, "apikey is not null");
-    }
-
-    @Test
-    void testCredentialsEnv() {
-        Assertions.assertNotNull(
-                dotenv.get("environment"), "environment is not null");
-    }
-
-    @Test
-    void testCredentialsHost() {
-        Assertions.assertNotNull(
-                dotenv.get("host"), "host is not null");
-    }
-
-    @Test
-    void testCredentialsOrganizationUid() {
-        Assertions.assertNotNull(
-                dotenv.get("organizationUid"), "organization uid is not null");
-    }
+    static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    static String USER_ID = "test@contentstack.com";
+    static String PASSWORD = "test@contentstack";
 
     @Test
     void testDefaultClientInstance() {
@@ -174,7 +123,7 @@ public class ContentstackUnitTest {
         Contentstack contentstack = new Contentstack.Builder()
                 .setProxy(proxy)
                 .build();
-        Assertions.assertEquals("HTTP @ hostname/<unresolved>:433", contentstack.proxy.toString());
+        Assertions.assertEquals("HTTP @ hostname:433", contentstack.proxy.toString());
 
     }
 

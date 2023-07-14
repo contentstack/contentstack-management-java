@@ -12,7 +12,6 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 
-
 /**
  * The type Installation.
  */
@@ -25,48 +24,67 @@ public class Installation implements Parametron {
     protected HashMap<String, Object> params;
     private Retrofit client;
 
-
-    /**
-     * Instantiates a new Installation.
-     *
-     * @param client
-     *         the client
-     * @param organisationId
-     *         the org id
-     * @param installationId
-     *         the installation id
-     */
+    // The `public Installation(Retrofit client, @NotNull String organisationId,
+    // @NotNull String
+    // installationId)` is a constructor for the `Installation` class. It takes
+    // three parameters: `client`,
+    // `organisationId`, and `installationId`.
     public Installation(Retrofit client, @NotNull String organisationId, @NotNull String installationId) {
         checkOrganisationId(organisationId);
         init(client, organisationId, installationId);
     }
 
+    /**
+     * The function checks if the organisationId is empty and throws a
+     * NullPointerException if it is.
+     * 
+     * @param organisationId The parameter `organisationId` is a string that
+     *                       represents the ID of an
+     *                       organization.
+     */
     private void checkOrganisationId(String organisationId) {
         if (organisationId.isEmpty()) {
             throw new NullPointerException(Util.MISSING_ORG_ID);
         }
     }
 
+    /**
+     * The function validates if the installationId is not null or empty.
+     * 
+     * @param installationId The installationId parameter is a string that
+     *                       represents the unique identifier
+     *                       for an installation.
+     */
     private void validateInstallationId(String installationId) {
         if (installationId == null || installationId.isEmpty()) {
             throw new IllegalArgumentException("installationId is requirement");
         }
     }
 
-    /**
-     * Instantiates a new Installation.
-     *
-     * @param client
-     *         the client
-     * @param organisationId
-     *         the organization uid
-     */
+    // The `public Installation(@NotNull Retrofit client, @NotNull String
+    // organisationId)` is a constructor
+    // for the `Installation` class. It takes two parameters: `client` and
+    // `organisationId`.
     public Installation(@NotNull Retrofit client, @NotNull String organisationId) {
         checkOrganisationId(organisationId);
         init(client, organisationId, null);
     }
 
-
+    /**
+     * The function initializes the headers, parameters, installation ID,
+     * organization ID, Retrofit client,
+     * and service for an installation.
+     * 
+     * @param client         The `client` parameter is an instance of the Retrofit
+     *                       class. It is used to make HTTP
+     *                       requests to a RESTful API.
+     * @param organisationId The `organisationId` parameter is a string that
+     *                       represents the unique
+     *                       identifier of an organization.
+     * @param installationId The installationId parameter is a String that
+     *                       represents the unique identifier
+     *                       for an installation.
+     */
     private void init(Retrofit client, @NotNull String organisationId, String installationId) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
@@ -78,39 +96,37 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Find installed apps call.
-     *
-     * @return the call
+     * The function returns a list of installed apps by making a network call.
+     * 
+     * @return The method is returning a `Call` object with a generic type of
+     *         `ResponseBody`.
      */
     Call<ResponseBody> findInstalledApps() {
         return this.service.listInstalledApps(this.headers, this.params);
     }
 
-    /**
-     * Find installations call.
-     *
-     * @return the call
-     */
     Call<ResponseBody> findInstallations() {
         return this.service.listInstallations(this.headers, this.params);
     }
 
-
     /**
-     * Find installation call.
-     *
-     * @return the call
+     * The function fetches an installation by validating the installation ID and
+     * making a network request.
+     * 
+     * @return The method `fetchInstallation()` is returning a `Call<ResponseBody>`
+     *         object.
      */
     Call<ResponseBody> fetchInstallation() {
         validateInstallationId(this.installationId);
         return this.service.getInstallations(this.headers, installationId, this.params);
     }
 
-
     /**
-     * Fetch installation data call.
-     *
-     * @return the call
+     * The function fetches installation data by validating the installation ID and
+     * making a network
+     * request.
+     * 
+     * @return The method is returning a `Call<ResponseBody>` object.
      */
     Call<ResponseBody> fetchInstallationData() {
         validateInstallationId(this.installationId);
@@ -118,39 +134,44 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Update installation call.
-     *
-     * @return the call
+     * The function updates an installation with a given installation ID and returns
+     * the response body.
+     * 
+     * @param body A JSONObject containing the data to be updated for the
+     *             installation.
+     * @return The method is returning a Call object with a ResponseBody type.
      */
     Call<ResponseBody> updateInstallation(JSONObject body) {
         validateInstallationId(this.installationId);
         return this.service.updateInstallation(this.headers, this.installationId, body, this.params);
     }
 
-
     /**
-     * Find installed users call.
-     *
-     * @return the call
+     * The function returns a list of installed users by making a network call.
+     * 
+     * @return The method is returning a `Call` object with a generic type of
+     *         `ResponseBody`.
      */
     Call<ResponseBody> findInstalledUsers() {
         return this.service.listInstalledUsers(this.headers, this.params);
     }
 
-
     /**
-     * Find installed stacks call.
-     *
-     * @return the call
+     * The function returns a list of installed stacks by making a network call.
+     * 
+     * @return The method is returning a `Call` object with a generic type of
+     *         `ResponseBody`.
      */
     Call<ResponseBody> findInstalledStacks() {
         return this.service.listInstalledStacks(this.headers, this.params);
     }
 
     /**
-     * Uninstall call.
-     *
-     * @return the call
+     * The function `uninstall()` validates the installation ID and then calls the
+     * `uninstall()` method of
+     * a service, returning the response body.
+     * 
+     * @return The method is returning a Call object with a ResponseBody type.
      */
     Call<ResponseBody> uninstall() {
         validateInstallationId(this.installationId);
@@ -158,9 +179,12 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Fetch app configuration call.
-     *
-     * @return the call
+     * The function fetches the app configuration by validating the installation ID
+     * and making a network
+     * request.
+     * 
+     * @return The method is returning a Call object with a generic type of
+     *         ResponseBody.
      */
     Call<ResponseBody> fetchAppConfiguration() {
         validateInstallationId(this.installationId);
@@ -168,37 +192,49 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Fetch server configuration call.
-     *
-     * @return the call
+     * The function fetches the server configuration by making a network request
+     * with the installation ID
+     * and parameters.
+     * 
+     * @return The method is returning a Call object with a generic type of
+     *         ResponseBody.
      */
     Call<ResponseBody> fetchServerConfiguration() {
         validateInstallationId(this.installationId);
         return this.service.getServerConfiguration(this.headers, this.installationId, this.params);
     }
 
+    /**
+     * The function updates the server configuration with the given JSON object and
+     * returns the response
+     * body.
+     * 
+     * @param body A JSONObject containing the updated server configuration data.
+     * @return The method is returning a Call object with a ResponseBody type.
+     */
     Call<ResponseBody> updateServerConfiguration(JSONObject body) {
         validateInstallationId(this.installationId);
         return this.service.updateServerConfiguration(this.headers, this.installationId, body, this.params);
     }
 
     /**
-     * Update stack configuration call.
-     *
-     * @param body
-     *         The request Body
-     * @return the call
+     * The function updates the stack configuration using the provided JSON object.
+     * 
+     * @param body A JSONObject containing the updated stack configuration data.
+     * @return The method is returning a Call object with a ResponseBody type.
      */
     Call<ResponseBody> updateStackConfiguration(JSONObject body) {
         validateInstallationId(this.installationId);
         return this.service.updateStackConfiguration(this.headers, this.installationId, body, this.params);
     }
 
-
     /**
-     * Create installation token call.
-     *
-     * @return the call
+     * The function creates an installation token by validating the installation ID
+     * and making a request to
+     * the service.
+     * 
+     * @return The method is returning a `Call` object with a generic type of
+     *         `ResponseBody`.
      */
     Call<ResponseBody> createInstallationToken() {
         validateInstallationId(this.installationId);
@@ -206,9 +242,11 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Location.
-     *
-     * @return the location
+     * The function returns a new Location object with the specified client,
+     * organisationId, and
+     * installationId.
+     * 
+     * @return An instance of the Location class.
      */
     public Location location() {
         validateInstallationId(this.installationId);
@@ -216,11 +254,11 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Webhook webhook.
-     *
-     * @param webhookId
-     *         the webhook id
-     * @return the webhook
+     * The function creates and returns a new Webhook object with the given
+     * parameters.
+     * 
+     * @param webhookId A string representing the ID of the webhook.
+     * @return An instance of the Webhook class.
      */
     public Webhook webhook(@NotNull String webhookId) {
         validateInstallationId(this.installationId);
@@ -228,16 +266,16 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Adds a header with the specified key and value to this location and returns the updated location.
-     *
-     * @param key
-     *         the key of the header to be added
-     * @param value
-     *         the value of the header to be added
-     * @return a new {@link Installation} object with the specified header added
-     * @throws NullPointerException
-     *         if the key or value argument is null
+     * The function adds a parameter to a map and returns the updated map.
+     * 
+     * @param key   The key parameter is a String that represents the key for the
+     *              parameter being added.
+     * @param value The value parameter is of type Object, which means it can accept
+     *              any type of object as
+     *              its value.
+     * @return The method is returning an instance of the `Installation` class.
      */
+
     @SuppressWarnings("unchecked")
     @Override
     public Installation addParam(@NotNull String key, @NotNull Object value) {
@@ -246,16 +284,14 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Adds a header with the specified key and value to this location and returns the updated location.
-     *
-     * @param key
-     *         the key of the header to be added
-     * @param value
-     *         the value of the header to be added
-     * @return a new {@link Installation} object with the specified header added
-     * @throws NullPointerException
-     *         if the key or value argument is null
+     * The function adds a header to a map and returns the updated map.
+     * 
+     * @param key   A string representing the key of the header to be added.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return The method is returning an instance of the `Installation` class.
      */
+
     @SuppressWarnings("unchecked")
     @Override
     public Installation addHeader(@NotNull String key, @NotNull String value) {
@@ -264,13 +300,14 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Adds the specified parameters to this location and returns the updated location.
+     * Adds the specified parameters to this location and returns the updated
+     * location.
      *
      * @param params
-     *         a {@link HashMap} containing the parameters to be added
+     *               a {@link HashMap} containing the parameters to be added
      * @return a new {@link Installation} object with the specified parameters added
      * @throws NullPointerException
-     *         if the params argument is null
+     *                              if the params argument is null
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -280,13 +317,14 @@ public class Installation implements Parametron {
     }
 
     /**
-     * Adds the specified parameters to this location and returns the updated location.
+     * Adds the specified parameters to this location and returns the updated
+     * location.
      *
      * @param headers
-     *         a {@link HashMap} containing the parameters to be added
+     *                a {@link HashMap} containing the parameters to be added
      * @return a new {@link Installation} object with the specified parameters added
      * @throws NullPointerException
-     *         if the params argument is null
+     *                              if the params argument is null
      */
     @SuppressWarnings("unchecked")
     @Override

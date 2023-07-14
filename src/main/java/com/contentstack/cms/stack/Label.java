@@ -9,12 +9,16 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 
 /**
- * Labels allow you to group a collection of content within a stack. Using labels you can group content types that need
+ * Labels allow you to group a collection of content within a stack. Using
+ * labels you can group content types that need
  * to work together. Read more about Labels.
  * <p>
- * You can now pass the branch header in the API request to fetch or manage modules located within specific branches of
- * the stack. Additionally, you can also set the include_branch query parameter to true to include the _branch top-level
- * key in the response. This key specifies the unique ID of the branch where the concerned Contentstack module resides.
+ * You can now pass the branch header in the API request to fetch or manage
+ * modules located within specific branches of
+ * the stack. Additionally, you can also set the include_branch query parameter
+ * to true to include the _branch top-level
+ * key in the response. This key specifies the unique ID of the branch where the
+ * concerned Contentstack module resides.
  *
  * @author ishaileshmishra
  * @version v0.1.0
@@ -49,9 +53,9 @@ public class Label {
      * Sets header for the request
      *
      * @param key
-     *         header key for the request
+     *              header key for the request
      * @param value
-     *         header value for the request
+     *              header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -61,9 +65,9 @@ public class Label {
      * Sets header for the request
      *
      * @param key
-     *         query param key for the request
+     *              query param key for the request
      * @param value
-     *         query param value for the request
+     *              query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -73,7 +77,7 @@ public class Label {
      * Set header for the request
      *
      * @param key
-     *         Removes query param using key of request
+     *            Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -90,7 +94,7 @@ public class Label {
      * Enter your branch unique ID
      *
      * @param value
-     *         branch unique ID
+     *              branch unique ID
      * @return Label
      */
     public Label addBranch(@NotNull String value) {
@@ -101,18 +105,24 @@ public class Label {
     /**
      * This call fetches all the existing labels of the stack.
      * <p>
-     * When executing the API call, under the <b>Header</b> section, you need to enter the API key of your stack and the
+     * When executing the API call, under the <b>Header</b> section, you need to
+     * enter the API key of your stack and the
      * authtoken that you receive after logging into your account.
      * <p>
-     * Using {@link #addParam(String, Object)} you can add queries to extend the functionality of this API call. Under
-     * the URI Parameters section, insert a parameter named query and provide a query in JSON format as the value.
+     * Using {@link #addParam(String, Object)} you can add queries to extend the
+     * functionality of this API call. Under
+     * the URI Parameters section, insert a parameter named query and provide a
+     * query in JSON format as the value.
      * <p>
-     * To learn more about the queries, refer to the Query section of the Content Delivery API doc.
+     * To learn more about the queries, refer to the Query section of the Content
+     * Delivery API doc.
      *
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-labels">Get all
-     * labels
-     * </a>
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-labels">Get
+     *      all
+     *      labels
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -126,10 +136,11 @@ public class Label {
      * <p>
      *
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-label">Get
-     * a single label
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-label">Get
+     *      a single label
      *
-     * </a>
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -142,19 +153,24 @@ public class Label {
     /**
      * This call is used to create a label.
      * <p>
-     * When executing the API call, under the 'Header' section, you need to enter the API key of your stack and the
+     * When executing the API call, under the 'Header' section, you need to enter
+     * the API key of your stack and the
      * authtoken that you receive after logging into your account.
      * <p>
-     * In the 'Body' section, enter the label details, such as the name of the label, the uid of the parent label, and
-     * the content types that need to be included in the label. These details need to be provided in JSON format.
+     * In the 'Body' section, enter the label details, such as the name of the
+     * label, the uid of the parent label, and
+     * the content types that need to be included in the label. These details need
+     * to be provided in JSON format.
      * <p>
      *
      * @param requestBody
-     *         JSONObject request body
+     *                    JSONObject request body
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-label">Add label
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-label">Add
+     *      label
      *
-     * </a>
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -165,21 +181,25 @@ public class Label {
     /**
      * The Update label call is used to update an existing label.
      * <p>
-     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
+     * When executing the API call, under the 'Header' section, you need to enter
+     * the authtoken that you receive after
      * logging into your account.
      * <p>
-     * In the 'Body' section, enter the updated details of your label, which include the name of the label, the uid of
-     * the parent label, and the content types that need to be included in the label. These details need to be provided
+     * In the 'Body' section, enter the updated details of your label, which include
+     * the name of the label, the uid of
+     * the parent label, and the content types that need to be included in the
+     * label. These details need to be provided
      * in JSON format
      * <p>
      *
      * @param body
-     *         the request body to update the {@link Label}
+     *             the request body to update the {@link Label}
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-label">Update
-     * label
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-label">Update
+     *      label
      *
-     * </a>
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -192,15 +212,17 @@ public class Label {
     /**
      * Delete label call is used to delete a specific label.
      * <p>
-     * When executing the API call, under the 'Header' section, you need to enter the authtoken that you receive after
+     * When executing the API call, under the 'Header' section, you need to enter
+     * the authtoken that you receive after
      * logging into your account
      * <p>
      *
      * @return Call
-     * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-label">Delete
-     * label
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-label">Delete
+     *      label
      *
-     * </a>
+     *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0

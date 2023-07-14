@@ -26,14 +26,14 @@ class LocationTests {
     @Test
     void testFindAuthorizedApp() {
         Request request = location.fetchConfigurationLocation().request();
-        Assertions.assertEquals("/installations/blte0fdf06879c18c1e/locations/configuration", request.url().encodedPath());
+        Assertions.assertEquals("/installations/"+ORG_UID+"/locations/configuration", request.url().encodedPath());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("installations", request.url().pathSegments().get(0));
-        Assertions.assertEquals("blte0fdf06879c18c1e", request.url().pathSegments().get(1));
+        Assertions.assertEquals(ORG_UID, request.url().pathSegments().get(1));
         Assertions.assertEquals("locations", request.url().pathSegments().get(2));
         Assertions.assertEquals("configuration", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
