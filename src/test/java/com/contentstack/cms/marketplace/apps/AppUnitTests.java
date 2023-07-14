@@ -7,8 +7,6 @@ import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -16,11 +14,12 @@ import java.io.IOException;
 class AppUnitTests {
 
     private static App app;
-    final static String ORG_UID = TestClient.ORGANIZATION_UID;
+    static String ORG_UID = "";
     final String AUTH = TestClient.AUTHTOKEN;
 
     @BeforeAll
     static void setup() {
+        ORG_UID = TestClient.ORGANIZATION_UID;
         app = TestClient.getClient().organization(ORG_UID).marketplace().app(ORG_UID);
         app.addParam("search", "paramValue").
                 addParam("limit", 10).

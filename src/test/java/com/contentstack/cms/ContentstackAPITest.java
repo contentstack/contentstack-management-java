@@ -3,10 +3,8 @@ package com.contentstack.cms;
 import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.google.gson.Gson;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
@@ -18,18 +16,12 @@ import java.io.IOException;
  */
 public class ContentstackAPITest {
 
-    private static Dotenv dotenv;
-
-    @BeforeAll
-    public static void getCredentials() {
-        dotenv = Dotenv.load();
-    }
+    private static String AUTHTOKEN = TestClient.AUTHTOKEN;
 
     @Test
     void testContentstackUserLogin() throws IOException {
-        String authToken = dotenv.get("authToken");
         Contentstack contentstack = new Contentstack.Builder()
-                .setAuthtoken(authToken)
+                .setAuthtoken(AUTHTOKEN)
                 .build();
         Response<ResponseBody> user = contentstack.user().getUser().execute();
         if (user.isSuccessful()) {
@@ -42,8 +34,8 @@ public class ContentstackAPITest {
             Error error = new Gson().fromJson(errString, Error.class);
             Assertions.assertEquals(105, error.getErrorCode(), "not loggedIn");
         }
-        Assertions.assertNotNull(authToken);
-        Assertions.assertEquals(authToken, contentstack.authtoken);
+        Assertions.assertNotNull(AUTHTOKEN);
+        Assertions.assertEquals(AUTHTOKEN, contentstack.authtoken);
     }
 
     @Test
@@ -84,11 +76,10 @@ public class ContentstackAPITest {
 
     @Test
     void testLogoutWithAuthtoken() throws IOException {
-        String authToken = dotenv.get("auth_token");
         Contentstack contentstack = new Contentstack.Builder()
-                .setAuthtoken(authToken)
+                .setAuthtoken(AUTHTOKEN)
                 .build();
-        Response<ResponseBody> status = contentstack.logoutWithAuthtoken(authToken);
+        Response<ResponseBody> status = contentstack.logoutWithAuthtoken(AUTHTOKEN);
         if (status.isSuccessful()) {
             assert status.body() != null;
             System.out.println(status.body().string());

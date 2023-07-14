@@ -10,10 +10,8 @@ import okio.BufferedSink;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 
 @Tag("api")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -50,7 +48,9 @@ class ExtensionAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
         Assertions.assertEquals("query=%22type%22:%22field%22&include_branch=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions?query=%22type%22:%22field%22&include_branch=true", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/extensions?query=%22type%22:%22field%22&include_branch=true",
+                request.url().toString());
     }
 
     @Test
@@ -68,7 +68,8 @@ class ExtensionAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/bltba87adc6be076d26?include_branch=true", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/" + AUTHTOKEN + "?include_branch=true",
+                request.url().toString());
     }
 
     @Test
@@ -86,7 +87,8 @@ class ExtensionAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
         Assertions.assertEquals("query=%22type%22:%22field%22&include_branch=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/bltba87adc6be076d26?query=%22type%22:%22field%22&include_branch=true", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/" + AUTHTOKEN
+                + "?query=%22type%22:%22field%22&include_branch=true", request.url().toString());
     }
 
     @Test
@@ -122,7 +124,8 @@ class ExtensionAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
         Assertions.assertEquals("include_branch=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/"+AUTHTOKEN+"?include_branch=true", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/" + AUTHTOKEN + "?include_branch=true",
+                request.url().toString());
     }
 
     @Test
@@ -154,9 +157,9 @@ class ExtensionAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions?include_branch=true", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/extensions?include_branch=true",
+                request.url().toString());
     }
-
 
     @Test
     void extensionDeleteAgain() {

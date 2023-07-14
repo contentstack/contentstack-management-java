@@ -16,7 +16,7 @@ class ContentTypeAPITest {
     protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static String contentTypeUid = "contentType";
     protected static Stack stack;
-    private int _COUNT = 3;
+    private int _COUNT = 2;
 
 
     @BeforeAll
