@@ -1,4 +1,4 @@
 /**
- * Useful to access contentstack's organizations
+ * Useful to access contentstack's organization component
  */
 package com.contentstack.cms.organization;

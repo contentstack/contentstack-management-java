@@ -83,7 +83,7 @@ public class Webhook implements Parametron {
      *                    unique identifier of an
      *                    execution. It is used to identify a specific execution
      *                    that needs to be retried.
-     * @return The method is returning a `Call<ResponseBody>` object.
+     * @return Call object.
      */
     public Call<ResponseBody> retryExecution(@NotNull String executionId) {
         validateInstallationId();

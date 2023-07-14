@@ -79,7 +79,7 @@ class UserMockTests {
         mockJsonObject = Utils.readJson("mockuser/updateuser.json");
         Assertions.assertEquals("Profile updated successfully.", mockJsonObject.get("notice"));
         mockJsonObject = (JSONObject) mockJsonObject.get("user");
-        Set allKeys = mockJsonObject.keySet();
+        Set<String> allKeys = mockJsonObject.keySet();
         logger.finest(mockJsonObject.toJSONString());
         String[] keyArray = {
                 "org_uid",
