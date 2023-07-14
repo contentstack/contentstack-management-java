@@ -117,7 +117,7 @@ public class App implements Parametron {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public App addParams(@NotNull HashMap params) {
+    public App addParams(@NotNull HashMap  params) {
         this.params.putAll(params);
         return this;
     }
