@@ -17,6 +17,15 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-passphrase: GPG_PASSPHRASE
+      - name: Build and Test
+        run: |
+          mvn clean test jacoco:report
+          mvn -B verify -P coverage --no-transfer-progress
+      - name: Publish Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Coverage Report
+          path: target/site/jacoco/index.html
       - name: Publish to the Maven Central Repository
         run: mvn --batch-mode deploy
         env:
