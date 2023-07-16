@@ -1,7 +1,9 @@
 name: Measure coverage
 
 on:
-  pull_request:
+    push:
+      branches:
+        - feat/CS-36689-compare-merge-branch
 
 jobs:
   build:
