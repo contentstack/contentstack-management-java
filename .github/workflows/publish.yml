@@ -27,8 +27,3 @@ jobs:
         run: mvn --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish Coverage Report
-        uses: actions/upload-artifact@v2
-        with:
-          name: Coverage Report
-          path: target/site/jacoco/index.html
