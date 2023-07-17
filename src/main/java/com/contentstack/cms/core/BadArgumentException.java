@@ -14,6 +14,13 @@ public class BadArgumentException extends IllegalArgumentException {
         super();
     }
 
+    // The code `public BadArgumentException(String message) { super(message); }` is
+    // a constructor for the
+    // `BadArgumentException` class. It takes a `String` parameter `message` and
+    // calls the constructor of
+    // the superclass `IllegalArgumentException` with the `message` parameter. This
+    // allows you to create an
+    // instance of `BadArgumentException` with a custom error message.
     public BadArgumentException(String message) {
         super(message);
     }

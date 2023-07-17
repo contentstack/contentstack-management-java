@@ -24,19 +24,46 @@ import java.io.IOException;
  */
 public class AuthInterceptor implements Interceptor {
 
+    protected String authtoken;
+
+    // The `public AuthInterceptor() {}` is a default constructor for the
+    // `AuthInterceptor` class. It is
+    // used to create an instance of the `AuthInterceptor` class without passing any
+    // arguments. In this
+    // case, it initializes the `authtoken` variable to `null`.
     public AuthInterceptor() {
     }
 
-    protected String authtoken;
-
+    // The `public AuthInterceptor(String authtoken)` is a constructor for the
+    // `AuthInterceptor` class that
+    // takes an `authtoken` parameter.
     public AuthInterceptor(String authtoken) {
         this.authtoken = authtoken;
     }
 
+    /**
+     * The function sets the value of the authtoken variable.
+     * 
+     * @param authtoken The authtoken parameter is a string that represents an
+     *                  authentication token.
+     */
     public void setAuthtoken(String authtoken) {
         this.authtoken = authtoken;
     }
 
+    /**
+     * This function intercepts a request and adds headers to it, including a user
+     * agent, content type, and
+     * authentication token if available.
+     * 
+     * @param chain The `chain` parameter is an object of type `Interceptor.Chain`.
+     *              It represents the chain
+     *              of interceptors that will be executed for a given request. It
+     *              provides methods to proceed to the
+     *              next interceptor in the chain or to proceed with the request and
+     *              get the response.
+     * @return The method is returning a Response object.
+     */
     @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {

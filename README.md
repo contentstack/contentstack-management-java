@@ -24,27 +24,27 @@ You need Java 8 or above installed on your machine to use the Contentstack Manag
 
 ### Installation
 
-Install it via maven:
+**Install it via maven:**
 
 ```java
 <dependency>
-<groupId>com.contentstack.sdk</groupId>
-<artifactId>cms</artifactId>
-<version>{version}</version>
+   <groupId>com.contentstack.sdk</groupId>
+   <artifactId>cms</artifactId>
+   <version>{version}</version>
 </dependency>
 ```
 
-Install it via gradle:
+**Install it via gradle:**
 
 ```java
-   implementation'com.contentstack.sdk:cms:{version}'
+implementation'com.contentstack.sdk:cms:{version}'
 ```
 
 To import the SDK, use the following command:
 
 ```java
-    package com.contentstack.cms;
-    Contentstack contentstack=new Contentstack.Builder().build();
+package com.contentstack.cms;
+Contentstack contentstack = new Contentstack.Builder().build();
 ```
 
 ### Authentication
@@ -58,7 +58,7 @@ An [Authtoken](https://www.contentstack.com/docs/developers/create-tokens/types-
 is a read-write token used to make authorized CMA requests, and it is a **user-specific** token.
 
 ```java
-        Contentstack contentstack=new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
 ```
 
 ### Login
@@ -66,8 +66,8 @@ is a read-write token used to make authorized CMA requests, and it is a **user-s
 To Login to Contentstack by using credentials, you can use the following lines of code:
 
 ```java
-        Contentstack contentstack=new Contentstack.Builder().build();
-        contentstack.login("EMAIL","PASSWORD");
+Contentstack contentstack = new Contentstack.Builder().build();
+contentstack.login("EMAIL","PASSWORD");
 ```
 
 ### Management Token
@@ -76,8 +76,8 @@ To Login to Contentstack by using credentials, you can use the following lines o
 *stack-level** tokens, with no users attached to them.
 
 ```java
-        Contentstack contentstack=new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
-        Stack stack=contentstack.stack("API_KEY","MANAGEMENT_TOKEN");
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
+Stack stack=contentstack.stack("API_KEY","MANAGEMENT_TOKEN");
 ```
 
 ### Contentstack Management Java SDK: 5-minute Quickstart
@@ -87,7 +87,7 @@ To Login to Contentstack by using credentials, you can use the following lines o
 To use the Java CMA SDK, you need to first initialize it. To do this, use the following code:
 
 ```java
-   Contentstack contentstack=new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
 ```
 
 #### Fetch Stack Detail
@@ -95,8 +95,8 @@ To use the Java CMA SDK, you need to first initialize it. To do this, use the fo
 Use the following lines of code to fetch your stack detail using this SDK:
 
 ```java
-        Stack stack=contentstack.stack("API_KEY");
-        Response<ResponseBody> response=stack.fetch().execute();
+Stack stack = contentstack.stack("API_KEY");
+Response<ResponseBody> response = stack.fetch().execute();
 ```
 
 #### Create Entry
@@ -104,13 +104,13 @@ Use the following lines of code to fetch your stack detail using this SDK:
 To create an entry in a specific content type of a stack, use the following lines of code:
 
 ```java
-        Contentstack contentstack=new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
-        Stack stack=contentstack.stack("API_KEY");
-        JSONObject body=....
-        Response<ResponseBody> response=entry.create(body).execute();
-        if(response.isSuccessful()){
-        System.out.println(response.body());
-        }
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
+Stack stack=contentstack.stack("API_KEY");
+JSONObject body = ....
+Response<ResponseBody> response=entry.create(body).execute();
+if(response.isSuccessful()){
+   System.out.println(response.body());
+}
 ```
 
 #### Create Asset
@@ -118,21 +118,21 @@ To create an entry in a specific content type of a stack, use the following line
 The following lines of code can be used to upload assets to your stack:
 
 ```java
-        Contentstack contentstack=new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
-        Stack stack=contentstack.stack("API_KEY");
-        Asset asset=stack.asset();
-        Response<ResponseBody> response=asset.uploadAsset("filePath","description").execute();
-        if(response.isSuccessful()){
-        System.out.println(response.body());
-        }else{
-        System.out.println(response.errorBody());
-        }
+Contentstack contentstack = new Contentstack.Builder().setAuthtoken("AUTHTOKEN").build();
+Stack stack=contentstack.stack("API_KEY");
+Asset asset=stack.asset();
+Response<ResponseBody> response=asset.uploadAsset("filePath","description").execute();
+if(response.isSuccessful()){
+   System.out.println(response.body());
+}else{
+   System.out.println(response.errorBody());
+}
 ```
 
 ### Helpful Links
 
 - [Contentstack Website](https://www.contentstack.com/)
-- [Official Documentation](https://contentstack.com/docs)
+- [API Reference Documentation](https://www.contentstack.com/docs/developers/sdks/content-management-sdk/java)
 - [Content Management API Docs](https://www.contentstack.com/docs/developers/apis/content-management-api)
 
 ### The MIT License (MIT)

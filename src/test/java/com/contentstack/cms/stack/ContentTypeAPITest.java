@@ -18,11 +18,11 @@ class ContentTypeAPITest {
     protected static Stack stack;
     private int _COUNT = 2;
 
-
     @BeforeAll
     public void setUp() {
         stack = TestClient.getStack().addHeader(Util.API_KEY, API_KEY)
                 .addHeader("api_key", API_KEY);
+        _COUNT = stack.headers.size();
     }
 
     @Order(1)
@@ -75,8 +75,11 @@ class ContentTypeAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("include_count=true&include_global_field_schema=true", request.url().query().toString());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true", request.url().toString());
+        Assertions.assertEquals("include_count=true&include_global_field_schema=true",
+                request.url().query().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
+                request.url().toString());
 
     }
 
@@ -144,7 +147,9 @@ class ContentTypeAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType/references?include_global_fields=false", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/content_types/contentType/references?include_global_fields=false",
+                request.url().toString());
     }
 
     @Order(8)
@@ -161,7 +166,9 @@ class ContentTypeAPITest {
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertEquals("include_global_fields=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType/references?include_global_fields=true", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/content_types/contentType/references?include_global_fields=true",
+                request.url().toString());
     }
 
     @Order(9)
@@ -177,7 +184,8 @@ class ContentTypeAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType/export", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType/export",
+                request.url().toString());
     }
 
     @Order(10)
@@ -194,7 +202,8 @@ class ContentTypeAPITest {
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertEquals("version=1", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType/export?version=1", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType/export?version=1",
+                request.url().toString());
     }
 
     @Order(11)
@@ -227,7 +236,8 @@ class ContentTypeAPITest {
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertEquals("overwrite=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true",
+                request.url().toString());
     }
 
     @Order(13)
