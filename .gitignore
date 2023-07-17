@@ -271,3 +271,5 @@ src/main/resources/
 /.apt_generated_tests/
 .dccache
 .vscode/settings.json
+.vscode/
+/.vscode/
