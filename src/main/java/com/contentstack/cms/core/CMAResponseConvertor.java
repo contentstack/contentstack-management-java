@@ -23,31 +23,33 @@ public class CMAResponseConvertor {
     private static final String RESPONSE_NULL = "response == null";
     private final Response<ResponseBody> response;
 
-    /**
-     * @param response
-     *                 this is response body
-     */
+    // The `CMAResponseConvertor` class has a constructor that takes a
+    // `Response<ResponseBody>` object as a
+    // parameter. This constructor initializes the `response` field of the class
+    // with the provided
+    // `Response<ResponseBody>` object. This allows the `CMAResponseConvertor` class
+    // to access and work
+    // with the response data in its methods.
     public CMAResponseConvertor(Response<ResponseBody> response) {
         this.response = response;
     }
 
     /**
-     * It converts the response to string type
-     *
-     * @return stringfy the response
-     * @throws IOException
-     *                     throws exception when invalid response received
+     * The function returns the response body as a string if it is not null,
+     * otherwise it returns null.
+     * 
+     * @return The method is returning a String.
      */
     public String asString() throws IOException {
         return this.response.body() != null ? this.response.body().string() : null;
     }
 
     /**
-     * It converts the reponse to the json object
-     *
-     * @return string of json
-     * @throws IOException
-     *                     the io exception
+     * The function converts the response body to a JSON string using the Gson
+     * library.
+     * 
+     * @return The method is returning a JSON string representation of the response
+     *         body.
      */
     public String asJson() throws IOException {
         String body = this.response.body() != null ? this.response.body().string() : null;
@@ -55,11 +57,13 @@ public class CMAResponseConvertor {
     }
 
     /**
-     * It converts to json string to the
-     *
-     * @param string
-     *               response as string
-     * @return string type json
+     * The function takes a string as input and converts it to a JSON string using
+     * the Gson library.
+     * 
+     * @param string The parameter "string" is a String object that represents the
+     *               input string that you
+     *               want to convert to JSON format.
+     * @return The method is returning a JSON representation of the input string.
      */
     public String asJson(String string) {
         Objects.requireNonNull(string, "string == null");
@@ -67,16 +71,16 @@ public class CMAResponseConvertor {
     }
 
     /**
-     * It accepts model class you want to convert the data response to the specified
-     * model class
-     *
-     * @param tClass
-     *               the model class
-     * @param <T>
+     * The function converts a JSON response body into a Java object of the
+     * specified class using the Gson
+     * library.
+     * 
+     * @param tClass The `tClass` parameter is a `Class` object that represents the
      *               type of the model class
-     * @return the model class
-     * @throws IOException
-     *                     exception while parsing the response data
+     *               that you want to convert the response body to.
+     * @return The method is returning an object of type T, which is determined by
+     *         the input parameter
+     *         tClass.
      */
     public <T> T toModel(Class<T> tClass) throws IOException {
         Objects.requireNonNull(tClass, MODEL_NULL_CHECK);
@@ -102,6 +106,23 @@ public class CMAResponseConvertor {
         return new Gson().fromJson(response, tClass);
     }
 
+    /**
+     * The function converts a response body into a model object using Gson library
+     * in Java.
+     * 
+     * @param tClass   The `tClass` parameter is a `Class` object that represents
+     *                 the type of the model you
+     *                 want to convert the response body to. It is used to specify
+     *                 the type of the object that will be
+     *                 created from the JSON response.
+     * @param response The "response" parameter is of type "Response<ResponseBody>".
+     *                 It represents the
+     *                 response received from an HTTP request.
+     * @return The method is returning an object of type T, which is the model class
+     *         specified by the
+     *         tClass parameter.
+     */
+
     public <T> T toModel(Class<T> tClass, Response<ResponseBody> response) throws IOException {
         Objects.requireNonNull(tClass, MODEL_NULL_CHECK);
         Objects.requireNonNull(response, RESPONSE_NULL);
@@ -109,6 +130,14 @@ public class CMAResponseConvertor {
         return new Gson().fromJson(body, tClass);
     }
 
+    /**
+     * The function `requestBody` returns the request object associated with a given
+     * call instance.
+     * 
+     * @param callInstance An instance of the Call class, which represents a network
+     *                     request in OkHttp.
+     * @return The method is returning a Request object.
+     */
     public Request requestBody(Call callInstance) {
         return callInstance.request();
     }
