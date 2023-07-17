@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.contentstack.sdk</groupId>
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
@@ -46,16 +47,15 @@
 
     <developers>
         <developer>
-            <name>shaileshmishra</name>
-            <email>shailesh.mishra@contentstack.com</email>
-            <organization>contentstack</organization>
-            <organizationUrl>https://www.contentstack.com/</organizationUrl>
-        </developer>
-
-        <developer>
             <name>contentstack</name>
             <email>mobile@contentstack.com</email>
             <organization>Contentstack</organization>
+            <organizationUrl>https://www.contentstack.com/</organizationUrl>
+        </developer>
+        <developer>
+            <name>***REMOVED***</name>
+            <email>mshaileshr@gmail.com</email>
+            <organization>contentstack</organization>
             <organizationUrl>https://www.contentstack.com/</organizationUrl>
         </developer>
     </developers>
@@ -69,11 +69,6 @@
             <id>ossrh</id>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <!-- <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/contentstack/contentstack-management-java</url>
-        </repository> -->
     </distributionManagement>
 
     <properties>
@@ -91,7 +86,7 @@
         <converter-gson-version>2.9.0</converter-gson-version>
         <logging.version>4.10.0</logging.version>
         <jococo-plugin.version>0.8.5</jococo-plugin.version>
-        <lombok-source.version>1.18.26</lombok-source.version>
+        <lombok-source.version>1.18.28</lombok-source.version>
         <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <junit-jupiter-engine.version>5.8.0-M1</junit-jupiter-engine.version>
         <junit-vintage-engine.version>5.9.2</junit-vintage-engine.version>
@@ -172,9 +167,125 @@
         </dependency>
     </dependencies>
 
+
+    <profiles>
+        <profile>
+            <id>ossrhDeploy</id>
+            <distributionManagement>
+                <repository>
+                    <id>ossrh</id>
+                    <name>Central Repository OSSRH</name>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <name>Central Repository OSSRH</name>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>githubDeploy</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub cicirello Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/contentstack/contentstack-management-java</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>coverage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.10</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>generate-code-coverage-report</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>refactor</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.hjug.refactorfirst.plugin</groupId>
+                        <artifactId>refactor-first-maven-plugin</artifactId>
+                        <version>0.3.0</version>
+                        <configuration>
+                            <showDetails>true</showDetails>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>refactor-first</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
     <build>
         <plugins>
-            <!--mvn clean install -U -Dmaven.test.failure.ignore=true-->
+            <!--mvn
+            clean install -U -Dmaven.test.failure.ignore=true-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -217,7 +328,9 @@
                 </executions>
             </plugin>
 
-            <!--  -overview "***REMOVED***tentstack/java/contentstack-management-java/src/main/overview.html" -bottom  "<b>Copyright © 2012-2022 Contentstack </b><sup>TM</sup>"-->
+            <!--  -overview
+            "***REMOVED***tentstack/java/contentstack-management-java/src/main/overview.html"
+            -bottom  "<b>Copyright © 2012-2022 Contentstack </b><sup>TM</sup>"-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -334,7 +447,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
