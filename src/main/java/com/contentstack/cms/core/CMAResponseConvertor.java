@@ -38,6 +38,7 @@ public class CMAResponseConvertor {
      * The function returns the response body as a string if it is not null,
      * otherwise it returns null.
      * 
+     * @throws IOException if an I/O error occurs
      * @return The method is returning a String.
      */
     public String asString() throws IOException {
@@ -48,6 +49,7 @@ public class CMAResponseConvertor {
      * The function converts the response body to a JSON string using the Gson
      * library.
      * 
+     * @throws IOException if an I/O error occurs
      * @return The method is returning a JSON string representation of the response
      *         body.
      */
@@ -75,9 +77,11 @@ public class CMAResponseConvertor {
      * specified class using the Gson
      * library.
      * 
+     * @param <T>    the type of the parameter
      * @param tClass The `tClass` parameter is a `Class` object that represents the
      *               type of the model class
      *               that you want to convert the response body to.
+     * @throws IOException if an I/O error occurs
      * @return The method is returning an object of type T, which is determined by
      *         the input parameter
      *         tClass.
@@ -105,23 +109,6 @@ public class CMAResponseConvertor {
         Objects.requireNonNull(response, RESPONSE_NULL);
         return new Gson().fromJson(response, tClass);
     }
-
-    /**
-     * The function converts a response body into a model object using Gson library
-     * in Java.
-     * 
-     * @param tClass   The `tClass` parameter is a `Class` object that represents
-     *                 the type of the model you
-     *                 want to convert the response body to. It is used to specify
-     *                 the type of the object that will be
-     *                 created from the JSON response.
-     * @param response The "response" parameter is of type "Response<ResponseBody>".
-     *                 It represents the
-     *                 response received from an HTTP request.
-     * @return The method is returning an object of type T, which is the model class
-     *         specified by the
-     *         tClass parameter.
-     */
 
     public <T> T toModel(Class<T> tClass, Response<ResponseBody> response) throws IOException {
         Objects.requireNonNull(tClass, MODEL_NULL_CHECK);
