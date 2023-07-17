@@ -17,6 +17,17 @@ import java.lang.reflect.Type;
  */
 class ResponseResult<T> {
 
+    /**
+     * The function executes a network call and returns the response data or an
+     * error object.
+     * 
+     * @param call The <b>call</b> parameter is an instance of the `Call` interface,
+     *             which represents a single
+     *             request to be executed. It is a generic type, where `T`
+     *             represents the type of the response data
+     *             that is expected.
+     * @return The method is returning an object of type T.
+     */
     public T execute(Call<T> call) throws IOException {
         T data = null;
         Response<T> result = call.execute();
