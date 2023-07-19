@@ -300,7 +300,6 @@ public class Webhook {
      * @since 0.1.0
      */
     public Call<ResponseBody> importWebhook(@NotNull String fileName, @NotNull String jsonPath) {
-        // TODO: check before pushing
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         MultipartBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("webhook", fileName, RequestBody.create(mediaType, new File(jsonPath))).build();
