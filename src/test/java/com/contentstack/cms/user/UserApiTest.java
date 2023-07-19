@@ -29,12 +29,10 @@ public class UserApiTest {
     protected static User user;
     protected static final String activationToken = TestClient.AUTHTOKEN;
 
-
     @BeforeAll
     public static void initBeforeAll() {
         user = TestClient.getClient().user();
     }
-
 
     @Test
     @Order(3)
@@ -46,7 +44,6 @@ public class UserApiTest {
         Assertions.assertNull(request.body());
         Assertions.assertNull(request.url().query());
     }
-
 
     @Test()
     @Order(4)
@@ -62,7 +59,6 @@ public class UserApiTest {
         Assertions.assertEquals("https://api.contentstack.io/v3/user", userLogin.url().toString().replace("\"", ""));
 
     }
-
 
     @Test
     @Order(5)
