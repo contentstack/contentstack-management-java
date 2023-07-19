@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: JaCoCo Code Coverage Report
         id: jacoco_reporter
-        uses: PavanMudigonda/jacoco-reporter@v4.8
+        uses: actions/setup-java@v3
         with:
           coverage_results_path: site/jococo/index.html
           coverage_report_name: Coverage
