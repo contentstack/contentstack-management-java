@@ -24,7 +24,7 @@ jobs:
         run: mvn jacoco:prepare-agent jacoco:report
 
       - name: Publish JaCoCo Report
-        uses: dawidd6/action-jacoco-publish@v1
+        uses: PavanMudigonda/jacoco-reporter@v4.8
 
       - name: Fail if Coverage Below Threshold
         id: coverage_check
