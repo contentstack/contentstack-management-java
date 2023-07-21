@@ -302,7 +302,7 @@ public class Webhook {
     public Call<ResponseBody> importWebhook(@NotNull String fileName, @NotNull String jsonPath) {
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         MultipartBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("webhook", fileName, RequestBody.create(mediaType, new File(jsonPath))).build();
+                .addFormDataPart("webhook", fileName, RequestBody.create(mediaType, jsonPath)).build();
         this.headers.put(Util.CONTENT_TYPE, Util.MULTIPART);
         return this.service.imports(this.headers, body);
     }
