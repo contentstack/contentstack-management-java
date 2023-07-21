@@ -2,8 +2,6 @@ name: Java CI with Code Coverage
 
 on:
   push:
-    branches:
-      - feat/CS-36689-compare-merge-branch
 
 jobs:
   build-and-test:
