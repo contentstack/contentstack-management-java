@@ -15,6 +15,5 @@ public interface LocationService {
     Call<ResponseBody> getConfigurationLocation(
             @HeaderMap Map<String, String> headers,
             @Path("uid") String uid,
-            @QueryMap Map<String, Object> queryParams
-    );
+            @QueryMap Map<String, Object> queryParams);
 }
