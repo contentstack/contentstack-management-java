@@ -1,8 +1,9 @@
 name: Publish package to the Maven Central Repository
+
 on:
-  push:
-    branches:
-      - feat/CS-36689-compare-merge-branch
+  release:
+    types:
+      - created
 jobs:
   publish-maven:
     runs-on: ubuntu-latest
