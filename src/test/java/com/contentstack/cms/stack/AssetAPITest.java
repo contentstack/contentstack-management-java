@@ -2,8 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
@@ -51,7 +49,8 @@ class AssetAPITest {
         Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
-        Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(), "query params should not be empty");
+        Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(),
+                "query params should not be empty");
     }
 
     @Order(2)
@@ -78,7 +77,8 @@ class AssetAPITest {
         Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
-        Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(), "query params should not be empty");
+        Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(),
+                "query params should not be empty");
 
     }
 
@@ -97,11 +97,15 @@ class AssetAPITest {
         Assertions.assertTrue(resp.raw().request().isHttps(), "always works on https");
         Assertions.assertEquals("GET", resp.raw().request().method(), "works with GET call");
         Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(), "host should be anything but not null");
+        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(),
+                "host should be anything but not null");
         Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
-        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"), "the first segment of url should be v3");
-        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"), "url segment should contain assets");
-        Assertions.assertFalse(Objects.requireNonNull(resp.raw().request().url().query()).isEmpty(), "query params should not be empty");
+        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"),
+                "the first segment of url should be v3");
+        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"),
+                "url segment should contain assets");
+        Assertions.assertFalse(Objects.requireNonNull(resp.raw().request().url().query()).isEmpty(),
+                "query params should not be empty");
 
     }
 
@@ -122,7 +126,8 @@ class AssetAPITest {
         Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
-        Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(), "query params should not be empty");
+        Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(),
+                "query params should not be empty");
 
     }
 
@@ -150,7 +155,8 @@ class AssetAPITest {
         Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
-        Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(), "query params should not be empty");
+        Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(),
+                "query params should not be empty");
 
     }
 
@@ -176,11 +182,15 @@ class AssetAPITest {
         Assertions.assertTrue(resp.raw().request().isHttps(), "always works on https");
         Assertions.assertEquals("PUT", resp.raw().request().method(), "works with GET call");
         Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(), "host should be anything but not null");
+        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(),
+                "host should be anything but not null");
         Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
-        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"), "the first segment of url should be v3");
-        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"), "url segment should contain assets");
-        Assertions.assertFalse(Objects.requireNonNull(resp.raw().request().url().query()).isEmpty(), "query params should not be empty");
+        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"),
+                "the first segment of url should be v3");
+        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"),
+                "url segment should contain assets");
+        Assertions.assertFalse(Objects.requireNonNull(resp.raw().request().url().query()).isEmpty(),
+                "query params should not be empty");
 
     }
 
@@ -202,11 +212,15 @@ class AssetAPITest {
         Assertions.assertTrue(resp.raw().request().isHttps(), "always works on https");
         Assertions.assertEquals("PUT", resp.raw().request().method(), "works with GET call");
         Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(), "host should be anything but not null");
+        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(),
+                "host should be anything but not null");
         Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
-        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"), "the first segment of url should be v3");
-        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"), "url segment should contain assets");
-        Assertions.assertFalse(Objects.requireNonNull(resp.raw().request().url().query()).isEmpty(), "query params should not be empty");
+        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"),
+                "the first segment of url should be v3");
+        Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"),
+                "url segment should contain assets");
+        Assertions.assertFalse(Objects.requireNonNull(resp.raw().request().url().query()).isEmpty(),
+                "query params should not be empty");
     }
 
     @Test
@@ -230,6 +244,5 @@ class AssetAPITest {
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
     }
-
 
 }
