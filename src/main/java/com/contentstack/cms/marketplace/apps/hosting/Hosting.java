@@ -50,8 +50,7 @@ public class Hosting implements Parametron {
     /**
      * Create signed upload url call.
      * The function returns a signed upload URL by making a request to a service
-     * with the provided
-     * headers and app ID.
+     * with the provided headers and app ID.
      * 
      * @return The method is returning a Call object with a generic type of
      *         ResponseBody.
