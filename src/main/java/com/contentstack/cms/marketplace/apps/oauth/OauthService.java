@@ -9,22 +9,19 @@ import java.util.Map;
 
 public interface OauthService {
 
-    @GET("manifests/{uid}/oauth")
-    Call<ResponseBody> getOauthConfiguration(
-            @HeaderMap Map<String, String> headers,
-            @Path("uid") String uid
-    );
+        @GET("manifests/{uid}/oauth")
+        Call<ResponseBody> getOauthConfiguration(
+                        @HeaderMap Map<String, String> headers,
+                        @Path("uid") String uid);
 
-    @GET("manifests/oauth/scopes")
-    Call<ResponseBody> findScopes(
-            @HeaderMap Map<String, String> headers
-    );
+        @GET("manifests/oauth/scopes")
+        Call<ResponseBody> findScopes(
+                        @HeaderMap Map<String, String> headers);
 
-    @PUT("manifests/{uid}/oauth")
-    Call<ResponseBody> updateOauthConfiguration(
-            @HeaderMap Map<String, String> headers,
-            @Path("uid") String uid,
-            @Body JSONObject body
-    );
+        @PUT("manifests/{uid}/oauth")
+        Call<ResponseBody> updateOauthConfiguration(
+                        @HeaderMap Map<String, String> headers,
+                        @Path("uid") String uid,
+                        @Body JSONObject body);
 
 }

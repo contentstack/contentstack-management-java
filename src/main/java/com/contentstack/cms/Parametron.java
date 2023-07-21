@@ -41,7 +41,7 @@ public interface Parametron {
      * input and returns a
      * generic type T.
      * 
-     * @param <T>   the type of the parameter
+     * @param <T>    the type of the parameter
      * @param params The "params" parameter is a HashMap that maps String keys to
      *               Object values. It is
      *               annotated with @NotNull, indicating that it cannot be null.
@@ -52,7 +52,7 @@ public interface Parametron {
     /**
      * The function adds headers to a HashMap.
      * 
-     * @param <T>   the type of the parameter
+     * @param <T>     the type of the parameter
      * @param headers A HashMap containing key-value pairs of headers, where the key
      *                is a String
      *                representing the header name and the value is a String
