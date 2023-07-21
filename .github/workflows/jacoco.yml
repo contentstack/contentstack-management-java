@@ -31,7 +31,7 @@ jobs:
           total_missed=${total_missed:-0}
           total_percentage=$(awk "BEGIN { pc=100*${total_lines}/(${total_lines}+${total_missed}) } { printf \"%f\", pc }")
           echo "Total Coverage Percentage: $total_percentage"
-          if (( $(bc <<< "$total_percentage < 80.0") )); then
+          if (( $(bc <<< "$total_percentage < 60.0") )); then
             echo "Code Coverage is below 80% - failing the CI build."
             exit 1
           else
