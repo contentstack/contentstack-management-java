@@ -10,48 +10,46 @@ import java.util.Map;
 
 public interface ExtensionsService {
 
+        @GET("extensions")
+        Call<ResponseBody> getAll(
+                        @HeaderMap Map<String, Object> headers,
+                        @QueryMap(encoded = true) Map<String, Object> query);
 
-    @GET("extensions")
-    Call<ResponseBody> getAll(
-            @HeaderMap Map<String, Object> headers,
-            @QueryMap(encoded = true) Map<String, Object> query);
+        @GET("extensions/{custom_field_uid}")
+        Call<ResponseBody> getSingle(
+                        @HeaderMap Map<String, Object> headers,
+                        @Path("custom_field_uid") String customFieldUid,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
-    @GET("extensions/{custom_field_uid}")
-    Call<ResponseBody> getSingle(
-            @HeaderMap Map<String, Object> headers,
-            @Path("custom_field_uid") String customFieldUid,
-            @QueryMap(encoded = true) Map<String, Object> queryParameter);
+        @Multipart
+        @POST("extensions")
+        Call<ResponseBody> uploadCustomField(
+                        @HeaderMap Map<String, Object> headers,
+                        @PartMap Map<String, RequestBody> params,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter);
 
+        @POST("extensions")
+        Call<ResponseBody> uploadCustomField(
+                        @HeaderMap Map<String, Object> headers,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter,
+                        @Body JSONObject body);
 
-    @Multipart
-    @POST("extensions")
-    Call<ResponseBody> uploadCustomField(
-            @HeaderMap Map<String, Object> headers,
-            @PartMap Map<String, RequestBody> params,
-            @QueryMap(encoded = true) Map<String, Object> queryParameter);
+        @PUT("extensions/{custom_field_uid}")
+        Call<ResponseBody> update(
+                        @HeaderMap Map<String, Object> headers,
+                        @Path("custom_field_uid") String customFieldUid,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter,
+                        @Body JSONObject body);
 
-    @POST("extensions")
-    Call<ResponseBody> uploadCustomField(
-            @HeaderMap Map<String, Object> headers,
-            @QueryMap(encoded = true) Map<String, Object> queryParameter,
-            @Body JSONObject body);
+        @DELETE("extensions/{custom_field_uid}")
+        Call<ResponseBody> delete(
+                        @HeaderMap Map<String, Object> headers,
+                        @Path("custom_field_uid") String customFieldUid);
 
-    @PUT("extensions/{custom_field_uid}")
-    Call<ResponseBody> update(
-            @HeaderMap Map<String, Object> headers,
-            @Path("custom_field_uid") String customFieldUid,
-            @QueryMap(encoded = true) Map<String, Object> queryParameter,
-            @Body JSONObject body);
-
-    @DELETE("extensions/{custom_field_uid}")
-    Call<ResponseBody> delete(
-            @HeaderMap Map<String, Object> headers,
-            @Path("custom_field_uid") String customFieldUid);
-
-    @POST("content_types")
-    Call<ResponseBody> createContentTypeWithExtensionField(
-            @HeaderMap Map<String, Object> headers,
-            @QueryMap(encoded = true) Map<String, Object> queryParameter,
-            @Body JSONObject body);
+        @POST("content_types")
+        Call<ResponseBody> createContentTypeWithExtensionField(
+                        @HeaderMap Map<String, Object> headers,
+                        @QueryMap(encoded = true) Map<String, Object> queryParameter,
+                        @Body JSONObject body);
 
 }

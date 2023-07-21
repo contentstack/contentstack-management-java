@@ -8,10 +8,9 @@ import retrofit2.http.QueryMap;
 
 import java.util.Map;
 
-
 public interface AuthService {
 
     @GET("authorized-apps")
     Call<ResponseBody> findAuthorizedApps(@HeaderMap Map<String, String> headers,
-                                          @QueryMap Map<String, Object> params );
+            @QueryMap Map<String, Object> params);
 }
