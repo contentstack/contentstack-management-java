@@ -1,8 +1,9 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
+
 import okhttp3.Request;
 import org.junit.jupiter.api.*;
 
@@ -12,12 +13,11 @@ import java.util.HashMap;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PublishQueueUnitTest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("workflowUid");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String _uid = TestClient.USER_ID;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static PublishQueue publishQueue;
-
 
     @BeforeAll
     static void setup() {
@@ -66,7 +66,8 @@ class PublishQueueUnitTest {
         Assertions.assertEquals("publish-queue", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/publish-queue?publish_queue_uid=your_publish_queue_uid", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/publish-queue?publish_queue_uid=your_publish_queue_uid",
+                request.url().toString());
     }
 
     @Test
@@ -81,7 +82,9 @@ class PublishQueueUnitTest {
         Assertions.assertEquals("publish-queue", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("publish_queue_uid=your_publish_queue_uid", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/publish-queue/blti9u09nunu3u7?publish_queue_uid=your_publish_queue_uid", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/publish-queue/" + _uid + "?publish_queue_uid=your_publish_queue_uid",
+                request.url().toString());
     }
 
     @Test
@@ -96,8 +99,10 @@ class PublishQueueUnitTest {
         Assertions.assertEquals("publish-queue", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("publish_queue_uid=your_publish_queue_uid", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/publish-queue/blti9u09nunu3u7/unschedule?publish_queue_uid=your_publish_queue_uid", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/publish-queue/" + _uid
+                        + "/unschedule?publish_queue_uid=your_publish_queue_uid",
+                request.url().toString());
     }
-
 
 }

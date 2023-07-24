@@ -1,0 +1,27 @@
+{
+  "entries": [
+    {
+      "uid": "{{entry_uid}}",
+      "content_type": "{{content_type_uid}}",
+      "version": 1,
+      "locale": "{{entry_locale}}"
+    },
+    {
+      "uid": "{{entry_uid}}",
+      "content_type": "{{content_type_uid}}",
+      "version": 1,
+      "locale": "{{entry_locale}}"
+    }
+  ],
+  "assets": [
+    {
+      "uid": "{{uid}}"
+    }
+  ],
+  "locales": [
+    "en-us"
+  ],
+  "environments": [
+    "{{env_uid}}"
+  ]
+}

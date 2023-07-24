@@ -18,11 +18,10 @@ import java.util.HashMap;
  * app or service to keep your application
  * in sync with your Contentstack account. Webhooks allow you to specify a URL
  * to which you would like Contentstack to
- * post data when an event happens. <a
- * href=
+ * post data when an event happens. <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">
- * Read
- * more about Webhooks.</a>
+ * Read more
+ * about Webhooks.</a>
  *
  * @author ***REMOVED***
  * @version v0.1.0
@@ -110,8 +109,7 @@ public class Webhook {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-webhooks">Get
-     *      all
-     *      Webhooks
+     *      all Webhooks
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -126,10 +124,10 @@ public class Webhook {
      * webhook.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">Get
-     *      a Single Delivery Token
+     *      a
+     *      Single Delivery Token
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -161,18 +159,17 @@ public class Webhook {
      * <p>
      * When creating a webhook, you need to specify the branch scope through the
      * following schema in the request body:
-     * 
+     *
      * <pre>
      *     "branches":[
      *     "main"
      * ]
      * </pre>
-     * 
+     *
      * <b>Note:</b> In the Header, you need to use either the stack Management Token
-     * (recommended) or the user
-     * Authtoken, along with the stack API key, to make valid Content Management API
-     * requests. For more information,
-     * refer to Authentication.
+     * (recommended) or the user Authtoken, along with the stack API key, to make
+     * valid Content Management API requests.
+     * For more information, refer to Authentication.
      *
      * @param requestBody
      *                    The @JSONObject you want to post
@@ -267,8 +264,7 @@ public class Webhook {
      *
      *
      * <b>Note:</b> In case you do not know the UID of the webhook, use the <b>Get
-     * all webhooks</b> request to
-     * get all the webhooks (along with the UIDs).
+     * all webhooks</b> request to get all the webhooks (along with the UIDs).
      *
      * @return Call
      * @see <a href=
@@ -304,10 +300,9 @@ public class Webhook {
      * @since 0.1.0
      */
     public Call<ResponseBody> importWebhook(@NotNull String fileName, @NotNull String jsonPath) {
-        // TODO: check before pushing
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         MultipartBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("webhook", fileName, RequestBody.create(mediaType, new File(jsonPath))).build();
+                .addFormDataPart("webhook", fileName, RequestBody.create(mediaType, jsonPath)).build();
         this.headers.put(Util.CONTENT_TYPE, Util.MULTIPART);
         return this.service.imports(this.headers, body);
     }
@@ -317,8 +312,7 @@ public class Webhook {
      * of an existing webhook.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-existing-webhook">Import
      *      Existing
      *      </a>
@@ -358,7 +352,7 @@ public class Webhook {
      * execution status.
      * <p>
      * The following table shows values you can use for the query parameter:
-     * 
+     *
      * <pre>
      *     <b>Success:</b>
      *     {
@@ -375,7 +369,7 @@ public class Webhook {
      *   }
      * }
      * </pre>
-     * 
+     * <p>
      * This API request will return a maximum of 100 records while fetching the
      * execution details for a specific
      * webhook. Previously, there was no limit on the number of records returned.
@@ -384,8 +378,7 @@ public class Webhook {
      * the “limit” parameter.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-executions-of-a-webhook">Get
      *      executions of a webhook
      *      </a>
@@ -439,8 +432,7 @@ public class Webhook {
      *                     executions of webhooks' call to retrieve the UID of a
      *                     webhook
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-latest-execution-log-of-a-webhook">Get
      *      latest execution log of a webhook
      *      </a>
