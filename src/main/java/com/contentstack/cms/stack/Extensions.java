@@ -107,15 +107,11 @@ public class Extensions {
      * of the branch where the concerned Contentstack module resides</dd>
      * </dl>
      *
-     * @return Call
-     * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-custom-fields">Get
-     *      all
-     *      Custom Field
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
-     * @see #addParam(String, Object) to add query parameters
+     * @return Call call
+     * @see #addHeader(String, Object) #addHeader(String, Object)#addHeader(String,
+     *      Object)to add headers
+     * @see #addParam(String, Object) #addParam(String, Object)#addParam(String,
+     *      Object)to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {
@@ -124,8 +120,7 @@ public class Extensions {
 
     /**
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-custom-field">Get
      *      a
      *      Single Custom Field
@@ -170,11 +165,10 @@ public class Extensions {
      * @param body
      *             the request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
-     *      a
-     *      custom field
+     *      a custom
+     *      field
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -213,11 +207,10 @@ public class Extensions {
      * @param body
      *             the request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
-     *      a
-     *      custom field
+     *      a custom
+     *      field
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -232,11 +225,10 @@ public class Extensions {
      * @param body
      *             JSON requestBody
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-custom-field">Update
-     *      a
-     *      custom field
+     *      a custom
+     *      field
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -257,11 +249,10 @@ public class Extensions {
      * Delete custom field request is used to delete a specific custom field
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-custom-field">Delete
-     *      a
-     *      custom field
+     *      a custom
+     *      field
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0

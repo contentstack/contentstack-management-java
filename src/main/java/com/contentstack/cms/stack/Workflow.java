@@ -1,6 +1,5 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.core.Util;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -15,13 +14,11 @@ import java.util.List;
  * creation and publishing, and lets you manage
  * the content lifecycle of your project smoothly.
  * <p>
- * Read more about <a
- * href=
+ * Read more about <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#workflows">Workflow</a>
  *
  * <b>Note:</b> You cannot create workflows in a stack that supports branches
- * when using the classic Contentstack
- * interface.
+ * when using the classic Contentstack interface.
  *
  * @author ***REMOVED***
  * @version v01.0
@@ -114,11 +111,10 @@ public class Workflow {
      * specific Workflow of a stack.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-workflow">Get
-     *      a
-     *      singel workflow
+     *      a singel
+     *      workflow
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -137,25 +133,24 @@ public class Workflow {
      * scope, specify the unique IDs of the
      * branches for which the workflow will be applicable in the following schema in
      * the request body:
-     * 
+     *
      * <pre>
      *     "branches":[
      *     "main",
      *     "development"
      * ]
      * </pre>
-     * 
+     * <p>
      * To control who can edit an entry at different stages of the workflow, you can
      * pass the entry_lock parameter
      * inside each workflow stage.
      *
      * <b>Note:</b> Workflow superusers, organization owners, and stack
-     * owners/admins can edit or delete the entry in
-     * any workflow stage, irrespective of the stage access rules set for that
-     * stage.
+     * owners/admins can edit or delete the entry in any workflow stage,
+     * irrespective of the stage access rules set for
+     * that stage.
      * <p>
-     * Read more about <a
-     * href=
+     * Read more about <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-workflow">Create-Workflow</a>
      *
      * @param requestBody
@@ -189,7 +184,7 @@ public class Workflow {
      *     "development"
      * ]
      * </pre>
-     * 
+     * <p>
      * To control who can edit an entry at different stages of the workflow, you can
      * pass the entry_lock parameter
      * inside each workflow stage.
@@ -201,8 +196,7 @@ public class Workflow {
      * @param requestBody
      *                    The body should be of @{@link JSONObject} type
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-or-update-workflow-details">Update
      *      Workflow
      *      </a>
@@ -272,27 +266,26 @@ public class Workflow {
      * To define the branch scope, specify the unique IDs of the branches for which
      * the publishing rule will be
      * applicable in the following schema in the request body:
-     * 
+     *
      * <pre>
      *     "branches":[
      *     "main",
      *     "development"
      * ]
      * </pre>
-     * 
+     *
      * <b>Note:</b> You cannot create publish rules in a stack that supports
-     * branches when using the classic
-     * Contentstack interface.
+     * branches when using the classic Contentstack interface.
      *
      * @param requestBody
      *                    Specify the unique IDs of the branches for which the
      *                    publishing rule will be applicable in the schema in
      *                    the request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-publish-rules">Create
-     *      Publish Rule
+     *      Publish
+     *      Rule
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -315,10 +308,10 @@ public class Workflow {
      * @param requestBody
      *                    The request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-publish-rules">Update
-     *      Publish Rules
+     *      Publish
+     *      Rules
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -334,10 +327,10 @@ public class Workflow {
      * @param ruleUid
      *                The UID of the publish rule that you want to delete
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-publish-rules">Delete
-     *      Publish Rules
+     *      Publish
+     *      Rules
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -355,11 +348,10 @@ public class Workflow {
      *                     comma-separated list of content type UIDs for filtering
      *                     publish rules on its basis
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-publish-rules">Get
-     *      all
-     *      publish rule
+     *      all publish
+     *      rule
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -379,11 +371,10 @@ public class Workflow {
      * @param ruleUid
      *                The UID of the publish rule that you want to fetch
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-publish-rules">Get
-     *      all
-     *      publish rules
+     *      all publish
+     *      rules
      *
      *      </a>
      * @see #addHeader(String, Object) to add headers
@@ -407,8 +398,7 @@ public class Workflow {
      *                       The UID of the content type of which you want to
      *                       retrieve the Publishing Rule.
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-rules-by-content-types">Get
      *      Publish Rules By Content Types
      *      </a>

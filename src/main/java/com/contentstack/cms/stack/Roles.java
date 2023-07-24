@@ -8,9 +8,6 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 
-import static com.contentstack.cms.core.Util.CONTENT_TYPE;
-import static com.contentstack.cms.core.Util.CONTENT_TYPE_VALUE;
-
 /**
  * A role is a collection of permissions that will be applicable to all the
  * users who are assigned this role.
@@ -104,7 +101,8 @@ public class Roles {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-roles">Get
-     *      all Roles
+     *      all
+     *      Roles
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -121,7 +119,8 @@ public class Roles {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-role">Get
-     *      a single Roles
+     *      a
+     *      single Roles
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -146,7 +145,8 @@ public class Roles {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-role">Create
-     *      a Roles
+     *      a
+     *      Roles
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -189,7 +189,8 @@ public class Roles {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-role">Delete
-     *      a Role
+     *      a
+     *      Role
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0

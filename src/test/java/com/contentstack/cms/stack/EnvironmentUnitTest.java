@@ -1,8 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -10,13 +10,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-
 @Tag("unit")
 public class EnvironmentUnitTest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     static Environment environment;
 
     @BeforeAll
@@ -78,7 +77,7 @@ public class EnvironmentUnitTest {
     @Test
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
-        Request request = environment.update( requestBody).request();
+        Request request = environment.update(requestBody).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());

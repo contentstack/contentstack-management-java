@@ -1,8 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -21,10 +21,10 @@ import java.util.Map;
 @Tag("unit")
 class ExtensionUnitTest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("authToken");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String _uid = TestClient.USER_ID;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     static Extensions extension;
     protected static JSONObject body;
 
@@ -36,7 +36,8 @@ class ExtensionUnitTest {
             "\t\t],\n" +
             "\t\t\"data_type\": \"text\",\n" +
             "\t\t\"title\": \"Old Extension\",\n" +
-            "\t\t\"src\": \"Enter either the source code (use 'srcdoc') or the external hosting link of the extension depending on the hosting method you selected.\",\n" +
+            "\t\t\"src\": \"Enter either the source code (use 'srcdoc') or the external hosting link of the extension depending on the hosting method you selected.\",\n"
+            +
             "\t\t\"multiple\": false,\n" +
             "\t\t\"config\": \"{}\",\n" +
             "\t\t\"type\": \"field\"\n" +
@@ -143,7 +144,8 @@ class ExtensionUnitTest {
         Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
         Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/extensions/" + _uid + "?include_count=false&include_branch=false",
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/extensions/" + _uid + "?include_count=false&include_branch=false",
                 request.url().toString());
     }
 
@@ -176,19 +178,20 @@ class ExtensionUnitTest {
                 request.url().toString());
     }
 
-//    @Test
-//    void updateTheExtension() {
-//        Request request = extension.uploadCustomField(body).request();
-//        Assertions.assertEquals(2, request.headers().names().size());
-//        Assertions.assertEquals("POST", request.method());
-//        Assertions.assertNotNull(request.body());
-//        Assertions.assertTrue(request.url().isHttps());
-//        Assertions.assertEquals("api.contentstack.io", request.url().host());
-//        Assertions.assertEquals(2, request.url().pathSegments().size());
-//        Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
-//        Assertions.assertNull(request.url().encodedQuery());
-//        Assertions.assertEquals("https://api.contentstack.io/v3/extensions", request.url().toString());
-//    }
+    // @Test
+    // void updateTheExtension() {
+    // Request request = extension.uploadCustomField(body).request();
+    // Assertions.assertEquals(2, request.headers().names().size());
+    // Assertions.assertEquals("POST", request.method());
+    // Assertions.assertNotNull(request.body());
+    // Assertions.assertTrue(request.url().isHttps());
+    // Assertions.assertEquals("api.contentstack.io", request.url().host());
+    // Assertions.assertEquals(2, request.url().pathSegments().size());
+    // Assertions.assertEquals("extensions", request.url().pathSegments().get(1));
+    // Assertions.assertNull(request.url().encodedQuery());
+    // Assertions.assertEquals("https://api.contentstack.io/v3/extensions",
+    // request.url().toString());
+    // }
 
     @Test
     void extensionDeleteAgain() {

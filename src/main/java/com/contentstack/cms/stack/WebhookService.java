@@ -13,7 +13,7 @@ public interface WebhookService {
 
     @GET("webhooks")
     Call<ResponseBody> fetch(@HeaderMap Map<String, Object> headers,
-                             @QueryMap HashMap<String, Object> params);
+            @QueryMap HashMap<String, Object> params);
 
     @GET("webhooks/{webhook_uid}")
     Call<ResponseBody> single(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String executionUid);
@@ -22,7 +22,8 @@ public interface WebhookService {
     Call<ResponseBody> create(@HeaderMap Map<String, Object> headers, @Body JSONObject requestBody);
 
     @PUT("webhooks/{webhook_uid}")
-    Call<ResponseBody> update(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String webhookUid, @Body JSONObject requestBody);
+    Call<ResponseBody> update(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String webhookUid,
+            @Body JSONObject requestBody);
 
     @DELETE("webhooks/{webhook_uid}")
     Call<ResponseBody> delete(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String webhookUid);
@@ -47,5 +48,6 @@ public interface WebhookService {
     Call<ResponseBody> retry(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String executionUid);
 
     @GET("webhooks/{execution_uid}/logs")
-    Call<ResponseBody> getExecutionLog(@HeaderMap Map<String, Object> headers, @Path("execution_uid") String executionUid);
+    Call<ResponseBody> getExecutionLog(@HeaderMap Map<String, Object> headers,
+            @Path("execution_uid") String executionUid);
 }
