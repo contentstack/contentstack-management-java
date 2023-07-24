@@ -108,8 +108,7 @@ public class GlobalField {
      * Read more about authentication.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
      *      all
      *      environments
@@ -138,8 +137,7 @@ public class GlobalField {
      * Read more about authentication.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-global-field">Get
      *      a
      *      single global field
@@ -172,11 +170,10 @@ public class GlobalField {
      * @param requestBody
      *                    the request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-global-field">Create
-     *      a
-     *      global field
+     *      a global
+     *      field
      *
      *      </a>
      * @see #addHeader(String, Object) to add headers
@@ -203,11 +200,10 @@ public class GlobalField {
      * @param requestBody
      *                    the request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-global-field">Update
-     *      a
-     *      global field
+     *      a global
+     *      field
      *
      *      </a>
      * @see #addHeader(String, Object) to add headers
@@ -230,10 +226,10 @@ public class GlobalField {
      * <b>here</b>: force:true is already applied in this request call
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-global-field">Delete
-     *      global field
+     *      global
+     *      field
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -258,11 +254,10 @@ public class GlobalField {
      * @param body
      *             The request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-global-field">Import
-     *      a
-     *      global field
+     *      a global
+     *      field
      *
      *      </a>
      * @see #addHeader(String, Object) to add headers
@@ -279,11 +274,10 @@ public class GlobalField {
      * data is exported in JSON format
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-global-field">Export
-     *      a
-     *      global field
+     *      a global
+     *      field
      *
      *      </a>
      * @see #addHeader(String, Object) to add headers

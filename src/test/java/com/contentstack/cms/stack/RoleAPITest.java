@@ -1,70 +1,38 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 @Tag("api")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RoleAPITest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("authToken");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String _uid = TestClient.AUTHTOKEN;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static Roles roles;
-    protected static JSONObject body;
-
-    // Create a JSONObject, JSONObject could be created in multiple ways.
-    // We choose JSONParser that converts string to JSONObject
-    static String theJsonString = "{\n" +
-            "  \"role\":{\n" +
-            "    \"name\":\"testRole\",\n" +
-            "    \"description\":\"This is a test role.\",\n" +
-            "    \"rules\":[\n" +
-            "      {\n" +
-            "        \"module\":\"branch\",\n" +
-            "        \"branches\":[\n" +
-            "          \"main\"\n" +
-            "        ],\n" +
-            "        \"acl\":{\n" +
-            "          \"read\":true\n" +
-            "        }\n" +
-            "      },\n" +
-            "        }\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  }\n" +
-            "}";
+    static Stack stack;
 
 
     @BeforeAll
-    public static void setup() {
-        HashMap<String, Object> headers = new HashMap<>();
-        headers.put(Util.API_KEY, API_KEY);
-        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-        Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
+    static void setup() {
+        stack = TestClient.getStack();
+        stack.addHeader(Util.API_KEY, API_KEY);
+        stack.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         roles = stack.roles(_uid);
-
-        try {
-            JSONParser parser = new JSONParser();
-            body = (JSONObject) parser.parse(theJsonString);
-        } catch (ParseException e) {
-            System.out.println(e.getLocalizedMessage());
-        }
     }
 
     @Test
     void allRoles() throws IOException {
+        roles = stack.roles(_uid);
         roles.addParam("include_rules", true);
         roles.addParam("include_permissions", true);
         Response<ResponseBody> response = roles.find().execute();
@@ -78,6 +46,7 @@ class RoleAPITest {
 
     @Test
     void singleRole() throws IOException {
+        roles = stack.roles(_uid);
         Response<ResponseBody> response = roles.fetch().execute();
         if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
@@ -87,36 +56,60 @@ class RoleAPITest {
     }
 
     @Test
-    @Disabled
-    void createRole() throws IOException {
-        Response<ResponseBody> response = roles.create(body).execute();
-        if (response.isSuccessful()) {
-            Assertions.assertTrue(response.isSuccessful());
-        } else {
-            Assertions.assertFalse(response.isSuccessful());
-        }
+    void createRole() {
+        JSONObject body = new JSONObject();
+        body.put("abcd", "abcd");
+        roles = stack.roles(_uid);
+        roles.addHeader(Util.API_KEY, API_KEY);
+        roles.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+        Request request = roles.create(body).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("roles", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/roles", request.url().toString());
     }
 
     @Test
-    @Disabled
-    void updateRole() throws IOException {
-        Response<ResponseBody> response = roles.update(body).execute();
-        if (response.isSuccessful()) {
-            Assertions.assertTrue(response.isSuccessful());
-        } else {
-            Assertions.assertFalse(response.isSuccessful());
-        }
+    void updateRole() {
+
+        roles = stack.roles(_uid);
+        roles.addHeader("authtoken", AUTHTOKEN);
+        roles.addHeader("api_key", API_KEY);
+        JSONObject object = new JSONObject();
+        object.put("key", "value");
+
+        Request request = roles.update(object).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("roles", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/roles/"+AUTHTOKEN, request.url().toString());
     }
 
     @Test
-    @Disabled
-    void deleteRole() throws IOException {
-        Response<ResponseBody> response = roles.delete().execute();
-        if (response.isSuccessful()) {
-            Assertions.assertTrue(response.isSuccessful());
-        } else {
-            Assertions.assertFalse(response.isSuccessful());
-        }
+    void deleteRole() {
+        roles = stack.roles(_uid);
+        roles.addHeader("authtoken", AUTHTOKEN);
+        roles.addHeader("api_key", API_KEY);
+        Request request = roles.delete().request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("roles", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/roles/"+_uid, request.url().toString());
     }
 
 }

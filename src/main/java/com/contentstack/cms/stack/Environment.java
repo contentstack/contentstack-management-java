@@ -95,14 +95,13 @@ public class Environment {
      * {@link #addParam(String, Object)} Use addParams to include Query parameters
      * <p>
      * <b>Example: </b>
-     * 
+     *
      * <pre>
      * environment.addParams("someKey", "someValue').fetch()
      * </pre>
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
      *      all
      *      environments
@@ -124,11 +123,10 @@ public class Environment {
      * logging into your account.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-environment">Get
-     *      a
-     *      single environments
+     *      a single
+     *      environments
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -154,8 +152,7 @@ public class Environment {
      * @param body
      *             The {@link JSONObject} request body<br>
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
      *      all
      *      environments
@@ -185,8 +182,7 @@ public class Environment {
      * @param requestBody
      *                    request body of type @{@link JSONObject}
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-environment">Update
      *      Environment</a>
      * @see #addHeader(String, Object) to add headers to the request
@@ -206,8 +202,7 @@ public class Environment {
      * authtoken that you receive after logging into your account.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-environment">Delete
      *      Environment</a>
      * @see #addHeader(String, Object) to add headers to the request

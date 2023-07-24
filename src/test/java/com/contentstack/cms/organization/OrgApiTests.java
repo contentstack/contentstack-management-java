@@ -1,34 +1,24 @@
 package com.contentstack.cms.organization;
 
-import com.contentstack.cms.Contentstack;
-import com.contentstack.cms.models.Error;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import io.github.cdimascio.dotenv.Dotenv;
+import com.contentstack.cms.TestClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Tag("api")
-public class OrgApiTests {
+@Tag("unit")
+class OrgApiTests {
 
-    private String organizationUid;
-    private static Contentstack contentstack;
-    private static Organization organization;
+    private static Organization ORG;
+    private final String ORG_ID = TestClient.ORGANIZATION_UID;
 
     private JSONObject theJSONBody(@NotNull String _body) {
         try {
@@ -39,133 +29,150 @@ public class OrgApiTests {
         }
     }
 
-    private JsonObject toJson(Response<ResponseBody> response) throws IOException {
-        assert response.body() != null;
-        return new Gson().fromJson(response.body().string(), JsonObject.class);
-    }
-
-    @BeforeAll
-    public static void setUp() throws IOException {
-        String emailId = Dotenv.load().get("username");
-        String password = Dotenv.load().get("password");
-        contentstack = new Contentstack.Builder().build();
-        contentstack.login(emailId, password);
-        organization = contentstack.organization();
+    @BeforeEach
+    void setUp() {
+        ORG = TestClient.getClient().organization()
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("apiKey", TestClient.API_KEY);
     }
 
     @Order(1)
     @Test
-    void testGetAll() throws IOException {
-        Response<ResponseBody> response = organization.find().execute();
-        if (response.isSuccessful()) {
-            JSONObject jsonOrgs = theJSONBody(response.body().string());
-            JSONArray array = (JSONArray) jsonOrgs.get("organizations");
-            organizationUid = ((JSONObject) array.get(0)).get("uid").toString();
-            organization = contentstack.organization(organizationUid);
-            Assertions.assertTrue(array.size() > 0);
-        } else {
-            Assertions.fail("should be passed");
-        }
+    void testGetAll() {
+        Request request = ORG.find().request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations", request.url().toString());
     }
 
     @Order(2)
     @Test
-    void testGetAllWithParams() throws IOException {
-        organization.addParam("include_plan", true);
-        Response<ResponseBody> response = organization.find().execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("organizations"));
-            JsonElement planId = respJson.get("organizations").getAsJsonArray().get(0);
-            JsonObject jsonPlanId = planId.getAsJsonObject();
-            Assertions.assertTrue(jsonPlanId.has("plan_id"));
-        } else {
-            Assertions.fail("should be passed");
-        }
+    void testGetAllWithParams() {
+        ORG.addParam("include_plan", true);
+        Request request = ORG.find().request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations?include_plan=true", request.url().toString());
     }
 
     @Order(3)
     @Test
-    void testGetSingle() throws IOException {
-        Response<ResponseBody> response = organization.fetch().execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("organization"));
-            JsonObject isJsonObject = respJson.get("organization").getAsJsonObject();
-            Assertions.assertTrue(isJsonObject.isJsonObject());
-        } else {
-            Assertions.fail("should be passed");
-        }
+    void testGetSingle() {
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("apiKey", TestClient.API_KEY);
+        Request request = ORG.fetch().request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID, request.url().toString());
+
     }
 
     @Order(4)
     @Test
-    void testGetSingleWithInclude() throws IOException {
-        organization.addParam("include_plan", true);
-        Response<ResponseBody> response = organization.fetch().execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("organization"));
-            JsonObject isJsonObject = respJson.get("organization").getAsJsonObject();
-            Assertions.assertTrue(isJsonObject.has("plan_id"));
-        } else {
-            Assertions.fail("should be passed");
-        }
+    void testGetSingleWithInclude() {
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("apiKey", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Request request = ORG.fetch().request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("include_plan=true", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "?include_plan=true", request.url().toString());
     }
 
     @Order(5)
     @Test
-    void testRole() throws IOException {
-        organization.addParam("limit", 2);
-        organization.addParam("skip", 2);
-        organization.addParam("asc", true);
-        organization.addParam("desc", true);
-        organization.addParam("include_count", true);
-        organization.addParam("include_stack_roles", true);
-        Response<ResponseBody> response = organization.roles().execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("roles"));
-            JsonArray asJsonArray = respJson.get("roles").getAsJsonArray();
-            Assertions.assertTrue(asJsonArray.isJsonArray());
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "You don't have the permission to do this operation.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(316, error.getErrorCode());
-        }
+    void testRole() {
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("apiKey", TestClient.API_KEY)
+                .addParam("include_plan", true)
+                .addParam("limit", 2)
+                .addParam("skip", 2)
+                .addParam("asc", true)
+                .addParam("desc", true)
+                .addParam("include_count", true)
+                .addParam("include_stack_roles", true);
+        Request request = ORG.roles().request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("asc=true&include_stack_roles=true&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/roles?asc=true&include_stack_roles=true&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().toString());
+
     }
 
     @Order(6)
     @Test
-    void testRoleWithQueryPrams() throws IOException {
-        organization.addParam("limit", 2);
-        organization.addParam("skip", 2);
-        organization.addParam("asc", true);
-        organization.addParam("desc", true);
-        organization.addParam("include_count", true);
-        organization.addParam("include_stack_roles", false);
-        Response<ResponseBody> response = organization.roles().execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("roles"));
-            JsonArray asJsonArray = respJson.get("roles").getAsJsonArray();
-            Assertions.assertTrue(asJsonArray.isJsonArray());
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "You don't have the permission to do this operation.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(316, error.getErrorCode());
-        }
+    void testRoleWithQueryPrams() {
+
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("apiKey", TestClient.API_KEY)
+                .addParam("include_plan", true).addParam("limit", 2)
+                .addParam("skip", 2)
+                .addParam("asc", true)
+                .addParam("desc", true)
+                .addParam("include_count", true)
+                .addParam("include_stack_roles", false);
+        Request request = ORG.roles().request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("asc=true&include_stack_roles=false&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/roles?asc=true&include_stack_roles=false&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().toString());
+
     }
 
     @Order(7)
     @Test
-    @Disabled
-    void testInviteUser() throws IOException {
-        organization.addParam("include_plan", true);
+    void testInviteUser() {
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
         String requestBody = "{\n" +
                 "\t\"share\": {\n" +
                 "\t\t\"users\": {\n" +
@@ -185,25 +192,24 @@ public class OrgApiTests {
                 "\t}\n" +
                 "}";
         JSONObject body = theJSONBody(requestBody);
-        Response<ResponseBody> response = organization.inviteUser(body).execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("shares"));
-            JsonArray asJsonArray = respJson.get("shares").getAsJsonArray();
-            Assertions.assertTrue(asJsonArray.isJsonArray());
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "Unable to share at this moment.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(315, error.getErrorCode());
-        }
+        Request request = ORG.inviteUser(body).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/share", request.url().toString());
+
+
     }
 
     @Order(8)
     @Test
-    @Disabled
-    void testRemoveUser() throws IOException {
+    void testRemoveUser() {
         String _body = "{\n" +
                 "\t\"share\": {\n" +
                 "\t\t\"users\": {\n" +
@@ -223,150 +229,168 @@ public class OrgApiTests {
                 "\t}\n" +
                 "}";
         JSONObject body = theJSONBody(_body);
-        Response<ResponseBody> response = organization.removeUsers(body).execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("notice"));
-            Assertions.assertTrue(respJson.has("shares"));
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "Unable to delete share at this moment.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(323, error.getErrorCode());
-        }
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Request request = ORG.inviteUser(body).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/share", request.url().toString());
+
     }
 
     @Order(9)
     @Test
-    @Disabled
-    void testResendInvitation() throws IOException {
+    void testResendInvitation() {
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
-        Response<ResponseBody> response = organization.resendInvitation("shareUid").execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("notice"));
-            Assertions.assertTrue(respJson.has("shares"));
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "Unable to resend invitation as the invitation is either not initiated or is already accepted.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(328, error.getErrorCode());
-        }
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Request request = ORG.resendInvitation(ORG_ID).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/share/" + ORG_ID + "/resend_invitation", request.url().toString());
     }
 
 
     @Order(10)
     @Test
-    @Disabled
-    void testTransferOwnership() throws IOException {
+    void testTransferOwnership() {
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
         String strBody = "{\n" +
-                "\t\"transfer_to\": \"ishaileshmishra@gmail.com\"\n" +
+                "\t\"transfer_to\": \"shaileshmishra@gmail.com\"\n" +
                 "}";
         JSONObject body = theJSONBody(strBody);
-        Response<ResponseBody> response = organization.transferOwnership(body).execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("notice"));
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "You don't have the permission to do this operation.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(316, error.getErrorCode());
-        }
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Request request = ORG.transferOwnership(body).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/transfer-ownership", request.url().toString());
     }
 
     @Order(11)
     @Test
-    @Disabled
-    void testStacks() throws IOException {
-        Response<ResponseBody> response = organization.stacks().execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("stacks"));
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "You don't have the permission to do this operation.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(316, error.getErrorCode());
-        }
+    void testStacks() {
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Request request = ORG.stacks().request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/stacks?include_plan=true", request.url().toString());
     }
 
     @Test
     @Order(12)
-    @Disabled
-    void testLogDetails() throws IOException {
-        Response<ResponseBody> response = organization.logsDetails().execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("logs"));
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "You don't have the permission to do this operation.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(316, error.getErrorCode());
-        }
+    void testLogDetails() {
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Request request = ORG.logsDetails().request();
+
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/logs", request.url().toString());
     }
 
     @Order(13)
     @Test
-    @Disabled
-    void testLogsItem() throws IOException {
-        Response<ResponseBody> response = organization.logItem("fake@loguid").execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("stacks"));
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
-            Assertions.assertEquals(
-                    "Organization log entry doesn't exists.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(141, error.getErrorCode());
-        }
+    void testLogsItem() {
+
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Request request = ORG.logItem("fake@loguid").request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/logs/fake@loguid", request.url().toString());
+
     }
 
     @Order(14)
     @Test
-    @Disabled
-    void testAllInvitation() throws IOException {
+    void testAllInvitation() {
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
-        Response<ResponseBody> response =
-                organization.allInvitations().execute();
-        if (response.isSuccessful()) {
-            JsonObject respJson = toJson(response);
-            Assertions.assertTrue(respJson.has("shares"));
-        } else {
-            Error error = new Gson().fromJson(response.errorBody().string(),
-                    Error.class);
-            Assertions.assertEquals(
-                    "You're not allowed in here unless you're logged in.",
-                    error.getErrorMessage());
-            Assertions.assertEquals(309, error.getErrorCode());
-        }
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Request request = ORG.allInvitations().request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/share?include_plan=true", request.url().toString());
     }
 
     @Order(15)
     @Test
-    void testAllInvitationWithQuery() {
-        organization.allInvitations().enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                // This is android thing
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // This is android thing
-            }
-        });
+    void testAllInvitationWithQuery() throws IOException {
+        ORG = TestClient.getClient().organization(ORG_ID)
+                .addHeader("authtoken", TestClient.AUTHTOKEN)
+                .addHeader("api_key", TestClient.API_KEY)
+                .addParam("include_plan", true);
+        Response<ResponseBody> response = ORG.allInvitations().execute();
+        Assertions.assertFalse(response.isSuccessful());
     }
 
 }

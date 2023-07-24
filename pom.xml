@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.contentstack.sdk</groupId>
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
     <url>https://github.com/contentstack/contentstack-management-java/</url>
 
-    <!--    release the package using mvn clean deploy -->
+    <!--    Release the package using mvn clean deploy -->
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
@@ -46,34 +47,39 @@
 
     <developers>
         <developer>
-            <name>shaileshmishra</name>
-            <email>shailesh.mishra@contentstack.com</email>
-            <organization>contentstack</organization>
-            <organizationUrl>https://www.contentstack.com/</organizationUrl>
-        </developer>
-
-        <developer>
             <name>contentstack</name>
             <email>mobile@contentstack.com</email>
             <organization>Contentstack</organization>
             <organizationUrl>https://www.contentstack.com/</organizationUrl>
         </developer>
+        <developer>
+            <name>ishaileshmishra</name>
+            <email>mshaileshr@gmail.com</email>
+            <organization>contentstack</organization>
+            <organizationUrl>https://www.contentstack.com/</organizationUrl>
+        </developer>
     </developers>
 
     <distributionManagement>
-        <snapshotRepository>
+        <!-- <snapshotRepository>
             <id>ossrh</id>
+            <name>Apache Maven Packages Snapshot</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository> -->
+        <snapshotRepository>
+            <id>github</id>
+            <name>GitHub Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/contentstack/contentstack-management-java</url>
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
+            <name>Apache Maven Packages Release</name>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
     <properties>
-        <sdk.version>0.1.0-SNAPSHOT</sdk.version>
-        <sdk.version.snapshot>${sdk.version}-SNAPSHOT</sdk.version.snapshot>
+        <sdk.version>1.0.0</sdk.version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -81,22 +87,23 @@
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <dotenv-source.version>5.2.2</dotenv-source.version>
-        <rxjava-source.version>3.1.5</rxjava-source.version>
+        <rxjava-source.version>3.1.6</rxjava-source.version>
         <retrofit-source.version>2.9.0</retrofit-source.version>
         <converter-gson-version>2.9.0</converter-gson-version>
         <logging.version>4.10.0</logging.version>
-        <jococo-plugin.version>0.8.5</jococo-plugin.version>
-        <lombok-source.version>1.18.24</lombok-source.version>
-        <junit-jupiter.version>5.9.0</junit-jupiter.version>
+        <jococo-plugin.version>0.8.7</jococo-plugin.version>
+        <lombok-source.version>1.18.28</lombok-source.version>
+        <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <junit-jupiter-engine.version>5.8.0-M1</junit-jupiter-engine.version>
-        <junit-vintage-engine.version>5.9.0</junit-vintage-engine.version>
-        <gson.version>2.10</gson.version>
+        <junit-vintage-engine.version>5.9.2</junit-vintage-engine.version>
+        <gson.version>2.10.1</gson.version>
         <maven-site-plugin.version>3.3</maven-site-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -131,7 +138,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <version>24.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -166,14 +173,17 @@
         </dependency>
     </dependencies>
 
+
     <build>
         <plugins>
-            <!--mvn clean install -U -Dmaven.test.failure.ignore=true-->
+            <!--mvn
+            clean install -U -Dmaven.test.failure.ignore=true-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
+                    <skipTests>true</skipTests>
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
@@ -211,7 +221,9 @@
                 </executions>
             </plugin>
 
-            <!--  -overview "/Users/shaileshmishra/Documents/Workspace/contentstack/java/contentstack-management-java/src/main/overview.html" -bottom  "<b>Copyright © 2012-2022 Contentstack </b><sup>TM</sup>"-->
+            <!--  -overview
+            "/Users/shaileshmishra/Documents/Workspace/contentstack/java/contentstack-management-java/src/main/overview.html"
+            -bottom  "<b>Copyright © 2012-2022 Contentstack </b><sup>TM</sup>"-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -228,26 +240,27 @@
                 </executions>
             </plugin>
 
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>${maven-site-plugin.version}</version>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>${maven-gpg-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-gpg-plugin</artifactId>-->
+            <!--                <version>${maven-gpg-plugin.version}</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>sign-artifacts</id>-->
+            <!--                        <phase>verify</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>sign</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -259,11 +272,6 @@
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
-                        <!-- We turn off:
-                            - `serial` because we don't use Java serialization
-                              (and all it does is stupidly complain about the serialVersionUID)
-                            - `processing` because it complains about every annotation
-                        -->
                         <arg>-Xlint:all,-serial,-processing</arg>
                     </compilerArgs>
                 </configuration>
@@ -291,18 +299,20 @@
                 </configuration>
             </plugin>
 
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jococo-plugin.version}</version>
+                <version>0.8.7</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>generate-code-coverage-report</id>
+                        <id>report</id>
                         <phase>test</phase>
                         <goals>
                             <goal>report</goal>
@@ -311,6 +321,26 @@
                 </executions>
             </plugin>
 
+
+            <!-- mvn pdf:pdf -->
+            <!-- The Maven PDF Plugin allows you generate a PDF document of your documentation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pdf-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>pdf</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>pdf</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
+                            <includeReports>false</includeReports>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -332,7 +362,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>

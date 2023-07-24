@@ -9,14 +9,12 @@ import java.util.HashMap;
 
 /**
  * <b>Delivery tokens:</b>Delivery tokens provide read-only access to the
- * associated environments, while management
- * tokens provide read-write access to the content of your stack. Use these
- * tokens along with the stack API key to make
- * authorized API requests.
+ * associated environments, while management tokens provide read-write access to
+ * the content of your stack. Use these
+ * tokens along with the stack API key to make authorized API requests.
  * <br>
  * <b>Management tokens: </b> To authenticate Content Management API (CMA)
- * requests over your stack content, you can
- * use Management Tokens
+ * requests over your stack content, you can use Management Tokens
  * <br>
  *
  * @author ishaileshmishra
@@ -94,8 +92,7 @@ public class DeliveryToken {
      * tokens created in a stack.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-delivery-tokens">Get
      *      all
      *      Delivery Tokens
@@ -113,10 +110,10 @@ public class DeliveryToken {
      * delivery tokens created in a stack.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">Get
-     *      a Single Delivery Token
+     *      a
+     *      Single Delivery Token
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -138,10 +135,10 @@ public class DeliveryToken {
      * @param requestBody
      *                    The request body to create a delivery token
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-delivery-token">Create
-     *      Delivery Token
+     *      Delivery
+     *      Token
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -167,10 +164,10 @@ public class DeliveryToken {
      * @param requestBody
      *                    the body should be of @{@link JSONObject} type
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-delivery-token">Update
-     *      Delivery Token
+     *      Delivery
+     *      Token
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -185,10 +182,10 @@ public class DeliveryToken {
      * The Delete delivery token request deletes a specific delivery token
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-delivery-token">Delete
-     *      Delivery Token
+     *      Delivery
+     *      Token
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -205,10 +202,10 @@ public class DeliveryToken {
      * @param isForce
      *                provide ‘true’ to force delete a delivery token
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-delivery-token">Delete
-     *      Delivery Token
+     *      Delivery
+     *      Token
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
