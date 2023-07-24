@@ -84,10 +84,11 @@ public class Folder {
      * the parent folder UID.
      *
      * <p>
-     * #addParam query parameters - include_path(optional) Set this parameter
-     * to ‘true’ to retrieve the complete path of the folder. The path will be
-     * displayed as an array of objects which
-     * includes the names and UIDs of each parent folder.
+     * #addParam query parameters - include_path(optional) Set this parameter to
+     * ‘true’ to retrieve the complete path of
+     * the folder. The path will be displayed as an array of objects which includes
+     * the names and UIDs of each parent
+     * folder.
      * <p>
      * Example:false
      *
@@ -182,7 +183,8 @@ public class Folder {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-folder">
-     *      Delete A Folder</a>
+     *      Delete
+     *      A Folder</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0

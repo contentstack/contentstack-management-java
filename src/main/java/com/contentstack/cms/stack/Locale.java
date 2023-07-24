@@ -248,8 +248,7 @@ public class Locale {
      * @param body
      *             the request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-a-fallback-language">Set
      *      a
      *      fallback language
@@ -279,8 +278,7 @@ public class Locale {
      * @param body
      *             the request body
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-fallback-language">Update
      *      fallback language</a>
      * @see #addHeader(String, Object) to add headers

@@ -1,8 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,10 +16,10 @@ import java.util.HashMap;
 @Tag("api")
 class TokenAPITest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("authToken");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String _uid = TestClient.USER_ID;
+    protected static String MANAGEMENT_TOKEN = TestClient.AUTHTOKEN;
     protected static Tokens tokens;
     protected static JSONObject body;
 
@@ -69,7 +69,6 @@ class TokenAPITest {
             "    }\n" +
             "}";
 
-
     @BeforeAll
     static void setup() {
         HashMap<String, Object> headers = new HashMap<>();
@@ -91,9 +90,9 @@ class TokenAPITest {
     @Test
     void allDeliveryTokens() throws IOException {
         Response<ResponseBody> response = tokens.deliveryTokens(_uid).find().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -101,9 +100,9 @@ class TokenAPITest {
     @Test
     void singleDeliveryToken() throws IOException {
         Response<ResponseBody> response = tokens.deliveryTokens(_uid).fetch().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -111,9 +110,9 @@ class TokenAPITest {
     @Test
     void createDeliveryToken() throws IOException {
         Response<ResponseBody> response = tokens.deliveryTokens(_uid).create(body).execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -121,9 +120,9 @@ class TokenAPITest {
     @Test
     void updateDeliveryToken() throws IOException {
         Response<ResponseBody> response = tokens.deliveryTokens(_uid).update(body).execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -131,19 +130,19 @@ class TokenAPITest {
     @Test
     void deleteDeliveryToken() throws IOException {
         Response<ResponseBody> response = tokens.deliveryTokens(_uid).delete().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
 
     @Test
     void deleteDeliveryTokenForcefully() throws IOException {
-        Response<ResponseBody> response = tokens.deliveryTokens(_uid).delete( true).execute();
-        if (response.isSuccessful()){
+        Response<ResponseBody> response = tokens.deliveryTokens(_uid).delete(true).execute();
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -151,9 +150,9 @@ class TokenAPITest {
     @Test
     void allManagementToken() throws IOException {
         Response<ResponseBody> response = tokens.managementToken(_uid).find().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -161,9 +160,9 @@ class TokenAPITest {
     @Test
     void singleManagementToken() throws IOException {
         Response<ResponseBody> response = tokens.managementToken(_uid).fetch().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -171,19 +170,19 @@ class TokenAPITest {
     @Test
     void createManagementToken() throws IOException {
         Response<ResponseBody> response = tokens.managementToken(_uid).create(body).execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
 
     @Test
     void updateManagementToken() throws IOException {
-        Response<ResponseBody> response = tokens.managementToken(_uid).update( body).execute();
-        if (response.isSuccessful()){
+        Response<ResponseBody> response = tokens.managementToken(_uid).update(body).execute();
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -191,9 +190,9 @@ class TokenAPITest {
     @Test
     void deleteManagementToken() throws IOException {
         Response<ResponseBody> response = tokens.managementToken(_uid).delete().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }

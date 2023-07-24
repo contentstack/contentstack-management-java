@@ -1,9 +1,9 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
@@ -20,9 +20,9 @@ class ContentTypeUnitTests {
     JSONObject requestBody = Utils.readJson("mockcontenttype/update.json");
     ContentType contentType;
 
-    String API_KEY = Dotenv.load().get("apiKey");
-    String AUTHTOKEN = Dotenv.load().get("authToken");
-    String managementToken = Dotenv.load().get("authToken");
+    String API_KEY = TestClient.API_KEY;
+    String AUTHTOKEN = TestClient.AUTHTOKEN;
+    String managementToken = TestClient.MANAGEMENT_TOKEN;
     private Stack stack;
 
     @BeforeAll
@@ -304,7 +304,8 @@ class ContentTypeUnitTests {
     @Test
     void testReferenceCompleteUrl() {
         Request request = contentType.reference(false).request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/references?include_global_fields=false",
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/content_types/product/references?include_global_fields=false",
                 request.url().toString());
     }
 

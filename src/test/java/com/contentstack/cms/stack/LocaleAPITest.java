@@ -1,8 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -12,12 +12,13 @@ import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
+
 @Tag("api")
 public class LocaleAPITest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     static Locale locale;
 
     @BeforeAll
@@ -30,9 +31,9 @@ public class LocaleAPITest {
     @Test
     void fetchLocales() throws IOException {
         Response<ResponseBody> response = locale.find().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -41,9 +42,9 @@ public class LocaleAPITest {
     void addLocale() throws IOException {
         JSONObject requestBody = Utils.readJson("locales/add_locale.json");
         Response<ResponseBody> response = locale.create(requestBody).execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -51,9 +52,9 @@ public class LocaleAPITest {
     @Test
     void getLocale() throws IOException {
         Response<ResponseBody> response = locale.fetch().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -61,10 +62,10 @@ public class LocaleAPITest {
     @Test
     void updateLocale() throws IOException {
         JSONObject requestBody = Utils.readJson("locales/update_locale.json");
-        Response<ResponseBody> response = locale.update( requestBody).execute();
-        if (response.isSuccessful()){
+        Response<ResponseBody> response = locale.update(requestBody).execute();
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -72,9 +73,9 @@ public class LocaleAPITest {
     @Test
     void deleteLocale() throws IOException {
         Response<ResponseBody> response = locale.delete().execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -83,9 +84,9 @@ public class LocaleAPITest {
     void setFallbackLocale() throws IOException {
         JSONObject requestBody = Utils.readJson("locales/set_fallback_lang.json");
         Response<ResponseBody> response = locale.setFallback(requestBody).execute();
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }
@@ -93,10 +94,10 @@ public class LocaleAPITest {
     @Test
     void updateFallbackLocale() throws IOException {
         JSONObject requestBody = Utils.readJson("locales/update_fallback.json");
-        Response<ResponseBody> response = locale.updateFallback( requestBody).execute();
-        if (response.isSuccessful()){
+        Response<ResponseBody> response = locale.updateFallback(requestBody).execute();
+        if (response.isSuccessful()) {
             Assertions.assertTrue(response.isSuccessful());
-        }else {
+        } else {
             Assertions.assertFalse(response.isSuccessful());
         }
     }

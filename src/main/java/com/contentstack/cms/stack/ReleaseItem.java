@@ -1,6 +1,5 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.core.Util;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -14,8 +13,7 @@ import java.util.HashMap;
  * and assets) that are part of a specific
  * Release and perform CRUD operations on it.
  * <p>
- * Read more about <a
- * href=
+ * Read more about <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Release
  * Items</a>
  *
@@ -142,10 +140,9 @@ public class ReleaseItem {
      * assets) to their latest versions before deployment
      * <p>
      * <b>Note:</b> You need to use either the stack's Management Token or the user
-     * Authtoken (anyone is
-     * mandatory), along with the stack API key, to make a valid Content Management
-     * API request. Read more about
-     * authentication
+     * Authtoken (anyone is mandatory), along with the stack API key, to make a
+     * valid Content Management API request.
+     * Read more about authentication
      * <br>
      * <br>
      * In case an un-localized entry in the release has been localized later, this

@@ -172,12 +172,12 @@ public class Asset {
      * Example:file_size
      *
      * @return Call
+     * @author ishaileshmishra
+     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-assets">Get
      *      all
      *      As</a>
-     * @author ishaileshmishra
-     * @version v0.1.0
      * @since 2022-10-20
      */
     public Call<ResponseBody> find() {
@@ -196,12 +196,11 @@ public class Asset {
      * published in each of the environment.
      *
      * @return Call
-     * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-asset">Get
-     *      a
-     *      single asset</a>
      * @author ishaileshmishra
      * @version v0.1.0
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-asset">Get
+     *      a single asset</a>
      * @since 2022-10-20
      */
     public Call<ResponseBody> fetch() {
@@ -217,14 +216,13 @@ public class Asset {
      * @param folderUid
      *                  The folderUid of specific folder
      * @return Call
-     * @see <a
-     *      href=
+     * @author ishaileshmishra
+     * @version v0.1.0
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-of-a-specific-folder">Get
      *      Assets of a Specific Folder</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @author ishaileshmishra
-     * @version v0.1.0
      * @since 2022-10-20
      */
     public Call<ResponseBody> byFolderUid(@NotNull String folderUid) {
@@ -242,14 +240,13 @@ public class Asset {
      * @param isIncludeFolders
      *                         provide true/false
      * @return Call
-     * @see <a
-     *      href=
+     * @author ishaileshmishra
+     * @version v0.1.0
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-and-subfolders-of-a-parent-folder">Get
      *      Assets and Subfolders of a Parent Folder</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @author ishaileshmishra
-     * @version v0.1.0
      * @since 2022-10-20
      */
     public Call<ResponseBody> subfolder(
@@ -293,14 +290,14 @@ public class Asset {
      *                    in the response.</li>
      *                    </ul>
      * @return Call
+     * @author ishaileshmishra
+     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-asset">
      *      Upload
      *      Asset</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @author ishaileshmishra
-     * @version v0.1.0
      * @since 2022-10-20
      */
     public Call<ResponseBody> uploadAsset(@NotNull String filePath, String description) {
@@ -341,16 +338,18 @@ public class Asset {
      * title and a description for the
      * uploaded asset, respectively.
      *
+     * @param filePath
+     *                    the filepath
+     * @param description
+     *                    the file description
      * @return Call
+     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#replace-asset">
      *      Replace
      *      Asset</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @param filePath the filepath
-     * @param description the file description
-     * @version v0.1.0
      * @since 2022-10-20
      */
     public Call<ResponseBody> replace(@NotNull String filePath, @NotNull String description) {
@@ -396,12 +395,12 @@ public class Asset {
      * format:
      * <br>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * {
      * <code>
      *     { "asset": { "permanent_url": "<a href=
-    "https://api.contentstack.io/v3">...</a>...{stack_api_key}/{asset_uid}/{unique_identifier}"} }}
+     * "https://api.contentstack.io/v3">...</a>...{stack_api_key}/{asset_uid}/{unique_identifier}"} }}
      * </code>
      * }
      * </pre>
@@ -409,13 +408,12 @@ public class Asset {
      * @param body
      *             the JSONObject request body
      * @return Call
-     * @see <a
-     *      href=
+     * @author ishaileshmishra
+     * @version v0.1.0
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
      *      Generate Permanent Asset URL </a>
      * @see #addHeader(String, Object) to add headers
-     * @author ishaileshmishra
-     * @version v0.1.0
      * @since 2022-10-20
      */
     public Call<ResponseBody> generatePermanentUrl(JSONObject body) {
@@ -441,14 +439,13 @@ public class Asset {
      * @param slugUrl
      *                The unique identifier of the asset.
      * @return Call
-     * @see <a
-     *      href=
+     * @author ishaileshmishra
+     * @version v0.1.0
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
      *      Generate Permanent Asset Url</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
-     * @author ishaileshmishra
-     * @version v0.1.0
      * @since 2022-10-20
      */
     public Call<ResponseBody> getPermanentUrl(String slugUrl) {
@@ -479,10 +476,10 @@ public class Asset {
      * Text Editor field.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
-     *      Get Information On RTE Assets</a>
+     *      Get
+     *      Information On RTE Assets</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
@@ -494,8 +491,7 @@ public class Asset {
     /**
      * Version naming allows you to assign a name to a version of an asset for easy
      * identification. For more
-     * information, Read more about <a
-     * href=
+     * information, Read more about <a href=
      * "https://www.contentstack.com/docs/content-managers/asset-versions/name-asset-versions">Asset</a>
      *
      * <p>
@@ -513,10 +509,10 @@ public class Asset {
      * @param requestBody
      *                      the request body of {@link JSONObject}
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
-     *      Get Information On RTE Assets</a>
+     *      Get
+     *      Information On RTE Assets</a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -554,8 +550,7 @@ public class Asset {
      * version details. Example:false
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-asset">
      *      Get Details of All Versions of an Asset</a>
      * @see #addParam(String, Object) to add Query parameters
@@ -577,10 +572,10 @@ public class Asset {
      * @param versionNumber
      *                      asset version
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-asset">
-     *      Delete Version Name Of Asset</a>
+     *      Delete
+     *      Version Name Of Asset</a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -623,10 +618,10 @@ public class Asset {
      *                  <p>
      *                  - For videos, "videos"
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-either-only-images-or-videos">
-     *      Get Either Only Images Or Videos
+     *      Get
+     *      Either Only Images Or Videos
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -649,7 +644,7 @@ public class Asset {
      * <br>
      * <b>Here's an example of the body:</b>
      * <br>
-     * 
+     *
      * <pre>
      *  { "asset": { "title": "Title", "description": "Description" }, "version": 3 }
      * </pre>
@@ -732,11 +727,10 @@ public class Asset {
      * <br>
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-folder-by-name">
-     *      Get
-     *      A Single Folder By Name</a>
+     *      Get A
+     *      Single Folder By Name</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
@@ -753,8 +747,7 @@ public class Asset {
      * #addParam query parameters
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-subfolders-of-a-parent-folder">
      *      Get subfolders of a parent folder</a>
      * @see #addHeader(String, Object) to add headers

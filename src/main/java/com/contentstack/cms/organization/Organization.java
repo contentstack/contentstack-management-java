@@ -1,5 +1,6 @@
 package com.contentstack.cms.organization;
 
+import com.contentstack.cms.marketplace.Marketplace;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -24,6 +25,7 @@ public class Organization {
     protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
     private String organizationUid;
+    private final Retrofit clientInstance;
 
     /**
      * Instantiates a new Organization.
@@ -34,6 +36,7 @@ public class Organization {
     public Organization(Retrofit client) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
+        this.clientInstance = client;
         this.service = client.create(OrganizationService.class);
     }
 
@@ -42,12 +45,14 @@ public class Organization {
      *
      * @param client
      *               The retrofit client
-     * @param uid The uid of the organisation
+     * @param uid
+     *               The uid of the organisation
      */
     public Organization(Retrofit client, String uid) {
         this.headers = new HashMap<>();
         this.organizationUid = uid;
         this.params = new HashMap<>();
+        this.clientInstance = client;
         this.service = client.create(OrganizationService.class);
     }
 
@@ -58,9 +63,12 @@ public class Organization {
      *              header key for the request
      * @param value
      *              header value for the request
+     *              return Organization the instance of Organization
+     * @return Organization instance of organisation
      */
-    public void addHeader(@NotNull String key, @NotNull String value) {
+    public Organization addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
+        return this;
     }
 
     /**
@@ -70,16 +78,23 @@ public class Organization {
      *              header key for the request
      * @param value
      *              header value for the request
+     * @return instance of Organization
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    public Organization addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
     }
 
     /**
-     * Clear all params
+     * The function clears the parameters of an organization object and returns the
+     * object itself.
+     * 
+     * @return The method is returning an instance of the Organization class.
      */
-    protected void clearParams() {
+
+    protected Organization clearParams() {
         this.params.clear();
+        return this;
     }
 
     /**
@@ -436,6 +451,34 @@ public class Organization {
     public Call<ResponseBody> logItem(String logUid) {
         validate();
         return service.getLogItems(this.headers, this.organizationUid, logUid);
+    }
+
+    /**
+     * Marketplace is the one-stop shop for ready-made extensions and one-click
+     * integrations with the industry's leading
+     * technology and service providers. Discover an extensive ecosystem of
+     * features, services, apps, and accelerators
+     * and combine the best technologies to achieve your desired business outcomes.
+     *
+     * @return An instance of the Marketplace class.
+     */
+    public Marketplace marketplace() {
+        return new Marketplace(this.clientInstance, this.organizationUid, null);
+    }
+
+    /**
+     * Marketplace is the one-stop shop for ready-made extensions and one-click
+     * integrations with the industry's leading
+     * technology and service providers. Discover an extensive ecosystem of
+     * features, services, apps, and accelerators
+     * and combine the best technologies to achieve your desired business outcomes.
+     *
+     * @param endpoint
+     *                 the base url for making marketplace request
+     * @return An instance of the Marketplace class.
+     */
+    public Marketplace marketplace(@NotNull String endpoint) {
+        return new Marketplace(this.clientInstance, this.organizationUid, endpoint);
     }
 
 }
