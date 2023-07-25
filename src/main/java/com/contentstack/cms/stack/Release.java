@@ -22,8 +22,7 @@ import java.util.HashMap;
  * key in the response. This key specifies the unique ID of the branch where the
  * concerned Contentstack module resides
  * <p>
- * Read more about <a
- * href=
+ * Read more about <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#releases">Releases</a>
  *
  * @author ishaileshmishra
@@ -126,7 +125,8 @@ public class Release {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-release">Get
-     *      a singel release
+     *      a singel
+     *      release
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -208,15 +208,15 @@ public class Release {
      * and assets) that are part of a
      * specific Release and perform CRUD operations on it.
      * <p>
-     * Read more about <a
-     * href=
+     * Read more about <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Release
      * Items</a>
      *
      * @return ReleaseItem
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Get
-     *      a release item
+     *      a
+     *      release item
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters

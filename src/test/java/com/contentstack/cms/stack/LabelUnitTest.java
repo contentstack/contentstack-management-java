@@ -1,8 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,14 +17,12 @@ import java.util.HashMap;
 @Tag("unit")
 class LabelUnitTest {
 
-
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("authToken");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String _uid = TestClient.USER_ID;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     static Label label;
     protected static JSONObject body;
-
 
     static String theJsonString = "{\n" +
             "  \"label\": {\n" +
@@ -55,7 +53,6 @@ class LabelUnitTest {
         }
     }
 
-
     @Test
     void getAllLabels() {
         Request request = label.find().request();
@@ -81,7 +78,8 @@ class LabelUnitTest {
         Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
         Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels?include_count=false&include_branch=false", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/labels?include_count=false&include_branch=false",
+                request.url().toString());
     }
 
     @Test
@@ -97,7 +95,8 @@ class LabelUnitTest {
         Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
         Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels?include_count=false&include_branch=false", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/labels?include_count=false&include_branch=false",
+                request.url().toString());
     }
 
     @Test
@@ -125,7 +124,8 @@ class LabelUnitTest {
         Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
         Assertions.assertEquals("include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels/" + _uid + "?include_branch=false", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/labels/" + _uid + "?include_branch=false",
+                request.url().toString());
     }
 
     @Test
@@ -142,10 +142,9 @@ class LabelUnitTest {
         Assertions.assertEquals("https://api.contentstack.io/v3/labels", request.url().toString());
     }
 
-
     @Test
     void labelUpdate() {
-        Request request = label.update( body).request();
+        Request request = label.update(body).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertNotNull(request.body());
@@ -170,6 +169,5 @@ class LabelUnitTest {
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals("https://api.contentstack.io/v3/labels/" + _uid, request.url().toString());
     }
-
 
 }

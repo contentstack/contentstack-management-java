@@ -1,17 +1,13 @@
 package com.contentstack.cms.user;
 
+import com.contentstack.cms.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Level;
@@ -29,27 +25,6 @@ class UserMockTests {
     private static final Logger logger = Logger.getLogger(UserMockTests.class.getName());
     private JSONObject mockJsonObject;
 
-    /**
-     * Read json json object.
-     *
-     * @param file the file
-     * @return the json object
-     */
-    public JSONObject readJson(String file) {
-        String path = "src/test/resources/mockuser/" + file;
-        try {
-            Object obj = new JSONParser().parse(new FileReader(new File(path).getPath()));
-            mockJsonObject = (JSONObject) obj;
-        } catch (IOException | ParseException e) {
-            logger.warning(e.getLocalizedMessage());
-        }
-        logger.fine(mockJsonObject.toJSONString());
-        return mockJsonObject;
-    }
-
-    /**
-     * Sets before all.
-     */
     @BeforeAll
     public void setupBeforeAll() {
         logger.setLevel(Level.ALL);
@@ -61,7 +36,7 @@ class UserMockTests {
     @Test
     @Order(1)
     void mockTestGetUser() {
-        JSONObject getUserJSONObj = readJson("getuser.json");
+        JSONObject getUserJSONObj = Utils.readJson("mockuser/getuser.json");
         mockJsonObject = (JSONObject) getUserJSONObj.get("user");
         Set<String> allKeys = mockJsonObject.keySet();
         String authtoken = (String) mockJsonObject.get("authtoken");
@@ -72,7 +47,7 @@ class UserMockTests {
         String prettyJsonString = gson.toJson(je);
         logger.finer(prettyJsonString);
 
-        String[] keyArray = { "org_uid",
+        String[] keyArray = {"org_uid",
                 "authy_id",
                 "failed_attempts",
                 "shared_org_uid",
@@ -89,7 +64,7 @@ class UserMockTests {
                 "mobile_number",
                 "first_name",
                 "email",
-                "username" };
+                "username"};
 
         Assertions.assertEquals("the_fake_uid", authtoken);
         Assertions.assertArrayEquals(Arrays.stream(keyArray).toArray(), allKeys.toArray());
@@ -101,10 +76,10 @@ class UserMockTests {
     @Test
     @Order(2)
     void test_mock_testcase_update_user() {
-        mockJsonObject = readJson("updateuser.json");
+        mockJsonObject = Utils.readJson("mockuser/updateuser.json");
         Assertions.assertEquals("Profile updated successfully.", mockJsonObject.get("notice"));
         mockJsonObject = (JSONObject) mockJsonObject.get("user");
-        Set allKeys = mockJsonObject.keySet();
+        Set<String> allKeys = mockJsonObject.keySet();
         logger.finest(mockJsonObject.toJSONString());
         String[] keyArray = {
                 "org_uid",
@@ -133,7 +108,7 @@ class UserMockTests {
     @Test
     @Order(3)
     void test_mock_testcase_activate_user() {
-        mockJsonObject = readJson("activateuser.json");
+        mockJsonObject = Utils.readJson("mockuser/activateuser.json");
         Assertions.assertEquals("Your account has been activated.", mockJsonObject.get("notice"));
     }
 
@@ -144,7 +119,7 @@ class UserMockTests {
     @DisplayName("Mock testcase for request password")
     @Order(4)
     void test_mock_testcase_request_password() {
-        mockJsonObject = readJson("request_password.json");
+        mockJsonObject = Utils.readJson("mockuser/request_password.json");
         Assertions.assertEquals(
                 "We sent an email to john.doe@contentstack.com with instructions to reset your password.",
                 mockJsonObject.get("notice"));
@@ -157,7 +132,7 @@ class UserMockTests {
     @DisplayName("Mock testcase for reset password")
     @Order(5)
     void test_mock_testcase_reset_password() {
-        mockJsonObject = readJson("reset_password.json");
+        mockJsonObject = Utils.readJson("mockuser/reset_password.json");
         Assertions.assertEquals("Your password has been reset successfully.", mockJsonObject.get("notice"));
     }
 
@@ -168,7 +143,7 @@ class UserMockTests {
     @DisplayName("Mock testcase for user logout")
     @Order(6)
     void test_mock_testcase_logout() {
-        mockJsonObject = readJson("logout.json");
+        mockJsonObject = Utils.readJson("mockuser/logout.json");
         Assertions.assertEquals("You've logged out successfully!", mockJsonObject.get("notice"));
     }
 

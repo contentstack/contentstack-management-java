@@ -75,7 +75,9 @@ public class Tokens {
     /**
      * To authenticate Content Management API (CMA) requests over your stack
      * content, you can use Management Tokens
-     * @param managementTokenUid the managementTokenUid
+     *
+     * @param managementTokenUid
+     *                           the managementTokenUid
      * @return ManagementToken
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/create-tokens/about-management-tokens">About
