@@ -1,8 +1,8 @@
 package com.contentstack.cms.user;
 
-import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.google.gson.Gson;
-import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +12,7 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
-@Tag("api")
+@Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserApiTest {
 
@@ -26,55 +26,39 @@ public class UserApiTest {
         }
     }
 
-    private static User user;
-    private static String activationToken = Dotenv.load().get("activationToken");
-    private static Contentstack client;
+    protected static User user;
+    protected static final String activationToken = TestClient.AUTHTOKEN;
 
     @BeforeAll
     public static void initBeforeAll() {
-        client = new Contentstack.Builder().build();
-    }
-
-    @Test
-    @Order(1)
-    void testUserLogin() throws IOException {
-        Dotenv dotenv = Dotenv.load();
-        client.login(dotenv.get("username"), dotenv.get("password"));
-        user = client.user();
-    }
-
-    @Test
-    @Order(2)
-    void testUser() {
-        user = client.user();
+        user = TestClient.getClient().user();
     }
 
     @Test
     @Order(3)
-    void testGetUser() throws IOException {
-        Response<ResponseBody> response = user.getUser().execute();
-        JSONObject jsonBody = strToJson(response.body().string());
-        Assertions.assertTrue(response.isSuccessful());
+    void testGetUser() {
+        Request request = user.getUser().request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/user", request.url().toString());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals(0, request.headers().names().size());
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().query());
     }
-
 
     @Test()
     @Order(4)
-    void testUpdateUser() throws IOException {
+    void testUpdateUser() {
         String body = "{\n" +
                 "\t\"user\": {\n" +
                 "\t\t\"company\": \"contentstack.ind\"\n" +
                 "\t}\n" +
                 "}";
         JSONObject jsonBody = strToJson(body);
-        Response<ResponseBody> userLogin = user.update(jsonBody).execute();
-        if (userLogin.isSuccessful()) {
-            JSONObject user = strToJson(userLogin.body().string());
-            Assertions.assertTrue(user.containsKey("notice"));
-            Assertions.assertEquals("Profile updated successfully.", user.get("notice").toString().replace("\"", ""));
-        }
-    }
+        Request userLogin = user.update(jsonBody).request();
+        Assertions.assertTrue(userLogin.isHttps());
+        Assertions.assertEquals("https://api.contentstack.io/v3/user", userLogin.url().toString().replace("\"", ""));
 
+    }
 
     @Test
     @Order(5)

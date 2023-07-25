@@ -1,8 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
@@ -14,9 +14,10 @@ import java.util.HashMap;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GlobalFieldUnitTests {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
+    protected static String GLOBAL_FIELD_UID = MANAGEMENT_TOKEN;
     static GlobalField globalField;
 
     @BeforeAll
@@ -24,9 +25,8 @@ public class GlobalFieldUnitTests {
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-        String globalFiledUid = Dotenv.load().get("authToken");
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
-        globalField = stack.globalField(globalFiledUid);
+        globalField = stack.globalField(GLOBAL_FIELD_UID);
     }
 
     @Test
@@ -43,8 +43,9 @@ public class GlobalFieldUnitTests {
     @Test
     void testGlobalFieldFetch() throws IOException {
         Request response = globalField.fetch().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/"+AUTHTOKEN, response.url().toString());
-        Assertions.assertEquals("/v3/global_fields/"+AUTHTOKEN, response.url().encodedPath());
+        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + GLOBAL_FIELD_UID,
+                response.url().toString());
+        Assertions.assertEquals("/v3/global_fields/" + GLOBAL_FIELD_UID, response.url().encodedPath());
         Assertions.assertEquals("https", response.url().scheme());
         Assertions.assertNull(response.url().query(), "No Query is expected");
         Assertions.assertTrue(response.url().isHttps(), "Expected Https request, purely secured and trusted");
@@ -65,8 +66,9 @@ public class GlobalFieldUnitTests {
     @Test
     void testUpdate() throws IOException {
         Request response = globalField.update(new JSONObject()).request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/"+AUTHTOKEN, response.url().toString());
-        Assertions.assertEquals("/v3/global_fields/"+AUTHTOKEN, response.url().encodedPath());
+        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + GLOBAL_FIELD_UID,
+                response.url().toString());
+        Assertions.assertEquals("/v3/global_fields/" + GLOBAL_FIELD_UID, response.url().encodedPath());
         Assertions.assertEquals("https", response.url().scheme());
         Assertions.assertNull(response.url().query(), "No Query is expected");
         Assertions.assertTrue(response.url().isHttps(), "Expected Https request, purely secured and trusted");
@@ -76,10 +78,11 @@ public class GlobalFieldUnitTests {
     @Test
     void testDelete() throws IOException {
         Request response = globalField.delete().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/"+AUTHTOKEN+"?force=true", response.url().toString());
-        Assertions.assertEquals("/v3/global_fields/"+AUTHTOKEN, response.url().encodedPath());
+        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + GLOBAL_FIELD_UID + "?force=true",
+                response.url().toString());
+        Assertions.assertEquals("/v3/global_fields/" + GLOBAL_FIELD_UID, response.url().encodedPath());
         Assertions.assertEquals("https", response.url().scheme());
-        Assertions.assertEquals("force=true",response.url().query(), "No Query is expected");
+        Assertions.assertEquals("force=true", response.url().query(), "No Query is expected");
         Assertions.assertTrue(response.url().isHttps(), "Expected Https request, purely secured and trusted");
         Assertions.assertEquals("DELETE", response.method());
     }
@@ -92,8 +95,9 @@ public class GlobalFieldUnitTests {
         otherDetails.put("title", "technology");
         globalFieldBody.put("global_field", otherDetails);
         Request response = globalField.imports(globalFieldBody).request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/"+AUTHTOKEN+"/export", response.url().toString());
-        Assertions.assertEquals("/v3/global_fields/"+AUTHTOKEN+"/export", response.url().encodedPath());
+        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + AUTHTOKEN + "/export",
+                response.url().toString());
+        Assertions.assertEquals("/v3/global_fields/" + AUTHTOKEN + "/export", response.url().encodedPath());
         Assertions.assertEquals("https", response.url().scheme());
         Assertions.assertNull(response.url().query(), "No Query is expected");
         Assertions.assertTrue(response.url().isHttps(), "Expected Https request, purely secured and trusted");
@@ -103,8 +107,9 @@ public class GlobalFieldUnitTests {
     @Test
     void testGlobalFieldExport() throws IOException {
         Request response = globalField.export().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/"+AUTHTOKEN+"/export", response.url().toString());
-        Assertions.assertEquals("/v3/global_fields/"+AUTHTOKEN+"/export", response.url().encodedPath());
+        Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + GLOBAL_FIELD_UID + "/export",
+                response.url().toString());
+        Assertions.assertEquals("/v3/global_fields/" + GLOBAL_FIELD_UID + "/export", response.url().encodedPath());
         Assertions.assertEquals("https", response.url().scheme());
         Assertions.assertNull(response.url().query(), "No Query is expected");
         Assertions.assertTrue(response.url().isHttps(), "Expected Https request, purely secured and trusted");

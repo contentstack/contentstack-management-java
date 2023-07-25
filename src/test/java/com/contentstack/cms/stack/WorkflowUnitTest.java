@@ -1,8 +1,9 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-import io.github.cdimascio.dotenv.Dotenv;
+
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,10 +18,10 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class WorkflowUnitTest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String _uid = Dotenv.load().get("workflowUid");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String _uid = TestClient.USER_ID;
+    protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static Workflow workflow;
     protected static JSONObject body;
 
@@ -99,7 +100,6 @@ class WorkflowUnitTest {
             "    }\n" +
             "}";
 
-
     @BeforeAll
     public static void setup() {
         HashMap<String, Object> headers = new HashMap<>();
@@ -116,7 +116,6 @@ class WorkflowUnitTest {
         }
 
     }
-
 
     @Test
     @Order(1)
@@ -220,7 +219,8 @@ class WorkflowUnitTest {
         Assertions.assertEquals("workflows", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/workflows/" + _uid + "/disable", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/workflows/" + _uid + "/disable",
+                request.url().toString());
     }
 
     @Test
@@ -235,7 +235,8 @@ class WorkflowUnitTest {
         Assertions.assertEquals("workflows", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/workflows/" + _uid + "/enable", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/workflows/" + _uid + "/enable",
+                request.url().toString());
     }
 
     @Test
@@ -280,7 +281,8 @@ class WorkflowUnitTest {
         Assertions.assertEquals("workflows", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/workflows/publishing_rules/ruleUid", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/workflows/publishing_rules/ruleUid",
+                request.url().toString());
     }
 
     @Test
@@ -295,7 +297,8 @@ class WorkflowUnitTest {
         Assertions.assertEquals("workflows", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/workflows/publishing_rules/ruleUid", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/workflows/publishing_rules/ruleUid",
+                request.url().toString());
     }
 
     @Test
@@ -344,7 +347,6 @@ class WorkflowUnitTest {
         Assertions.assertNotNull(request.url().toString());
     }
 
-
     @Test
     @Order(18)
     void workflowFetchTasks() {
@@ -359,6 +361,5 @@ class WorkflowUnitTest {
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertNotNull(request.url().toString());
     }
-
 
 }

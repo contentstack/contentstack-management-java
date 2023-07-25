@@ -124,7 +124,7 @@ public class Entry {
      * {@link #addParam(String, Object)} You can add Query params, the Query
      * parameters are:
      * <br>
-     * 
+     *
      * <pre>
      *     -locale={language_code}
      *     -include_workflow={boolean_value}
@@ -134,7 +134,8 @@ public class Entry {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-entries">Get
-     *      All Entry</a>
+     *      All
+     *      Entry</a>
      */
     public Call<ResponseBody> find() {
         validateContentType();
@@ -159,8 +160,7 @@ public class Entry {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-entry">Get
-     *      A
-     *      Single Entry</a>
+     *      A Single Entry</a>
      */
     public Call<ResponseBody> fetch() {
         validateContentType();
@@ -186,17 +186,14 @@ public class Entry {
      *
      * @param requestBody
      *                    Provide the Json Body to create entry:
-     * 
-     *                    <pre>
-     *                                                                                                                                                 { "entry": { "title": "Entry title", "url": "Entry URL", "reference_field_uid": [{ "uid": "the_uid",
-     *                                                                                                                                                 "_content_type_uid": "referred_content_type_uid" }] } }
-     *                    </pre>
-     * 
+     *                    <p>
+     *                    { "entry": { "title": "Entry title", "url": "Entry URL",
+     *                    "reference_field_uid": [{ "uid": "the_uid",
+     *                    "_content_type_uid": "referred_content_type_uid" }] } }
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">Create
-     *      A
-     *      Entry</a>
+     *      A Entry</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -223,7 +220,8 @@ public class Entry {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-an-entry">
-     *      Update an entry</a>
+     *      Update
+     *      an entry</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -275,10 +273,10 @@ public class Entry {
      *                    Add, SUB and Delete will be executed like the above. for
      *                    more details
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#atomic-updates-to-entries">
-     *      Atomic Operation</a>
+     *      Atomic
+     *      Operation</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -300,7 +298,7 @@ public class Entry {
      * valid Content Management API requests.
      * For more information, refer to Authentication.
      * </p>
-
+     *
      * <p>
      * The entry you want to update {@link #addParam(String, Object)} - Delete
      * specific localized entry: <br>
@@ -396,8 +394,7 @@ public class Entry {
      *                    "Test version", "locale": "fr-fr", "force":
      *                    true } } ```
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-version-name-for-entry">
      *      Set
      *      Version Name for Entry</a>
@@ -439,8 +436,7 @@ public class Entry {
      * locale will be displayed
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-entry">
      *      Get Details of All Versions of an Entry</a>
      * @see #addHeader(String, Object) to add headers
@@ -460,10 +456,10 @@ public class Entry {
      *                       Request body for the delete operation ``` { "entry": {
      *                       "locale": "en-us" } } ```
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-entry">
-     *      Delete Version Name of Entry</a>
+     *      Delete
+     *      Version Name of Entry</a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -488,8 +484,7 @@ public class Entry {
      * be displayed
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-references-of-an-entry">
      *      Get
      *      references of an entry</a>
@@ -513,8 +508,7 @@ public class Entry {
      * locale will be displayed
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-languages-of-an-entry">
      *      Get
      *      language of an entry</a>
@@ -591,7 +585,8 @@ public class Entry {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-an-entry">
-     *      Export an entry
+     *      Export
+     *      an entry
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -626,7 +621,8 @@ public class Entry {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
-     *      Import an entry
+     *      Import
+     *      an entry
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -653,7 +649,8 @@ public class Entry {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
-     *      Import an entry
+     *      Import
+     *      an entry
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -729,8 +726,7 @@ public class Entry {
      *                    workflow stage where they satisfy the applied to publish
      *                    rules.
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry-with-references">
      *      Publish an entry With reference
      *      </a>

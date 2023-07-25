@@ -1,8 +1,10 @@
 ## Security
 
-Contentstack takes the security of our software products and services seriously, which includes all source code repositories managed through our GitHub organizations.
+Contentstack takes the security of our software products and services seriously, which includes all source code
+repositories managed through our GitHub organizations.
 
-If you believe you have found a security vulnerability in any Contentstack-owned repository, please report it to us as described below.
+If you believe you have found a security vulnerability in any Contentstack-owned repository, please report it to us as
+described below.
 
 ## Reporting Security Issues
 
@@ -10,9 +12,11 @@ If you believe you have found a security vulnerability in any Contentstack-owned
 
 Send email to [security@contentstack.com](mailto:security@contentstack.com).
 
-You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message.
+You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we
+received your original message.
 
-Please include the requested information listed below (as much as you can provide) to help us better understand the nature and scope of the possible issue:
+Please include the requested information listed below (as much as you can provide) to help us better understand the
+nature and scope of the possible issue:
 
 - Type of issue (e.g. buffer overflow, SQL injection, cross-site scripting, etc.)
 - Full paths of source file(s) related to the manifestation of the issue

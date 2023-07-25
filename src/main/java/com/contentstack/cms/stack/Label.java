@@ -138,8 +138,7 @@ public class Label {
      * @return Call
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-label">Get
-     *      a
-     *      single label
+     *      a single label
      *
      *      </a>
      * @see #addHeader(String, Object) to add headers

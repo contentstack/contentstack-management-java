@@ -1,8 +1,8 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
@@ -10,13 +10,12 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
-
 @Tag("api")
 public class EnvironmentAPITest {
 
-    protected static String AUTHTOKEN = Dotenv.load().get("authToken");
-    protected static String API_KEY = Dotenv.load().get("apiKey");
-    protected static String MANAGEMENT_TOKEN = Dotenv.load().get("authToken");
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    protected static String API_KEY = TestClient.API_KEY;
+    protected static String MANAGEMENT_TOKEN = TestClient.AUTHTOKEN;
     static Environment environment;
 
     @BeforeAll
@@ -34,13 +33,13 @@ public class EnvironmentAPITest {
         environment.addParam("desc", "updated_at");
         try {
             Response<ResponseBody> response = environment.find().execute();
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
                 Assertions.assertTrue(response.isSuccessful());
-            }else{
+            } else {
                 Assertions.assertFalse(response.isSuccessful());
             }
         } catch (IOException e) {
-            System.out.println("Exception: "+e.getLocalizedMessage());
+            System.out.println("Exception: " + e.getLocalizedMessage());
         }
 
     }
@@ -50,30 +49,30 @@ public class EnvironmentAPITest {
     void addLocale() {
         try {
             Response<ResponseBody> response = environment.fetch().execute();
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
                 Assertions.assertTrue(response.isSuccessful());
-            }else{
+            } else {
                 Assertions.assertFalse(response.isSuccessful());
             }
         } catch (IOException e) {
-            System.out.println("Exception: "+e.getLocalizedMessage());
+            System.out.println("Exception: " + e.getLocalizedMessage());
         }
     }
 
     @Test
     @Order(3)
     void getLocale() {
-        //add_env.json
+        // add_env.json
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
             Response<ResponseBody> response = environment.create(requestBody).execute();
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
                 Assertions.assertTrue(true);
-            }else{
+            } else {
                 Assertions.assertFalse(false);
             }
         } catch (IOException e) {
-            System.out.println("Exception: "+e.getLocalizedMessage());
+            System.out.println("Exception: " + e.getLocalizedMessage());
         }
     }
 
@@ -82,14 +81,14 @@ public class EnvironmentAPITest {
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
-            Response<ResponseBody> response = environment.update( requestBody).execute();
-            if (response.isSuccessful()){
+            Response<ResponseBody> response = environment.update(requestBody).execute();
+            if (response.isSuccessful()) {
                 Assertions.assertTrue(response.isSuccessful());
-            }else{
+            } else {
                 Assertions.assertFalse(response.isSuccessful());
             }
         } catch (IOException e) {
-            System.out.println("Exception: "+e.getLocalizedMessage());
+            System.out.println("Exception: " + e.getLocalizedMessage());
         }
     }
 
@@ -98,13 +97,13 @@ public class EnvironmentAPITest {
     void deleteLocale() {
         try {
             Response<ResponseBody> response = environment.delete().execute();
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
                 Assertions.assertTrue(true);
-            }else{
+            } else {
                 Assertions.assertFalse(false);
             }
         } catch (IOException e) {
-            System.out.println("Exception: "+e.getLocalizedMessage());
+            System.out.println("Exception: " + e.getLocalizedMessage());
         }
     }
 
