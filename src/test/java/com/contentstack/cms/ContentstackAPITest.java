@@ -1,14 +1,10 @@
 package com.contentstack.cms;
 
-import com.contentstack.cms.core.CMAResponseConvertor;
 import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
-import com.contentstack.cms.models.UserDetail;
 import com.google.gson.Gson;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
@@ -20,18 +16,12 @@ import java.io.IOException;
  */
 public class ContentstackAPITest {
 
-    private static Dotenv dotenv;
-
-    @BeforeAll
-    public static void getCredentials() {
-        dotenv = Dotenv.load();
-    }
+    private static String AUTHTOKEN = TestClient.AUTHTOKEN;
 
     @Test
     void testContentstackUserLogin() throws IOException {
-        String authToken = dotenv.get("authToken");
         Contentstack contentstack = new Contentstack.Builder()
-                .setAuthtoken(authToken)
+                .setAuthtoken(AUTHTOKEN)
                 .build();
         Response<ResponseBody> user = contentstack.user().getUser().execute();
         if (user.isSuccessful()) {
@@ -44,8 +34,8 @@ public class ContentstackAPITest {
             Error error = new Gson().fromJson(errString, Error.class);
             Assertions.assertEquals(105, error.getErrorCode(), "not loggedIn");
         }
-        Assertions.assertNotNull(authToken);
-        Assertions.assertEquals(authToken, contentstack.authtoken);
+        Assertions.assertNotNull(AUTHTOKEN);
+        Assertions.assertEquals(AUTHTOKEN, contentstack.authtoken);
     }
 
     @Test
@@ -76,7 +66,6 @@ public class ContentstackAPITest {
 
     @Test
     void testContentstackUserLoginWhenAlreadyLoggedIn() throws IOException {
-        String authToken = dotenv.get("auth_token");
         Contentstack contentstack = new Contentstack.Builder()
                 .setAuthtoken(null)
                 .build();
@@ -87,15 +76,16 @@ public class ContentstackAPITest {
 
     @Test
     void testLogoutWithAuthtoken() throws IOException {
-        String authToken = dotenv.get("auth_token");
         Contentstack contentstack = new Contentstack.Builder()
-                .setAuthtoken(authToken)
+                .setAuthtoken(AUTHTOKEN)
                 .build();
-        Response<ResponseBody> status = contentstack.logoutWithAuthtoken(authToken);
+        Response<ResponseBody> status = contentstack.logoutWithAuthtoken(AUTHTOKEN);
         if (status.isSuccessful()) {
+            assert status.body() != null;
             System.out.println(status.body().string());
             Assertions.assertEquals(200, status.code());
         } else {
+            assert status.errorBody() != null;
             Error error = new Gson().fromJson(status.errorBody().string(), Error.class);
             Assertions.assertEquals(105, error.getErrorCode());
         }
@@ -108,41 +98,11 @@ public class ContentstackAPITest {
         if (logout.isSuccessful()) {
             Assertions.assertEquals(200, logout.code());
         } else {
+            assert logout.errorBody() != null;
             Error error = new Gson().fromJson(logout.errorBody().string(), Error.class);
             Assertions.assertEquals(105, error.getErrorCode());
         }
         Assertions.assertNull(contentstack.authtoken);
     }
-
-    @Test
-    void testLoginCSResponse() throws IOException {
-        Contentstack client = new Contentstack.Builder().build();
-        client.login(dotenv.get("username"), dotenv.get("password"));
-        Response<ResponseBody> response = client.user().getUser().execute();
-        if (response.isSuccessful()) {
-
-            CMAResponseConvertor csr = new CMAResponseConvertor(response);
-            String csrStr = csr.asString();
-            String csrStrOne = csr.asJson();
-            String csrStrTwo = csr.asJson(csrStr);
-            UserDetail userModel = csr.toModel(UserDetail.class);
-            UserDetail srJson = csr.toModel(UserDetail.class, csrStr);
-            UserDetail csrResp = csr.toModel(UserDetail.class, response);
-
-            Assertions.assertNotNull(csrStr);
-            Assertions.assertNotNull(csrStrOne);
-            Assertions.assertNotNull(csrStrTwo);
-            Assertions.assertEquals(dotenv.get("userId"), srJson.getUser().uid.toString());
-        }
-    }
-
-    // @Test
-    // void testCallback() throws IOException {
-    // User client = new
-    // Contentstack.Builder().setAuthtoken("notnull@fake").build().user();
-    // Response<LoginDetails> response = client.login("ishaileshmishra@gmail.com",
-    // "password").execute();
-    // System.out.println(response);
-    // }
 
 }

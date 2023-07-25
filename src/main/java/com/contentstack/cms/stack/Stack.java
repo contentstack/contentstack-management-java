@@ -39,54 +39,66 @@ public class Stack {
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * The addHeader function adds a key-value pair to the headers map and returns
+     * the updated Stack
+     * object.
+     * 
+     * @param key   A string representing the key of the header. It is marked
+     *              as @NotNull, which means it
+     *              cannot be null and must be provided.
+     * @param value The value parameter is of type Object, which means it can accept
+     *              any type of object as
+     *              its value.
+     * @return The method is returning a Stack object.
      */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
+    public Stack addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
+        return this;
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * The addParam function adds a key-value pair to a stack and returns the
+     * updated stack.
+     * 
+     * @param key   A string representing the key for the parameter.
+     * @param value The value parameter is of type Object, which means it can accept
+     *              any type of object as
+     *              its value.
+     * @return The method is returning a reference to the current instance of the
+     *         Stack object.
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    public Stack addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *            header key for the request
+     * The function removes a parameter from a stack and returns the modified stack.
+     * 
+     * @param key The parameter "key" is of type String and is marked with
+     *            the @NotNull annotation,
+     *            indicating that it cannot be null.
+     * @return The method is returning a Stack object.
      */
-    public void removeParam(@NotNull String key) {
+    public Stack removeParam(@NotNull String key) {
         this.params.remove(key);
+        return this;
     }
 
     /**
-     * To clear all the query params
+     * The function clears the parameters in a stack and returns the modified stack.
+     * 
+     * @return The method is returning a reference to the current instance of the
+     *         Stack object.
      */
-    protected void clearParams() {
+    protected Stack clearParams() {
         this.params.clear();
+        return this;
     }
 
-    /**
-     * Instantiates a new Stack.
-     *
-     * @param client
-     *                the contentstack client
-     * @param headers
-     *                Required headers to get the {@link Stack} information
-     */
+    // The above code is defining a constructor for a class called "Stack". The
+    // constructor takes two
+    // parameters: a Retrofit client and a map of headers.
     public Stack(@NotNull Retrofit client, @NotNull Map<String, Object> headers) {
         this.headers = new HashMap<>();
         this.client = client;
@@ -244,7 +256,7 @@ public class Stack {
      * or enter ‘cs_root’ to get all assets and their folder details from the root
      * folder.
      * <p>
-     * Example:bltd899999999
+     * Example: bltd899999999
      * </li>
      * <li>
      * include_folders(optional)
@@ -309,7 +321,9 @@ public class Stack {
      * <p>
      * Example:false
      * </ul>
-     * @param assetUid the assetUid
+     *
+     * @param assetUid
+     *                 the assetUid
      * @return Asset
      */
     public Asset asset(String assetUid) {
@@ -335,7 +349,9 @@ public class Stack {
      * within your stack. This eliminates the need (and thereby time and efforts) to
      * create the same set of fields
      * repeatedly in multiple content types.
-     * @param globalFiledUid the globalField uid
+     *
+     * @param globalFiledUid
+     *                       the globalField uid
      * @return GlobalField
      */
     public GlobalField globalField(@NotNull String globalFiledUid) {
@@ -365,7 +381,9 @@ public class Stack {
      * to a wide variety of audience by
      * serving content in their local language(s).
      * <p>
-     * @param code the locale code.
+     *
+     * @param code
+     *             the locale code.
      * @return Locale
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
@@ -395,7 +413,9 @@ public class Stack {
      * the entries need to be published.
      * <p>
      * Read more about
-     * @param environment uid
+     *
+     * @param environment
+     *                    uid
      * @return Environment
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
@@ -427,7 +447,9 @@ public class Stack {
      * Labels allow you to group a collection of content within a stack. Using
      * labels you can group content types that
      * need to work together. Read more about
-     * @param labelUid The label
+     *
+     * @param labelUid
+     *                 The label
      * @return Label
      *         <p>
      *         You can now pass the branch header in the API request to fetch or
@@ -536,8 +558,8 @@ public class Stack {
      * You can pin a set of entries and assets (along with the deploy action, i.e.,
      * publish/unpublish) to a
      * <b>release</b>, and then deploy this release to an environment. This will
-     * publish/unpublish all the items of
-     * the release to the specified environment. Read more about Releases.
+     * publish/unpublish all the items of the release to the specified environment.
+     * Read more about Releases.
      *
      * @return Release
      */
@@ -549,8 +571,8 @@ public class Stack {
      * You can pin a set of entries and assets (along with the deploy action, i.e.,
      * publish/unpublish) to a
      * <b>release</b>, and then deploy this release to an environment. This will
-     * publish/unpublish all the items of
-     * the release to the specified environment. Read more about Releases.
+     * publish/unpublish all the items of the release to the specified environment.
+     * Read more about Releases.
      *
      * @param releaseUid
      *                   The unique ID of the release of which you want to retrieve
@@ -595,8 +617,7 @@ public class Stack {
      * Audit log displays a record of all the activities performed in a stack and
      * helps you keep a track of all
      * published items, updates, deletes, and current status of the existing
-     * content. Read more about <a
-     * href=
+     * content. Read more about <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">AuditLog</a>.
      *
      * @return AuditLog
@@ -609,10 +630,11 @@ public class Stack {
      * Audit log displays a record of all the activities performed in a stack and
      * helps you keep a track of all
      * published items, updates, deletes, and current status of the existing
-     * content. Read more about <a
-     * href=
+     * content. Read more about <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">AuditLog</a>.
-     * @param logItemUid the logItemUid
+     *
+     * @param logItemUid
+     *                   the logItemUid
      * @return AuditLog
      */
     public AuditLog auditLog(@NotNull String logItemUid) {
@@ -627,8 +649,7 @@ public class Stack {
      * details include time, entry, content type, version, language, user,
      * environment, and status.
      * <p>
-     * For more details, refer the <a
-     * href=
+     * For more details, refer the <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">Publish
      * Queue</a>
      * documentation.
@@ -640,6 +661,22 @@ public class Stack {
     }
 
     /**
+     * You can perform bulk operations such as Publish, Unpublish, and Delete on
+     * multiple entries or assets, or Change
+     * the Workflow Details of multiple entries or assets at the same time.
+     * <p>
+     * For more details, refer the <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-operations">Bulk
+     * Operation</a>
+     * documentation.
+     *
+     * @return BulkOperation
+     */
+    public BulkOperation bulkOperation() {
+        return new BulkOperation(this.client);
+    }
+
+    /**
      * The Publishing Queue displays the historical and current details of
      * activities such as publish, unpublish, or
      * delete that can be performed on entries and/or assets. It also shows details
@@ -647,8 +684,7 @@ public class Stack {
      * details include time, entry, content type, version, language, user,
      * environment, and status.
      * <p>
-     * For more details, refer the <a
-     * href=
+     * For more details, refer the <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">Publish
      * Queue</a>
      * documentation.
@@ -669,18 +705,17 @@ public class Stack {
      * app or service to keep your
      * application in sync with your Contentstack account. Webhooks allow you to
      * specify a URL to which you would like
-     * Contentstack to post data when an event happens. Read more about <a
-     * href=
+     * Contentstack to post data when an event happens. Read more about <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#webhooks">Webhooks</a>
      *
      * <p>
      * <b>Note:</b> If any key name in the response data sent to a notification URL
-     * begins with a dollar sign ($), it
-     * will be prefixed with the acronym "cs" as a wildcard. For example, the key
-     * named "$success" would be replaced
-     * with "cs$success." For more information, refer to our API Change Log
-     * documentation. The option to define
-     * stack-level scope for webhooks is not available when using the classic
+     * begins with a dollar sign ($), it will be prefixed with the acronym "cs" as a
+     * wildcard. For example, the key
+     * named "$success" would be replaced with "cs$success." For more information,
+     * refer to our API Change Log
+     * documentation. The option to define stack-level scope for webhooks is not
+     * available when using the classic
      * Contentstack interface.
      *
      * @return Webhook
@@ -694,18 +729,17 @@ public class Stack {
      * app or service to keep your
      * application in sync with your Contentstack account. Webhooks allow you to
      * specify a URL to which you would like
-     * Contentstack to post data when an event happens. Read more about <a
-     * href=
+     * Contentstack to post data when an event happens. Read more about <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#webhooks">Webhooks</a>
      *
      * <p>
      * <b>Note:</b> If any key name in the response data sent to a notification URL
-     * begins with a dollar sign ($), it
-     * will be prefixed with the acronym "cs" as a wildcard. For example, the key
-     * named "$success" would be replaced
-     * with "cs$success." For more information, refer to our API Change Log
-     * documentation. The option to define
-     * stack-level scope for webhooks is not available when using the classic
+     * begins with a dollar sign ($), it will be prefixed with the acronym "cs" as a
+     * wildcard. For example, the key
+     * named "$success" would be replaced with "cs$success." For more information,
+     * refer to our API Change Log
+     * documentation. The option to define stack-level scope for webhooks is not
+     * available when using the classic
      * Contentstack interface.
      *
      * @param webhookUid
@@ -803,7 +837,7 @@ public class Stack {
      * Request request = stack.fetch().request();
      * }
      * </pre>
-     * 
+     *
      * <b>For SSO-enabled organizations, it is mandatory to pass the organization
      * UID in the header.</b>
      * <br>

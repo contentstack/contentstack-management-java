@@ -18,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.net.Proxy;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -27,10 +28,13 @@ import static com.contentstack.cms.core.Util.*;
 /**
  * <b>Contentstack Java Management SDK</b>
  * <br>
- * <b>Java Management SDK</b> Interact with the Content Management APIs and allow you to create, update,
- * delete, and fetch content from your Contentstack account. (They are read-write in nature.)
+ * <b>Java Management SDK</b> Interact with the Content Management APIs and
+ * allow you to create, update,
+ * delete, and fetch content from your Contentstack account. (They are
+ * read-write in nature.)
  * <br>
- * You can use them to build your own apps and manage your content from Contentstack.
+ * You can use them to build your own apps and manage your content from
+ * Contentstack.
  */
 public class Contentstack {
 
@@ -47,7 +51,8 @@ public class Contentstack {
     protected User user;
 
     /**
-     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can
+     * have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -66,12 +71,14 @@ public class Contentstack {
      * Contentstack contentstack = new Contentstack.Builder().setAuthtoken("authtoken").build();
      * User user = contentstack.user();
      * </pre>
+     * 
      * <br>
      *
      * @return User
      * @author ishaileshmishra
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
-     * </a>
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     *      </a>
      * @since 2022-05-19
      */
     public User user() {
@@ -83,12 +90,14 @@ public class Contentstack {
 
     /**
      * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The authtoken is returned to the 'Response' body of
+     * authenticating yourself via the Log in call of User Session. The authtoken is
+     * returned to the 'Response' body of
      * the Log in call and is mandatory in all the calls.
      * <p>
      * <b>Example:</b>
      * <p>
-     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can
+     * have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -109,18 +118,20 @@ public class Contentstack {
      * Contentstack contentstack = new Contentstack.Builder().build();
      * Response login = contentstack.login("emailId", "password");
      * </pre>
+     * 
      * <br>
      *
      * @param emailId
-     *         the email id of the user
+     *                 the email id of the user
      * @param password
-     *         the password of the user
+     *                 the password of the user
      * @return LoginDetails
      * @throws IOException
-     *         the IOException
+     *                     the IOException
      * @author ishaileshmishra
-     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
-     * </a>
+     * @see <a href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     *      </a>
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
@@ -133,12 +144,14 @@ public class Contentstack {
 
     /**
      * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The authtoken is returned to the 'Response' body of
+     * authenticating yourself via the Log in call of User Session. The authtoken is
+     * returned to the 'Response' body of
      * the Log in call and is mandatory in all the calls.
      * <p>
      * <b>Example:</b>
      * <p>
-     * All accounts registered with Contentstack are known as Users. A stack can have many users with varying
+     * All accounts registered with Contentstack are known as Users. A stack can
+     * have many users with varying
      * permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
@@ -159,24 +172,26 @@ public class Contentstack {
      * Contentstack contentstack = new Contentstack.Builder().build();
      * Response login = contentstack.login("emailId", "password");
      * </pre>
+     * 
      * <br>
      *
      * @param emailId
-     *         the email id
+     *                 the email id
      * @param password
-     *         the password
+     *                 the password
      * @param tfaToken
-     *         the tfa token
+     *                 the tfa token
      * @return LoginDetails
      * @throws IOException
-     *         the io exception
+     *                     the io exception
      * @throws IOException
-     *         the IOException
+     *                     the IOException
      * @author ishaileshmishra
      * @see <a
-     * href="https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
-     * your account
-     * </a>
+     *      href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
+     *      your account
+     *      </a>
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
         if (this.authtoken != null)
@@ -203,8 +218,9 @@ public class Contentstack {
     }
 
     /**
-     * The Log out of your account call is used to sign out the user of Contentstack account
-     *
+     * The Log out of your account call is used to sign out the user of Contentstack
+     * account
+     * <p>
      * <b> Example </b>
      *
      * <pre>
@@ -215,7 +231,7 @@ public class Contentstack {
      *
      * @return the response
      * @throws IOException
-     *         the io exception
+     *                     the io exception
      */
     Response<ResponseBody> logout() throws IOException {
         user = new User(this.instance);
@@ -223,8 +239,9 @@ public class Contentstack {
     }
 
     /**
-     * The Log out of your account using authtoken is used to sign out the user of Contentstack account
-     *
+     * The Log out of your account using authtoken is used to sign out the user of
+     * Contentstack account
+     * <p>
      * <b> Example </b>
      *
      * <pre>
@@ -234,10 +251,10 @@ public class Contentstack {
      * <p>
      *
      * @param authtoken
-     *         the authtoken
+     *                  the authtoken
      * @return the response
      * @throws IOException
-     *         the io exception
+     *                     the io exception
      */
     Response<ResponseBody> logoutWithAuthtoken(String authtoken) throws IOException {
         user = new User(this.instance);
@@ -249,14 +266,16 @@ public class Contentstack {
     }
 
     /**
-     * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources,
-     * and users. Organization allows easy management of projects as well as users within the Organization.
-     *
+     * Organization is the top-level entity in the hierarchy of Contentstack,
+     * consisting of stacks and stack resources,
+     * and users. Organization allows easy management of projects as well as users
+     * within the Organization.
+     * <p>
      * <b> Example </b>
      *
      * <pre>
-     *  Contentstack contentstack = new Contentstack.Builder().build();
-     *  Organization org = contentstack.organization();
+     * Contentstack contentstack = new Contentstack.Builder().build();
+     * Organization org = contentstack.organization();
      * </pre>
      *
      * @return the organization
@@ -267,22 +286,24 @@ public class Contentstack {
         return new Organization(this.instance);
     }
 
-
     /**
-     * Organization is the top-level entity in the hierarchy of Contentstack, consisting of stacks and stack resources,
-     * and users. Organization allows easy management of projects as well as users within the Organization.
-     *
+     * Organization is the top-level entity in the hierarchy of Contentstack,
+     * consisting of stacks and stack resources,
+     * and users. Organization allows easy management of projects as well as users
+     * within the Organization.
+     * <p>
      * <b> Example </b>
      *
      * @param organizationUid
-     *         The UID of the organization that you want to retrieve
+     *                        The UID of the organization that you want to retrieve
      * @return the organization
-     * <br>
-     * <b>Example</b>
-     * <pre>
-     * Contentstack contentstack = new Contentstack.Builder().build();
-     * Organization org = contentstack.organization();
-     *  </pre>
+     *         <br>
+     *         <b>Example</b>
+     * 
+     *         <pre>
+     *         Contentstack contentstack = new Contentstack.Builder().build();
+     *         Organization org = contentstack.organization();
+     *         </pre>
      */
     public Organization organization(@NotNull String organizationUid) {
         if (this.authtoken == null)
@@ -293,8 +314,11 @@ public class Contentstack {
     }
 
     /**
-     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
-     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
+     * A stack is
+     * a space that stores the content of a project (a web or mobile property).
+     * Within a stack, you can create content
      * structures, content entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
@@ -312,10 +336,12 @@ public class Contentstack {
         return new Stack(this.instance);
     }
 
-
     /**
-     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
-     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
+     * A stack is
+     * a space that stores the content of a project (a web or mobile property).
+     * Within a stack, you can create content
      * structures, content entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
@@ -326,7 +352,7 @@ public class Contentstack {
      * </pre>
      *
      * @param header
-     *         the headers for the stack
+     *               the headers for the stack
      * @return the stack instance
      */
     public Stack stack(@NotNull Map<String, Object> header) {
@@ -335,10 +361,12 @@ public class Contentstack {
         return new Stack(this.instance, header);
     }
 
-
     /**
-     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
-     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
+     * A stack is
+     * a space that stores the content of a project (a web or mobile property).
+     * Within a stack, you can create content
      * structures, content entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
@@ -349,9 +377,9 @@ public class Contentstack {
      * </pre>
      *
      * @param managementToken
-     *         the authorization for the stack
+     *                        the authorization for the stack
      * @param apiKey
-     *         the apiKey for the stack
+     *                        the apiKey for the stack
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken) {
@@ -361,10 +389,12 @@ public class Contentstack {
         return new Stack(this.instance, headers);
     }
 
-
     /**
-     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
-     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
+     * A stack is
+     * a space that stores the content of a project (a web or mobile property).
+     * Within a stack, you can create content
      * structures, content entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
@@ -375,7 +405,7 @@ public class Contentstack {
      * </pre>
      *
      * @param key
-     *         You can provide apiKey of the stack or branchKey
+     *            You can provide apiKey of the stack or branchKey
      * @return the stack instance
      */
     public Stack stack(@NotNull String key) {
@@ -391,8 +421,11 @@ public class Contentstack {
     }
 
     /**
-     * <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a> A stack is
-     * a space that stores the content of a project (a web or mobile property). Within a stack, you can create content
+     * <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
+     * A stack is
+     * a space that stores the content of a project (a web or mobile property).
+     * Within a stack, you can create content
      * structures, content entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
@@ -403,11 +436,11 @@ public class Contentstack {
      * </pre>
      *
      * @param managementToken
-     *         the authorization for the stack
+     *                        the authorization for the stack
      * @param apiKey
-     *         the apiKey for the stack
+     *                        the apiKey for the stack
      * @param branch
-     *         the branch that include branching in the response
+     *                        the branch that include branching in the response
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken, @NotNull String branch) {
@@ -418,12 +451,11 @@ public class Contentstack {
         return new Stack(this.instance, headers);
     }
 
-
     /**
      * Instantiates a new Contentstack.
      *
      * @param builder
-     *         the builder
+     *                the builder
      */
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
@@ -447,6 +479,7 @@ public class Contentstack {
          */
         protected Proxy proxy;
         private AuthInterceptor authInterceptor;
+
         private String authtoken; // authtoken for client
         private Retrofit instance; // client instance
         private String hostname = Util.HOST; // Default Host for Contentstack API (default: api.contentstack.io)
@@ -463,18 +496,20 @@ public class Contentstack {
         }
 
         /**
-         * Sets proxy. (Setting proxy to the OkHttpClient) Proxy proxy = new Proxy(Proxy.Type.HTTP, new
+         * Sets proxy. (Setting proxy to the OkHttpClient) Proxy proxy = new
+         * Proxy(Proxy.Type.HTTP, new
          * InetSocketAddress(proxyHost, proxyPort));
          * <br>
+         * 
          * <pre>
          * {
-         * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
-         * Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
+         *     Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
+         *     Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
          * }
          * </pre>
          *
          * @param proxy
-         *         the proxy
+         *              the proxy
          * @return the Builder instance
          */
         public Builder setProxy(@NotNull Proxy proxy) {
@@ -486,7 +521,7 @@ public class Contentstack {
          * Sets retry on failure.
          *
          * @param retry
-         *         if retry is true
+         *              if retry is true
          * @return the retry on failure
          */
         public Builder setRetry(@NotNull Boolean retry) {
@@ -498,7 +533,7 @@ public class Contentstack {
          * Set host for client instance
          *
          * @param hostname
-         *         host for the Contentstack Client
+         *                 host for the Contentstack Client
          * @return Client host
          */
         public Builder setHost(@NotNull String hostname) {
@@ -510,7 +545,7 @@ public class Contentstack {
          * Set port for client instance
          *
          * @param port
-         *         - port for the Contentstack Client
+         *             - port for the Contentstack Client
          * @return Client port
          */
         public Builder setPort(@NotNull String port) {
@@ -522,7 +557,7 @@ public class Contentstack {
          * Set version for client instance
          *
          * @param version
-         *         for the Contentstack Client
+         *                for the Contentstack Client
          * @return Client version
          */
         public Builder setVersion(@NotNull String version) {
@@ -534,7 +569,7 @@ public class Contentstack {
          * Set timeout for client instance
          *
          * @param timeout
-         *         for the Contentstack Client
+         *                for the Contentstack Client
          * @return Client timeout
          */
         public Builder setTimeout(int timeout) {
@@ -546,7 +581,7 @@ public class Contentstack {
          * Sets authtoken for the client
          *
          * @param authtoken
-         *         for the client
+         *                  for the client
          * @return Contentstack authtoken
          */
         public Builder setAuthtoken(String authtoken) {
@@ -578,6 +613,7 @@ public class Contentstack {
             return new OkHttpClient.Builder().addInterceptor(this.authInterceptor)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
+                    .connectTimeout(Duration.ofSeconds(this.timeout))
                     .retryOnConnectionFailure(retryOnFailure)
                     .build();
         }
