@@ -30,7 +30,8 @@ import java.util.HashMap;
  * @version v0.1.0
  * @see <a href=
  *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">
- *      Publish Queue
+ *      Publish
+ *      Queue
  *      </a>
  * @since 2022-10-22
  */
@@ -111,8 +112,7 @@ public class PublishQueue {
      * deployments in the response body.
      * <p>
      * <b>Note:</b> You can retrieve the publish queue details for activities
-     * performed on entries and/or assets of
-     * your stack in the last 30 days.
+     * performed on entries and/or assets of your stack in the last 30 days.
      * <p>
      * You can apply queries to filter the results. Refer to the Queries section for
      * more details.
@@ -149,8 +149,7 @@ public class PublishQueue {
      * {@link #addParam(String, Object)}
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue-activity">Get
      *      publish queue activity
      *      </a>
@@ -169,8 +168,7 @@ public class PublishQueue {
      * activity of entries and/or assets and also cancel the deployment of releases
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#cancel-scheduled-action">Cancel
      *      scheduled action
      *

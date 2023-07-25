@@ -34,5 +34,4 @@ public interface UserService {
     @POST("user/reset_password")
     Call<ResponseBody> resetPassword(@Body JSONObject body);
 
-
 }

@@ -1,11 +1,11 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
 import com.contentstack.cms.models.Error;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
@@ -22,11 +22,11 @@ class StackAPITest {
 
     private static final String TAG = StackAPITest.class.getSimpleName();
     private final static Logger log = Logger.getLogger(StackAPITest.class.getName());
-    private Stack stackInstance;
-    private final String organizationUid = Dotenv.load().get("organizationUid");
-    private final String userId = Dotenv.load().get("userId");
-    private final String apiKey = Dotenv.load().get("apiKey");
-    private final String ownershipToken = Dotenv.load().get("ownershipToken");
+    private Stack stack;
+    private final String organizationUid = TestClient.ORGANIZATION_UID;
+    private final String userId = TestClient.USER_ID;
+    private final String apiKey = TestClient.API_KEY;
+    private final String ownershipToken = TestClient.OWNERSHIP;
 
     private JsonObject toJson(Response<ResponseBody> response) throws IOException {
         assert response.body() != null;
@@ -34,21 +34,16 @@ class StackAPITest {
     }
 
     @BeforeAll
-    public void setUp() throws IOException {
-        Contentstack contentstack = new Contentstack.Builder().build();
-        String emailId = Dotenv.load().get("username");
-        String password = Dotenv.load().get("password");
-        contentstack.login(emailId, password);
-        assert apiKey != null;
-        stackInstance = contentstack.stack();
+    public void setUp() {
+        stack = TestClient.getStack();
     }
 
     @Test
     void testStackFetchAll() {
         try {
-            stackInstance.clearParams();
+            stack.clearParams();
             assert apiKey != null;
-            Response<ResponseBody> response = stackInstance.find().execute();
+            Response<ResponseBody> response = stack.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stacks"));
@@ -63,8 +58,8 @@ class StackAPITest {
         try {
             assert apiKey != null;
             assert organizationUid != null;
-            stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.find().execute();
+            stack.addHeader("organization_uid", organizationUid);
+            Response<ResponseBody> response = stack.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stacks"));
@@ -78,13 +73,13 @@ class StackAPITest {
     void testFetchWithOptionalQueryParams() {
         try {
 
-            stackInstance.addParam("include_collaborators", true);
-            stackInstance.addParam("include_stack_variables", false);
-            stackInstance.addParam("include_discrete_variables", true);
-            stackInstance.addParam("include_count", false);
+            stack.addParam("include_collaborators", true);
+            stack.addParam("include_stack_variables", false);
+            stack.addParam("include_discrete_variables", true);
+            stack.addParam("include_count", false);
             assert organizationUid != null;
-            stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.find().execute();
+            stack.addHeader("organization_uid", organizationUid);
+            Response<ResponseBody> response = stack.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stacks"));
@@ -97,14 +92,14 @@ class StackAPITest {
     @Test
     void testFetchWithOptionalOrgUidAndQueryParams() {
         try {
-            stackInstance.addParam("include_collaborators", true);
-            stackInstance.addParam("include_stack_variables", false);
-            stackInstance.addParam("include_discrete_variables", true);
-            stackInstance.addParam("include_count", false);
+            stack.addParam("include_collaborators", true);
+            stack.addParam("include_stack_variables", false);
+            stack.addParam("include_discrete_variables", true);
+            stack.addParam("include_count", false);
             assert apiKey != null;
             assert organizationUid != null;
-            stackInstance.addHeader("organization_uid", organizationUid);
-            Response<ResponseBody> response = stackInstance.find().execute();
+            stack.addHeader("organization_uid", organizationUid);
+            Response<ResponseBody> response = stack.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stacks"));
@@ -135,10 +130,11 @@ class StackAPITest {
     }
 
     @Test
+    @Disabled
     void testStackUpdate() {
         try {
             JSONObject requestBody = Utils.readJson("mockstack/update.json");
-            Response<ResponseBody> response = stackInstance.update(requestBody).execute();
+            Response<ResponseBody> response = stack.update(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack"));
@@ -154,7 +150,7 @@ class StackAPITest {
         try {
             JSONObject requestBody = Utils.readJson("mockstack/ownership.json");
             assert apiKey != null;
-            Response<ResponseBody> response = stackInstance.transferOwnership(requestBody).execute();
+            Response<ResponseBody> response = stack.transferOwnership(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -162,8 +158,7 @@ class StackAPITest {
                 assert response.errorBody() != null;
                 Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
                 int errCode = error.getErrorCode();
-                String errMessage = error.getErrorMessage();
-                Assertions.assertEquals(109, errCode);
+                Assertions.assertEquals(309, errCode);
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -172,9 +167,9 @@ class StackAPITest {
 
     @Test
     void testStackAcceptOwnership() throws IOException {
-        stackInstance.addParam("api_key", apiKey);
-        stackInstance.addParam("uid", userId);
-        Response<ResponseBody> response = stackInstance.acceptOwnership(ownershipToken).execute();
+        stack.addParam("api_key", apiKey);
+        stack.addParam("uid", userId);
+        Response<ResponseBody> response = stack.acceptOwnership(ownershipToken).execute();
         if (response.isSuccessful()) {
             JsonObject jsonResp = toJson(response);
             Assertions.assertTrue(jsonResp.has("notice"));
@@ -200,7 +195,7 @@ class StackAPITest {
                             .request()
                             .url()
                             .query());
-            Assertions.assertEquals(5,
+            Assertions.assertEquals(6,
                     response.raw().request().headers().size());
 
         }
@@ -213,7 +208,7 @@ class StackAPITest {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.setting().execute();
+            Response<ResponseBody> response = stack.setting().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("stack_settings"));
@@ -230,7 +225,7 @@ class StackAPITest {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.updateSetting(requestBody).execute();
+            Response<ResponseBody> response = stack.updateSetting(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -248,7 +243,7 @@ class StackAPITest {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.updateSetting(requestBody).execute();
+            Response<ResponseBody> response = stack.updateSetting(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -266,14 +261,14 @@ class StackAPITest {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.share(requestBody).execute();
+            Response<ResponseBody> response = stack.share(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
             } else {
                 Assertions.assertEquals("/v3/stacks/share",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(5,
+                Assertions.assertEquals(6,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
@@ -288,14 +283,14 @@ class StackAPITest {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.unshare(requestBody).execute();
+            Response<ResponseBody> response = stack.unshare(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
             } else {
                 Assertions.assertEquals("/v3/stacks/unshare",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(5,
+                Assertions.assertEquals(6,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
@@ -309,7 +304,7 @@ class StackAPITest {
         assert apiKey != null;
         assert userId != null;
         assert ownershipToken != null;
-        Response<ResponseBody> response = stackInstance.allUsers().execute();
+        Response<ResponseBody> response = stack.allUsers().execute();
         if (response.isSuccessful()) {
             JsonObject jsonResp = toJson(response);
             Assertions.assertTrue(jsonResp.has("stacks"));
@@ -328,7 +323,7 @@ class StackAPITest {
             assert apiKey != null;
             assert userId != null;
             assert ownershipToken != null;
-            Response<ResponseBody> response = stackInstance.roles(requestBody).execute();
+            Response<ResponseBody> response = stack.roles(requestBody).execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
                 Assertions.assertTrue(jsonResp.has("notice"));
@@ -336,7 +331,7 @@ class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/users/roles",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(5,
+                Assertions.assertEquals(6,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {

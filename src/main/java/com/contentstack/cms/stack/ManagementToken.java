@@ -10,8 +10,7 @@ import java.util.HashMap;
 /**
  * <b>Management tokens: </b> <br>
  * To authenticate Content Management API (CMA) requests over your stack
- * content, you
- * can use Management Tokens
+ * content, you can use Management Tokens
  * <br>
  *
  * @author ***REMOVED***
@@ -90,10 +89,10 @@ public class ManagementToken {
      * NOT the actual management tokens.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens">Get
-     *      all Management Tokens
+     *      all
+     *      Management Tokens
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
@@ -109,10 +108,10 @@ public class ManagementToken {
      * and NOT the actual management token.
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-management-token">Get
-     *      a single management token
+     *      a
+     *      single management token
      *      </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
@@ -131,8 +130,7 @@ public class ManagementToken {
      *                    details of the management token in @{@link JSONObject}
      *                    format
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-management-token">Create
      *      a
      *      management token
@@ -162,8 +160,7 @@ public class ManagementToken {
      *                    details of the management token in @{@link JSONObject}
      *                    format
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-management-token">Update
      *      management token
      *      </a>
@@ -179,8 +176,7 @@ public class ManagementToken {
      * The Delete management token request deletes a specific management token
      *
      * @return Call
-     * @see <a
-     *      href=
+     * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-management-token">Delete
      *      management token
      *      </a>
