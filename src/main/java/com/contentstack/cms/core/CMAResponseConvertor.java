@@ -37,9 +37,9 @@ public class CMAResponseConvertor {
     /**
      * The function returns the response body as a string if it is not null,
      * otherwise it returns null.
-     * 
-     * @throws IOException if an I/O error occurs
+     *
      * @return The method is returning a String.
+     * @throws IOException if an I/O error occurs
      */
     public String asString() throws IOException {
         return this.response.body() != null ? this.response.body().string() : null;
@@ -48,10 +48,10 @@ public class CMAResponseConvertor {
     /**
      * The function converts the response body to a JSON string using the Gson
      * library.
-     * 
-     * @throws IOException if an I/O error occurs
+     *
      * @return The method is returning a JSON string representation of the response
-     *         body.
+     * body.
+     * @throws IOException if an I/O error occurs
      */
     public String asJson() throws IOException {
         String body = this.response.body() != null ? this.response.body().string() : null;
@@ -61,7 +61,7 @@ public class CMAResponseConvertor {
     /**
      * The function takes a string as input and converts it to a JSON string using
      * the Gson library.
-     * 
+     *
      * @param string The parameter "string" is a String object that represents the
      *               input string that you
      *               want to convert to JSON format.
@@ -76,15 +76,15 @@ public class CMAResponseConvertor {
      * The function converts a JSON response body into a Java object of the
      * specified class using the Gson
      * library.
-     * 
+     *
      * @param <T>    the type of the parameter
      * @param tClass The `tClass` parameter is a `Class` object that represents the
      *               type of the model class
      *               that you want to convert the response body to.
-     * @throws IOException if an I/O error occurs
      * @return The method is returning an object of type T, which is determined by
-     *         the input parameter
-     *         tClass.
+     * the input parameter
+     * tClass.
+     * @throws IOException if an I/O error occurs
      */
     public <T> T toModel(Class<T> tClass) throws IOException {
         Objects.requireNonNull(tClass, MODEL_NULL_CHECK);
@@ -96,12 +96,9 @@ public class CMAResponseConvertor {
      * It accepts the modal class and the string data response to return the model
      * class
      *
-     * @param tClass
-     *                 the class
-     * @param response
-     *                 data response
-     * @param <T>
-     *                 the model class type
+     * @param tClass   the class
+     * @param response data response
+     * @param <T>      the model class type
      * @return the model class
      */
     public <T> T toModel(Class<T> tClass, String response) {
@@ -120,7 +117,7 @@ public class CMAResponseConvertor {
     /**
      * The function `requestBody` returns the request object associated with a given
      * call instance.
-     * 
+     *
      * @param callInstance An instance of the Call class, which represents a network
      *                     request in OkHttp.
      * @return The method is returning a Request object.
