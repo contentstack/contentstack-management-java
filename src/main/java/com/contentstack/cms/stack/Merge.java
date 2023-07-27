@@ -1,6 +1,6 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Parametron;
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -45,7 +45,7 @@ import java.util.Map;
  *      Branches </a>
  * @since 2023 -June-30
  */
-public class Merge implements Parametron {
+public class Merge implements BaseImplementation {
 
     /**
      * The Headers.

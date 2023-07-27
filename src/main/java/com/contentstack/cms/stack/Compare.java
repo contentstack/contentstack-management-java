@@ -1,6 +1,6 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Parametron;
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -36,7 +36,7 @@ import java.util.Map;
  *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#compare-branches"></a>Compare
  *      Branches
  */
-public class Compare implements Parametron {
+public class Compare implements BaseImplementation {
 
     private final CompareService service;
     private final Map<String, String> headers;
