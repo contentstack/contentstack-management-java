@@ -1,7 +1,6 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Parametron;
-import com.contentstack.cms.marketplace.apps.App;
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -28,7 +27,7 @@ import java.util.HashMap;
  *      Bulk Operations Queue </a>
  * @since 2023 -08-23
  */
-public class BulkOperation implements Parametron {
+public class BulkOperation implements BaseImplementation {
 
     /**
      * The Service.

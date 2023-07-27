@@ -61,20 +61,20 @@
     </developers>
 
     <distributionManagement>
-        <!-- <snapshotRepository>
+        <snapshotRepository>
             <id>ossrh</id>
             <name>Apache Maven Packages Snapshot</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository> -->
-        <snapshotRepository>
+        </snapshotRepository>
+        <!-- <snapshotRepository>
             <id>github</id>
             <name>GitHub Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/contentstack/contentstack-management-java</url>
-        </snapshotRepository>
+        </snapshotRepository> -->
         <repository>
             <id>ossrh</id>
             <name>Apache Maven Packages Release</name>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
@@ -246,20 +246,20 @@
                 <version>${maven-site-plugin.version}</version>
             </plugin>
 
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-gpg-plugin</artifactId>-->
-            <!--                <version>${maven-gpg-plugin.version}</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>sign-artifacts</id>-->
-            <!--                        <phase>verify</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>sign</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven-gpg-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin> -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

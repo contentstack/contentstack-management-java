@@ -1,6 +1,5 @@
 package com.contentstack.cms.organization;
 
-import com.contentstack.cms.marketplace.Marketplace;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -25,7 +24,6 @@ public class Organization {
     protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
     private String organizationUid;
-    private final Retrofit clientInstance;
 
     /**
      * Instantiates a new Organization.
@@ -36,7 +34,6 @@ public class Organization {
     public Organization(Retrofit client) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.clientInstance = client;
         this.service = client.create(OrganizationService.class);
     }
 
@@ -52,7 +49,6 @@ public class Organization {
         this.headers = new HashMap<>();
         this.organizationUid = uid;
         this.params = new HashMap<>();
-        this.clientInstance = client;
         this.service = client.create(OrganizationService.class);
     }
 
@@ -64,7 +60,7 @@ public class Organization {
      * @param value
      *              header value for the request
      *              return Organization the instance of Organization
-     * @return Organization instance of organisation
+     * @return Organization instance of organization
      */
     public Organization addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
@@ -451,34 +447,6 @@ public class Organization {
     public Call<ResponseBody> logItem(String logUid) {
         validate();
         return service.getLogItems(this.headers, this.organizationUid, logUid);
-    }
-
-    /**
-     * Marketplace is the one-stop shop for ready-made extensions and one-click
-     * integrations with the industry's leading
-     * technology and service providers. Discover an extensive ecosystem of
-     * features, services, apps, and accelerators
-     * and combine the best technologies to achieve your desired business outcomes.
-     *
-     * @return An instance of the Marketplace class.
-     */
-    public Marketplace marketplace() {
-        return new Marketplace(this.clientInstance, this.organizationUid, null);
-    }
-
-    /**
-     * Marketplace is the one-stop shop for ready-made extensions and one-click
-     * integrations with the industry's leading
-     * technology and service providers. Discover an extensive ecosystem of
-     * features, services, apps, and accelerators
-     * and combine the best technologies to achieve your desired business outcomes.
-     *
-     * @param endpoint
-     *                 the base url for making marketplace request
-     * @return An instance of the Marketplace class.
-     */
-    public Marketplace marketplace(@NotNull String endpoint) {
-        return new Marketplace(this.clientInstance, this.organizationUid, endpoint);
     }
 
 }

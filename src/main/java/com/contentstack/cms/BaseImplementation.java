@@ -6,11 +6,11 @@ import java.util.HashMap;
 /**
  * The interface Parametron.
  */
-public interface Parametron {
+public interface BaseImplementation {
 
     /**
      * The function adds a parameter to a collection using a key-value pair.
-     * 
+     *
      * @param <T>   the type of the parameter
      * @param key   A string representing the key of the parameter. It cannot be
      *              null and must be
@@ -24,7 +24,7 @@ public interface Parametron {
 
     /**
      * The function adds a header with a key-value pair to a request.
-     * 
+     *
      * @param <T>   the type of the parameter
      * @param key   The key parameter is a string that represents the name or
      *              identifier of the header.
@@ -40,7 +40,7 @@ public interface Parametron {
      * The function "addParams" takes a HashMap of String keys and Object values as
      * input and returns a
      * generic type T.
-     * 
+     *
      * @param <T>    the type of the parameter
      * @param params The "params" parameter is a HashMap that maps String keys to
      *               Object values. It is
@@ -51,7 +51,7 @@ public interface Parametron {
 
     /**
      * The function adds headers to a HashMap.
-     * 
+     *
      * @param <T>     the type of the parameter
      * @param headers A HashMap containing key-value pairs of headers, where the key
      *                is a String
