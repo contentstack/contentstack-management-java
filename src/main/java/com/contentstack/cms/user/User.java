@@ -1,6 +1,6 @@
 package com.contentstack.cms.user;
 
-import com.contentstack.cms.Parametron;
+import com.contentstack.cms.BaseImplementation;
 import com.contentstack.cms.core.Util;
 import com.contentstack.cms.models.LoginDetails;
 import okhttp3.ResponseBody;
@@ -23,7 +23,7 @@ import java.util.HashMap;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class User implements Parametron {
+public class User implements BaseImplementation {
 
     protected final UserService userService;
     protected HashMap<String, String> headers;
