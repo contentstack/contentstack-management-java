@@ -1,6 +1,6 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Parametron;
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -25,7 +25,7 @@ import java.util.Map;
  *      </a>
  * @since 2022-10-22
  */
-public class Branch implements Parametron {
+public class Branch implements BaseImplementation {
 
     protected final Map<String, Object> headers;
     protected Map<String, Object> params;
