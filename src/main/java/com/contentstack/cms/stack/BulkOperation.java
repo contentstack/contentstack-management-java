@@ -23,8 +23,8 @@ import java.util.HashMap;
  * @author ishaileshmishra
  * @version v1.0.0
  * @see <a href=
- *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-publish-operation">
- *      Bulk Operations Queue </a>
+ * "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-publish-operation">
+ * Bulk Operations Queue </a>
  * @since 2023 -08-23
  */
 public class BulkOperation implements BaseImplementation {
@@ -46,8 +46,7 @@ public class BulkOperation implements BaseImplementation {
     /**
      * Instantiates a new Bulk operation.
      *
-     * @param retrofit
-     *                 the retrofit
+     * @param retrofit the retrofit
      */
     protected BulkOperation(Retrofit retrofit) {
         this.headers = new HashMap<>();
@@ -84,17 +83,16 @@ public class BulkOperation implements BaseImplementation {
      * {@link #addHeader(String, String)}.
      * </p>
      *
-     * @param body
-     *             The JSON object containing the data to be published.
+     * @param body The JSON object containing the data to be published.
      * @return Call object for the API request.
      * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-entries-and-assets-in-bulk">
-     *      Publish entries and assets in bulk </a>
+     * href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-entries-and-assets-in-bulk">
+     * Publish entries and assets in bulk </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers in
-     *      {@link #publish(JSONObject)}.
+     * {@link #publish(JSONObject)}.
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     *      parameters in {@link #publish(JSONObject)}.
+     * parameters in {@link #publish(JSONObject)}.
      * @since 1.0.0
      */
     public Call<ResponseBody> publish(@NotNull JSONObject body) {
@@ -130,15 +128,14 @@ public class BulkOperation implements BaseImplementation {
      * approvals=true.
      * <p>
      *
-     * @param body
-     *             the body
+     * @param body the body
      * @return Call call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-unpublish-operation">Bulk
-     *      Unpublish Operation </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-unpublish-operation">Bulk
+     * Unpublish Operation </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     *      parameters
+     * parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> unpublish(@NotNull JSONObject body) {
@@ -161,15 +158,14 @@ public class BulkOperation implements BaseImplementation {
      * Read more about authentication.
      * <p>
      *
-     * @param body
-     *             the body
+     * @param body the body
      * @return Call call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
-     *      Delete Operation </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
+     * Delete Operation </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     *      parameters
+     * parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> delete(JSONObject body) {
@@ -193,15 +189,14 @@ public class BulkOperation implements BaseImplementation {
      * assigned the same workflow stage and are associated with the same workflow.
      * <p>
      *
-     * @param body
-     *             the body
+     * @param body the body
      * @return Call call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
-     *      Delete Operation </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
+     * Delete Operation </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     *      parameters
+     * parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> updateWorkflow(@NotNull JSONObject body) {
@@ -212,13 +207,10 @@ public class BulkOperation implements BaseImplementation {
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param key
-     *              the key of the header to be added
-     * @param value
-     *              the value of the header to be added
-     * @return a new {@link App} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
+     * @return a new {@link BulkOperation} object with the specified param added
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
     public BulkOperation addParam(@NotNull String key, @NotNull Object value) {
@@ -230,13 +222,10 @@ public class BulkOperation implements BaseImplementation {
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param key
-     *              the key of the header to be added
-     * @param value
-     *              the value of the header to be added
-     * @return a new {@link App} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
+     * @return a new {@link BulkOperation} object with the specified header added
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
     public BulkOperation addHeader(@NotNull String key, @NotNull String value) {
@@ -248,11 +237,9 @@ public class BulkOperation implements BaseImplementation {
      * Adds the specified parameters to this location and returns the updated
      * location.
      *
-     * @param params
-     *               a {@link HashMap} containing the parameters to be added
-     * @return a new {@link App} object with the specified parameters added
-     * @throws NullPointerException
-     *                              if the params argument is null
+     * @param params a {@link HashMap} containing the parameters to be added
+     * @return a new {@link BulkOperation} object with the specified parameters added
+     * @throws NullPointerException if the params argument is null
      */
     @Override
     public BulkOperation addParams(@NotNull HashMap params) {
@@ -264,11 +251,9 @@ public class BulkOperation implements BaseImplementation {
      * Adds the specified parameters to this location and returns the updated
      * location.
      *
-     * @param headers
-     *                a {@link HashMap} containing the parameters to be added
-     * @return a new {@link App} object with the specified parameters added
-     * @throws NullPointerException
-     *                              if the params argument is null
+     * @param headers a {@link HashMap} containing the parameters to be added
+     * @return a new {@link BulkOperation} object with the specified headers added
+     * @throws NullPointerException if the params argument is null
      */
     @Override
     public BulkOperation addHeaders(@NotNull HashMap headers) {
