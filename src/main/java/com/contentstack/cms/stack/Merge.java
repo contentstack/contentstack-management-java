@@ -228,16 +228,12 @@ public class Merge implements BaseImplementation {
      * Adds the specified parameters to this location and returns the updated
      * location.
      *
-     * @param headers
-     *                a {@link HashMap} containing the parameters to be added
-     * @return a new {@link Merge} object with the specified parameters added
-     * @throws NullPointerException
-     *                              if the params argument is null
+     * @param headers a {@link HashMap} containing the parameters to be added
+     * @throws NullPointerException if the params argument is null
      */
     @Override
-    public Merge addHeaders(@NotNull HashMap headers) {
+    public void addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
-        return this;
     }
 
 }
