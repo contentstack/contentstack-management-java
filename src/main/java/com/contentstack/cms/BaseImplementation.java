@@ -1,10 +1,11 @@
 package com.contentstack.cms;
 
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
 /**
- * The interface Parametron.
+ * The interface @{@link BaseImplementation}
  */
 public interface BaseImplementation {
 
@@ -20,7 +21,7 @@ public interface BaseImplementation {
      *              object as its value.
      * @return The method is returning an object of type T.
      */
-    public <T> T addParam(@NotNull String key, @NotNull Object value);
+    <T> T addParam(@NotNull String key, @NotNull Object value);
 
     /**
      * The function adds a header with a key-value pair to a request.
@@ -34,7 +35,7 @@ public interface BaseImplementation {
      *              header.
      * @return The method is returning an object of type T.
      */
-    public <T> T addHeader(@NotNull String key, @NotNull String value);
+    <T> T addHeader(@NotNull String key, @NotNull String value);
 
     /**
      * The function "addParams" takes a HashMap of String keys and Object values as
@@ -47,7 +48,7 @@ public interface BaseImplementation {
      *               annotated with @NotNull, indicating that it cannot be null.
      * @return The method is returning an object of type T.
      */
-    public <T> T addParams(@NotNull HashMap<String, Object> params);
+    <T> T addParams(@NotNull HashMap<String, Object> params);
 
     /**
      * The function adds headers to a HashMap.
@@ -57,7 +58,6 @@ public interface BaseImplementation {
      *                is a String
      *                representing the header name and the value is a String
      *                representing the header value.
-     * @return The method is returning an object of type T.
      */
-    public <T> T addHeaders(@NotNull HashMap<String, String> headers);
+    <T> void addHeaders(@NotNull HashMap<String, String> headers);
 }

@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 
 /**
- * You can perform bulk operations such as Publish, Unpublish, and Delete on
+ * You can perform bulk operations such as Publish, Unpublished, and Delete on
  * multiple entries or assets, or Change the
  * Workflow Details of multiple entries or assets at the same time
  * <br>
@@ -90,9 +90,7 @@ public class BulkOperation implements BaseImplementation {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-entries-and-assets-in-bulk">
      * Publish entries and assets in bulk </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers in
-     * {@link #publish(JSONObject)}.
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     * parameters in {@link #publish(JSONObject)}.
      * @since 1.0.0
      */
     public Call<ResponseBody> publish(@NotNull JSONObject body) {
@@ -252,13 +250,11 @@ public class BulkOperation implements BaseImplementation {
      * location.
      *
      * @param headers a {@link HashMap} containing the parameters to be added
-     * @return a new {@link BulkOperation} object with the specified headers added
      * @throws NullPointerException if the params argument is null
      */
     @Override
-    public BulkOperation addHeaders(@NotNull HashMap headers) {
+    public void addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
-        return this;
     }
 
 }
