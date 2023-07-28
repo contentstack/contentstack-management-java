@@ -59,5 +59,5 @@ public interface BaseImplementation {
      *                representing the header name and the value is a String
      *                representing the header value.
      */
-    <T> void addHeaders(@NotNull HashMap<String, String> headers);
+    <T> T addHeaders(@NotNull HashMap<String, String> headers);
 }

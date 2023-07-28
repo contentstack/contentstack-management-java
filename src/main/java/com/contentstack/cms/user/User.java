@@ -49,6 +49,9 @@ public class User implements BaseImplementation {
      * @author ishaileshmishra
      */
     public User(Retrofit client) {
+        this.params = new HashMap<>();
+        this.headers = new HashMap<>();
+        this.headers.put("Content-Type", "application/json");
         this.userService = client.create(UserService.class);
     }
 
@@ -233,8 +236,9 @@ public class User implements BaseImplementation {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addHeaders(@NotNull HashMap headers) {
+    public User addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
+        return this;
     }
 
 }

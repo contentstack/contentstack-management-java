@@ -232,8 +232,9 @@ public class Merge implements BaseImplementation {
      * @throws NullPointerException if the params argument is null
      */
     @Override
-    public void addHeaders(@NotNull HashMap headers) {
+    public Merge addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
+        return this;
     }
 
 }

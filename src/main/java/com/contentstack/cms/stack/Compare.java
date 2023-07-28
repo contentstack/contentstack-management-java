@@ -33,8 +33,8 @@ import java.util.Map;
  * </ul>
  *
  * @see <a href=
- *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#compare-branches"></a>Compare
- *      Branches
+ * "https://www.contentstack.com/docs/developers/apis/content-management-api/#compare-branches"></a>Compare
+ * Branches
  */
 public class Compare implements BaseImplementation {
 
@@ -45,14 +45,11 @@ public class Compare implements BaseImplementation {
     /**
      * Instantiates a new Compare.
      *
-     * @param instance
-     *                        the instance
-     * @param baseBranchId
-     *                        The basis on which comparison is done. If kept empty
+     * @param instance        the instance
+     * @param baseBranchId    The basis on which comparison is done. If kept empty
      *                        or null, the source branch of the compare branch is
      *                        considered by default
-     * @param compareBranchId
-     *                        the branch you want to compare with the base branch
+     * @param compareBranchId the branch you want to compare with the base branch
      */
     public Compare(Retrofit instance, String baseBranchId, String compareBranchId) {
         this.headers = new HashMap<>();
@@ -123,7 +120,7 @@ public class Compare implements BaseImplementation {
      * @return the call
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     *      parameters
+     * parameters
      */
     Call<ResponseBody> contentType() {
         return this.service.compareContentTypesBetweenBranches(this.headers, this.params);
@@ -140,7 +137,7 @@ public class Compare implements BaseImplementation {
      * @return the call
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     *      parameters
+     * parameters
      */
     Call<ResponseBody> globalField() {
         return this.service.compareGlobalFieldBetweenBranches(this.headers, this.params);
@@ -151,15 +148,14 @@ public class Compare implements BaseImplementation {
      * differences of the specified content
      * type between the two specified branches
      *
-     * @param contentTypeId
-     *                      the unique ID of the content type of which you want to
+     * @param contentTypeId the unique ID of the content type of which you want to
      *                      retrieve the difference. The UID is generated
      *                      based on the title of the content type. The unique ID of
      *                      a content type is unique across a stack.
      * @return the call
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     *      parameters
+     * parameters
      */
     Call<ResponseBody> specificContentType(@NotNull String contentTypeId) {
         return this.service.compareSpecificContentTypeBetweenBranches(this.headers, contentTypeId, this.params);
@@ -170,15 +166,14 @@ public class Compare implements BaseImplementation {
      * differences of the specified global
      * field between the two specified branches.
      *
-     * @param globalFieldUid
-     *                       the unique ID of the global field of which you want to
+     * @param globalFieldUid the unique ID of the global field of which you want to
      *                       retrieve the difference. The UID is generated
      *                       based on the title of the global field. The unique ID
      *                       of a global field is unique across a stack.
      * @return the call
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     *      parameters
+     * parameters
      */
     Call<ResponseBody> specificGlobalField(String globalFieldUid) {
         return this.service.compareSpecificGlobalFieldBetweenBranches(this.headers, globalFieldUid, this.params);
@@ -188,13 +183,10 @@ public class Compare implements BaseImplementation {
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param key
-     *              the key of the header to be added
-     * @param value
-     *              the value of the header to be added
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
      * @return a new {@link Compare} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
     public Compare addParam(@NotNull String key, @NotNull Object value) {
@@ -206,13 +198,10 @@ public class Compare implements BaseImplementation {
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param key
-     *              the key of the header to be added
-     * @param value
-     *              the value of the header to be added
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
      * @return a new {@link Compare} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
     public Compare addHeader(@NotNull String key, @NotNull String value) {
@@ -224,11 +213,9 @@ public class Compare implements BaseImplementation {
      * Adds the specified parameters to this location and returns the updated
      * location.
      *
-     * @param params
-     *               a {@link HashMap} containing the parameters to be added
+     * @param params a {@link HashMap} containing the parameters to be added
      * @return a new {@link Compare} object with the specified parameters added
-     * @throws NullPointerException
-     *                              if the params argument is null
+     * @throws NullPointerException if the params argument is null
      */
     @Override
     public Compare addParams(@NotNull HashMap params) {
@@ -244,7 +231,8 @@ public class Compare implements BaseImplementation {
      * @throws NullPointerException if the params argument is null
      */
     @Override
-    public void addHeaders(@NotNull HashMap headers) {
+    public Compare addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
+        return this;
     }
 }
