@@ -10,6 +10,8 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -45,10 +47,6 @@ public class Asset {
         this.headers.putAll(header);
         this.params = new HashMap<>();
         this.service = instance.create(AssetService.class);
-    }
-
-    void validate() {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
     }
 
 
@@ -182,7 +180,7 @@ public class Asset {
      * @since 2022-10-20
      */
     public Call<ResponseBody> fetch() {
-        this.validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.single(this.headers, this.assetUid, this.params);
     }
 
@@ -366,12 +364,29 @@ public class Asset {
      * @since 2022-10-20
      */
     public Call<ResponseBody> replace(@NotNull String filePath, @NotNull String description) {
-        this.validate();
-        MultipartBody.Part assetPath = createMultipartBody(filePath, null, null, null, null);
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        MultipartBody.Part assetPath = uploadFile(filePath);
         RequestBody body = RequestBody.create(MediaType.parse(String.valueOf(MultipartBody.FORM)), description);
         return this.service.replace(this.headers, this.assetUid, assetPath, body, this.params);
     }
 
+
+    private MultipartBody.Part uploadFile(@NotNull String filePath) {
+        if (!filePath.isEmpty()) {
+            File file = new File(filePath);
+            URLConnection connection = null;
+            try {
+                connection = file.toURL().openConnection();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (file.exists()) {
+                RequestBody body = RequestBody.create(MediaType.parse(connection.getContentType()), file);
+                return MultipartBody.Part.createFormData("asset[upload]", file.getName(), body);
+            }
+        }
+        return null;
+    }
 
     /**
      * Generate Permanent Asset URL request allows you to generate a permanent URL
@@ -402,7 +417,7 @@ public class Asset {
      * @since 2022-10-20
      */
     public Call<ResponseBody> generatePermanentUrl(JSONObject body) {
-        this.validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.generatePermanentUrl(this.headers, this.assetUid, body);
     }
 
@@ -432,7 +447,7 @@ public class Asset {
      * @since 2022-10-20
      */
     public Call<ResponseBody> getPermanentUrl(String slugUrl) {
-        this.validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.downloadPermanentUrl(this.headers, this.assetUid, slugUrl, this.params);
     }
 
@@ -449,7 +464,7 @@ public class Asset {
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
-        this.validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.delete(this.headers, this.assetUid);
     }
 
@@ -539,7 +554,7 @@ public class Asset {
      * @since 0.1.0
      */
     public Call<ResponseBody> getVersionNameDetails() {
-        this.validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.getVersionNameDetails(this.headers, this.assetUid, this.params);
     }
 
@@ -560,7 +575,7 @@ public class Asset {
      * @since 0.1.0
      */
     public Call<ResponseBody> deleteVersionName(int versionNumber) {
-        this.validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.deleteVersionName(this.headers, this.assetUid, versionNumber);
     }
 
@@ -577,7 +592,7 @@ public class Asset {
      * @since 0.1.0
      */
     public Call<ResponseBody> getReferences() {
-        validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.getReferences(this.headers, this.assetUid);
     }
 
@@ -635,7 +650,7 @@ public class Asset {
      * @since 0.1.0
      */
     public Call<ResponseBody> updateDetails(JSONObject requestBody) {
-        validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.updateDetails(this.headers, this.assetUid, this.params, requestBody);
     }
 
@@ -661,7 +676,7 @@ public class Asset {
      * @since 0.1.0
      */
     public Call<ResponseBody> publish(@NotNull JSONObject requestBody) {
-        validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.publish(this.headers, this.assetUid, requestBody);
     }
 
@@ -687,7 +702,7 @@ public class Asset {
      */
     public Call<ResponseBody> unpublish(
             @NotNull JSONObject requestBody) {
-        this.validate();
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         return this.service.unpublish(this.headers, this.assetUid, requestBody);
     }
 
