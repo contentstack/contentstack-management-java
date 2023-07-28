@@ -233,9 +233,8 @@ public class User implements BaseImplementation {
 
     @SuppressWarnings("unchecked")
     @Override
-    public User addHeaders(@NotNull HashMap headers) {
+    public void addHeaders(@NotNull HashMap headers) {
         this.headers.putAll(headers);
-        return this;
     }
 
 }

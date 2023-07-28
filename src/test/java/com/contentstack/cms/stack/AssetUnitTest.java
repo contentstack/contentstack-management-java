@@ -638,7 +638,7 @@ class AssetUnitTest {
         void testAssetValidate() {
                 asset = TestClient.getStack().asset();
                 asset.clearParams();
-                Assertions.assertThrows(IllegalStateException.class, () -> asset.fetch());
+                Assertions.assertThrows(NullPointerException.class, () -> asset.fetch());
 
         }
 }

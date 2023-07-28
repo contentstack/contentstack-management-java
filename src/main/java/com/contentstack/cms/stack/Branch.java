@@ -110,16 +110,12 @@ public class Branch implements BaseImplementation {
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param headers
-     *                headers of type {@link HashMap} will be added
-     * @return a new {@link Branch} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @param headers headers of type {@link HashMap} will be added
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
-    public Branch addHeaders(HashMap headers) {
+    public void addHeaders(HashMap headers) {
         this.headers.putAll(headers);
-        return this;
     }
 
     /**

@@ -10,6 +10,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 
 import java.net.URL;
+import java.util.HashMap;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -580,4 +581,16 @@ public class UserUnitTests {
                                 requestInfo.url().queryParameterNames().size());
         }
 
+        @Test
+        @Order(41)
+        @DisplayName("User With Super Class Implementation")
+        void testUserBaseParameters() {
+
+                HashMap<String , String> headers = new HashMap<>();
+                headers.put("header", "something");
+                userInstance.addParams(headers).addParam("param", "value").addHeader("key", "value").addHeaders(headers);
+                Request requestInfo = userInstance.logoutWithAuthtoken("authtoken").request();
+                Assertions.assertEquals(0,
+                        requestInfo.url().queryParameterNames().size());
+        }
 }
