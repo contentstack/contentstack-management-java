@@ -9,6 +9,8 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 import retrofit2.Call;
 
+import java.util.HashMap;
+
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BranchUnitTest {
@@ -332,6 +334,31 @@ class BranchUnitTest {
                                 "https://api.contentstack.io/v3/stacks/branches_queue/jobId98344?base_branch="
                                                 + AUTHTOKEN + "&limit=20&skip=4",
                                 request.url().toString());
+        }
+
+
+        @Test
+        void branchMergeFetchOtherParams() {
+                HashMap<String, String> headParams = new HashMap<>();
+                headParams.put("param1", "param1");
+                Request request = branch.mergeQueue()
+                        .addHeader("authtoken", AUTHTOKEN).addParams(headParams)
+                        .addParam("skip", 4).addParam("limit", 20).addHeaders(headParams)
+                        .fetch("jobId98344").request();
+
+                Assertions.assertEquals(3, request.headers().names().size());
+                Assertions.assertEquals("GET", request.method());
+                Assertions.assertTrue(request.url().isHttps());
+                Assertions.assertEquals("api.contentstack.io", request.url().host());
+                Assertions.assertEquals(4, request.url().pathSegments().size());
+                Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+                Assertions.assertEquals("branches_queue", request.url().pathSegments().get(2));
+                Assertions.assertNull(request.body());
+                Assertions.assertNotNull(request.url().encodedQuery());
+                Assertions.assertEquals(
+                        "https://api.contentstack.io/v3/stacks/branches_queue/jobId98344?base_branch="
+                                + AUTHTOKEN + "&limit=20&skip=4&param1=param1",
+                        request.url().toString());
         }
 
 }
