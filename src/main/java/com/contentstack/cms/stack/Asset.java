@@ -10,10 +10,9 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Assets refer to all the media files (images, videos, PDFs, audio files, and
@@ -21,7 +20,6 @@ import java.util.Map;
  * repository for future use.
  *
  * @author ***REMOVED***
- * @version v0.1.0
  * @since 2022-10-20
  */
 public class Asset {
@@ -50,47 +48,30 @@ public class Asset {
     }
 
     void validate() {
-        if (this.assetUid == null || this.assetUid.isEmpty())
-            throw new IllegalStateException("Asset Uid can not be null or empty");
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
     }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
-     */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-    }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
-     */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    public Asset addParam(String key, Object value) {
         this.params.put(key, value);
+        return this;
     }
 
-    /**
-     * Set header for the request
-     *
-     * @param key
-     *            Removes query param using key of request
-     */
-    public void removeParam(@NotNull String key) {
-        this.params.remove(key);
+    public Asset addHeader(String key, String value) {
+        this.headers.put(key, value);
+        return this;
     }
 
-    /**
-     * To clear all the query params
-     */
+    public Asset addHeaders(HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
+    }
+
+    public Asset addParams(HashMap<String, Object> headers) {
+        this.params.putAll(headers);
+        return this;
+    }
+
     protected void clearParams() {
         this.params.clear();
     }
@@ -107,8 +88,7 @@ public class Asset {
     /**
      * Gets folder instance
      *
-     * @param folderUid
-     *                  The UID of the folder that you want to either update or move
+     * @param folderUid The UID of the folder that you want to either update or move
      * @return Folder
      */
     public Folder folder(@NotNull String folderUid) {
@@ -173,11 +153,10 @@ public class Asset {
      *
      * @return Call
      * @author ***REMOVED***
-     * @version v0.1.0
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-assets">Get
-     *      all
-     *      As</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-assets">Get
+     * all
+     * As</a>
      * @since 2022-10-20
      */
     public Call<ResponseBody> find() {
@@ -197,10 +176,9 @@ public class Asset {
      *
      * @return Call
      * @author ***REMOVED***
-     * @version v0.1.0
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-asset">Get
-     *      a single asset</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-asset">Get
+     * a single asset</a>
      * @since 2022-10-20
      */
     public Call<ResponseBody> fetch() {
@@ -213,16 +191,14 @@ public class Asset {
      * folder; however, it doesn't retrieve
      * the details of sub-folders within it.
      *
-     * @param folderUid
-     *                  The folderUid of specific folder
+     * @param folderUid The folderUid of specific folder
      * @return Call
      * @author ***REMOVED***
-     * @version v0.1.0
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-of-a-specific-folder">Get
-     *      Assets of a Specific Folder</a>
-     * @see #addHeader(String, Object) to add headers
-     * @see #addParam(String, Object) to add query params
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-of-a-specific-folder">Get
+     * Assets of a Specific Folder</a>
+     * @see #addHeader(String, String) to add headers
+     * @see #addParams(HashMap) to add query params
      * @since 2022-10-20
      */
     public Call<ResponseBody> byFolderUid(@NotNull String folderUid) {
@@ -232,20 +208,17 @@ public class Asset {
 
     /**
      * The Get assets and folders of a parent folder retrieves details of both
-     * assets and asset subfolders within a
+     * assets and asset sub-folders within a
      * specific parent asset folder.
      *
-     * @param folderUid
-     *                         folder uid
-     * @param isIncludeFolders
-     *                         provide true/false
+     * @param folderUid        folder uid
+     * @param isIncludeFolders provide true/false
      * @return Call
      * @author ***REMOVED***
-     * @version v0.1.0
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-and-subfolders-of-a-parent-folder">Get
-     *      Assets and Subfolders of a Parent Folder</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-and-subfolders-of-a-parent-folder">Get
+     * Assets and Subfolders of a Parent Folder</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 2022-10-20
      */
@@ -263,10 +236,8 @@ public class Asset {
      * details, you need to use the following
      * "form-data" parameters:
      *
-     * @param filePath
-     *                    the file path
-     * @param description
-     *                    The description of the asset file
+     * @param filePath    the file path
+     * @param description The description of the asset file
      *                    <ul>
      *                    <li>asset[upload] (mandatory) Select the input type as
      *                    'File'. Then, browse and select the asset file that
@@ -291,37 +262,82 @@ public class Asset {
      *                    </ul>
      * @return Call
      * @author ***REMOVED***
-     * @version v0.1.0
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-asset">
-     *      Upload
-     *      Asset</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-asset">
+     * Upload
+     * Asset</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 2022-10-20
      */
     public Call<ResponseBody> uploadAsset(@NotNull String filePath, String description) {
         RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), description);
-        MultipartBody.Part assetPath = uploadFile(filePath);
-        return this.service.uploadAsset(this.headers, assetPath, body, this.params);
+        MultipartBody.Part partFile = createMultipartBody(filePath, null, null, null, null);
+        return this.service.uploadAsset(this.headers, partFile, body, this.params);
     }
 
-    private MultipartBody.Part uploadFile(@NotNull String filePath) {
-        if (!filePath.isEmpty()) {
-            File file = new File(filePath);
-            URLConnection connection = null;
-            try {
-                connection = file.toURL().openConnection();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if (file.exists()) {
-                RequestBody body = RequestBody.create(MediaType.parse(connection.getContentType()), file);
-                return MultipartBody.Part.createFormData("asset[upload]", file.getName(), body);
+
+    /**
+     * The <b>Upload asset</b> request uploads an asset file to your stack.
+     * <p>
+     * To upload assets from your local system to Contentstack and manage their
+     * details, you need to use the following
+     * "form-data" parameters:
+     *
+     * @param filePath    the file path
+     * @param parentUid   the parent uid
+     * @param title       the title of asset
+     * @param description description of asset
+     * @param tags        tags array of strings
+     * @return Call
+     */
+    public Call<ResponseBody> uploadAsset(@NotNull String filePath, String parentUid, String title, String description, String[] tags) {
+        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), description);
+        MultipartBody.Part partFile = createMultipartBody(filePath, parentUid, title, description, tags);
+        return this.service.uploadAsset(this.headers, partFile, body, this.params);
+    }
+
+    private String tagConvertor(String[] tags) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < tags.length; i++) {
+            stringBuilder.append(tags[i]);
+            if (i < tags.length - 1) {
+                stringBuilder.append(", ");
             }
         }
-        return null;
+        return stringBuilder.toString();
     }
+
+
+    private MultipartBody.Part createMultipartBody(String filePath, String parentUid, String title, String description, String[] tags) {
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+
+        if (!filePath.isEmpty()) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                builder.addFormDataPart("asset[upload]", file.getName(), fileBody);
+            }
+        }
+
+        // Add other parts
+        if (parentUid != null) {
+            builder.addFormDataPart("asset[parent_uid]", parentUid);
+        }
+        if (title != null) {
+            builder.addFormDataPart("asset[title]", title);
+        }
+        if (description != null) {
+            builder.addFormDataPart("asset[description]", description);
+        }
+        if (tags != null) {
+            builder.addFormDataPart("asset[tags]", tagConvertor(tags));
+        }
+
+        return builder.build().part(0);
+    }
+
 
     /**
      * The Replace asset call will replace an existing asset with another file on
@@ -338,53 +354,24 @@ public class Asset {
      * title and a description for the
      * uploaded asset, respectively.
      *
-     * @param filePath
-     *                    the filepath
-     * @param description
-     *                    the file description
+     * @param filePath    the filepath
+     * @param description the file description
      * @return Call
-     * @version v0.1.0
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#replace-asset">
-     *      Replace
-     *      Asset</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#replace-asset">
+     * Replace
+     * Asset</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 2022-10-20
      */
     public Call<ResponseBody> replace(@NotNull String filePath, @NotNull String description) {
         this.validate();
-        MultipartBody.Part assetPath = uploadFile(filePath);
+        MultipartBody.Part assetPath = createMultipartBody(filePath, null, null, null, null);
         RequestBody body = RequestBody.create(MediaType.parse(String.valueOf(MultipartBody.FORM)), description);
         return this.service.replace(this.headers, this.assetUid, assetPath, body, this.params);
     }
 
-    /**
-     * It helps to replace data with custom file title, file description and path
-     *
-     * @param filePath
-     *                        The filePath of the payload
-     * @param fileTitle
-     *                        Title of the payload
-     * @param fileDescription
-     *                        Description of the payload
-     * @return RequestBody
-     */
-    private RequestBody createPayload(@NotNull String filePath, String fileTitle, String fileDescription) {
-        if (!filePath.isEmpty()) {
-            File file = new File(filePath);
-            if (file.exists()) {
-                fileTitle = (fileTitle != null) ? fileTitle : file.getName();
-                return new MultipartBody.Builder().setType(MultipartBody.FORM)
-                        .addFormDataPart("asset[upload]", file.getName(),
-                                RequestBody.create(MediaType.parse("application/octet-stream"), file))
-                        .addFormDataPart("asset[title]", fileTitle)
-                        .addFormDataPart("asset[description]", fileDescription).build();
-            }
-            return null;
-        }
-        return null;
-    }
 
     /**
      * Generate Permanent Asset URL request allows you to generate a permanent URL
@@ -405,15 +392,13 @@ public class Asset {
      * }
      * </pre>
      *
-     * @param body
-     *             the JSONObject request body
+     * @param body the JSONObject request body
      * @return Call
      * @author ***REMOVED***
-     * @version v0.1.0
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
-     *      Generate Permanent Asset URL </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
+     * Generate Permanent Asset URL </a>
+     * @see #addHeader(String, String) to add headers
      * @since 2022-10-20
      */
     public Call<ResponseBody> generatePermanentUrl(JSONObject body) {
@@ -436,15 +421,13 @@ public class Asset {
      * the asset you want to download.
      * <br>
      *
-     * @param slugUrl
-     *                The unique identifier of the asset.
+     * @param slugUrl The unique identifier of the asset.
      * @return Call
      * @author ***REMOVED***
-     * @version v0.1.0
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
-     *      Generate Permanent Asset Url</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
+     * Generate Permanent Asset Url</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 2022-10-20
      */
@@ -458,11 +441,11 @@ public class Asset {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-asset">
-     *      Delete
-     *      Asset
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-asset">
+     * Delete
+     * Asset
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
@@ -477,10 +460,10 @@ public class Asset {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
-     *      Get
-     *      Information On RTE Assets</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
+     * Get
+     * Information On RTE Assets</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -504,20 +487,18 @@ public class Asset {
      * the asset version.
      * <br>
      *
-     * @param versionNumber
-     *                      asset version number
-     * @param requestBody
-     *                      the request body of {@link JSONObject}
+     * @param versionNumber asset version number
+     * @param requestBody   the request body of {@link JSONObject}
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
-     *      Get
-     *      Information On RTE Assets</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-information-on-rte-assets">
+     * Get
+     * Information On RTE Assets</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> setVersionName(int versionNumber,
-            @NotNull JSONObject requestBody) {
+                                             @NotNull JSONObject requestBody) {
         return this.service.setVersionName(this.headers, this.assetUid, versionNumber, requestBody);
     }
 
@@ -551,10 +532,10 @@ public class Asset {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-asset">
-     *      Get Details of All Versions of an Asset</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-asset">
+     * Get Details of All Versions of an Asset</a>
      * @see #addParam(String, Object) to add Query parameters
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> getVersionNameDetails() {
@@ -569,14 +550,13 @@ public class Asset {
      * to a specific version of an asset.
      * This request resets the name of the asset version to the version number.
      *
-     * @param versionNumber
-     *                      asset version
+     * @param versionNumber asset version
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-asset">
-     *      Delete
-     *      Version Name Of Asset</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-asset">
+     * Delete
+     * Version Name Of Asset</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> deleteVersionName(int versionNumber) {
@@ -591,9 +571,9 @@ public class Asset {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-asset-references">
-     *      Get Asset References</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-asset-references">
+     * Get Asset References</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> getReferences() {
@@ -610,8 +590,7 @@ public class Asset {
      * URI Parameters section, insert a
      * parameter named query and provide a query in JSON format as the value.
      *
-     * @param assetType
-     *                  asset type that you want to retrieve. For example,
+     * @param assetType asset type that you want to retrieve. For example,
      *                  <b>images</b> or <b>videos</b>.
      *                  <p>
      *                  - For images, "images"
@@ -619,11 +598,11 @@ public class Asset {
      *                  - For videos, "videos"
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-either-only-images-or-videos">
-     *      Get
-     *      Either Only Images Or Videos
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-either-only-images-or-videos">
+     * Get
+     * Either Only Images Or Videos
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> getByType(@NotNull String assetType) {
@@ -649,10 +628,9 @@ public class Asset {
      *  { "asset": { "title": "Title", "description": "Description" }, "version": 3 }
      * </pre>
      *
-     * @param requestBody
-     *                    The request body
+     * @param requestBody The request body
      * @return Call
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -674,13 +652,12 @@ public class Asset {
      * environments, where the assets need to be
      * published. These details should be in JSON format.
      *
-     * @param requestBody
-     *                    JSON Request body
+     * @param requestBody JSON Request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-asset">
-     *      Publish An Asset</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-asset">
+     * Publish An Asset</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> publish(@NotNull JSONObject requestBody) {
@@ -689,7 +666,7 @@ public class Asset {
     }
 
     /**
-     * Unpublish an asset call is used to unpublish a specific version of an asset
+     * unpublish an asset call is used to unpublish a specific version of an asset
      * from a desired environment.
      * <p>
      * In case of Scheduled Unpublished, add the scheduled_at key and provide the
@@ -700,13 +677,12 @@ public class Asset {
      * environments, from where the assets need
      * to be unpublished. These details should be in JSON format.
      *
-     * @param requestBody
-     *                    JSON Request body
+     * @param requestBody JSON Request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
-     *      Unpublish An Asset</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
+     * Unpublish An Asset</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> unpublish(
@@ -728,10 +704,10 @@ public class Asset {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-folder-by-name">
-     *      Get A
-     *      Single Folder By Name</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-folder-by-name">
+     * Get A
+     * Single Folder By Name</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -740,17 +716,17 @@ public class Asset {
     }
 
     /**
-     * Get subfolders of a parent folder request retrieves the details of only the
-     * subfolders of a specific asset
+     * Get sub-folders of a parent folder request retrieves the details of only the
+     * sub-folders of a specific asset
      * folder. This request does not retrieve asset files.
      * <p>
      * #addParam query parameters
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-subfolders-of-a-parent-folder">
-     *      Get subfolders of a parent folder</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-subfolders-of-a-parent-folder">
+     * Get subfolders of a parent folder</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -758,4 +734,8 @@ public class Asset {
         return this.service.getSubfolder(this.headers, this.params);
     }
 
+    protected Asset removeParam(String key) {
+        this.params.remove(key);
+        return this;
+    }
 }

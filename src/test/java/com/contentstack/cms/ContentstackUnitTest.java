@@ -1,5 +1,7 @@
 package com.contentstack.cms;
 
+import com.contentstack.cms.organization.Organization;
+import com.contentstack.cms.stack.Stack;
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
@@ -12,10 +14,6 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 
 public class ContentstackUnitTest {
-
-    static String AUTHTOKEN = TestClient.AUTHTOKEN;
-    static String USER_ID = "test@contentstack.com";
-    static String PASSWORD = "test@contentstack";
 
     @Test
     void testDefaultClientInstance() {
@@ -213,5 +211,57 @@ public class ContentstackUnitTest {
         }
         Assertions.assertEquals("fake@authtoken", client.authtoken);
     }
+
+    @Test
+    public void testStackWithAPIKey() {
+        // Arrange
+        String apiKey = "***REMOVED***";
+        Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
+        Stack stack = client.stack(apiKey);
+        Assertions.assertNotNull(stack);
+    }
+
+    @Test
+    public void testStackWithBranch() {
+        // Arrange
+        String apiKey = "branch";
+        Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
+        Stack stack = client.stack(apiKey);
+        Assertions.assertNotNull(stack);
+    }
+
+    @Test
+    public void testStackWithAllOtherParams() {
+        // Arrange
+        Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
+        Stack stack = client.stack("apiKey", "management_token", "branch");
+        Assertions.assertNotNull(stack);
+    }
+
+    @Test
+    public void testValidOrganization() {
+        // Arrange
+        String organizationUid = "org-123";
+        Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
+        Organization organization = client.organization(organizationUid);
+        Assertions.assertNotNull(organization);
+        Assertions.assertEquals("org-123", organizationUid);
+    }
+
+    @Test
+    public void testNullOrganizationUid() {
+        Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> client.organization(null));
+    }
+
+    @Test
+    public void testEmptyOrganizationUid() {
+        Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
+        String emptyOrganizationUid = "";
+
+        // Act & Assert
+        Assertions.assertThrows(IllegalStateException.class, () -> client.organization(emptyOrganizationUid));
+    }
+
 
 }

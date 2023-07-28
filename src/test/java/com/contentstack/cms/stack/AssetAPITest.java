@@ -6,6 +6,7 @@ import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
+import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -55,7 +56,7 @@ class AssetAPITest {
 
     @Order(2)
     @Test
-    void testFetch() throws IOException {
+    void testFetch() {
         asset.clearParams();
         asset.addParam("include_path", false);
         asset.addParam("version", 1);
@@ -243,6 +244,22 @@ class AssetAPITest {
         Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
+    }
+
+
+    @Test
+    @Disabled
+    void testAssetUploadWithMultipleParams() throws IOException {
+        String description = "The calender has been placed to assets by ***REMOVED***";
+        String filePath = "/Users/shailesh.mishra/Desktop/contentstack-management-java/src/test/resources/asset.png";
+        Contentstack client = new Contentstack.Builder().build();
+        Stack stack = client.stack("bltc490996a05bf86a6", "***REMOVED***");
+        Response<ResponseBody> upload = stack.asset().uploadAsset(filePath, description).execute();
+        String[] tags = {"shailesh", "mishra", "mumbai", "india"};
+        Response<ResponseBody> uploadMultiple = stack.asset().uploadAsset(filePath, "blt6acef5d8b2dc6d2f", "Fake Image", "Something as description", tags).execute();
+        if (uploadMultiple.isSuccessful()) {
+            System.out.println(upload.body().string());
+        }
     }
 
 }
