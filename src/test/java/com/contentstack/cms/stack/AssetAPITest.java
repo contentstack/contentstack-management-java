@@ -253,10 +253,10 @@ class AssetAPITest {
         String description = "The calender has been placed to assets by ishaileshmishra";
         String filePath = "/Users/shailesh.mishra/Desktop/contentstack-management-java/src/test/resources/asset.png";
         Contentstack client = new Contentstack.Builder().build();
-        Stack stack = client.stack("bltc490996a05bf86a6", "csabb134a8f5b9e53a6e26c6d6");
+        Stack stack = client.stack("Your api key", "authorization");
         Response<ResponseBody> upload = stack.asset().uploadAsset(filePath, description).execute();
         String[] tags = {"shailesh", "mishra", "mumbai", "india"};
-        Response<ResponseBody> uploadMultiple = stack.asset().uploadAsset(filePath, "blt6acef5d8b2dc6d2f", "Fake Image", "Something as description", tags).execute();
+        Response<ResponseBody> uploadMultiple = stack.asset().uploadAsset(filePath, "parent_uid", "Fake Image", "Something as description", tags).execute();
         if (uploadMultiple.isSuccessful()) {
             System.out.println(upload.body().string());
         }
