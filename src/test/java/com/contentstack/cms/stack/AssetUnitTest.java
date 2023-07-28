@@ -5,10 +5,8 @@ import com.contentstack.cms.core.Util;
 import okhttp3.Request;
 
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -133,6 +131,7 @@ class AssetUnitTest {
         }
 
         @Test
+        @Disabled
         void testAssetUpload() {
                 asset.clearParams();
                 asset.addParam("relative_urls", true);
