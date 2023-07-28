@@ -114,8 +114,9 @@ public class Branch implements BaseImplementation {
      * @throws NullPointerException if the key or value argument is null
      */
     @Override
-    public void addHeaders(HashMap headers) {
+    public Branch addHeaders(HashMap headers) {
         this.headers.putAll(headers);
+        return this;
     }
 
     /**

@@ -251,7 +251,7 @@ public class ContentstackUnitTest {
     @Test
     public void testNullOrganizationUid() {
         Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> client.organization(null));
+        Assertions.assertThrows(NullPointerException.class, () -> client.organization(null));
     }
 
     @Test

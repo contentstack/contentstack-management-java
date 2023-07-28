@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An alias acts as a pointer to a particular branch. You can specify the alias
@@ -29,10 +30,6 @@ public class Alias {
     protected final AliasService service;
     private String uid;
 
-    void validate() {
-        if (this.uid == null)
-            throw new IllegalStateException("Global Field Uid can not be null or empty");
-    }
 
     // The `protected Alias(Retrofit instance)` constructor is used to create an
     // instance of the `Alias`
@@ -132,7 +129,7 @@ public class Alias {
      * @since 2022-10-20
      */
     public Call<ResponseBody> fetch() {
-        validate();
+        Objects.requireNonNull(this.uid,"Global Field Uid can not be null or empty");
         return this.service.single(this.headers, this.uid);
     }
 
@@ -183,7 +180,7 @@ public class Alias {
      * @since 2022-10-20
      */
     public Call<ResponseBody> delete() {
-        validate();
+        Objects.requireNonNull(this.uid,"Global Field Uid can not be null or empty");
         return this.service.delete(this.headers, this.uid, this.params);
     }
 
