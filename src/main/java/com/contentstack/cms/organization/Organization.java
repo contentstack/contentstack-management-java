@@ -93,6 +93,7 @@ public class Organization {
      * Sets header for the request
      *
      * @param key header key for the request
+     * @return instance of {@link Organization}
      */
     public Organization removeParam(@NotNull String key) {
         this.params.remove(key);

@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.organization.Organization;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -52,9 +53,11 @@ public class DeliveryToken {
      * @param value The value parameter is of type Object, which means it can accept
      *              any type of object as
      *              its value.
+     *  @return instance of {@link DeliveryToken}
      */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
+    public DeliveryToken addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
+        return this;
     }
 
     /**
@@ -66,6 +69,7 @@ public class DeliveryToken {
      * @param value The value parameter is of type Object, which means it can accept
      *              any type of object as
      *              its value.
+     *  @return instance of {@link DeliveryToken}
      */
     public DeliveryToken addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
