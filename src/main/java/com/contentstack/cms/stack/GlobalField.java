@@ -57,10 +57,9 @@ public class GlobalField {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
+     * @return instance of {@link GlobalField}
      */
     public GlobalField addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -70,10 +69,9 @@ public class GlobalField {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
+     * @return instance of {@link GlobalField}
      */
     public GlobalField addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -83,8 +81,8 @@ public class GlobalField {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
+     * @return instance of {@link GlobalField}
      */
     public GlobalField removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -93,6 +91,7 @@ public class GlobalField {
 
     /**
      * To clear all the query params
+     * @return instance of {@link GlobalField}
      */
     protected GlobalField clearParams() {
         this.params.clear();
@@ -113,10 +112,10 @@ public class GlobalField {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
-     *      all
-     *      environments
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
+     * all
+     * environments
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -142,10 +141,10 @@ public class GlobalField {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-global-field">Get
-     *      a
-     *      single global field
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-global-field">Get
+     * a
+     * single global field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -171,15 +170,14 @@ public class GlobalField {
      * valid Content Management API request.
      * Read more about authentication.
      *
-     * @param requestBody
-     *                    the request body
+     * @param requestBody the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-global-field">Create
-     *      a global
-     *      field
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-global-field">Create
+     * a global
+     * field
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -201,15 +199,14 @@ public class GlobalField {
      * valid Content Management API request.
      * Read more about authentication.
      *
-     * @param requestBody
-     *                    the request body
+     * @param requestBody the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-global-field">Update
-     *      a global
-     *      field
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-global-field">Update
+     * a global
+     * field
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -231,10 +228,10 @@ public class GlobalField {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-global-field">Delete
-     *      global
-     *      field
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-global-field">Delete
+     * global
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -255,15 +252,14 @@ public class GlobalField {
      * (any one is mandatory), along with the
      * stack API key, to make a valid Content Management API request.
      *
-     * @param body
-     *             The request body
+     * @param body The request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-global-field">Import
-     *      a global
-     *      field
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-global-field">Import
+     * a global
+     * field
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -279,11 +275,11 @@ public class GlobalField {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-global-field">Export
-     *      a global
-     *      field
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-global-field">Export
+     * a global
+     * field
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */

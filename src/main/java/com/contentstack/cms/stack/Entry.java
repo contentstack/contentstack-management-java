@@ -66,6 +66,7 @@ public class Entry {
      *
      * @param key   header key for the request
      * @param value header value for the request
+     *  @return instance of {@link Entry}
      */
     public Entry addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -77,6 +78,7 @@ public class Entry {
      *
      * @param key   query param key for the request
      * @param value query param value for the request
+     *  @return instance of {@link Entry}
      */
     public Entry addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -95,6 +97,7 @@ public class Entry {
 
     /**
      * To clear all the query params
+     * @return instance of {@link Entry}
      */
     protected Entry clearParams() {
         this.params.clear();
