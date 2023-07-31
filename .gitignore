@@ -8,8 +8,6 @@ factoryConfiguration.json
 ### Eclipse ###
 
 .metadata
-.env
-.env/
 test-report/
 bin/
 coverage/
