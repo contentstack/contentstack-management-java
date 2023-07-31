@@ -58,6 +58,7 @@ public interface BaseImplementation {
      *                is a String
      *                representing the header name and the value is a String
      *                representing the header value.
+     * @return The method is returning an object of type T.
      */
     <T> T addHeaders(@NotNull HashMap<String, String> headers);
 }
