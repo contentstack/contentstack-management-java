@@ -1,6 +1,5 @@
 package com.contentstack.cms.organization;
 
-import com.contentstack.cms.marketplace.Marketplace;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -8,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Organization is the top-level entity in the hierarchy of Contentstack,
@@ -25,46 +25,40 @@ public class Organization {
     protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
     private String organizationUid;
-    private final Retrofit clientInstance;
+    final String ERROR_MSG = "OrganizationUid Can Not Be Null OR Empty";
+
 
     /**
      * Instantiates a new Organization.
      *
-     * @param client
-     *               The retrofit client
+     * @param client The retrofit client
      */
     public Organization(Retrofit client) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
-        this.clientInstance = client;
         this.service = client.create(OrganizationService.class);
     }
 
     /**
      * Instantiates a new Organization.
      *
-     * @param client
-     *               The retrofit client
-     * @param uid
-     *               The uid of the organisation
+     * @param client The retrofit client
+     * @param uid    The uid of the organisation
      */
     public Organization(Retrofit client, String uid) {
         this.headers = new HashMap<>();
         this.organizationUid = uid;
         this.params = new HashMap<>();
-        this.clientInstance = client;
         this.service = client.create(OrganizationService.class);
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      *              return Organization the instance of Organization
-     * @return Organization instance of organisation
+     * @return Organization instance of organization
      */
     public Organization addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
@@ -74,10 +68,8 @@ public class Organization {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      * @return instance of Organization
      */
     public Organization addParam(@NotNull String key, @NotNull Object value) {
@@ -88,7 +80,7 @@ public class Organization {
     /**
      * The function clears the parameters of an organization object and returns the
      * object itself.
-     * 
+     *
      * @return The method is returning an instance of the Organization class.
      */
 
@@ -100,11 +92,12 @@ public class Organization {
     /**
      * Sets header for the request
      *
-     * @param key
-     *            header key for the request
+     * @param key header key for the request
+     * @return instance of {@link Organization}
      */
-    public void removeParam(@NotNull String key) {
+    public Organization removeParam(@NotNull String key) {
         this.params.remove(key);
+        return this;
     }
 
     /**
@@ -166,13 +159,8 @@ public class Organization {
      * @return Call
      */
     public Call<ResponseBody> fetch() {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.getSingle(this.headers, organizationUid, this.params);
-    }
-
-    void validate() {
-        if (this.organizationUid == null)
-            throw new IllegalStateException("organizationUid can not be null or empty");
     }
 
     /**
@@ -217,7 +205,7 @@ public class Organization {
      * @return Call
      */
     public Call<ResponseBody> roles() {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.getRoles(this.headers, this.organizationUid, this.params);
     }
 
@@ -230,12 +218,11 @@ public class Organization {
      * <p>
      * When executing the API call, provide the Organization UID
      *
-     * @param body
-     *             the request body JSONObject
+     * @param body the request body JSONObject
      * @return Call
      */
     public Call<ResponseBody> inviteUser(JSONObject body) {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.inviteUser(this.headers, this.organizationUid, body);
     }
 
@@ -248,12 +235,11 @@ public class Organization {
      * users from your organization
      * <br>
      *
-     * @param body
-     *             the request body JSONObject
+     * @param body the request body JSONObject
      * @return Call
      */
     public Call<ResponseBody> removeUsers(JSONObject body) {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.removeUser(this.headers, this.organizationUid, body);
     }
 
@@ -266,12 +252,11 @@ public class Organization {
      * Organization can resend the invitation to
      * add users to an Organization
      *
-     * @param shareUid
-     *                 the share uid
+     * @param shareUid the share uid
      * @return Call
      */
     public Call<ResponseBody> resendInvitation(String shareUid) {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.resendInvitation(this.headers, this.organizationUid, shareUid);
     }
 
@@ -342,7 +327,7 @@ public class Organization {
      * @return Call
      */
     public Call<ResponseBody> allInvitations() {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.getAllInvitations(this.headers, this.organizationUid, this.params);
     }
 
@@ -353,12 +338,11 @@ public class Organization {
      * for accepting the ownership of a
      * particular Organization is sent to the specified user<br>
      *
-     * @param body
-     *             The request body @codes { "transfer_to": "abc@sample.com" }
+     * @param body The request body @codes { "transfer_to": "abc@sample.com" }
      * @return Call
      */
     public Call<ResponseBody> transferOwnership(JSONObject body) {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.transferOwnership(this.headers, this.organizationUid, body);
     }
 
@@ -406,7 +390,7 @@ public class Organization {
      * @return Call
      */
     public Call<ResponseBody> stacks() {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.getStacks(this.headers, this.organizationUid, this.params);
     }
 
@@ -444,41 +428,12 @@ public class Organization {
      * </b>
      * <br>
      *
-     * @param logUid
-     *               the log uid
+     * @param logUid the log uid
      * @return Call
      */
     public Call<ResponseBody> logItem(String logUid) {
-        validate();
+        Objects.requireNonNull(this.organizationUid, ERROR_MSG);
         return service.getLogItems(this.headers, this.organizationUid, logUid);
-    }
-
-    /**
-     * Marketplace is the one-stop shop for ready-made extensions and one-click
-     * integrations with the industry's leading
-     * technology and service providers. Discover an extensive ecosystem of
-     * features, services, apps, and accelerators
-     * and combine the best technologies to achieve your desired business outcomes.
-     *
-     * @return An instance of the Marketplace class.
-     */
-    public Marketplace marketplace() {
-        return new Marketplace(this.clientInstance, this.organizationUid, null);
-    }
-
-    /**
-     * Marketplace is the one-stop shop for ready-made extensions and one-click
-     * integrations with the industry's leading
-     * technology and service providers. Discover an extensive ecosystem of
-     * features, services, apps, and accelerators
-     * and combine the best technologies to achieve your desired business outcomes.
-     *
-     * @param endpoint
-     *                 the base url for making marketplace request
-     * @return An instance of the Marketplace class.
-     */
-    public Marketplace marketplace(@NotNull String endpoint) {
-        return new Marketplace(this.clientInstance, this.organizationUid, endpoint);
     }
 
 }
