@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Audit log displays a record of all the activities performed in a stack and
@@ -48,18 +49,11 @@ public class AuditLog {
         this.service = retrofit.create(AuditLogService.class);
     }
 
-    void validate() {
-        if (this.logItemUid == null || this.logItemUid.isEmpty())
-            throw new IllegalStateException("LogItem Uid can not be null or empty");
-    }
-
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -68,10 +62,8 @@ public class AuditLog {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -80,8 +72,7 @@ public class AuditLog {
     /**
      * Sets header for the request
      *
-     * @param key
-     *            header key for the request
+     * @param key header key for the request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -113,7 +104,7 @@ public class AuditLog {
      * @return Call
      */
     public Call<ResponseBody> fetch() {
-        validate();
+        Objects.requireNonNull(this.logItemUid, "Log Item uid can not be null or empty");
         return this.service.fetch(this.headers, this.logItemUid);
     }
 

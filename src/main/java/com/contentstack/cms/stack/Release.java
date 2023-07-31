@@ -54,16 +54,14 @@ public class Release {
 
     void validate() {
         if (this.releaseUid == null || this.releaseUid.isEmpty())
-            throw new IllegalStateException("Release Uid can not be null or empty");
+            throw new IllegalAccessError("Release Uid Can Not Be Null OR Empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -72,10 +70,8 @@ public class Release {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -84,8 +80,7 @@ public class Release {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -105,9 +100,9 @@ public class Release {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-releases">Get
-     *      all Releases
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-releases">Get
+     * all Releases
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -124,10 +119,10 @@ public class Release {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-release">Get
-     *      a singel
-     *      release
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-release">Get
+     * a singel
+     * release
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -143,14 +138,13 @@ public class Release {
      * Release, you need to provide the UIDs of the entries/assets in <b>items</b>
      * in the request body.
      *
-     * @param requestBody
-     *                    The details of the delivery role in @{@link JSONObject}
+     * @param requestBody The details of the delivery role in @{@link JSONObject}
      *                    format
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-release">Create
-     *      a release
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-release">Create
+     * a release
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -167,13 +161,12 @@ public class Release {
      * 'Body' section, you need to provide
      * the new name and description of the Release that you want to update.
      *
-     * @param requestBody
-     *                    The body should be of @{@link JSONObject} type
+     * @param requestBody The body should be of @{@link JSONObject} type
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-release">Update
-     *      a release
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-release">Update
+     * a release
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -191,9 +184,9 @@ public class Release {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-release">Delete
-     *      a release
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-release">Delete
+     * a release
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -214,10 +207,10 @@ public class Release {
      *
      * @return ReleaseItem
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Get
-     *      a
-     *      release item
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Get
+     * a
+     * release item
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -238,13 +231,12 @@ public class Release {
      * the locale(s) on which the Release should be deployed.
      * <p>
      *
-     * @param requestBody
-     *                    The JSONObject request body
+     * @param requestBody The JSONObject request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#deploy-a-release">Deploy
-     *      a release
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#deploy-a-release">Deploy
+     * a release
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -262,13 +254,12 @@ public class Release {
      * section, you need to provide the new
      * name and description of the cloned Release.
      *
-     * @param requestBody
-     *                    The JSONObject request body
+     * @param requestBody The JSONObject request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#clone-a-release">Clone
-     *      all release
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#clone-a-release">Clone
+     * all release
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */

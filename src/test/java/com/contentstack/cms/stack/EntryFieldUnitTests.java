@@ -2,7 +2,6 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
-
 import okhttp3.Request;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,6 +22,8 @@ class EntryFieldUnitTests {
     protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static String contentType = "product";
     static Entry entryInstance;
+    JSONObject deleteRequestBody = deleteRequestBody();
+    JSONObject _verRequestBody = versionNameRequestBody();
 
     @BeforeAll
     static void setup() {
@@ -65,6 +66,8 @@ class EntryFieldUnitTests {
         Assertions.assertEquals(2, resp.headers().size());
     }
 
+    // --------------------[Single]----------------
+
     @Test
     void testEntryFetchHeaderNames() {
         Collection<String> matcher = new ArrayList<>();
@@ -80,8 +83,6 @@ class EntryFieldUnitTests {
         Request resp = entryInstance.find().request();
         Assertions.assertEquals("GET", resp.method());
     }
-
-    // --------------------[Single]----------------
 
     @Test
     void testSingleEntryQuery() {
@@ -114,6 +115,8 @@ class EntryFieldUnitTests {
         Assertions.assertTrue(resp.headers().names().containsAll(matcher));
     }
 
+    // ------------------------[Create]------------------------------
+
     @Test
     void testSingleEntryMethod() {
         Request resp = entryInstance.fetch().request();
@@ -127,8 +130,6 @@ class EntryFieldUnitTests {
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid,
                 resp.url().toString());
     }
-
-    // ------------------------[Create]------------------------------
 
     @Test
     void testCreateEntryQueryRespNull() {
@@ -154,7 +155,7 @@ class EntryFieldUnitTests {
     @Test
     void testCreateEntryHeaders() {
         Request resp = entryInstance.create(new JSONObject()).request();
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
     }
 
     @Test
@@ -241,6 +242,8 @@ class EntryFieldUnitTests {
         Assertions.assertEquals("locale=en-us", resp.url().query());
     }
 
+    // Atomic Operation
+
     @Test
     void testUpdateEntryRequestBody() {
         Request resp = entryInstance.update(updateRequestBody()).request();
@@ -256,8 +259,6 @@ class EntryFieldUnitTests {
                 "https://api.contentstack.io/v3/content_types/product/entries/" + _uid + "?locale=en-us",
                 resp.url().toString());
     }
-
-    // Atomic Operation
 
     JSONObject atomicRequestBody() {
         JSONObject requestBody = new JSONObject();
@@ -283,7 +284,7 @@ class EntryFieldUnitTests {
     @Test
     void testAtomicOperationHeaderSize() {
         Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
     }
 
     @Test
@@ -314,6 +315,8 @@ class EntryFieldUnitTests {
         Assertions.assertNull(resp.url().query());
     }
 
+    // Delete Entry
+
     @Test
     void testAtomicOperationRequestBody() {
         Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();
@@ -327,8 +330,6 @@ class EntryFieldUnitTests {
                 resp.url().toString());
     }
 
-    // Delete Entry
-
     JSONObject deleteRequestBody() {
         JSONObject requestBody = new JSONObject();
         JSONObject multipleContent = new JSONObject();
@@ -340,8 +341,6 @@ class EntryFieldUnitTests {
         requestBody.put("entry", multipleContent);
         return requestBody;
     }
-
-    JSONObject deleteRequestBody = deleteRequestBody();
 
     @Test
     void testDeleteMethod() {
@@ -385,13 +384,13 @@ class EntryFieldUnitTests {
         Assertions.assertEquals("delete_all_localized=true&locale=en-us", resp.url().query());
     }
 
+    // versionName request body tests
+
     @Test
     void testDeleteRequestBody() {
         Request resp = entryInstance.delete(deleteRequestBody()).request();
         Assertions.assertNotNull(resp.body());
     }
-
-    // versionName request body tests
 
     JSONObject versionNameRequestBody() {
         JSONObject requestBody = new JSONObject();
@@ -402,8 +401,6 @@ class EntryFieldUnitTests {
         requestBody.put("entry", content);
         return requestBody;
     }
-
-    JSONObject _verRequestBody = versionNameRequestBody();
 
     @Test
     void testVersionNameMethod() {
@@ -628,7 +625,7 @@ class EntryFieldUnitTests {
         entryInstance.addParam("overwrite", false);
         Request resp = entryInstance.imports().request();
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -650,7 +647,7 @@ class EntryFieldUnitTests {
         entryInstance.addParam("overwrite", false);
         Request resp = entryInstance.importExisting().request();
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -744,7 +741,7 @@ class EntryFieldUnitTests {
         // Unpublished Reference
         Request resp = entryInstance.unpublish(requestBody).request(); // sending request body and query parameter
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -758,6 +755,17 @@ class EntryFieldUnitTests {
         Assertions.assertNotNull(resp.body());
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid + "/unpublish",
                 resp.url().toString());
+        entryInstance.removeParam("locale");
+    }
+
+
+    @Test
+    void testHeader() {
+        Request resp = entryInstance
+        .addHeader("API_KEY", "API_VALUE")
+        .versionName(1, _verRequestBody)
+        .request();
+        Assertions.assertEquals(3, resp.headers().size());
     }
 
 }

@@ -20,7 +20,7 @@ class ResponseResult<T> {
     /**
      * The function executes a network call and returns the response data or an
      * error object.
-     * 
+     *
      * @param call The <b>call</b> parameter is an instance of the `Call` interface,
      *             which represents a single
      *             request to be executed. It is a generic type, where `T`

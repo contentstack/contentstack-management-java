@@ -25,9 +25,8 @@ class ExtensionUnitTest {
     protected static String API_KEY = TestClient.API_KEY;
     protected static String _uid = TestClient.USER_ID;
     protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
-    static Extensions extension;
     protected static JSONObject body;
-
+    static Extensions extension;
     static String requestBody = "{\n" +
             "\t\"extension\": {\n" +
             "\t\t\"tags\": [\n" +
@@ -207,4 +206,39 @@ class ExtensionUnitTest {
         Assertions.assertEquals("https://api.contentstack.io/v3/extensions/" + _uid, request.url().toString());
     }
 
+
+    @Test
+    void testExtensionException() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        Extensions theExtensions = stack.extensions();
+        theExtensions.addParam("key", "value");
+        theExtensions.removeParam("key");
+        theExtensions.addHeader("key", "value");
+        JSONObject obj = new JSONObject();
+        obj.put("key", "value");
+        Map<String, RequestBody> map = new HashMap<>();
+        RequestBody requestBody = new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return null;
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) {
+
+            }
+        };
+        map.put("someKey", requestBody);
+        theExtensions.uploadCustomField(map);
+        theExtensions.uploadCustomFieldUsingJSONObject(body);
+        Assertions.assertThrows(IllegalAccessError.class, theExtensions::fetch);
+    }
+
+    @Test
+    void testExtensionUpdateException() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        Extensions theExtensions = stack.extensions("customFieldUid");
+        Request request = theExtensions.update(body).request();
+        Assertions.assertNotNull(request.body());
+    }
 }

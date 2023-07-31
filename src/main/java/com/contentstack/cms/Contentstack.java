@@ -21,6 +21,7 @@ import java.net.Proxy;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import static com.contentstack.cms.core.Util.*;
@@ -71,14 +72,14 @@ public class Contentstack {
      * Contentstack contentstack = new Contentstack.Builder().setAuthtoken("authtoken").build();
      * User user = contentstack.user();
      * </pre>
-     * 
+     *
      * <br>
      *
      * @return User
      * @author ***REMOVED***
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     * </a>
      * @since 2022-05-19
      */
     public User user() {
@@ -118,20 +119,17 @@ public class Contentstack {
      * Contentstack contentstack = new Contentstack.Builder().build();
      * Response login = contentstack.login("emailId", "password");
      * </pre>
-     * 
+     *
      * <br>
      *
-     * @param emailId
-     *                 the email id of the user
-     * @param password
-     *                 the password of the user
+     * @param emailId  the email id of the user
+     * @param password the password of the user
      * @return LoginDetails
-     * @throws IOException
-     *                     the IOException
+     * @throws IOException the IOException
      * @author ***REMOVED***
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     * </a>
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
@@ -172,26 +170,21 @@ public class Contentstack {
      * Contentstack contentstack = new Contentstack.Builder().build();
      * Response login = contentstack.login("emailId", "password");
      * </pre>
-     * 
+     *
      * <br>
      *
-     * @param emailId
-     *                 the email id
-     * @param password
-     *                 the password
-     * @param tfaToken
-     *                 the tfa token
+     * @param emailId  the email id
+     * @param password the password
+     * @param tfaToken the tfa token
      * @return LoginDetails
-     * @throws IOException
-     *                     the io exception
-     * @throws IOException
-     *                     the IOException
+     * @throws IOException the io exception
+     * @throws IOException the IOException
      * @author ***REMOVED***
      * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
-     *      your account
-     *      </a>
+     * href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
+     * your account
+     * </a>
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
         if (this.authtoken != null)
@@ -206,7 +199,7 @@ public class Contentstack {
     private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
         if (loginResponse.isSuccessful()) {
             assert loginResponse.body() != null;
-            logger.info(loginResponse.body().getNotice());
+            //logger.info(loginResponse.body().getNotice());
             this.authtoken = loginResponse.body().getUser().getAuthtoken();
             this.interceptor.setAuthtoken(this.authtoken);
         } else {
@@ -230,8 +223,7 @@ public class Contentstack {
      * <p>
      *
      * @return the response
-     * @throws IOException
-     *                     the io exception
+     * @throws IOException the io exception
      */
     Response<ResponseBody> logout() throws IOException {
         user = new User(this.instance);
@@ -250,11 +242,9 @@ public class Contentstack {
      * </pre>
      * <p>
      *
-     * @param authtoken
-     *                  the authtoken
+     * @param authtoken the authtoken
      * @return the response
-     * @throws IOException
-     *                     the io exception
+     * @throws IOException the io exception
      */
     Response<ResponseBody> logoutWithAuthtoken(String authtoken) throws IOException {
         user = new User(this.instance);
@@ -281,8 +271,7 @@ public class Contentstack {
      * @return the organization
      */
     public Organization organization() {
-        if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access user instance");
+        Objects.requireNonNull(this.authtoken, "Please Login to access user instance");
         return new Organization(this.instance);
     }
 
@@ -294,20 +283,18 @@ public class Contentstack {
      * <p>
      * <b> Example </b>
      *
-     * @param organizationUid
-     *                        The UID of the organization that you want to retrieve
+     * @param organizationUid The UID of the organization that you want to retrieve
      * @return the organization
-     *         <br>
-     *         <b>Example</b>
-     * 
-     *         <pre>
+     * <br>
+     * <b>Example</b>
+     *
+     * <pre>
      *         Contentstack contentstack = new Contentstack.Builder().build();
      *         Organization org = contentstack.organization();
      *         </pre>
      */
     public Organization organization(@NotNull String organizationUid) {
-        if (this.authtoken == null)
-            throw new IllegalStateException("Please Login to access user instance");
+        Objects.requireNonNull(this.authtoken, "Please Login to access user instance");
         if (organizationUid.isEmpty())
             throw new IllegalStateException("organizationUid can not be empty");
         return new Organization(this.instance, organizationUid);
@@ -331,8 +318,7 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack() {
-        if (this.authtoken == null)
-            throw new IllegalStateException(ILLEGAL_USER);
+        Objects.requireNonNull(this.authtoken, ILLEGAL_USER);
         return new Stack(this.instance);
     }
 
@@ -351,8 +337,7 @@ public class Contentstack {
      * Stack org = client.stack();
      * </pre>
      *
-     * @param header
-     *               the headers for the stack
+     * @param header the headers for the stack
      * @return the stack instance
      */
     public Stack stack(@NotNull Map<String, Object> header) {
@@ -376,10 +361,8 @@ public class Contentstack {
      * Stack org = client.stack();
      * </pre>
      *
-     * @param managementToken
-     *                        the authorization for the stack
-     * @param apiKey
-     *                        the apiKey for the stack
+     * @param managementToken the authorization for the stack
+     * @param apiKey          the apiKey for the stack
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken) {
@@ -404,21 +387,21 @@ public class Contentstack {
      * Stack org = client.stack();
      * </pre>
      *
-     * @param key
-     *            You can provide apiKey of the stack or branchKey
+     * @param key You can provide apiKey of the stack or branchKey
      * @return the stack instance
      */
     public Stack stack(@NotNull String key) {
         HashMap<String, Object> headers = new HashMap<>();
         if (key.startsWith("blt")) {
-            // In the case of API_Key provided
+            // When API_Key is available
             headers.put(API_KEY, key);
         } else {
-            // In case of branch provided
+            //When branch is available
             headers.put(BRANCH, key);
         }
         return new Stack(this.instance, headers);
     }
+
 
     /**
      * <a href=
@@ -435,12 +418,9 @@ public class Contentstack {
      * Stack org = client.stack();
      * </pre>
      *
-     * @param managementToken
-     *                        the authorization for the stack
-     * @param apiKey
-     *                        the apiKey for the stack
-     * @param branch
-     *                        the branch that include branching in the response
+     * @param managementToken the authorization for the stack
+     * @param apiKey          the apiKey for the stack
+     * @param branch          the branch that include branching in the response
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken, @NotNull String branch) {
@@ -454,8 +434,7 @@ public class Contentstack {
     /**
      * Instantiates a new Contentstack.
      *
-     * @param builder
-     *                the builder
+     * @param builder the builder
      */
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
@@ -496,11 +475,11 @@ public class Contentstack {
         }
 
         /**
-         * Sets proxy. (Setting proxy to the OkHttpClient) Proxy proxy = new
+         * Sets proxy. (Setting proxy to the OkHttpClient) Proxy = new
          * Proxy(Proxy.Type.HTTP, new
          * InetSocketAddress(proxyHost, proxyPort));
          * <br>
-         * 
+         *
          * <pre>
          * {
          *     Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
@@ -508,8 +487,7 @@ public class Contentstack {
          * }
          * </pre>
          *
-         * @param proxy
-         *              the proxy
+         * @param proxy the proxy
          * @return the Builder instance
          */
         public Builder setProxy(@NotNull Proxy proxy) {
@@ -520,8 +498,7 @@ public class Contentstack {
         /**
          * Sets retry on failure.
          *
-         * @param retry
-         *              if retry is true
+         * @param retry if retry is true
          * @return the retry on failure
          */
         public Builder setRetry(@NotNull Boolean retry) {
@@ -532,8 +509,7 @@ public class Contentstack {
         /**
          * Set host for client instance
          *
-         * @param hostname
-         *                 host for the Contentstack Client
+         * @param hostname host for the Contentstack Client
          * @return Client host
          */
         public Builder setHost(@NotNull String hostname) {
@@ -544,8 +520,7 @@ public class Contentstack {
         /**
          * Set port for client instance
          *
-         * @param port
-         *             - port for the Contentstack Client
+         * @param port - port for the Contentstack Client
          * @return Client port
          */
         public Builder setPort(@NotNull String port) {
@@ -556,8 +531,7 @@ public class Contentstack {
         /**
          * Set version for client instance
          *
-         * @param version
-         *                for the Contentstack Client
+         * @param version for the Contentstack Client
          * @return Client version
          */
         public Builder setVersion(@NotNull String version) {
@@ -568,8 +542,7 @@ public class Contentstack {
         /**
          * Set timeout for client instance
          *
-         * @param timeout
-         *                for the Contentstack Client
+         * @param timeout for the Contentstack Client
          * @return Client timeout
          */
         public Builder setTimeout(int timeout) {
@@ -580,8 +553,7 @@ public class Contentstack {
         /**
          * Sets authtoken for the client
          *
-         * @param authtoken
-         *                  for the client
+         * @param authtoken for the client
          * @return Contentstack authtoken
          */
         public Builder setAuthtoken(String authtoken) {
