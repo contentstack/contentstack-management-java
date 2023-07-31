@@ -60,7 +60,7 @@ public class PublishQueue {
 
     void validate() {
         if (this.publishQueueUid == null || this.publishQueueUid.isEmpty())
-            throw new IllegalStateException("Publish Queue Uid can not be null or empty");
+            throw new IllegalAccessError("Publish Queue Uid can not be null or empty");
     }
 
     /**

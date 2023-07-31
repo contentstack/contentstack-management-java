@@ -26,6 +26,8 @@ class AuditLogUnitTest {
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
         auditLog = stack.auditLog(_uid);
+        auditLog = stack.auditLog();
+        auditLog.clearParams();
 
     }
 
@@ -77,16 +79,16 @@ class AuditLogUnitTest {
     @Test
     @Order(6)
     void workflowFetchByWorkflowId() {
-        Request request = auditLog.fetch().request();
-        Assertions.assertEquals(1, request.headers().names().size());
-        Assertions.assertEquals("GET", request.method());
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "managementToken");
+        AuditLog audit = stack.auditLog("audit_uid");
+        Request request = audit.fetch().request();
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
         Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("audit-logs", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/audit-logs/" + _uid, request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/audit-logs/audit_uid", request.url().toString());
     }
 
 

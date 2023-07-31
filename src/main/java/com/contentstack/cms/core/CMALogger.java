@@ -17,7 +17,7 @@ public class CMALogger {
 
     /**
      * The function returns the logger object.
-     * 
+     *
      * @return The method is returning an instance of the Logger class.
      */
     public Logger getLogger() {
@@ -73,7 +73,7 @@ public class CMALogger {
 
     /**
      * The function "warning" logs a warning message using a logger.
-     * 
+     *
      * @param message A string parameter named "message" which is annotated with the
      *                "@NotNull" annotation.
      */
@@ -83,7 +83,7 @@ public class CMALogger {
 
     /**
      * The function "severe" logs a severe-level message using a logger.
-     * 
+     *
      * @param message A string parameter named "message" which is annotated with the
      *                "@NotNull" annotation.
      */
