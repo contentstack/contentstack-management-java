@@ -7,7 +7,6 @@ import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 @Tag("unit")
@@ -41,7 +40,7 @@ public class GlobalFieldUnitTests {
     }
 
     @Test
-    void testGlobalFieldFetch() throws IOException {
+    void testGlobalFieldFetch() {
         Request response = globalField.fetch().request();
         Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + GLOBAL_FIELD_UID,
                 response.url().toString());
@@ -53,7 +52,7 @@ public class GlobalFieldUnitTests {
     }
 
     @Test
-    void testCreate() throws IOException {
+    void testCreate() {
         Request response = globalField.create(new JSONObject()).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/global_fields", response.url().toString());
         Assertions.assertEquals("/v3/global_fields", response.url().encodedPath());
@@ -64,7 +63,7 @@ public class GlobalFieldUnitTests {
     }
 
     @Test
-    void testUpdate() throws IOException {
+    void testUpdate() {
         Request response = globalField.update(new JSONObject()).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + GLOBAL_FIELD_UID,
                 response.url().toString());
@@ -76,7 +75,7 @@ public class GlobalFieldUnitTests {
     }
 
     @Test
-    void testDelete() throws IOException {
+    void testDelete() {
         Request response = globalField.delete().request();
         Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + GLOBAL_FIELD_UID + "?force=true",
                 response.url().toString());
@@ -89,7 +88,7 @@ public class GlobalFieldUnitTests {
 
     @Test
     @Disabled
-    void testGlobalFieldImport() throws IOException {
+    void testGlobalFieldImport() {
         JSONObject globalFieldBody = new JSONObject();
         JSONObject otherDetails = new JSONObject();
         otherDetails.put("title", "technology");
@@ -105,7 +104,7 @@ public class GlobalFieldUnitTests {
     }
 
     @Test
-    void testGlobalFieldExport() throws IOException {
+    void testGlobalFieldExport() {
         Request response = globalField.export().request();
         Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + GLOBAL_FIELD_UID + "/export",
                 response.url().toString());
@@ -114,6 +113,18 @@ public class GlobalFieldUnitTests {
         Assertions.assertNull(response.url().query(), "No Query is expected");
         Assertions.assertTrue(response.url().isHttps(), "Expected Https request, purely secured and trusted");
         Assertions.assertEquals("GET", response.method());
+    }
+
+    @Test
+    void testGlobalFieldsException() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        GlobalField globalField = stack.globalField();
+        globalField.addParam("kle", "subject");
+        globalField.clearParams().addParam("key", "value");
+        globalField.removeParam("key");
+        globalField.addHeader("key", "value");
+        globalField.imports(new JSONObject());
+        Assertions.assertThrows(IllegalAccessError.class, globalField::fetch);
     }
 
 }

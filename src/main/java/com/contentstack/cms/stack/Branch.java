@@ -9,6 +9,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Branches allows you to isolate and easily manage your “in-progress” work from
@@ -20,9 +21,9 @@ import java.util.Map;
  * @author ishaileshmishra
  * @version v1.0.0
  * @see <a href=
- *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#branches">About
- *      Branches
- *      </a>
+ * "https://www.contentstack.com/docs/developers/apis/content-management-api/#branches">About
+ * Branches
+ * </a>
  * @since 2022-10-22
  */
 public class Branch implements BaseImplementation {
@@ -50,21 +51,20 @@ public class Branch implements BaseImplementation {
     }
 
     void validate() {
-        if (this.baseBranchId == null || this.baseBranchId.isEmpty())
-            throw new IllegalStateException("Branch uid can not be null or empty");
+        final String ERROR_MESSAGE = "The Branch UID Can Not Be Null ORr Empty";
+        Objects.requireNonNull(this.baseBranchId, ERROR_MESSAGE);
+        if (this.baseBranchId.isEmpty())
+            throw new IllegalStateException(ERROR_MESSAGE);
     }
 
     /**
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param key
-     *              the key of the header to be added
-     * @param value
-     *              the value of the header to be added
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
      * @return a new {@link Branch} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
     public Branch addParam(@NotNull String key, @NotNull Object value) {
@@ -76,13 +76,10 @@ public class Branch implements BaseImplementation {
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param key
-     *              the key of the header to be added
-     * @param value
-     *              the value of the header to be added
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
      * @return a new {@link Branch} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
     public Branch addHeader(@NotNull String key, @NotNull String value) {
@@ -94,11 +91,9 @@ public class Branch implements BaseImplementation {
      * Adds the specified parameters to this location and returns the updated
      * location.
      *
-     * @param params
-     *               a {@link HashMap} containing the parameters to be added
+     * @param params a {@link HashMap} containing the parameters to be added
      * @return a new {@link Branch} object with the specified parameters added
-     * @throws NullPointerException
-     *                              if the params argument is null
+     * @throws NullPointerException if the params argument is null
      */
     @Override
     public Branch addParams(@NotNull HashMap params) {
@@ -135,8 +130,8 @@ public class Branch implements BaseImplementation {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-branches">Get
-     *      all branches</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-branches">Get
+     * all branches</a>
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {
@@ -148,8 +143,8 @@ public class Branch implements BaseImplementation {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-branch">
-     *      Get a single branch</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-branch">
+     * Get a single branch</a>
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
@@ -161,12 +156,11 @@ public class Branch implements BaseImplementation {
      * The Create a branch request creates a new branch in a particular stack of
      * your organization.
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-branch">Create
-     *      a branch</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-branch">Create
+     * a branch</a>
      * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
@@ -181,8 +175,8 @@ public class Branch implements BaseImplementation {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-branch">Delete
-     *      a branch</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-branch">Delete
+     * a branch</a>
      * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
@@ -215,12 +209,11 @@ public class Branch implements BaseImplementation {
      * </li>
      * </ul>
      *
-     * @param compareBranchId
-     *                        the branch you want to compare with the base branch
+     * @param compareBranchId the branch you want to compare with the base branch
      * @return instance of @{@link Compare}
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#compare-branches"></a>Compare
-     *      Branches
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#compare-branches"></a>Compare
+     * Branches
      */
     public Compare compare(@NotNull String compareBranchId) {
         return new Compare(this.instance, this.baseBranchId, compareBranchId);
@@ -256,8 +249,8 @@ public class Branch implements BaseImplementation {
      *
      * @return instance of @{@link Merge}
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/branches/merging-branches/"></a>Merging
-     *      Branches
+     * "https://www.contentstack.com/docs/developers/branches/merging-branches/"></a>Merging
+     * Branches
      */
     public Merge mergeQueue() {
         return new Merge(this.instance, this.baseBranchId);

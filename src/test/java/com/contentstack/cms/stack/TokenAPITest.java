@@ -7,7 +7,10 @@ import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -155,6 +158,18 @@ class TokenAPITest {
         } else {
             Assertions.assertFalse(response.isSuccessful());
         }
+    }
+
+
+    @Test
+    void testManagementTokenException() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        ManagementToken theManagementToken = stack.tokens().managementToken();
+        theManagementToken.clearParams();
+        theManagementToken.addParam("key", "value");
+        theManagementToken.removeParam("key");
+        theManagementToken.addHeader("key", "value");
+        Assertions.assertThrows(IllegalAccessError.class, theManagementToken::fetch);
     }
 
     @Test

@@ -221,8 +221,8 @@ class OrgApiTests {
                 "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
                 "\t\t\t},\n" +
                 "\t\t\t\"xyz@sample.com\": {\n" +
-                "\t\t\t\t\"blta1ed1f11111c1eb1\": [\"blt111d1b110111e1f1\"],\n" +
-                "\t\t\t\t\"bltf0c00caa0f0000f0\": [\"bltcea22222d2222222\", \"blt333f33cb3e33ffde\"]\n" +
+                "\t\t\t\t\"a1ed1f11111c1eb1\": [\"111d1b110111e1f1\"],\n" +
+                "\t\t\t\t\"f0c00caa0f0000f0\": [\"cea22222d2222222\", \"333f33cb3e33ffde\"]\n" +
                 "\t\t\t}\n" +
                 "\t\t},\n" +
                 "\t\t\"message\": \"Invitation message\"\n" +

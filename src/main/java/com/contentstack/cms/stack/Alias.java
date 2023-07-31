@@ -91,7 +91,7 @@ public class Alias {
      *            key of the parameter
      *            that needs to be removed from the "params" collection.
      */
-    public void removeParam(@NotNull String key) {
+    protected void removeParam(@NotNull String key) {
         this.params.remove(key);
     }
 
@@ -106,7 +106,6 @@ public class Alias {
      *
      * @return Call
      * @author ishaileshmishra
-     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-aliases">Get
      *      all
@@ -122,7 +121,6 @@ public class Alias {
      *
      * @return Call
      * @author ishaileshmishra
-     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-branch">
      *      Get a single branch</a>
@@ -148,7 +146,6 @@ public class Alias {
      *             the request body
      * @return Call
      * @author ishaileshmishra
-     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#assign-or-update-an-alias">Update
      *      a
@@ -171,7 +168,6 @@ public class Alias {
      *
      * @return Call
      * @author ishaileshmishra
-     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-alias">Delete
      *      a branch</a>

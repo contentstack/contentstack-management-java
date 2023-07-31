@@ -4,7 +4,6 @@ import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
 import okhttp3.Request;
-
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -571,6 +570,21 @@ class StackUnitTests {
                 "https://api.contentstack.io/v3/stacks/accept_ownership/" + ORG_ID + "?uid=" + USER_ID
                         + "&api_key=" + stack.headers.get("api_key").toString() + "",
                 request.url().url().toString());
+    }
+
+
+    @Test
+    void testMissedFunctions() {
+        stack.removeParam("key");
+        stack.globalField();
+        stack.locale();
+        stack.label();
+        stack.extensions();
+        stack.roles();
+        stack.releases();
+        stack.publishQueue();
+        Assertions.assertNotNull(stack);
+
     }
 
 }

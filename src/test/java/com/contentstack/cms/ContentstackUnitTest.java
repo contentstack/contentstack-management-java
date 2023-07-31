@@ -6,7 +6,6 @@ import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -215,7 +214,7 @@ public class ContentstackUnitTest {
     @Test
     public void testStackWithAPIKey() {
         // Arrange
-        String apiKey = "blt123456789";
+        String apiKey = "123456789";
         Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
         Stack stack = client.stack(apiKey);
         Assertions.assertNotNull(stack);
