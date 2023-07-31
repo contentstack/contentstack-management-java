@@ -13,7 +13,7 @@ public interface WebhookService {
 
     @GET("webhooks")
     Call<ResponseBody> fetch(@HeaderMap Map<String, Object> headers,
-            @QueryMap HashMap<String, Object> params);
+                             @QueryMap HashMap<String, Object> params);
 
     @GET("webhooks/{webhook_uid}")
     Call<ResponseBody> single(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String executionUid);
@@ -23,7 +23,7 @@ public interface WebhookService {
 
     @PUT("webhooks/{webhook_uid}")
     Call<ResponseBody> update(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String webhookUid,
-            @Body JSONObject requestBody);
+                              @Body JSONObject requestBody);
 
     @DELETE("webhooks/{webhook_uid}")
     Call<ResponseBody> delete(@HeaderMap Map<String, Object> headers, @Path("webhook_uid") String webhookUid);
@@ -49,5 +49,5 @@ public interface WebhookService {
 
     @GET("webhooks/{execution_uid}/logs")
     Call<ResponseBody> getExecutionLog(@HeaderMap Map<String, Object> headers,
-            @Path("execution_uid") String executionUid);
+                                       @Path("execution_uid") String executionUid);
 }
