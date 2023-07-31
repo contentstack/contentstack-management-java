@@ -157,7 +157,7 @@ public class Extensions {
      * <p>
      * <b>Example:false</b>
      *
-     * @param body the request body of type Map<String, RequestBody> body
+     * @param body the request body
      * @return Call
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
