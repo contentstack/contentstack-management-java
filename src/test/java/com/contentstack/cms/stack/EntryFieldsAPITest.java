@@ -258,7 +258,7 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/"+API_KEY+"/export",
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/test/entries/" + API_KEY + "/export",
                 request.url().toString());
     }
 

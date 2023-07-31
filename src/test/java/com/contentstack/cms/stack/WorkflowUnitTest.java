@@ -3,7 +3,6 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -360,6 +359,18 @@ class WorkflowUnitTest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertNotNull(request.url().toString());
+    }
+
+
+    @Test
+    @Order(19)
+    void testFetchPublishRulesCT() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        Workflow theWorkFlo = stack.workflow("");
+        Workflow theWorkFlow = stack.workflow();
+        Assertions.assertNotNull(theWorkFlow);
+        Assertions.assertThrows(IllegalAccessError.class, theWorkFlo::fetch);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> theWorkFlo.fetchPublishRuleContentType(""));
     }
 
 }

@@ -6,10 +6,10 @@ import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
-import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
 @Tag("API")
@@ -248,18 +248,22 @@ class AssetAPITest {
 
 
     @Test
-    @Disabled
     void testAssetUploadWithMultipleParams() throws IOException {
         String description = "The calender has been placed to assets by ***REMOVED***";
         String filePath = "/Users/shailesh.mishra/Desktop/contentstack-management-java/src/test/resources/asset.png";
         Contentstack client = new Contentstack.Builder().build();
-        Stack stack = client.stack("Your api key", "authorization");
-        Response<ResponseBody> upload = stack.asset().uploadAsset(filePath, description).execute();
+        Stack stack = client.stack("Your-api-key", "authorization");
+        Response<ResponseBody> upload = stack.asset()
+                .addParams(new HashMap<>())
+                .addHeaders(new HashMap<>())
+                .addParam("key", "value")
+                .addHeader("header", "value")
+                .uploadAsset(filePath, description).execute();
         String[] tags = {"shailesh", "mishra", "mumbai", "india"};
-        Response<ResponseBody> uploadMultiple = stack.asset().uploadAsset(filePath, "parent_uid", "Fake Image", "Something as description", tags).execute();
-        if (uploadMultiple.isSuccessful()) {
-            System.out.println(upload.body().string());
-        }
+        Response<ResponseBody> uploadMultiple = stack.asset().
+                uploadAsset(filePath, "parent_uid", "Fake Image", "Something as description", tags).execute();
+        Assertions.assertFalse(uploadMultiple.isSuccessful());
+        Assertions.assertFalse(upload.isSuccessful());
     }
 
 }

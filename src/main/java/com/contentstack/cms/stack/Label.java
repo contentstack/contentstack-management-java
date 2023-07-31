@@ -46,16 +46,14 @@ public class Label {
 
     void validate() {
         if (this.labelUid == null || this.labelUid.isEmpty())
-            throw new IllegalStateException("Label Uid can not be null or empty");
+            throw new IllegalAccessError("Label Uid can not be null or empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -64,10 +62,8 @@ public class Label {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -76,8 +72,7 @@ public class Label {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -93,8 +88,7 @@ public class Label {
     /**
      * Enter your branch unique ID
      *
-     * @param value
-     *              branch unique ID
+     * @param value branch unique ID
      * @return Label
      */
     public Label addBranch(@NotNull String value) {
@@ -119,10 +113,10 @@ public class Label {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-labels">Get
-     *      all
-     *      labels
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-labels">Get
+     * all
+     * labels
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -137,10 +131,10 @@ public class Label {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-label">Get
-     *      a single label
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-label">Get
+     * a single label
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -163,14 +157,13 @@ public class Label {
      * to be provided in JSON format.
      * <p>
      *
-     * @param requestBody
-     *                    JSONObject request body
+     * @param requestBody JSONObject request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-label">Add
-     *      label
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-label">Add
+     * label
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -192,14 +185,13 @@ public class Label {
      * in JSON format
      * <p>
      *
-     * @param body
-     *             the request body to update the {@link Label}
+     * @param body the request body to update the {@link Label}
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-label">Update
-     *      label
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-label">Update
+     * label
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -219,10 +211,10 @@ public class Label {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-label">Delete
-     *      label
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-label">Delete
+     * label
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0

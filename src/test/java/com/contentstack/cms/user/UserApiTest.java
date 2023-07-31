@@ -16,6 +16,14 @@ import java.io.IOException;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserApiTest {
 
+    protected static final String activationToken = TestClient.AUTHTOKEN;
+    protected static User user;
+
+    @BeforeAll
+    public static void initBeforeAll() {
+        user = TestClient.getClient().user();
+    }
+
     JSONObject strToJson(String body) {
         try {
             JSONParser parser = new JSONParser();
@@ -24,14 +32,6 @@ public class UserApiTest {
             System.out.println(e.getLocalizedMessage());
             throw new RuntimeException(e);
         }
-    }
-
-    protected static User user;
-    protected static final String activationToken = TestClient.AUTHTOKEN;
-
-    @BeforeAll
-    public static void initBeforeAll() {
-        user = TestClient.getClient().user();
     }
 
     @Test

@@ -26,6 +26,7 @@ class BulkOperationTest {
         Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
         bulkOperation = stack.bulkOperation();
         bulkOperation.addHeaders(headers);
+        bulkOperation.addParams(headers);
         bulkOperation.addHeader("api_version", "3.2");
         bulkOperation.addParam("skip_workflow_stage_check", true);
         bulkOperation.addParam("approvals", true);
@@ -42,19 +43,19 @@ class BulkOperationTest {
     @Test
     @Order(2)
     void publishQueueParamsWithSizeZero() {
-        Assertions.assertEquals(3, bulkOperation.params.size());
+        Assertions.assertEquals(5, bulkOperation.params.size());
     }
 
     @Test
     @Order(3)
     void publishQueueParamsWithSizeMin() {
-        Assertions.assertEquals(3, bulkOperation.params.size());
+        Assertions.assertEquals(5, bulkOperation.params.size());
     }
 
     @Test
     @Order(4)
     void publishQueueParamsWithSizeMax() {
-        Assertions.assertEquals(3, bulkOperation.params.size());
+        Assertions.assertEquals(5, bulkOperation.params.size());
     }
 
     @Test
@@ -70,7 +71,7 @@ class BulkOperationTest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/publish?skip_workflow_stage_check=true&test=testValue&approvals=true",
+                "https://api.contentstack.io/v3/bulk/publish?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
                 request.url().toString());
     }
 
@@ -85,10 +86,10 @@ class BulkOperationTest {
         Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertEquals("skip_workflow_stage_check=true&test=testValue&approvals=true",
+        Assertions.assertEquals("authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
                 request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/unpublish?skip_workflow_stage_check=true&test=testValue&approvals=true",
+                "https://api.contentstack.io/v3/bulk/unpublish?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
                 request.url().toString());
     }
 
@@ -103,10 +104,10 @@ class BulkOperationTest {
         Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertEquals("skip_workflow_stage_check=true&test=testValue&approvals=true",
+        Assertions.assertEquals("authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
                 request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/delete?skip_workflow_stage_check=true&test=testValue&approvals=true",
+                "https://api.contentstack.io/v3/bulk/delete?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
                 request.url().toString());
     }
 
@@ -122,10 +123,10 @@ class BulkOperationTest {
         Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertEquals("skip_workflow_stage_check=true&test=testValue&approvals=true",
+        Assertions.assertEquals("authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
                 request.url().encodedQuery());
         Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/workflow?skip_workflow_stage_check=true&test=testValue&approvals=true",
+                "https://api.contentstack.io/v3/bulk/workflow?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
                 request.url().toString());
     }
 

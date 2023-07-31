@@ -22,11 +22,11 @@ class StackAPITest {
 
     private static final String TAG = StackAPITest.class.getSimpleName();
     private final static Logger log = Logger.getLogger(StackAPITest.class.getName());
-    private Stack stack;
     private final String organizationUid = TestClient.ORGANIZATION_UID;
     private final String userId = TestClient.USER_ID;
     private final String apiKey = TestClient.API_KEY;
     private final String ownershipToken = TestClient.OWNERSHIP;
+    private Stack stack;
 
     private JsonObject toJson(Response<ResponseBody> response) throws IOException {
         assert response.body() != null;
