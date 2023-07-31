@@ -242,7 +242,7 @@ class ContentTypeUnitTests {
     @Test
     void testFieldVisibilityRuleHeadersSize() {
         Request request = contentType.fieldVisibilityRule(requestBody).request();
-        Assertions.assertEquals(2, request.headers().size());
+        Assertions.assertEquals(3, request.headers().size());
     }
 
     @Test
@@ -436,6 +436,16 @@ class ContentTypeUnitTests {
 
     @Test
     void testImportIncludeOverwriteFalse() {
+        Request request = contentType.importOverwrite().request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true",
+                request.url().toString());
+    }
+
+    @Test
+    void testHeaderAndParams() {
+        contentType.addParam("key", "value");
+        contentType.addHeader("headerKey", "headerValue");
+        contentType.removeParam("key");
         Request request = contentType.importOverwrite().request();
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true",
                 request.url().toString());

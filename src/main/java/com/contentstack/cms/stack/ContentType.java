@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Content type defines the structure or schema of a page or a section of your
@@ -73,12 +74,6 @@ public class ContentType {
         this.service = instance.create(ContentTypeService.class);
     }
 
-    private void validate() {
-        if (this.contentTypeUid == null || this.contentTypeUid.isEmpty()) {
-            throw new IllegalArgumentException("contentTypeUid is required");
-        }
-    }
-
     /**
      * Sets header for the request
      *
@@ -126,7 +121,7 @@ public class ContentType {
      * @return Entry
      */
     public Entry entry() {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return new Entry(this.instance, this.headers, this.contentTypeUid);
     }
 
@@ -138,7 +133,7 @@ public class ContentType {
      * @return Entry
      */
     public Entry entry(@NotNull String entryUid) {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return new Entry(this.instance, this.headers, this.contentTypeUid, entryUid);
     }
 
@@ -219,7 +214,7 @@ public class ContentType {
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.single(this.headers, this.contentTypeUid, this.params);
     }
 
@@ -293,7 +288,7 @@ public class ContentType {
      * @since 0.1.0
      */
     public Call<ResponseBody> update(JSONObject requestBody) {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.update(this.contentTypeUid, this.headers, this.params, requestBody);
     }
 
@@ -324,7 +319,7 @@ public class ContentType {
      * @since 0.1.0
      */
     public Call<ResponseBody> fieldVisibilityRule(JSONObject requestBody) {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.visibilityRule(this.contentTypeUid, this.headers, this.params, requestBody);
     }
 
@@ -351,7 +346,7 @@ public class ContentType {
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.delete(this.contentTypeUid, this.headers, this.params);
     }
 
@@ -382,7 +377,7 @@ public class ContentType {
      * @since 0.1.0
      */
     public Call<ResponseBody> reference(Boolean isIncludeGlobalField) {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.reference(this.contentTypeUid, this.headers, isIncludeGlobalField);
     }
 
@@ -410,7 +405,7 @@ public class ContentType {
      * @since 0.1.0
      */
     public Call<ResponseBody> referenceIncludeGlobalField() {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.referenceIncludeGlobalField(this.contentTypeUid, this.headers);
     }
 
@@ -437,7 +432,7 @@ public class ContentType {
      * @since 0.1.0
      */
     public Call<ResponseBody> export() {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.export(this.contentTypeUid, this.headers);
     }
 
@@ -468,7 +463,7 @@ public class ContentType {
      * @since 0.1.0
      */
     public Call<ResponseBody> export(int version) {
-        validate();
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.export(this.contentTypeUid, this.headers, version);
     }
 

@@ -37,7 +37,7 @@ public abstract class RetryCallback<T> implements Callback<T> {
      * The function logs the localized message of the thrown exception and retries
      * the API call if the
      * retry count is less than the total number of retries allowed.
-     * 
+     *
      * @param call The `Call` object represents the network call that was made. It
      *             contains information
      *             about the request and response.

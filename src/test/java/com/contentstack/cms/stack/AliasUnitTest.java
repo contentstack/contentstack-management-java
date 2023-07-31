@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class AliaUnitTest {
+class AliasUnitTest {
 
     protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
     protected static String API_KEY = TestClient.API_KEY;
@@ -125,7 +125,6 @@ class AliaUnitTest {
     }
 
 
-
     @Test
     void updateRole() {
         Request request = alias.update(body).request();
@@ -158,6 +157,52 @@ class AliaUnitTest {
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/stacks/branch_aliases/" + _uid,
+                request.url().toString());
+    }
+
+    @Test
+    void deleteBranchHeader() {
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put(Util.API_KEY, API_KEY);
+        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+
+        Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
+        Alias aliases = stack.alias("alias_uid");
+        aliases.removeParam("key");
+        Request request = aliases.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branch_aliases/alias_uid",
+                request.url().toString());
+    }
+
+    @Test
+    void deleteBranchAliasAddHeader() {
+        Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack();
+        Alias aliases = stack.alias();
+        Alias aliasesUid = stack.alias("uid");
+        aliases.addHeader(Util.API_KEY, API_KEY);
+        aliases.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+        Request request = aliasesUid.delete().request();
+        Assertions.assertEquals(1, request.headers().names().size());
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
+        Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/stacks/branch_aliases/uid",
                 request.url().toString());
     }
 

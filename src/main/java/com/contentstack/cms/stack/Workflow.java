@@ -46,16 +46,14 @@ public class Workflow {
 
     void validate() {
         if (this.workflowUid == null || this.workflowUid.isEmpty())
-            throw new IllegalStateException("Workflow uid can not be null or empty");
+            throw new IllegalAccessError("Workflow uid can not be null or empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -64,10 +62,8 @@ public class Workflow {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -76,8 +72,7 @@ public class Workflow {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -96,9 +91,9 @@ public class Workflow {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-workflows">Get
-     *      all workflow
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-workflows">Get
+     * all workflow
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -112,10 +107,10 @@ public class Workflow {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-workflow">Get
-     *      a singel
-     *      workflow
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-workflow">Get
+     * a singel
+     * workflow
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -153,13 +148,12 @@ public class Workflow {
      * Read more about <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-workflow">Create-Workflow</a>
      *
-     * @param requestBody
-     *                    The details of the workflow in @{@link JSONObject}
+     * @param requestBody The details of the workflow in @{@link JSONObject}
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-workflow">Create
-     *      workflow
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-workflow">Create
+     * workflow
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -193,13 +187,12 @@ public class Workflow {
      * edit or delete the entry in any
      * workflow stage, irrespective of the stage access rules set for that stage.
      *
-     * @param requestBody
-     *                    The body should be of @{@link JSONObject} type
+     * @param requestBody The body should be of @{@link JSONObject} type
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-or-update-workflow-details">Update
-     *      Workflow
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-or-update-workflow-details">Update
+     * Workflow
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -213,10 +206,10 @@ public class Workflow {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#disable-workflow">Disable
-     *      workflow
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#disable-workflow">Disable
+     * workflow
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -230,9 +223,9 @@ public class Workflow {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#enable-workflow">Enable
-     *      Workflow
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#enable-workflow">Enable
+     * Workflow
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -247,9 +240,9 @@ public class Workflow {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-workflow">Delete
-     *      Workflow
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-workflow">Delete
+     * Workflow
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -277,16 +270,15 @@ public class Workflow {
      * <b>Note:</b> You cannot create publish rules in a stack that supports
      * branches when using the classic Contentstack interface.
      *
-     * @param requestBody
-     *                    Specify the unique IDs of the branches for which the
+     * @param requestBody Specify the unique IDs of the branches for which the
      *                    publishing rule will be applicable in the schema in
      *                    the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-publish-rules">Create
-     *      Publish
-     *      Rule
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-publish-rules">Create
+     * Publish
+     * Rule
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -303,16 +295,14 @@ public class Workflow {
      * the publishing rule will be
      * applicable in the following schema in the request body:
      *
-     * @param ruleUid
-     *                    The UID of the publishing rule that you want to update
-     * @param requestBody
-     *                    The request body
+     * @param ruleUid     The UID of the publishing rule that you want to update
+     * @param requestBody The request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-publish-rules">Update
-     *      Publish
-     *      Rules
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-publish-rules">Update
+     * Publish
+     * Rules
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -324,14 +314,13 @@ public class Workflow {
      * To Delete Publish Rules request allows you to delete an existing publish
      * rule.
      *
-     * @param ruleUid
-     *                The UID of the publish rule that you want to delete
+     * @param ruleUid The UID of the publish rule that you want to delete
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-publish-rules">Delete
-     *      Publish
-     *      Rules
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-publish-rules">Delete
+     * Publish
+     * Rules
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -344,15 +333,14 @@ public class Workflow {
      * The Get all Publish Rules request retrieves the details of all the Publishing
      * rules of a workflow.
      *
-     * @param contentTypes
-     *                     comma-separated list of content type UIDs for filtering
+     * @param contentTypes comma-separated list of content type UIDs for filtering
      *                     publish rules on its basis
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-publish-rules">Get
-     *      all publish
-     *      rule
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-publish-rules">Get
+     * all publish
+     * rule
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -368,15 +356,14 @@ public class Workflow {
      * a specific publish rule of a
      * Workflow.
      *
-     * @param ruleUid
-     *                The UID of the publish rule that you want to fetch
+     * @param ruleUid The UID of the publish rule that you want to fetch
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-publish-rules">Get
-     *      all publish
-     *      rules
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-publish-rules">Get
+     * all publish
+     * rules
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -394,14 +381,13 @@ public class Workflow {
      * the API Key of your stack and the
      * authtoken that you receive after logging into your account.
      *
-     * @param contentTypeUid
-     *                       The UID of the content type of which you want to
+     * @param contentTypeUid The UID of the content type of which you want to
      *                       retrieve the Publishing Rule.
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-rules-by-content-types">Get
-     *      Publish Rules By Content Types
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-rules-by-content-types">Get
+     * Publish Rules By Content Types
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -422,9 +408,9 @@ public class Workflow {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-tasks">Get
-     *      all
-     *      Tasks</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-tasks">Get
+     * all
+     * Tasks</a>
      * @since 0.1.0
      */
     public Call<ResponseBody> fetchTasks() {

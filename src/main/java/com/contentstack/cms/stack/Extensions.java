@@ -1,6 +1,5 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.core.CMARuntimeException;
 import com.contentstack.cms.core.Util;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -11,6 +10,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Extensions let you create custom fields and custom widgets that lets you
@@ -50,16 +50,14 @@ public class Extensions {
 
     void validate() {
         if (this.customFieldUid == null || this.customFieldUid.isEmpty())
-            throw new IllegalStateException("Custom Field uid can not be null or empty");
+            throw new IllegalAccessError("Custom Field UID Can Not Be Null OR Empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -68,10 +66,8 @@ public class Extensions {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -80,8 +76,7 @@ public class Extensions {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -109,9 +104,9 @@ public class Extensions {
      *
      * @return Call call
      * @see #addHeader(String, Object) #addHeader(String, Object)#addHeader(String,
-     *      Object)to add headers
+     * Object)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)#addParam(String,
-     *      Object)to add query parameters
+     * Object)to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {
@@ -121,10 +116,10 @@ public class Extensions {
     /**
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-custom-field">Get
-     *      a
-     *      Single Custom Field
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-custom-field">Get
+     * a
+     * Single Custom Field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -162,14 +157,13 @@ public class Extensions {
      * <p>
      * <b>Example:false</b>
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
-     *      a custom
-     *      field
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
+     * a custom
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -204,43 +198,35 @@ public class Extensions {
      * <p>
      * <b>Example:false</b>
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
-     *      a custom
-     *      field
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-a-custom-field">Upload
+     * a custom
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
-    public Call<ResponseBody> uploadCustomField(JSONObject body) {
+    public Call<ResponseBody> uploadCustomFieldUsingJSONObject(JSONObject body) {
         this.headers.put(Util.CONTENT_TYPE, "application/json");
         return this.service.uploadCustomField(this.headers, this.params, body);
     }
 
     /**
-     * @param body
-     *             JSON requestBody
+     * @param body JSON requestBody
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-custom-field">Update
-     *      a custom
-     *      field
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-custom-field">Update
+     * a custom
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> update(JSONObject body) {
-        if (body == null) {
-            try {
-                throw new CMARuntimeException("body can not be Null");
-            } catch (CMARuntimeException e) {
-                throw new IllegalArgumentException(e.getLocalizedMessage());
-            }
-        }
+        Objects.requireNonNull(body, "Body Can Not Be Null");
         this.validate();
         return this.service.update(this.headers, this.customFieldUid, this.params, body);
     }
@@ -250,10 +236,10 @@ public class Extensions {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-custom-field">Delete
-     *      a custom
-     *      field
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-custom-field">Delete
+     * a custom
+     * field
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
