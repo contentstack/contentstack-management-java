@@ -5,7 +5,7 @@
 ### Aug 01, 2023
 - Bug Fixed For un-localize An Entry
 - Fixed Timeout Issue
-- #32 Fixed issue of Asset upload does not allow specifying attributes
+- #32 Fixed 
 - Code coverage improvements
 - NRP support added
 - General improvements with minor breaking changes

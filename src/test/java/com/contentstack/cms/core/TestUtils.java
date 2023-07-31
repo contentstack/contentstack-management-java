@@ -66,4 +66,15 @@ public class TestUtils {
         }
     }
 
+    @Test
+    void testLogger() {
+        CMALogger logger = new CMALogger(StringIndexOutOfBoundsException.class);
+        logger.getLogger();
+        logger.info("This is testing");
+        logger.fine("testing for fine");
+        logger.finer("test for finer");
+        logger.warning("test for warning");
+        logger.severe("test for severe");
+
+    }
 }
