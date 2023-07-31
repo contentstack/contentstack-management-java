@@ -2,7 +2,6 @@ package com.contentstack.cms.organization;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
-
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -18,10 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class OrgUnitTests {
 
-    private static Organization organization;
     private final static String authtoken = TestClient.AUTHTOKEN;
     private final static String organizationUid = TestClient.ORGANIZATION_UID;
+    private static Organization organization;
 
+    @BeforeAll
+    public static void setUp() {
+        organization = new Contentstack.Builder().setAuthtoken(authtoken).build().organization(organizationUid);
+    }
 
     private JSONObject theJSONBody(@NotNull String _body) {
         try {
@@ -32,12 +35,6 @@ class OrgUnitTests {
             return null;
         }
     }
-
-    @BeforeAll
-    public static void setUp() {
-        organization = new Contentstack.Builder().setAuthtoken(authtoken).build().organization(organizationUid);
-    }
-
 
     @Test
     @Order(1)
@@ -172,7 +169,7 @@ class OrgUnitTests {
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/roles",
                 requestInfo.url().encodedPath());
     }
-    
+
 
     @Test
     @Order(17)
@@ -221,7 +218,7 @@ class OrgUnitTests {
                 "\t\t\t\t\"{{apiKey}}\": [\"{{stackRoleUid1}}\"]\n" +
                 "\t\t\t},\n" +
                 "\t\t\t\"xyz@sample.com\": {\n" +
-                "\t\t\t\t\"f11111c1eb1\": [\"blt111d1b110111e1f1\"],\n" +
+                "\t\t\t\t\"f11111c1eb1\": [\"111d1b110111e1f1\"],\n" +
                 "\t\t\t\t\"caa0f0000f0\": [\"2d2222222\", \"33cb3e33\"]\n" +
                 "\t\t\t}\n" +
                 "\t\t},\n" +
@@ -229,7 +226,7 @@ class OrgUnitTests {
                 "\t}\n" +
                 "}";
         JSONObject body = theJSONBody(_body);
-        Request requestInfo = organization.inviteUser( body).request();
+        Request requestInfo = organization.inviteUser(body).request();
         Assertions.assertEquals("POST", requestInfo.method());
     }
 
@@ -255,7 +252,7 @@ class OrgUnitTests {
                 "\t}\n" +
                 "}";
         JSONObject body = theJSONBody(requestBody);
-        Request requestInfo = organization.inviteUser( body).request();
+        Request requestInfo = organization.inviteUser(body).request();
         Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + organizationUid + "/share",
                 requestInfo.url().toString());
     }
@@ -282,7 +279,7 @@ class OrgUnitTests {
                 "\t}\n" +
                 "}";
         JSONObject body = theJSONBody(requestBody);
-        Request requestInfo = organization.inviteUser( body).request();
+        Request requestInfo = organization.inviteUser(body).request();
         assertNull(requestInfo.url().encodedQuery());
     }
 
@@ -308,7 +305,7 @@ class OrgUnitTests {
                 "\t}\n" +
                 "}";
         JSONObject body = theJSONBody(requestBody);
-        Request requestInfo = organization.inviteUser( body).request();
+        Request requestInfo = organization.inviteUser(body).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/share",
                 requestInfo.url().encodedPath());
     }
@@ -336,7 +333,7 @@ class OrgUnitTests {
                 "    ]\n" +
                 "}";
         JSONObject body = theJSONBody(requestBody);
-        Request requestInfo = organization.removeUsers( body).request();
+        Request requestInfo = organization.removeUsers(body).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/share",
                 requestInfo.url().encodedPath());
     }
@@ -352,7 +349,7 @@ class OrgUnitTests {
         JSONObject body = theJSONBody(requestBody);
         String host = "https://api.contentstack.io";
 
-        Request requestInfo = organization.removeUsers( body).request();
+        Request requestInfo = organization.removeUsers(body).request();
         Assertions.assertEquals(host + "/v3/organizations/" + organizationUid + "/share",
                 requestInfo.url().toString());
     }
@@ -372,7 +369,7 @@ class OrgUnitTests {
                 "    ]\n" +
                 "}";
         JSONObject body = theJSONBody(requestBody);
-        Request requestInfo = organization.removeUsers( body).request();
+        Request requestInfo = organization.removeUsers(body).request();
         assertNull(requestInfo.url().query());
     }
 
@@ -401,7 +398,7 @@ class OrgUnitTests {
     @Test
     @Order(31)
     void testResendInvitationEncodedPath() {
-        Request requestInfo = organization.resendInvitation( "invitation_uid").request();
+        Request requestInfo = organization.resendInvitation("invitation_uid").request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/share/invitation_uid/resend_invitation",
                 requestInfo.url().encodedPath());
     }
@@ -409,7 +406,7 @@ class OrgUnitTests {
     @Test
     @Order(32)
     void testResendInvitationRequestBody() {
-        Request requestInfo = organization.resendInvitation( "invitation_uid").request();
+        Request requestInfo = organization.resendInvitation("invitation_uid").request();
         assertNull(
                 requestInfo.url().query());
     }
@@ -417,7 +414,7 @@ class OrgUnitTests {
     @Test
     @Order(33)
     void testResendInvitationsRequestParam() {
-        Request requestInfo = organization.resendInvitation( "invitation_uid").request();
+        Request requestInfo = organization.resendInvitation("invitation_uid").request();
         assertNull(
                 requestInfo.url().encodedQuery());
     }
@@ -470,7 +467,7 @@ class OrgUnitTests {
     @Order(39)
     void testTransferOwnershipEncodedPath() {
         // String transferToEmail = "ishaileshmishra@gmail.com";
-        Request requestInfo = organization.transferOwnership( new JSONObject()).request();
+        Request requestInfo = organization.transferOwnership(new JSONObject()).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/transfer-ownership",
                 requestInfo.url().encodedPath());
     }
@@ -485,7 +482,7 @@ class OrgUnitTests {
     @Order(41)
     void testTransferOwnershipRequestBody() {
         //String transferToEmail = "ishaileshmishra@gmail.com";
-        Request requestInfo = organization.transferOwnership( new JSONObject()).request();
+        Request requestInfo = organization.transferOwnership(new JSONObject()).request();
         assertNull(
                 requestInfo.url().encodedQuery());
     }
@@ -601,7 +598,7 @@ class OrgUnitTests {
     @Test
     @Order(54)
     void testGetLogItemsMethod() {
-        Request requestInfo = organization.logItem( "thisIsLogUid9832").request();
+        Request requestInfo = organization.logItem("thisIsLogUid9832").request();
         Assertions.assertEquals("GET", requestInfo.method());
     }
 
@@ -615,14 +612,14 @@ class OrgUnitTests {
     @Test
     @Order(56)
     void testGetLogItemsEncodedPath() {
-        Request requestInfo = organization.logItem( "thisIsLogUid89347").request();
+        Request requestInfo = organization.logItem("thisIsLogUid89347").request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/logs/thisIsLogUid89347", requestInfo.url().encodedPath());
     }
 
     @Test
     @Order(57)
     void testGetLogItemsRequestBody() {
-        Request requestInfo = organization.logItem( "idLogUid12345").request();
+        Request requestInfo = organization.logItem("idLogUid12345").request();
         assertNull(
                 requestInfo.url().encodedQuery());
     }
@@ -630,7 +627,7 @@ class OrgUnitTests {
     @Test
     @Order(58)
     void testGetLogItemsRequestParam() {
-        Request requestInfo = organization.logItem( "idLogUid12345").request();
+        Request requestInfo = organization.logItem("idLogUid12345").request();
         assertNull(
                 requestInfo.url().query());
     }
@@ -638,10 +635,11 @@ class OrgUnitTests {
     @Test
     @Order(59)
     void testGetAllWithQueryParamLimit() {
-        Request requestInfo = organization.find().request();
+        Request requestInfo = organization.removeParam("asc").find().request();
         Assertions.assertEquals("GET", requestInfo.method());
         assertTrue(isValid(requestInfo.url().toString()));
         assertNull(requestInfo.url().queryParameter("limit"));
+
     }
 
 }

@@ -2,7 +2,6 @@ package com.contentstack.cms.user;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
-
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

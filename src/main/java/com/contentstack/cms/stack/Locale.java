@@ -21,10 +21,10 @@ import java.util.Map;
  * @author ishaileshmishra
  * @version v0.1.0
  * @see <a href=
- *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#languages">
- *      Read more about
- *      Languages
- *      </a>
+ * "https://www.contentstack.com/docs/developers/apis/content-management-api/#languages">
+ * Read more about
+ * Languages
+ * </a>
  * @since 2022-10-22
  */
 public class Locale {
@@ -37,8 +37,7 @@ public class Locale {
     /**
      * Instantiates a new Language
      *
-     * @param client
-     *               the retrofit client
+     * @param client the retrofit client
      */
     public Locale(Retrofit client) {
         this.headers = new HashMap<>();
@@ -54,17 +53,14 @@ public class Locale {
     }
 
     void validate() {
-        if (this.code == null)
-            throw new IllegalStateException("The Locale code can not be null or empty");
+        if (this.code == null) throw new IllegalAccessError("The Locale Code Can Not Be Null OR Empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -73,10 +69,8 @@ public class Locale {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -85,8 +79,7 @@ public class Locale {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -118,9 +111,9 @@ public class Locale {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
-     *      all languages
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -139,9 +132,9 @@ public class Locale {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
-     *      all languages
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -166,13 +159,12 @@ public class Locale {
      * can also specify the fallback
      * language you want to assign to the new language within the same JSON.
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
-     *      all languages
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
+     * all languages
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -193,14 +185,13 @@ public class Locale {
      * In the 'Body' section, enter the updated details of your language name and
      * fallback language in JSON format.
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-language">Update
-     *      language
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-language">Update
+     * language
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -221,10 +212,10 @@ public class Locale {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-language">Delete
-     *      language
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-language">Delete
+     * language
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -245,16 +236,15 @@ public class Locale {
      * <p>
      * In the <b>Body</b> section, enter the language codes in JSON format
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-a-fallback-language">Set
-     *      a
-     *      fallback language
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-a-fallback-language">Set
+     * a
+     * fallback language
      *
      *
-     *      </a>
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -275,12 +265,11 @@ public class Locale {
      * In the <b>Body</b> section, enter the updated details of the fallback
      * language in JSON format
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-fallback-language">Update
-     *      fallback language</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-fallback-language">Update
+     * fallback language</a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */

@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * <b>Delivery tokens:</b>Delivery tokens provide read-only access to the
@@ -27,6 +28,7 @@ public class DeliveryToken {
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
     private String tokenUid;
+    String ERROR = "Token UID Can Not Be Null OR Empty";
 
     protected DeliveryToken(TokenService service) {
         this.headers = new HashMap<>();
@@ -41,50 +43,48 @@ public class DeliveryToken {
         this.service = service;
     }
 
-    void validate() {
-        if (this.tokenUid == null || this.tokenUid.isEmpty())
-            throw new IllegalStateException("Token uid can not be null or empty");
-    }
-
     /**
-     * Sets header for the request
+     * The addHeader function adds a key-value pair to the headers map.
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   A string representing the key of the header. This is used to
+     *              identify the header when
+     *              retrieving or modifying it.
+     * @param value The value parameter is of type Object, which means it can accept
+     *              any type of object as
+     *              its value.
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
     }
 
     /**
-     * Sets header for the request
+     * The addParam function adds a key-value pair to a map.
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   A string representing the key for the parameter. It is annotated
+     *              with @NotNull,
+     *              indicating that it cannot be null.
+     * @param value The value parameter is of type Object, which means it can accept
+     *              any type of object as
+     *              its value.
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    public DeliveryToken addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
     }
 
     /**
-     * Set header for the request
+     * The function removes a parameter from a map using the specified key.
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key The key parameter is a String that represents the key of the
+     *            parameter to be removed.
      */
-    public void removeParam(@NotNull String key) {
+    protected void removeParam(@NotNull String key) {
         this.params.remove(key);
     }
 
-    /**
-     * To clear all the query params
-     */
-    protected void clearParams() {
+    protected DeliveryToken clearParams() {
         this.params.clear();
+        return this;
     }
 
     /**
@@ -93,10 +93,10 @@ public class DeliveryToken {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-delivery-tokens">Get
-     *      all
-     *      Delivery Tokens
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-delivery-tokens">Get
+     * all
+     * Delivery Tokens
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -111,16 +111,16 @@ public class DeliveryToken {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">Get
-     *      a
-     *      Single Delivery Token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">Get
+     * a
+     * Single Delivery Token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
-        this.validate();
+        Objects.requireNonNull(this.tokenUid, ERROR);
         return this.service.getDeliveryToken(this.headers, this.tokenUid);
     }
 
@@ -132,14 +132,13 @@ public class DeliveryToken {
      * JSON format. The details include the
      * name, description, and the environment of the delivery token.
      *
-     * @param requestBody
-     *                    The request body to create a delivery token
+     * @param requestBody The request body to create a delivery token
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-delivery-token">Create
-     *      Delivery
-     *      Token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-delivery-token">Create
+     * Delivery
+     * Token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -161,20 +160,19 @@ public class DeliveryToken {
      * through the following schema in the
      * request body:
      *
-     * @param requestBody
-     *                    the body should be of @{@link JSONObject} type
+     * @param requestBody the body should be of @{@link JSONObject} type
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-delivery-token">Update
-     *      Delivery
-     *      Token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-delivery-token">Update
+     * Delivery
+     * Token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
-        this.validate();
+        Objects.requireNonNull(this.tokenUid, ERROR);
         return this.service.updateDeliveryToken(this.headers, this.tokenUid, requestBody);
     }
 
@@ -183,30 +181,29 @@ public class DeliveryToken {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-delivery-token">Delete
-     *      Delivery
-     *      Token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-delivery-token">Delete
+     * Delivery
+     * Token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
-        this.validate();
+        Objects.requireNonNull(this.tokenUid, ERROR);
         return this.service.deleteDeliveryToken(this.headers, this.tokenUid, false);
     }
 
     /**
      * The Delete delivery token request deletes a specific delivery token.
      *
-     * @param isForce
-     *                provide ‘true’ to force delete a delivery token
+     * @param isForce provide ‘true’ to force delete a delivery token
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-delivery-token">Delete
-     *      Delivery
-     *      Token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-delivery-token">Delete
+     * Delivery
+     * Token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
