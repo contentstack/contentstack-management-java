@@ -65,12 +65,12 @@ public class Util {
      * The function returns the default user agent string for a Java application,
      * including the Java
      * version and operating system.
-     * 
+     *
      * @return The method is returning a string value. The string value being
-     *         returned is either the value
-     *         of the "http.agent" system property if it is not null, or a default
-     *         string value "Java" concatenated
-     *         with the Java version and the operating system name.
+     * returned is either the value
+     * of the "http.agent" system property if it is not null, or a default
+     * string value "Java" concatenated
+     * with the Java version and the operating system name.
      */
     protected static String defaultUserAgent() {
         String agent = System.getProperty("http.agent");
@@ -81,7 +81,7 @@ public class Util {
     /**
      * The function checks if a given string is null or empty and throws an
      * exception if it is.
-     * 
+     *
      * @param field The parameter "field" is of type String and is annotated with
      *              the "@NotNull"
      *              annotation.
@@ -105,7 +105,7 @@ public class Util {
     /**
      * The function converts a string into a RequestBody object with a specified
      * media type.
-     * 
+     *
      * @param bodyString The `bodyString` parameter is a string that represents the
      *                   body of the request. It
      *                   can contain any data that you want to send in the request

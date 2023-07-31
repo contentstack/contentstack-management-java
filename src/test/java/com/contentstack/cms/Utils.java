@@ -25,8 +25,7 @@ public class Utils {
     /**
      * This is used to convert json sting to the JSONObject
      *
-     * @param jsonString
-     *                   the json sting you want to convert as JSONObject
+     * @param jsonString the json sting you want to convert as JSONObject
      * @return JSONObject the request body
      */
     public static JSONObject createJSONObject(String jsonString) {
@@ -47,8 +46,7 @@ public class Utils {
      * files from the project's resource
      * itself 'String path = "src/test/resources/" + file;'
      *
-     * @param file
-     *             The file is the path of type string from where JSON File has to
+     * @param file The file is the path of type string from where JSON File has to
      *             read
      * @return JSONObject the request body
      */
