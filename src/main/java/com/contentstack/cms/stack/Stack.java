@@ -28,8 +28,7 @@ public class Stack {
     /**
      * Instantiates a new Stack.
      *
-     * @param client
-     *               the Retrofit instance
+     * @param client the Retrofit instance
      */
     public Stack(@NotNull Retrofit client) {
         this.headers = new HashMap<>();
@@ -42,7 +41,7 @@ public class Stack {
      * The addHeader function adds a key-value pair to the headers map and returns
      * the updated Stack
      * object.
-     * 
+     *
      * @param key   A string representing the key of the header. It is marked
      *              as @NotNull, which means it
      *              cannot be null and must be provided.
@@ -59,13 +58,13 @@ public class Stack {
     /**
      * The addParam function adds a key-value pair to a stack and returns the
      * updated stack.
-     * 
+     *
      * @param key   A string representing the key for the parameter.
      * @param value The value parameter is of type Object, which means it can accept
      *              any type of object as
      *              its value.
      * @return The method is returning a reference to the current instance of the
-     *         Stack object.
+     * Stack object.
      */
     public Stack addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -74,7 +73,7 @@ public class Stack {
 
     /**
      * The function removes a parameter from a stack and returns the modified stack.
-     * 
+     *
      * @param key The parameter "key" is of type String and is marked with
      *            the @NotNull annotation,
      *            indicating that it cannot be null.
@@ -87,9 +86,9 @@ public class Stack {
 
     /**
      * The function clears the parameters in a stack and returns the modified stack.
-     * 
+     *
      * @return The method is returning a reference to the current instance of the
-     *         Stack object.
+     * Stack object.
      */
     protected Stack clearParams() {
         this.params.clear();
@@ -145,8 +144,7 @@ public class Stack {
      * recommend you to check out our Content
      * Modeling guide
      *
-     * @param contentTypeUid
-     *                       Enter the unique ID of the content type of which you
+     * @param contentTypeUid Enter the unique ID of the content type of which you
      *                       want to retrieve the details. The UID is generated
      *                       based on the title of the content type. The unique ID
      *                       of a content type is unique across a stack
@@ -170,7 +168,7 @@ public class Stack {
      * or enter ‘cs_root’ to get all assets and their folder details from the root
      * folder.
      * <p>
-     * Example:bltd899999999
+     * Example:your_uid
      * </li>
      * <li>
      * include_folders(optional)
@@ -256,7 +254,7 @@ public class Stack {
      * or enter ‘cs_root’ to get all assets and their folder details from the root
      * folder.
      * <p>
-     * Example: bltd899999999
+     * Example: uid899999999
      * </li>
      * <li>
      * include_folders(optional)
@@ -322,8 +320,7 @@ public class Stack {
      * Example:false
      * </ul>
      *
-     * @param assetUid
-     *                 the assetUid
+     * @param assetUid the assetUid
      * @return Asset
      */
     public Asset asset(String assetUid) {
@@ -350,8 +347,7 @@ public class Stack {
      * create the same set of fields
      * repeatedly in multiple content types.
      *
-     * @param globalFiledUid
-     *                       the globalField uid
+     * @param globalFiledUid the globalField uid
      * @return GlobalField
      */
     public GlobalField globalField(@NotNull String globalFiledUid) {
@@ -368,7 +364,7 @@ public class Stack {
      *
      * @return Locale
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
+     * "https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
      */
     public Locale locale() {
         return new Locale(this.client);
@@ -382,11 +378,10 @@ public class Stack {
      * serving content in their local language(s).
      * <p>
      *
-     * @param code
-     *             the locale code.
+     * @param code the locale code.
      * @return Locale
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
+     * "https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
      */
     public Locale locale(String code) {
         return new Locale(this.client, code);
@@ -401,7 +396,7 @@ public class Stack {
      *
      * @return Environment
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
+     * "https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
      */
     public Environment environment() {
         return new Environment(this.client);
@@ -414,11 +409,10 @@ public class Stack {
      * <p>
      * Read more about
      *
-     * @param environment
-     *                    uid
+     * @param environment uid
      * @return Environment
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
+     * "https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
      */
     public Environment environment(String environment) {
         return new Environment(this.client, environment);
@@ -430,14 +424,14 @@ public class Stack {
      * need to work together. Read more about
      *
      * @return Label
-     *         <p>
-     *         You can now pass the branch header in the API request to fetch or
-     *         manage modules located within specific branches
-     *         of the stack. Additionally, you can also set the include_branch query
-     *         parameter to true to include the _branch
-     *         top-level key in the response. This key specifies the unique ID of
-     *         the branch where the concerned Contentstack
-     *         module resides.
+     * <p>
+     * You can now pass the branch header in the API request to fetch or
+     * manage modules located within specific branches
+     * of the stack. Additionally, you can also set the include_branch query
+     * parameter to true to include the _branch
+     * top-level key in the response. This key specifies the unique ID of
+     * the branch where the concerned Contentstack
+     * module resides.
      */
     public Label label() {
         return new Label(this.client);
@@ -448,17 +442,16 @@ public class Stack {
      * labels you can group content types that
      * need to work together. Read more about
      *
-     * @param labelUid
-     *                 The label
+     * @param labelUid The label
      * @return Label
-     *         <p>
-     *         You can now pass the branch header in the API request to fetch or
-     *         manage modules located within specific branches
-     *         of the stack. Additionally, you can also set the include_branch query
-     *         parameter to true to include the _branch
-     *         top-level key in the response. This key specifies the unique ID of
-     *         the branch where the concerned Contentstack
-     *         module resides.
+     * <p>
+     * You can now pass the branch header in the API request to fetch or
+     * manage modules located within specific branches
+     * of the stack. Additionally, you can also set the include_branch query
+     * parameter to true to include the _branch
+     * top-level key in the response. This key specifies the unique ID of
+     * the branch where the concerned Contentstack
+     * module resides.
      */
     public Label label(String labelUid) {
         return new Label(this.client, labelUid);
@@ -498,8 +491,7 @@ public class Stack {
      * module resides.
      * <p>
      *
-     * @param customFieldUid
-     *                       The UID of the custom field that you want to update
+     * @param customFieldUid The UID of the custom field that you want to update
      *                       {@link #addParam(String, Object)} Set this to 'true'
      *                       to include the '_branch' top-level key in the response.
      *                       This key states the unique ID of the branch where
@@ -545,8 +537,7 @@ public class Stack {
      * A role is a collection of permissions that will be applicable to all the
      * users who are assigned this role
      *
-     * @param roleUid
-     *                The unique ID of the role of which you want to retrieve the
+     * @param roleUid The unique ID of the role of which you want to retrieve the
      *                details
      * @return Role
      */
@@ -574,8 +565,7 @@ public class Stack {
      * publish/unpublish all the items of the release to the specified environment.
      * Read more about Releases.
      *
-     * @param releaseUid
-     *                   The unique ID of the release of which you want to retrieve
+     * @param releaseUid The unique ID of the release of which you want to retrieve
      *                   the details
      * @return Release
      */
@@ -605,8 +595,7 @@ public class Stack {
      * publishing, and lets you manage the
      * content lifecycle of your project smoothly.
      *
-     * @param workflowUid
-     *                    The UID of your workflow that you want to retrieve
+     * @param workflowUid The UID of your workflow that you want to retrieve
      * @return Workflow
      */
     public Workflow workflow(@NotNull String workflowUid) {
@@ -633,8 +622,7 @@ public class Stack {
      * content. Read more about <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">AuditLog</a>.
      *
-     * @param logItemUid
-     *                   the logItemUid
+     * @param logItemUid the logItemUid
      * @return AuditLog
      */
     public AuditLog auditLog(@NotNull String logItemUid) {
@@ -689,8 +677,7 @@ public class Stack {
      * Queue</a>
      * documentation.
      *
-     * @param publishQueueUid
-     *                        The UID of a specific publish queue activity of which
+     * @param publishQueueUid The UID of a specific publish queue activity of which
      *                        you want to retrieve the details. Execute the Get
      *                        publish queue API request to retrieve the UID of a
      *                        particular publish queue activity.
@@ -742,8 +729,7 @@ public class Stack {
      * available when using the classic
      * Contentstack interface.
      *
-     * @param webhookUid
-     *                   Enter the unique ID of the webhook of which you want to
+     * @param webhookUid Enter the unique ID of the webhook of which you want to
      *                   retrieve the details. Execute the <b>Get all
      *                   webhooks</b> call to retrieve the UID of a webhook
      * @return Webhook
@@ -778,8 +764,7 @@ public class Stack {
      * organized, and structured manner without impacting each other.
      * <br>
      *
-     * @param branchUid
-     *                  The unique ID of the branch of which you want to retrieve
+     * @param branchUid The unique ID of the branch of which you want to retrieve
      *                  the details.
      * @return Branch
      */
@@ -803,8 +788,7 @@ public class Stack {
      * ID in your frontend code to pull
      * content from the target branch associated with an alias.
      *
-     * @param aliasUid
-     *                 The unique ID of the alias of which you want to retrieve the
+     * @param aliasUid The unique ID of the alias of which you want to retrieve the
      *                 details. The UID of an alias is unique
      *                 across a stack. Execute the Get all aliases call to retrieve
      *                 the UID of an alias
@@ -848,12 +832,12 @@ public class Stack {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-stacks">Get
-     *      all
-     *      Stacks</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-stacks">Get
+     * all
+     * Stacks</a>
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-stack">Get
-     *      single Stack</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-stack">Get
+     * single Stack</a>
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {
@@ -870,15 +854,13 @@ public class Stack {
      * <b>Note:</b>At any given point of time, an organization can create only one
      * stack per minute.
      *
-     * @param organizationUid
-     *                        the organization uid
-     * @param requestBody
-     *                        The request body as JSONObject
+     * @param organizationUid the organization uid
+     * @param requestBody     The request body as JSONObject
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-stacks">Get
-     *      all
-     *      Stacks</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-stacks">Get
+     * all
+     * Stacks</a>
      * @since 0.1.0
      */
     public Call<ResponseBody> create(
@@ -899,8 +881,7 @@ public class Stack {
      * while stack creation. So, you cannot use this call to change/update the
      * master language.
      *
-     * @param requestBody
-     *                    the Request body
+     * @param requestBody the Request body
      * @return the stack
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
@@ -934,8 +915,7 @@ public class Stack {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#transfer-stack-ownership-to-other-users">
      * (Read more) </a>
      *
-     * @param body
-     *             The request body as JSONObject
+     * @param body The request body as JSONObject
      * @return the stack
      */
     public Call<ResponseBody> transferOwnership(@NotNull JSONObject body) {
@@ -968,8 +948,7 @@ public class Stack {
      * <li>To Add Header use {@link #addHeader(String, Object)}</li>
      * </ul>
      *
-     * @param ownershipToken
-     *                       the ownership token received via email by another user.
+     * @param ownershipToken the ownership token received via email by another user.
      * @return the stack
      */
     public Call<ResponseBody> acceptOwnership(
@@ -982,7 +961,7 @@ public class Stack {
      * <b>The Get stack settings call retrieves the
      * configuration settings of an existing stack.</b>
      * <br>
-     *
+     * <p>
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stack-settings">
      * *(Read
@@ -1032,7 +1011,7 @@ public class Stack {
      *    }
      *  }
      * </pre>
-     *
+     * <p>
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-stack-settings">
      * *(Read
@@ -1057,14 +1036,13 @@ public class Stack {
      *     }
      * }
      * </pre>
-     *
+     * <p>
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#reset-stack-settings">
      * (Read
      * more)</a>
      *
-     * @param requestBody
-     *                    the request body as JSONObject
+     * @param requestBody the request body as JSONObject
      * @return the call
      */
     public Call<ResponseBody> updateSetting(@NotNull JSONObject requestBody) {
@@ -1090,14 +1068,13 @@ public class Stack {
      *     }
      * }
      * </pre>
-     *
+     * <p>
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#reset-stack-settings">
      * (Read
      * more)</a>
      *
-     * @param requestBody
-     *                    the request body
+     * @param requestBody the request body
      * @return the call
      */
     public Call<ResponseBody> resetSetting(@NotNull JSONObject requestBody) {
@@ -1131,8 +1108,7 @@ public class Stack {
      * }
      * </pre>
      *
-     * @param requestBody
-     *                    the request body
+     * @param requestBody the request body
      * @return the call
      */
     public Call<ResponseBody> share(@NotNull JSONObject requestBody) {
@@ -1159,8 +1135,7 @@ public class Stack {
      * }
      * </pre>
      *
-     * @param requestBody
-     *                    the request body
+     * @param requestBody the request body
      * @return the call
      */
     public Call<ResponseBody> unshare(@NotNull JSONObject requestBody) {
@@ -1208,8 +1183,7 @@ public class Stack {
      * }
      * </pre>
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      */
     public Call<ResponseBody> roles(@NotNull JSONObject body) {

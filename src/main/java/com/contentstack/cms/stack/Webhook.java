@@ -10,7 +10,6 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
-import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -26,9 +25,9 @@ import java.util.HashMap;
  * @author ***REMOVED***
  * @version v0.1.0
  * @see <a href=
- *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">
- *      Webhooks
- *      </a>
+ * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">
+ * Webhooks
+ * </a>
  * @since 2022-10-22
  */
 public class Webhook {
@@ -53,16 +52,14 @@ public class Webhook {
 
     void validate() {
         if (this.webhookUid == null || this.webhookUid.isEmpty())
-            throw new IllegalStateException("Webhook uid can not be null or empty");
+            throw new IllegalAccessError("Webhook uid can not be null or empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -71,10 +68,8 @@ public class Webhook {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -83,8 +78,7 @@ public class Webhook {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -108,9 +102,9 @@ public class Webhook {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-webhooks">Get
-     *      all Webhooks
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-webhooks">Get
+     * all Webhooks
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -125,10 +119,10 @@ public class Webhook {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">Get
-     *      a
-     *      Single Delivery Token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">Get
+     * a
+     * Single Delivery Token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -171,13 +165,12 @@ public class Webhook {
      * valid Content Management API requests.
      * For more information, refer to Authentication.
      *
-     * @param requestBody
-     *                    The @JSONObject you want to post
+     * @param requestBody The @JSONObject you want to post
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-webhook">Create
-     *      a Webhook
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-webhook">Create
+     * a Webhook
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -220,14 +213,13 @@ public class Webhook {
      * more information, refer to
      * Authentication
      *
-     * @param requestBody
-     *                    the request body @JSONObject
+     * @param requestBody the request body @JSONObject
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-webhook">Update
-     *      a
-     *      Webhook
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-webhook">Update
+     * a
+     * Webhook
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -245,9 +237,9 @@ public class Webhook {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-webhook">Delete
-     *      Webhook
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-webhook">Delete
+     * Webhook
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -261,16 +253,14 @@ public class Webhook {
      * The Export a Webhook request exports an existing webhook. The exported
      * webhook data is saved in a downloadable
      * JSON file.
-     *
-     *
      * <b>Note:</b> In case you do not know the UID of the webhook, use the <b>Get
      * all webhooks</b> request to get all the webhooks (along with the UIDs).
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-webhook">Export
-     *      Webhook
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-webhook">Export
+     * Webhook
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -285,16 +275,14 @@ public class Webhook {
      * will help you to import new
      * Webhooks or update existing ones by uploading JSON files.
      *
-     * @param fileName
-     *                 the file name
-     * @param jsonPath
-     *                 jsonPath like example
+     * @param fileName the file name
+     * @param jsonPath jsonPath like example
      *                 "/Users/shaileshmishra/Downloads/import.json"
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-webhook">Import
-     *      Webhook
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-webhook">Import
+     * Webhook
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -313,9 +301,9 @@ public class Webhook {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-existing-webhook">Import
-     *      Existing
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-existing-webhook">Import
+     * Existing
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -379,9 +367,9 @@ public class Webhook {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-executions-of-a-webhook">Get
-     *      executions of a webhook
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-executions-of-a-webhook">Get
+     * executions of a webhook
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -400,16 +388,15 @@ public class Webhook {
      * execution UID that you receive when
      * you execute the 'Get executions of webhooks' call.
      *
-     * @param executionUid
-     *                     The execution unique ID of the webhook that you want to
+     * @param executionUid The execution unique ID of the webhook that you want to
      *                     retry. Execute the <b>Get executions of
      *                     webhooks</b> call to retrieve the UID of a webhook
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#retry-a-webhook">Retry
-     *      a
-     *      Webhook
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#retry-a-webhook">Retry
+     * a
+     * Webhook
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -426,16 +413,15 @@ public class Webhook {
      * execution UID that you receive when
      * you execute the <b>Get executions of webhooks</b> call.
      *
-     * @param executionUid
-     *                     The execution unique ID of the webhook of which you want
+     * @param executionUid The execution unique ID of the webhook of which you want
      *                     to retrieve the execution log. Execute the 'Get
      *                     executions of webhooks' call to retrieve the UID of a
      *                     webhook
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-latest-execution-log-of-a-webhook">Get
-     *      latest execution log of a webhook
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-latest-execution-log-of-a-webhook">Get
+     * latest execution log of a webhook
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */

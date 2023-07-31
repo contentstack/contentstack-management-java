@@ -250,4 +250,12 @@ class RoleUnitTest {
                 request.url().toString());
     }
 
+    @Test
+    void testRoleException() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        Roles theRole = stack.roles();
+        theRole.clearParams();
+        Assertions.assertThrows(IllegalAccessError.class, theRole::fetch);
+    }
+
 }

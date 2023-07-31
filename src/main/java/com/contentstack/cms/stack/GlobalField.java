@@ -51,7 +51,7 @@ public class GlobalField {
 
     void validate() {
         if (this.globalFiledUid == null)
-            throw new IllegalStateException("Global Field Uid can not be null or empty");
+            throw new IllegalAccessError("Global Field Uid can not be null or empty");
     }
 
     /**
@@ -62,8 +62,9 @@ public class GlobalField {
      * @param value
      *              header value for the request
      */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
+    public GlobalField addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
+        return this;
     }
 
     /**
@@ -74,8 +75,9 @@ public class GlobalField {
      * @param value
      *              query param value for the request
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    public GlobalField addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
     }
 
     /**
@@ -84,15 +86,17 @@ public class GlobalField {
      * @param key
      *            Removes query param using key of request
      */
-    public void removeParam(@NotNull String key) {
+    public GlobalField removeParam(@NotNull String key) {
         this.params.remove(key);
+        return this;
     }
 
     /**
      * To clear all the query params
      */
-    protected void clearParams() {
+    protected GlobalField clearParams() {
         this.params.clear();
+        return this;
     }
 
     /**

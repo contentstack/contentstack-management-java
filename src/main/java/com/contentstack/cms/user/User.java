@@ -30,8 +30,7 @@ public class User implements BaseImplementation {
     protected HashMap<String, Object> params;
 
     /**
-     * @param client
-     *               Retrofit adapts a Java interface to HTTP calls by using
+     * @param client Retrofit adapts a Java interface to HTTP calls by using
      *               annotations on the declared methods to define how
      *               requests are made. Create instances using
      *               {@linkplain Retrofit.Builder the builder} and pass your
@@ -62,10 +61,8 @@ public class User implements BaseImplementation {
      * <b>Note:</b> The authtoken is a mandatory parameter when executing Content
      * Management API calls.
      *
-     * @param email
-     *                 email for user to login
-     * @param password
-     *                 password for user to login
+     * @param email    email for user to login
+     * @param password password for user to login
      * @return Call
      */
     public Call<LoginDetails> login(@NotNull String email, @NotNull String password) {
@@ -84,12 +81,9 @@ public class User implements BaseImplementation {
     /**
      * Login call.
      *
-     * @param email
-     *                 email for user to login
-     * @param password
-     *                 password for user to login
-     * @param tfaToken
-     *                 the tfa token
+     * @param email    email for user to login
+     * @param password password for user to login
+     * @param tfaToken the tfa token
      * @return Call
      */
     public Call<LoginDetails> login(@NotNull String email, @NotNull String password, @NotNull String tfaToken) {
@@ -130,8 +124,7 @@ public class User implements BaseImplementation {
      * information should be in JSON format.
      * <br>
      *
-     * @param body
-     *             The request body
+     * @param body The request body
      * @return Call
      */
     public Call<ResponseBody> update(JSONObject body) {
@@ -144,13 +137,11 @@ public class User implements BaseImplementation {
      * signing up. For account activation,
      * you will require the token received in the activation email. <br>
      *
-     * @param activationToken
-     *                        The activation token received on the registered email
+     * @param activationToken The activation token received on the registered email
      *                        address. You can find the activation token in the
      *                        activation URL sent to the email address used while
      *                        signing up
-     * @param body
-     *                        the {@link JSONObject} body
+     * @param body            the {@link JSONObject} body
      * @return Call
      */
     public Call<ResponseBody> activateAccount(@NotNull String activationToken, JSONObject body) {
@@ -167,8 +158,7 @@ public class User implements BaseImplementation {
      * <li>Provide the user's email address in JSON format</li>
      * </ul>
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      */
     public Call<ResponseBody> requestPassword(JSONObject body) {
@@ -183,8 +173,7 @@ public class User implements BaseImplementation {
      * you receive via email, your new
      * password, and password confirmation in JSON format. <br>
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      */
     public Call<ResponseBody> resetPassword(@NotNull JSONObject body) {
@@ -195,8 +184,7 @@ public class User implements BaseImplementation {
      * The Log out of your account call is used to sign out the user of Contentstack
      * account
      *
-     * @param authtoken
-     *                  The authtoken of the user
+     * @param authtoken The authtoken of the user
      * @return Call
      */
     public Call<ResponseBody> logoutWithAuthtoken(String authtoken) {

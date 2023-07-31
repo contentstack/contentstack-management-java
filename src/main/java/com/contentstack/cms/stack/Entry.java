@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An entry is the actual piece of content created using one of the defined
@@ -26,6 +27,8 @@ import java.util.Map;
  */
 public class Entry {
 
+    final String ERROR_ENTRY_UID = "Entry UID Is Required";
+    final String ERROR_CT_UID = "Content Type UID Is Required";
     protected final HashMap<String, Object> headers;
     protected final HashMap<String, Object> params;
     protected final EntryService service;
@@ -50,57 +53,52 @@ public class Entry {
         this.service = instance.create(EntryService.class);
     }
 
-    private void validateContentType() {
-        if (this.contentTypeUid == null || this.contentTypeUid.isEmpty()) {
-            throw new IllegalArgumentException("Content Type uid is required");
-        }
+    private void validateEntry() {
+        Objects.requireNonNull(this.entryUid, ERROR_ENTRY_UID);
     }
 
-    private void validateEntryUid() {
-        if (this.entryUid == null || this.entryUid.isEmpty()) {
-            throw new IllegalArgumentException("entry uid is required");
-        }
+    private void validateCT() {
+        Objects.requireNonNull(this.contentTypeUid, ERROR_CT_UID);
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
+    public Entry addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
+        return this;
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    public Entry addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
     }
 
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
-    public void removeParam(@NotNull String key) {
+    public Entry removeParam(@NotNull String key) {
         this.params.remove(key);
+        return this;
     }
 
     /**
      * To clear all the query params
      */
-    protected void clearParams() {
+    protected Entry clearParams() {
         this.params.clear();
+        return this;
     }
 
     /**
@@ -133,12 +131,12 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-entries">Get
-     *      All
-     *      Entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-entries">Get
+     * All
+     * Entry</a>
      */
     public Call<ResponseBody> find() {
-        validateContentType();
+        validateCT();
         return this.service.fetch(this.headers, this.contentTypeUid, this.params);
     }
 
@@ -159,12 +157,12 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-entry">Get
-     *      A Single Entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-entry">Get
+     * A Single Entry</a>
      */
     public Call<ResponseBody> fetch() {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.single(headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
@@ -184,22 +182,21 @@ public class Entry {
      * data in the "Body" section
      * <br>
      *
-     * @param requestBody
-     *                    Provide the Json Body to create entry:
+     * @param requestBody Provide the Json Body to create entry:
      *                    <p>
      *                    { "entry": { "title": "Entry title", "url": "Entry URL",
      *                    "reference_field_uid": [{ "uid": "the_uid",
      *                    "_content_type_uid": "referred_content_type_uid" }] } }
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">Create
-     *      A Entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">Create
+     * A Entry</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> create(JSONObject requestBody) {
-        validateContentType();
+        validateCT();
         return this.service.create(this.headers, this.contentTypeUid, requestBody, this.params);
     }
 
@@ -214,21 +211,20 @@ public class Entry {
      * the Set Entry Workflow Stage call.
      * <br>
      *
-     * @param requestBody
-     *                    request body for the entry update
+     * @param requestBody request body for the entry update
      *                    <code>{ "entry": { "title": "example", "url": "/example" } } </code>
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-an-entry">
-     *      Update
-     *      an entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-an-entry">
+     * Update
+     * an entry</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> update(JSONObject requestBody) {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.update(this.headers, this.contentTypeUid, this.entryUid, requestBody, this.params);
     }
 
@@ -246,8 +242,7 @@ public class Entry {
      * <br>
      * <b>PUSH, PULL, UPDATE, ADD, and SUB</b>.
      *
-     * @param requestBody
-     *                    request body <br>
+     * @param requestBody request body <br>
      *                    <b>PUSH operation:</b> The PUSH operation allows you to
      *                    "push" (or append) data into an array without overriding
      *                    an existing value. ```
@@ -274,16 +269,16 @@ public class Entry {
      *                    more details
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#atomic-updates-to-entries">
-     *      Atomic
-     *      Operation</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#atomic-updates-to-entries">
+     * Atomic
+     * Operation</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> atomicOperation(JSONObject requestBody) {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.atomicOperations(this.headers, this.contentTypeUid, this.entryUid, requestBody);
     }
 
@@ -317,15 +312,15 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">Get
-     *      Delete An Entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">Get
+     * Delete An Entry</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.delete(this.headers, this.contentTypeUid, this.entryUid, new JSONObject(), this.params);
     }
 
@@ -360,23 +355,22 @@ public class Entry {
      * Request body using the locales key
      * as follows:
      *
-     * @param requestBody
-     *                    you can delete specific localized entries by passing the
+     * @param requestBody you can delete specific localized entries by passing the
      *                    locale codes in the Request body using the
      *                    locales key as follows ``` { "entry": { "locales":
      *                    ["hi-in", "mr-in", "es"] } } ```
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">
-     *      Delete
-     *      An Entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">
+     * Delete
+     * An Entry</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> delete(JSONObject requestBody) {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.delete(this.headers, this.contentTypeUid, this.entryUid, requestBody, this.params);
     }
 
@@ -386,24 +380,22 @@ public class Entry {
      * information, refer to the Name Entry Version documentation.
      * <br>
      *
-     * @param version
-     *                    Enter the version number of the entry to which you want to
+     * @param version     Enter the version number of the entry to which you want to
      *                    assign a name.
-     * @param requestBody
-     *                    RequestBody like below. ``` { "entry": { "_version_name":
+     * @param requestBody RequestBody like below. ``` { "entry": { "_version_name":
      *                    "Test version", "locale": "fr-fr", "force":
      *                    true } } ```
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-version-name-for-entry">
-     *      Set
-     *      Version Name for Entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-version-name-for-entry">
+     * Set
+     * Version Name for Entry</a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> versionName(int version, JSONObject requestBody) {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.versionName(this.headers, this.contentTypeUid, this.entryUid, String.valueOf(version),
                 requestBody);
     }
@@ -437,35 +429,33 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-entry">
-     *      Get Details of All Versions of an Entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-entry">
+     * Get Details of All Versions of an Entry</a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> detailOfAllVersion() {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.detailOfAllVersion(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
     /**
-     * @param versionNumber:
-     *                       Enter the version number of the entry that you want to
+     * @param versionNumber: Enter the version number of the entry that you want to
      *                       delete.
-     * @param requestBody
-     *                       Request body for the delete operation ``` { "entry": {
+     * @param requestBody    Request body for the delete operation ``` { "entry": {
      *                       "locale": "en-us" } } ```
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-entry">
-     *      Delete
-     *      Version Name of Entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-entry">
+     * Delete
+     * Version Name of Entry</a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> deleteVersionName(int versionNumber, JSONObject requestBody) {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.deleteVersionName(this.headers, this.contentTypeUid, this.entryUid, versionNumber,
                 requestBody);
     }
@@ -485,16 +475,16 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-references-of-an-entry">
-     *      Get
-     *      references of an entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-references-of-an-entry">
+     * Get
+     * references of an entry</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> getReference() {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.reference(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
@@ -509,16 +499,16 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-languages-of-an-entry">
-     *      Get
-     *      language of an entry</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-languages-of-an-entry">
+     * Get
+     * language of an entry</a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> getLanguage() {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.language(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
@@ -535,45 +525,42 @@ public class Entry {
      * the respective locale code in the locale={locale_code} parameter.
      * </p>
      *
-     * @param requestBody
-     *                    In the "Body" parameter, you need to provide the content
+     * @param requestBody In the "Body" parameter, you need to provide the content
      *                    of your entry based on the content type.
-     * @param localeCode
-     *                    Enter the code of the language to localize the entry of
+     * @param localeCode  Enter the code of the language to localize the entry of
      *                    that particular language
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#localize-an-entry">
-     *      Localize an entry
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#localize-an-entry">
+     * Localize an entry
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> localize(@NotNull JSONObject requestBody,
-            @NotNull String localeCode) {
-        validateContentType();
-        validateEntryUid();
+                                       @NotNull String localeCode) {
+        validateCT();
+        validateEntry();
         return this.service.localize(this.headers, this.contentTypeUid, this.entryUid, localeCode, requestBody);
     }
 
     /**
-     * The Unlocalize an entry request is used to unlocalize an existing entry. Read
+     * The Un-localize an entry request is used to un-localize an existing entry. Read
      * more about Localization.
      *
-     * @param localeCode
-     *                   Enter the code of the language to localize the entry of
+     * @param localeCode Enter the code of the language to localize the entry of
      *                   that particular language
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#unlocalize-an-entry">
-     *      unlocalize an entry
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#unlocalize-an-entry">
+     * unlocalize an entry
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> unLocalize(@NotNull String localeCode) {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.unLocalize(this.headers, this.contentTypeUid, this.entryUid, localeCode);
     }
 
@@ -584,17 +571,17 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-an-entry">
-     *      Export
-     *      an entry
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-an-entry">
+     * Export
+     * an entry
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> export() {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.export(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
@@ -620,16 +607,16 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
-     *      Import
-     *      an entry
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
+     * Import
+     * an entry
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> imports() {
-        validateContentType();
+        validateCT();
         return this.service.imports(this.headers, this.contentTypeUid, this.params);
     }
 
@@ -648,17 +635,17 @@ public class Entry {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
-     *      Import
-     *      an entry
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-entry">
+     * Import
+     * an entry
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> importExisting() {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.importExisting(this.headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
@@ -692,19 +679,18 @@ public class Entry {
      * the version number of your entry
      * that you want to publish.
      *
-     * @param requestBody
-     *                    The requestBody in JSONObject
+     * @param requestBody The requestBody in JSONObject
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry">
-     *      Publish an entry
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry">
+     * Publish an entry
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> publish(@NotNull JSONObject requestBody) {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.publish(this.headers, this.contentTypeUid, this.entryUid, requestBody);
     }
 
@@ -713,8 +699,7 @@ public class Entry {
      * entry along with all its references at
      * the same time.
      *
-     * @param requestBody
-     *                    The request body in JSONObject format
+     * @param requestBody The request body in JSONObject format
      *                    {@link #addParam(String, Object)} Below are the query
      *                    parameters
      *                    <br>
@@ -727,9 +712,9 @@ public class Entry {
      *                    rules.
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry-with-references">
-     *      Publish an entry With reference
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry-with-references">
+     * Publish an entry With reference
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -758,19 +743,18 @@ public class Entry {
      * date/time in the ISO format as its
      * value. Example: "scheduled_at":"2016-10-07T12:34:36.000Z"
      *
-     * @param requestBody
-     *                    The requestBody in JSONObject
+     * @param requestBody The requestBody in JSONObject
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-entry">
-     *      Unpublish an entry
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-entry">
+     * Unpublish an entry
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> unpublish(@NotNull JSONObject requestBody) {
-        validateContentType();
-        validateEntryUid();
+        validateCT();
+        validateEntry();
         return this.service.unpublish(this.headers, this.contentTypeUid, this.entryUid, requestBody);
     }
 

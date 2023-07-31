@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A publishing environment corresponds to one or more deployment servers or a
@@ -39,17 +40,17 @@ public class Environment {
     }
 
     void validate() {
-        if (this.environment == null || this.environment.isEmpty())
+        String ERROR = "Environment Can Not Be Null OR Empty";
+        Objects.requireNonNull(this.environment, ERROR);
+        if (this.environment.isEmpty())
             throw new IllegalStateException("Environment can not be null or empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -58,10 +59,8 @@ public class Environment {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -70,8 +69,7 @@ public class Environment {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -102,10 +100,10 @@ public class Environment {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
-     *      all
-     *      environments
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
+     * all
+     * environments
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -124,10 +122,10 @@ public class Environment {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-environment">Get
-     *      a single
-     *      environments
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-environment">Get
+     * a single
+     * environments
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -149,14 +147,13 @@ public class Environment {
      * (which include the language code and the URL of the server), and the option
      * to deploy content to a server.
      *
-     * @param body
-     *             The {@link JSONObject} request body<br>
+     * @param body The {@link JSONObject} request body<br>
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
-     *      all
-     *      environments
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#environment-collection">Get
+     * all
+     * environments
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -179,12 +176,11 @@ public class Environment {
      * code and the URL of the server), and
      * the option to deploy content to a server.
      *
-     * @param requestBody
-     *                    request body of type @{@link JSONObject}
+     * @param requestBody request body of type @{@link JSONObject}
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-environment">Update
-     *      Environment</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-environment">Update
+     * Environment</a>
      * @see #addHeader(String, Object) to add headers to the request
      * @since 0.1.0
      */
@@ -203,8 +199,8 @@ public class Environment {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-environment">Delete
-     *      Environment</a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-environment">Delete
+     * Environment</a>
      * @see #addHeader(String, Object) to add headers to the request
      * @since 0.1.0
      */
