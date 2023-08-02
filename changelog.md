@@ -2,9 +2,10 @@
 
 ## v1.0.0
 
-### Jul 12, 2023
-- Bug Fixed For Unlocalize An Entry
+### Aug 01, 2023
+- Bug Fixed For un-localize An Entry
 - Fixed Timeout Issue
+- #32 Fixed 
 - Code coverage improvements
 - NRP support added
 - General improvements with minor breaking changes

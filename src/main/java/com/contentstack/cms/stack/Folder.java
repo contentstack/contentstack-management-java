@@ -32,7 +32,7 @@ public class Folder {
 
     void validate() {
         if (this.folderUid == null || this.folderUid.isEmpty())
-            throw new IllegalStateException("Folder uid uid can not be null or empty");
+            throw new IllegalAccessError("Folder uid uid can not be null or empty");
     }
 
     /**

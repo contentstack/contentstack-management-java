@@ -43,7 +43,7 @@ public class Roles {
 
     void validate() {
         if (this.roleUid == null || this.roleUid.isEmpty())
-            throw new IllegalStateException("Role uid can not be null or empty");
+            throw new IllegalAccessError("Role uid can not be null or empty");
     }
 
     /**
