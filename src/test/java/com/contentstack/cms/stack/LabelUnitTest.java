@@ -21,9 +21,8 @@ class LabelUnitTest {
     protected static String API_KEY = TestClient.API_KEY;
     protected static String _uid = TestClient.USER_ID;
     protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
-    static Label label;
     protected static JSONObject body;
-
+    static Label label;
     static String theJsonString = "{\n" +
             "  \"label\": {\n" +
             "    \"name\": \"Test\",\n" +
@@ -168,6 +167,17 @@ class LabelUnitTest {
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals("https://api.contentstack.io/v3/labels/" + _uid, request.url().toString());
+    }
+
+
+    @Test
+    void testLabelException() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        Label theLabel = stack.label();
+        theLabel.addParam("key", "value");
+        theLabel.removeParam("");
+        theLabel.addHeader("key", "value");
+        Assertions.assertThrows(IllegalAccessError.class, theLabel::fetch);
     }
 
 }

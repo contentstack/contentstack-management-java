@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An alias acts as a pointer to a particular branch. You can specify the alias
@@ -29,10 +30,6 @@ public class Alias {
     protected final AliasService service;
     private String uid;
 
-    void validate() {
-        if (this.uid == null)
-            throw new IllegalStateException("Global Field Uid can not be null or empty");
-    }
 
     // The `protected Alias(Retrofit instance)` constructor is used to create an
     // instance of the `Alias`
@@ -94,7 +91,7 @@ public class Alias {
      *            key of the parameter
      *            that needs to be removed from the "params" collection.
      */
-    public void removeParam(@NotNull String key) {
+    protected void removeParam(@NotNull String key) {
         this.params.remove(key);
     }
 
@@ -109,7 +106,6 @@ public class Alias {
      *
      * @return Call
      * @author ishaileshmishra
-     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-aliases">Get
      *      all
@@ -125,14 +121,13 @@ public class Alias {
      *
      * @return Call
      * @author ishaileshmishra
-     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-branch">
      *      Get a single branch</a>
      * @since 2022-10-20
      */
     public Call<ResponseBody> fetch() {
-        validate();
+        Objects.requireNonNull(this.uid,"Global Field Uid can not be null or empty");
         return this.service.single(this.headers, this.uid);
     }
 
@@ -151,7 +146,6 @@ public class Alias {
      *             the request body
      * @return Call
      * @author ishaileshmishra
-     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#assign-or-update-an-alias">Update
      *      a
@@ -174,7 +168,6 @@ public class Alias {
      *
      * @return Call
      * @author ishaileshmishra
-     * @version v0.1.0
      * @see <a href=
      *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-alias">Delete
      *      a branch</a>
@@ -183,7 +176,7 @@ public class Alias {
      * @since 2022-10-20
      */
     public Call<ResponseBody> delete() {
-        validate();
+        Objects.requireNonNull(this.uid,"Global Field Uid can not be null or empty");
         return this.service.delete(this.headers, this.uid, this.params);
     }
 
