@@ -3,14 +3,11 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-
 import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,19 +15,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class WebhookUnitTest {
 
-    private static String ENTYRY_FILE = null;
     private static final String AUTHTOKEN = TestClient.AUTHTOKEN;
     private static final String API_KEY = TestClient.API_KEY;
     private static final String _webhook_uid = TestClient.USER_ID;
     private static final String MANAGEMENT_TOKEN = TestClient.AUTHTOKEN;
-    private static Webhook webhook;
     private static final String wehooksHost = "https://api.contentstack.io/v3/webhooks";
-
     protected static JSONObject body;
+    private static String ENTYRY_FILE = null;
+    private static Webhook webhook;
 
     @BeforeAll
     static void setup() {
@@ -210,7 +208,7 @@ class WebhookUnitTest {
     public void testReadEntryJson() {
         // Load the entry.json file using the ClassLoader
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("entry.json");
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 
             while ((ENTYRY_FILE = reader.readLine()) != null) {
                 System.out.println(ENTYRY_FILE);
@@ -228,7 +226,7 @@ class WebhookUnitTest {
     void importWebhook() {
         String line = "";
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("entry.json");
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 
             while ((line = reader.readLine()) != null) {
                 // Process each line here, if needed
@@ -304,6 +302,23 @@ class WebhookUnitTest {
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals(wehooksHost + "/" + _webhook_uid + "/logs", request.url().toString());
+    }
+
+    @Test
+    void testGetWebhook() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "managementToken");
+        Webhook newWebhook = stack.webhook();
+        Assertions.assertThrows(IllegalAccessError.class, newWebhook::fetch);
+        Request request = newWebhook.find().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+    }
+
+    @Test
+    void testImportWebhook() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "managementToken");
+        Webhook newWebhook = stack.webhook();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> newWebhook.importWebhook("importFile", "path/imp/json"));
     }
 
 }

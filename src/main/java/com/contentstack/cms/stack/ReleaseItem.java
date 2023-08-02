@@ -37,16 +37,14 @@ public class ReleaseItem {
 
     void validate() {
         if (this.releaseUid == null || this.releaseUid.isEmpty())
-            throw new IllegalStateException("Release Uid can not be null or empty");
+            throw new IllegalAccessError("Release Uid can not be null or empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -55,10 +53,8 @@ public class ReleaseItem {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -67,8 +63,7 @@ public class ReleaseItem {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -105,8 +100,7 @@ public class ReleaseItem {
      * UID (of an entry), the action to be
      * performed (publish/unpublish), and the locale of the item.
      *
-     * @param jsonBody
-     *                 requestBody for create/add single Item
+     * @param jsonBody requestBody for create/add single Item
      * @return Call
      */
     public Call<ResponseBody> create(@NotNull JSONObject jsonBody) {
@@ -125,8 +119,7 @@ public class ReleaseItem {
      * entries), the action to be performed (publish/unpublish), and the locales of
      * the items.
      *
-     * @param jsonBody
-     *                 requestBody for create/add single Item
+     * @param jsonBody requestBody for create/add single Item
      * @return Call
      */
     public Call<ResponseBody> createMultiple(@NotNull JSONObject jsonBody) {
@@ -173,8 +166,7 @@ public class ReleaseItem {
      * }
      * </pre>
      *
-     * @param jsonBody
-     *                 requestBody for create/add single Item, In the <b>Body</b>
+     * @param jsonBody requestBody for create/add single Item, In the <b>Body</b>
      *                 section, you need to specify the following:
      * @return Call
      */

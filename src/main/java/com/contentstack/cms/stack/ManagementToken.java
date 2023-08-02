@@ -39,16 +39,14 @@ public class ManagementToken {
 
     void validate() {
         if (this.tokenUid == null || this.tokenUid.isEmpty())
-            throw new IllegalStateException("Token uid can not be null or empty");
+            throw new IllegalAccessError("Token uid Can Not Be Null OR Empty");
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   header key for the request
+     * @param value header value for the request
      */
     public void addHeader(@NotNull String key, @NotNull Object value) {
         this.headers.put(key, value);
@@ -57,10 +55,8 @@ public class ManagementToken {
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
     public void addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
@@ -69,8 +65,7 @@ public class ManagementToken {
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -90,10 +85,10 @@ public class ManagementToken {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens">Get
-     *      all
-     *      Management Tokens
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens">Get
+     * all
+     * Management Tokens
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
@@ -109,10 +104,10 @@ public class ManagementToken {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-management-token">Get
-     *      a
-     *      single management token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-management-token">Get
+     * a
+     * single management token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -126,15 +121,14 @@ public class ManagementToken {
      * stack. This token provides you with
      * read-write access to the content of your stack.
      *
-     * @param requestBody
-     *                    details of the management token in @{@link JSONObject}
+     * @param requestBody details of the management token in @{@link JSONObject}
      *                    format
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-management-token">Create
-     *      a
-     *      management token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-management-token">Create
+     * a
+     * management token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -156,14 +150,13 @@ public class ManagementToken {
      * the following schema in the request
      * body:
      *
-     * @param requestBody
-     *                    details of the management token in @{@link JSONObject}
+     * @param requestBody details of the management token in @{@link JSONObject}
      *                    format
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-management-token">Update
-     *      management token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-management-token">Update
+     * management token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */
@@ -177,9 +170,9 @@ public class ManagementToken {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-management-token">Delete
-     *      management token
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-management-token">Delete
+     * management token
+     * </a>
      * @see #addHeader(String, Object) to add headers
      * @since 0.1.0
      */

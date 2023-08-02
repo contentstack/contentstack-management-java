@@ -26,6 +26,25 @@ public class EnvironmentUnitTest {
     }
 
     @Test
+    void fetchDefault() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "mngToken");
+        Environment env = stack.environment();
+        Assertions.assertThrows(NullPointerException.class, env::fetch);
+        env = stack.environment("env");
+        env.addHeader("key", "value");
+        env.addParam("key", "value");
+        env.removeParam("key");
+        env.clearParams();
+    }
+
+    @Test
+    void fetchEmptyDefault() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "mngToken");
+        Environment env = stack.environment("");
+        Assertions.assertThrows(IllegalStateException.class, env::fetch);
+    }
+
+    @Test
     void fetchLocales() {
         environment.addParam("include_count", false);
         environment.addParam("asc", "created_at");

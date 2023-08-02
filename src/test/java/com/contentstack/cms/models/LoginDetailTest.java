@@ -1,15 +1,20 @@
 package com.contentstack.cms.models;
 
+import com.contentstack.cms.core.AuthInterceptor;
+import okhttp3.Interceptor;
+import okhttp3.internal.http.RealInterceptorChain;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Tag("unit") public class LoginDetailTest {
+@Tag("unit")
+public class LoginDetailTest {
 
     private static LoginDetails loginDetails;
 
@@ -127,7 +132,7 @@ import java.util.List;
     @Test
     void getterSetterUserModelOrgUid() {
         UserModel userModel = new UserModel();
-        String[] strings = { "uidramesh", "uidforjohn", "uidforshailesh", "uidforuttam" };
+        String[] strings = {"uidramesh", "uidforjohn", "uidforshailesh", "uidforuttam"};
         userModel.setOrgUid(strings);
         Assertions.assertEquals("uidramesh",
                 Arrays.stream(userModel.getOrgUid()).findFirst().get());
@@ -136,7 +141,7 @@ import java.util.List;
     @Test
     void getterSetterUserModelSharedOrgUid() {
         UserModel userModel = new UserModel();
-        String[] strings = { "shareduidramesh", "shareduidforjohn", "shareduidforshailesh", "shareduidforuttam" };
+        String[] strings = {"shareduidramesh", "shareduidforjohn", "shareduidforshailesh", "shareduidforuttam"};
         userModel.setSharedOrgUid(strings);
         Assertions.assertEquals("shareduidramesh",
                 Arrays.stream(userModel.getSharedOrgUid()).findFirst().get());
@@ -151,7 +156,7 @@ import java.util.List;
     }
 
     @Test
-    void getterSetterUserRoles() {
+    void getterSetterUserRoles() throws IOException {
         UserModel userModel = new UserModel();
         List<Object> list = new ArrayList<>();
         list.add("roleAbc");

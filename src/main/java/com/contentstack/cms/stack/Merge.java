@@ -1,6 +1,6 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.Parametron;
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -41,11 +41,11 @@ import java.util.Map;
  * @author ***REMOVED***
  * @version v1.0.0
  * @see <a href=
- *      "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#merge-branches">Merge
- *      Branches </a>
+ * "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#merge-branches">Merge
+ * Branches </a>
  * @since 2023 -June-30
  */
-public class Merge implements Parametron {
+public class Merge implements BaseImplementation {
 
     /**
      * The Headers.
@@ -63,23 +63,8 @@ public class Merge implements Parametron {
     /**
      * Instantiates a new Merge.
      *
-     * @param instance
-     *                 the instance
-     */
-    protected Merge(Retrofit instance) {
-        this.headers = new HashMap<>();
-        this.headers.put("Content-Type", "application/json");
-        this.params = new HashMap<>();
-        this.service = instance.create(MergeService.class);
-    }
-
-    /**
-     * Instantiates a new Merge.
-     *
-     * @param instance
-     *                 the instance
-     * @param uid
-     *                 the uid
+     * @param instance the instance
+     * @param uid      the uid
      */
     protected Merge(Retrofit instance, String uid) {
         this.headers = new HashMap<>();
@@ -120,20 +105,16 @@ public class Merge implements Parametron {
      * </li>
      * </ul>
      *
-     * @param compareBranch
-     *                             The branch from which you want to merge changes
+     * @param compareBranch        The branch from which you want to merge changes
      *                             into the base branch.
-     * @param requestBody
-     *                             the request body
-     * @param defaultMergeStrategy
-     *                             Specify the merge strategy to apply for the merge
+     * @param requestBody          the request body
+     * @param defaultMergeStrategy Specify the merge strategy to apply for the merge
      *                             action. <b>Example:</b> merge_prefere_base
-     * @param mergeComment
-     *                             The comment to be displayed for the merge action
+     * @param mergeComment         The comment to be displayed for the merge action
      * @return Call
      */
     public Call<ResponseBody> branch(@NotNull String compareBranch, JSONObject requestBody,
-            @NotNull String defaultMergeStrategy, @NotNull String mergeComment) {
+                                     @NotNull String defaultMergeStrategy, @NotNull String mergeComment) {
         this.params.put("compare_branch", compareBranch);
         this.params.put("default_merge_strategy", defaultMergeStrategy);
         this.params.put("merge_comment", mergeComment);
@@ -147,9 +128,9 @@ public class Merge implements Parametron {
      *
      * @return the call
      * @see <a href=
-     *      "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#get-all-merge-jobs"></a>Get
-     *      all
-     *      Merge Jobs
+     * "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#get-all-merge-jobs"></a>Get
+     * all
+     * Merge Jobs
      */
     public Call<ResponseBody> find() {
         return this.service.find(this.headers, this.params);
@@ -160,13 +141,12 @@ public class Merge implements Parametron {
      * of a particular merge job.
      * <br>
      *
-     * @param mergeJobUid
-     *                    the key of the header to be added
+     * @param mergeJobUid the key of the header to be added
      * @return the call
      * @see <a href=
-     *      "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#get-single-merge-job"></a>Get
-     *      a
-     *      Single Merge Job
+     * "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#get-single-merge-job"></a>Get
+     * a
+     * Single Merge Job
      */
     public Call<ResponseBody> fetch(@NotNull String mergeJobUid) {
         return this.service.fetch(this.headers, mergeJobUid, this.params);
@@ -176,13 +156,10 @@ public class Merge implements Parametron {
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param key
-     *              the key of the header to be added
-     * @param value
-     *              the value of the header to be added
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
      * @return a new {@link Merge} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
     public Merge addParam(@NotNull String key, @NotNull Object value) {
@@ -194,13 +171,10 @@ public class Merge implements Parametron {
      * Adds a header with the specified key and value to this location and returns
      * the updated location.
      *
-     * @param key
-     *              the key of the header to be added
-     * @param value
-     *              the value of the header to be added
+     * @param key   the key of the header to be added
+     * @param value the value of the header to be added
      * @return a new {@link Merge} object with the specified header added
-     * @throws NullPointerException
-     *                              if the key or value argument is null
+     * @throws NullPointerException if the key or value argument is null
      */
     @Override
     public Merge addHeader(@NotNull String key, @NotNull String value) {
@@ -212,11 +186,9 @@ public class Merge implements Parametron {
      * Adds the specified parameters to this location and returns the updated
      * location.
      *
-     * @param params
-     *               a {@link HashMap} containing the parameters to be added
+     * @param params a {@link HashMap} containing the parameters to be added
      * @return a new {@link Merge} object with the specified parameters added
-     * @throws NullPointerException
-     *                              if the params argument is null
+     * @throws NullPointerException if the params argument is null
      */
     @Override
     public Merge addParams(@NotNull HashMap params) {
@@ -228,11 +200,8 @@ public class Merge implements Parametron {
      * Adds the specified parameters to this location and returns the updated
      * location.
      *
-     * @param headers
-     *                a {@link HashMap} containing the parameters to be added
-     * @return a new {@link Merge} object with the specified parameters added
-     * @throws NullPointerException
-     *                              if the params argument is null
+     * @param headers a {@link HashMap} containing the parameters to be added
+     * @throws NullPointerException if the params argument is null
      */
     @Override
     public Merge addHeaders(@NotNull HashMap headers) {

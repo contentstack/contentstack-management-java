@@ -43,7 +43,7 @@ public class AuthInterceptor implements Interceptor {
 
     /**
      * The function sets the value of the authtoken variable.
-     * 
+     *
      * @param authtoken The authtoken parameter is a string that represents an
      *                  authentication token.
      */
@@ -55,7 +55,7 @@ public class AuthInterceptor implements Interceptor {
      * This function intercepts a request and adds headers to it, including a user
      * agent, content type, and
      * authentication token if available.
-     * 
+     *
      * @param chain The `chain` parameter is an object of type `Interceptor.Chain`.
      *              It represents the chain
      *              of interceptors that will be executed for a given request. It
@@ -68,10 +68,7 @@ public class AuthInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         final String xUserAgent = Util.SDK_NAME + "/v" + Util.SDK_VERSION;
-        Request.Builder request = chain.request().newBuilder()
-                .header(Util.X_USER_AGENT, xUserAgent)
-                .header(Util.USER_AGENT, Util.defaultUserAgent())
-                .header(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
+        Request.Builder request = chain.request().newBuilder().header(Util.X_USER_AGENT, xUserAgent).header(Util.USER_AGENT, Util.defaultUserAgent()).header(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
 
         if (this.authtoken != null) {
             request.addHeader(Util.AUTHTOKEN, this.authtoken);
