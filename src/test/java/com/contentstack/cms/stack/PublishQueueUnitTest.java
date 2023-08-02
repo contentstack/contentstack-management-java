@@ -3,7 +3,6 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import com.contentstack.cms.core.Util;
-
 import okhttp3.Request;
 import org.junit.jupiter.api.*;
 
@@ -13,7 +12,8 @@ import java.util.HashMap;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PublishQueueUnitTest {
 
-    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;;
+    protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
+    ;
     protected static String API_KEY = TestClient.API_KEY;
     protected static String _uid = TestClient.USER_ID;
     protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
@@ -103,6 +103,17 @@ class PublishQueueUnitTest {
                 "https://api.contentstack.io/v3/publish-queue/" + _uid
                         + "/unschedule?publish_queue_uid=your_publish_queue_uid",
                 request.url().toString());
+    }
+
+    @Test
+    void testPublishQueueException() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        PublishQueue thePublishQueue = stack.publishQueue();
+        thePublishQueue.clearParams();
+        thePublishQueue.addParam("key", "value");
+        thePublishQueue.removeParam("key");
+        thePublishQueue.addHeader("key", "value");
+        Assertions.assertThrows(IllegalAccessError.class, thePublishQueue::fetchActivity);
     }
 
 }

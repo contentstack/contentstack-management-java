@@ -7,7 +7,10 @@ import okhttp3.Request;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
@@ -243,5 +246,18 @@ class TokenUnitTest {
         Assertions.assertEquals("management_tokens", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals("https://api.contentstack.io/v3/management_tokens/" + _uid, request.url().toString());
+    }
+
+    @Test
+    void testHeaderAndParams() {
+        Stack stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack("apiKey", "managementToken");
+        DeliveryToken deliveryToken = stack.tokens().deliveryTokens("test_id");
+        deliveryToken.clearParams();
+        deliveryToken.addHeader("headerKey", "headerValue");
+        deliveryToken.addParam("key", "Value");
+        deliveryToken.removeParam("key");
+        Request request = tokens.deliveryTokens().find().request();
+        Assertions.assertEquals("https://api.contentstack.io/v3/delivery_tokens",
+                request.url().toString());
     }
 }
