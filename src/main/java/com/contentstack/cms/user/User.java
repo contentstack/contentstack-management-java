@@ -1,6 +1,6 @@
 package com.contentstack.cms.user;
 
-import com.contentstack.cms.Parametron;
+import com.contentstack.cms.BaseImplementation;
 import com.contentstack.cms.core.Util;
 import com.contentstack.cms.models.LoginDetails;
 import okhttp3.ResponseBody;
@@ -23,15 +23,14 @@ import java.util.HashMap;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class User implements Parametron {
+public class User implements BaseImplementation {
 
     protected final UserService userService;
     protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
 
     /**
-     * @param client
-     *               Retrofit adapts a Java interface to HTTP calls by using
+     * @param client Retrofit adapts a Java interface to HTTP calls by using
      *               annotations on the declared methods to define how
      *               requests are made. Create instances using
      *               {@linkplain Retrofit.Builder the builder} and pass your
@@ -49,6 +48,9 @@ public class User implements Parametron {
      * @author ***REMOVED***
      */
     public User(Retrofit client) {
+        this.params = new HashMap<>();
+        this.headers = new HashMap<>();
+        this.headers.put("Content-Type", "application/json");
         this.userService = client.create(UserService.class);
     }
 
@@ -59,10 +61,8 @@ public class User implements Parametron {
      * <b>Note:</b> The authtoken is a mandatory parameter when executing Content
      * Management API calls.
      *
-     * @param email
-     *                 email for user to login
-     * @param password
-     *                 password for user to login
+     * @param email    email for user to login
+     * @param password password for user to login
      * @return Call
      */
     public Call<LoginDetails> login(@NotNull String email, @NotNull String password) {
@@ -81,12 +81,9 @@ public class User implements Parametron {
     /**
      * Login call.
      *
-     * @param email
-     *                 email for user to login
-     * @param password
-     *                 password for user to login
-     * @param tfaToken
-     *                 the tfa token
+     * @param email    email for user to login
+     * @param password password for user to login
+     * @param tfaToken the tfa token
      * @return Call
      */
     public Call<LoginDetails> login(@NotNull String email, @NotNull String password, @NotNull String tfaToken) {
@@ -127,8 +124,7 @@ public class User implements Parametron {
      * information should be in JSON format.
      * <br>
      *
-     * @param body
-     *             The request body
+     * @param body The request body
      * @return Call
      */
     public Call<ResponseBody> update(JSONObject body) {
@@ -141,13 +137,11 @@ public class User implements Parametron {
      * signing up. For account activation,
      * you will require the token received in the activation email. <br>
      *
-     * @param activationToken
-     *                        The activation token received on the registered email
+     * @param activationToken The activation token received on the registered email
      *                        address. You can find the activation token in the
      *                        activation URL sent to the email address used while
      *                        signing up
-     * @param body
-     *                        the {@link JSONObject} body
+     * @param body            the {@link JSONObject} body
      * @return Call
      */
     public Call<ResponseBody> activateAccount(@NotNull String activationToken, JSONObject body) {
@@ -164,8 +158,7 @@ public class User implements Parametron {
      * <li>Provide the user's email address in JSON format</li>
      * </ul>
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      */
     public Call<ResponseBody> requestPassword(JSONObject body) {
@@ -180,8 +173,7 @@ public class User implements Parametron {
      * you receive via email, your new
      * password, and password confirmation in JSON format. <br>
      *
-     * @param body
-     *             the request body
+     * @param body the request body
      * @return Call
      */
     public Call<ResponseBody> resetPassword(@NotNull JSONObject body) {
@@ -192,8 +184,7 @@ public class User implements Parametron {
      * The Log out of your account call is used to sign out the user of Contentstack
      * account
      *
-     * @param authtoken
-     *                  The authtoken of the user
+     * @param authtoken The authtoken of the user
      * @return Call
      */
     public Call<ResponseBody> logoutWithAuthtoken(String authtoken) {

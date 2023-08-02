@@ -77,7 +77,7 @@ public class LocaleUnitTest {
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("locales/update_locale.json");
         locale.clearParams();
-        Request request = locale.update( requestBody).request();
+        Request request = locale.update(requestBody).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -124,7 +124,7 @@ public class LocaleUnitTest {
     @Test
     void updateFallbackLocale() {
         JSONObject requestBody = Utils.readJson("locales/update_fallback.json");
-        Request request = locale.updateFallback( requestBody).request();
+        Request request = locale.updateFallback(requestBody).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -135,5 +135,16 @@ public class LocaleUnitTest {
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/locales/en-us",
                 request.url().toString());
+    }
+
+    @Test
+    void testLocaleException() {
+        Stack stack = new Contentstack.Builder().build().stack("apiKey", "token");
+        Locale theLocale = stack.locale();
+        theLocale.clearParams();
+        theLocale.addHeader("key", "value");
+        theLocale.addParam("key", "value");
+        theLocale.removeParam("key");
+        Assertions.assertThrows(IllegalAccessError.class, theLocale::fetch);
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.contentstack.sdk</groupId>
     <artifactId>cms</artifactId>
@@ -30,19 +30,19 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>http://github.com/contentstack/contentstack-management-java/issues</url>
+        <url>https://github.com/contentstack/contentstack-management-java/issues</url>
     </issueManagement>
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
         </license>
     </licenses>
 
     <organization>
         <name>contentstack</name>
-        <url>http://contentstack.com</url>
+        <url>https://contentstack.com</url>
     </organization>
 
     <developers>
@@ -61,20 +61,20 @@
     </developers>
 
     <distributionManagement>
-        <!-- <snapshotRepository>
+        <snapshotRepository>
             <id>ossrh</id>
             <name>Apache Maven Packages Snapshot</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository> -->
-        <snapshotRepository>
+        </snapshotRepository>
+        <!-- <snapshotRepository>
             <id>github</id>
             <name>GitHub Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/contentstack/contentstack-management-java</url>
-        </snapshotRepository>
+        </snapshotRepository> -->
         <repository>
             <id>ossrh</id>
             <name>Apache Maven Packages Release</name>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
@@ -171,6 +171,7 @@
             <version>1.1.1</version>
             <scope>compile</scope>
         </dependency>
+
     </dependencies>
 
 
@@ -246,20 +247,20 @@
                 <version>${maven-site-plugin.version}</version>
             </plugin>
 
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-gpg-plugin</artifactId>-->
-            <!--                <version>${maven-gpg-plugin.version}</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>sign-artifacts</id>-->
-            <!--                        <phase>verify</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>sign</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven-gpg-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -323,7 +324,7 @@
 
 
             <!-- mvn pdf:pdf -->
-            <!-- The Maven PDF Plugin allows you generate a PDF document of your documentation -->
+            <!-- The Maven PDF Plugin allows you to generate a PDF document of your documentation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pdf-plugin</artifactId>
@@ -362,7 +363,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
