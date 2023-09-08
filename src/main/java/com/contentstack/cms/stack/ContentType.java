@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -28,10 +29,10 @@ import java.util.Objects;
  * @author ***REMOVED***
  * @version v0.1.0
  * @see <a href=
- *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#content-types">Content
- *      Types</a>
+ * "https://www.contentstack.com/docs/developers/apis/content-management-api/#content-types">Content
+ * Types</a>
  */
-public class ContentType {
+public class ContentType implements BaseImplementation<ContentType> {
 
     protected final ContentTypeService service;
     protected final Map<String, Object> headers;
@@ -42,10 +43,8 @@ public class ContentType {
     /**
      * Instantiates a new Content type.
      *
-     * @param instance
-     *                 the {@link Retrofit} instance
-     * @param headers
-     *                 the headers
+     * @param instance the {@link Retrofit} instance
+     * @param headers  the headers
      */
     protected ContentType(@NotNull Retrofit instance, Map<String, Object> headers) {
         this.instance = instance;
@@ -58,12 +57,9 @@ public class ContentType {
     /**
      * Instantiates a new Content type.
      *
-     * @param instance
-     *                 the {@link Retrofit} instance
-     * @param headers
-     *                 the headers
-     * @param uid
-     *                 the contentTypeUid
+     * @param instance the {@link Retrofit} instance
+     * @param headers  the headers
+     * @param uid      the contentTypeUid
      */
     public ContentType(@NotNull Retrofit instance, Map<String, Object> headers, String uid) {
         this.instance = instance;
@@ -74,35 +70,70 @@ public class ContentType {
         this.service = instance.create(ContentTypeService.class);
     }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
-     */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-    }
+
+    //----------------------------------------------------------------
+    // GETTERS
+    //----------------------------------------------------------------
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *              key of query parameters of request
-     * @param value
-     *              value of query parameters of request
+     * @param key   A string representing the key of the parameter. It cannot be
+     *              null and must be
+     *              provided as a non-null value.
+     * @param value The "value" parameter is of type Object, which means it can
+     *              accept any type of
+     *              object as its value.
+     * @return instance of ContentType
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    @Override
+    public ContentType addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of ContentType
+     */
+    @Override
+    public ContentType addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of ContentType
+     */
+    @Override
+    public ContentType addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of ContentType
+     */
+    @Override
+    public ContentType addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *            Remove query parameters of request by key
+     * @param key remove query parameters of request by key
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -128,8 +159,7 @@ public class ContentType {
     /**
      * An entry is the actual piece of content created using one of the defined
      *
-     * @param entryUid
-     *                 The entry uid
+     * @param entryUid The entry uid
      * @return Entry
      */
     public Entry entry(@NotNull String entryUid) {
@@ -156,9 +186,9 @@ public class ContentType {
      *
      * @return the call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types">
-     *      Get all content types</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-content-types">
+     * Get all content types</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -206,10 +236,10 @@ public class ContentType {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-content-type">
-     *      Get a
-     *      single content type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-content-type">
+     * Get a
+     * single content type</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -250,13 +280,12 @@ public class ContentType {
      *     {@link Call} response = contentType.create(managementToken, bodyStr).execute();
      * </pre>
      *
-     * @param requestBody
-     *                    the request body
+     * @param requestBody the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-content-type">
-     *      Create A Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-content-type">
+     * Create A Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -277,13 +306,12 @@ public class ContentType {
      * href=https://www.contentstack.com/docs/developers/apis/content-management-api/#update-content-type>Read
      * more</a>
      *
-     * @param requestBody
-     *                    the request body
+     * @param requestBody the request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-content-type">
-     *      Update Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-content-type">
+     * Update Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -308,13 +336,12 @@ public class ContentType {
      * required fields to the content type and saved it) or while editing a content
      * type (both via UI and API).
      *
-     * @param requestBody
-     *                    the request body JSONBody
+     * @param requestBody the request body JSONBody
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-field-visibility-rule-for-content-type">
-     *      Set Field Visibility Rule for Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-field-visibility-rule-for-content-type">
+     * Set Field Visibility Rule for Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -339,9 +366,9 @@ public class ContentType {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-content-type">
-     *      Delete Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-content-type">
+     * Delete Content Type</a>
+     * @see #addHeader(String, String)  to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -367,13 +394,12 @@ public class ContentType {
      * Management API request. Read more about
      * authentication.
      *
-     * @param isIncludeGlobalField
-     *                             Include Global Field true/false
+     * @param isIncludeGlobalField Include Global Field true/false
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
-     *      Get All References Of Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
+     * Get All References Of Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> reference(Boolean isIncludeGlobalField) {
@@ -399,9 +425,9 @@ public class ContentType {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
-     *      Get All References Of Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-references-of-content-type">
+     * Get All References Of Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> referenceIncludeGlobalField() {
@@ -426,9 +452,9 @@ public class ContentType {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
-     *      Export A Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
+     * Export A Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> export() {
@@ -451,15 +477,14 @@ public class ContentType {
      * valid Content Management API request.
      * Read more about authentication.
      *
-     * @param version
-     *                The version of content type you want to retrieve. If no
+     * @param version The version of content type you want to retrieve. If no
      *                version is specified, you will get the latest
      *                version of the content type
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
-     *      Export A Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-content-type">
+     * Export A Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> export(int version) {
@@ -476,9 +501,9 @@ public class ContentType {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
-     *      Import A Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
+     * Import A Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> imports() {
@@ -498,9 +523,9 @@ public class ContentType {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
-     *      Import A Content Type</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-content-type">
+     * Import A Content Type</a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> importOverwrite() {

@@ -1,6 +1,6 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.organization.Organization;
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -23,7 +23,7 @@ import java.util.Objects;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class DeliveryToken {
+public class DeliveryToken implements BaseImplementation<DeliveryToken> {
 
     protected final TokenService service;
     protected HashMap<String, Object> headers;
@@ -44,21 +44,6 @@ public class DeliveryToken {
         this.service = service;
     }
 
-    /**
-     * The addHeader function adds a key-value pair to the headers map.
-     *
-     * @param key   A string representing the key of the header. This is used to
-     *              identify the header when
-     *              retrieving or modifying it.
-     * @param value The value parameter is of type Object, which means it can accept
-     *              any type of object as
-     *              its value.
-     *  @return instance of {@link DeliveryToken}
-     */
-    public DeliveryToken addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-        return this;
-    }
 
     /**
      * The addParam function adds a key-value pair to a map.
@@ -69,10 +54,51 @@ public class DeliveryToken {
      * @param value The value parameter is of type Object, which means it can accept
      *              any type of object as
      *              its value.
-     *  @return instance of {@link DeliveryToken}
+     * @return instance of {@link DeliveryToken}
      */
+    @Override
     public DeliveryToken addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of {@link DeliveryToken}
+     */
+    @Override
+    public DeliveryToken addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of {@link DeliveryToken}
+     */
+    @Override
+    public DeliveryToken addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of {@link DeliveryToken}
+     */
+    @Override
+    public DeliveryToken addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
         return this;
     }
 
@@ -101,7 +127,7 @@ public class DeliveryToken {
      * all
      * Delivery Tokens
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -119,7 +145,7 @@ public class DeliveryToken {
      * a
      * Single Delivery Token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -143,7 +169,7 @@ public class DeliveryToken {
      * Delivery
      * Token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -171,7 +197,7 @@ public class DeliveryToken {
      * Delivery
      * Token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -189,7 +215,7 @@ public class DeliveryToken {
      * Delivery
      * Token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -208,7 +234,7 @@ public class DeliveryToken {
      * Delivery
      * Token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
