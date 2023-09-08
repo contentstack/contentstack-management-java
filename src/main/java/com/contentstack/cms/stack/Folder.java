@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +11,7 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Folder {
+public class Folder implements BaseImplementation<Folder> {
 
     protected final Map<String, Object> headers;
     protected Map<String, Object> params;
@@ -36,34 +37,64 @@ public class Folder {
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
+     * @param key   A string representing the key of the parameter. It cannot be
+     *              null and must be
+     *              provided as a non-null value.
+     * @param value The "value" parameter is of type Object, which means it can
+     *              accept any type of
+     *              object as its value.
+     * @return instance of the {@link Folder}
      */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
+    @Override
+    public Folder addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+        return this;
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of the {@link Folder}
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
-        this.params.put(key, value);
+    @Override
+    public Folder addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of the {@link Folder}
+     */
+    @Override
+    public Folder addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of the {@link Folder}
+     */
+    @Override
+    public Folder addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -94,9 +125,9 @@ public class Folder {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
-     *      Unpublish An Asset</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-asset">
+     * Unpublish An Asset</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -125,14 +156,13 @@ public class Folder {
      * is 5. When nesting folder, you
      * cannot nest a folder within the same folder or within its child folders
      *
-     * @param requestBody
-     *                    JSONObject request body
+     * @param requestBody JSONObject request body
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-folder">
-     *      Create
-     *      a folder</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-folder">
+     * Create
+     * a folder</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -159,13 +189,12 @@ public class Folder {
      * is 5. When nesting folder, you
      * cannot nest a folder within the same folder or within its child folders.
      *
-     * @param requestBody
-     *                    JSONObject request body { "asset": { "name": "Demo" } }
+     * @param requestBody JSONObject request body { "asset": { "name": "Demo" } }
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-or-move-folder">
-     *      Update ORr Move Folder</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-or-move-folder">
+     * Update ORr Move Folder</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */
@@ -182,10 +211,10 @@ public class Folder {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-folder">
-     *      Delete
-     *      A Folder</a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-folder">
+     * Delete
+     * A Folder</a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query params
      * @since 0.1.0
      */

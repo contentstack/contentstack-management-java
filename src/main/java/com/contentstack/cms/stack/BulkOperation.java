@@ -27,7 +27,7 @@ import java.util.HashMap;
  * Bulk Operations Queue </a>
  * @since 2023 -08-23
  */
-public class BulkOperation implements BaseImplementation {
+public class BulkOperation implements BaseImplementation<BulkOperation> {
 
     /**
      * The Service.
@@ -124,7 +124,6 @@ public class BulkOperation implements BaseImplementation {
      * satisfy the publish rules, pass
      * additional query parameters, skip_workflow_stage_check=true and
      * approvals=true.
-     * <p>
      *
      * @param body the body
      * @return Call call
@@ -154,7 +153,6 @@ public class BulkOperation implements BaseImplementation {
      * Authtoken (any one is mandatory),
      * along with the stack API key, to make a valid Content Management API request.
      * Read more about authentication.
-     * <p>
      *
      * @param body the body
      * @return Call call
@@ -188,7 +186,7 @@ public class BulkOperation implements BaseImplementation {
      * <p>
      *
      * @param body the body
-     * @return Call call
+     * @return Call
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
      * Delete Operation </a>
