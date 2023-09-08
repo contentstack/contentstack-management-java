@@ -45,7 +45,7 @@ import java.util.Map;
  * Branches </a>
  * @since 2023 -June-30
  */
-public class Merge implements BaseImplementation {
+public class Merge implements BaseImplementation<Merge> {
 
     /**
      * The Headers.
