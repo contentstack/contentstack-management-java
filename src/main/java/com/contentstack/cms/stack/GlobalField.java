@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -26,7 +27,7 @@ import java.util.HashMap;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class GlobalField {
+public class GlobalField implements BaseImplementation<GlobalField> {
 
     /**
      * The Service.
@@ -54,27 +55,59 @@ public class GlobalField {
             throw new IllegalAccessError("Global Field Uid can not be null or empty");
     }
 
+
     /**
-     * Sets header for the request
-     *
-     * @param key   header key for the request
-     * @param value header value for the request
-     * @return instance of {@link GlobalField}
+     * @param key   A string representing the key of the parameter. It cannot be
+     *              null and must be
+     *              provided as a non-null value.
+     * @param value The "value" parameter is of type Object, which means it can
+     *              accept any type of
+     *              object as its value.
+     * @return instance of the GlobalField object
      */
-    public GlobalField addHeader(@NotNull String key, @NotNull Object value) {
+    @Override
+    public GlobalField addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of the GlobalField object
+     */
+    @Override
+    public GlobalField addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
         return this;
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key   query param key for the request
-     * @param value query param value for the request
-     * @return instance of {@link GlobalField}
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of the GlobalField object
      */
-    public GlobalField addParam(@NotNull String key, @NotNull Object value) {
-        this.params.put(key, value);
+    @Override
+    public GlobalField addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of the GlobalField object
+     */
+    @Override
+    public GlobalField addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
         return this;
     }
 
@@ -91,6 +124,7 @@ public class GlobalField {
 
     /**
      * To clear all the query params
+     *
      * @return instance of {@link GlobalField}
      */
     protected GlobalField clearParams() {
