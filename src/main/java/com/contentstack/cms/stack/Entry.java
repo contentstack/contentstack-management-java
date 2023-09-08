@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -25,7 +26,7 @@ import java.util.Objects;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class Entry {
+public class Entry implements BaseImplementation<Entry> {
 
     final String ERROR_ENTRY_UID = "Entry UID Is Required";
     final String ERROR_CT_UID = "Content Type UID Is Required";
@@ -66,9 +67,10 @@ public class Entry {
      *
      * @param key   header key for the request
      * @param value header value for the request
-     *  @return instance of {@link Entry}
+     * @return instance of {@link Entry}
      */
-    public Entry addHeader(@NotNull String key, @NotNull Object value) {
+    @Override
+    public Entry addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
         return this;
     }
@@ -78,10 +80,23 @@ public class Entry {
      *
      * @param key   query param key for the request
      * @param value query param value for the request
-     *  @return instance of {@link Entry}
+     * @return instance of {@link Entry}
      */
     public Entry addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
+    }
+
+
+    @Override
+    public Entry addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    @Override
+    public Entry addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
         return this;
     }
 
@@ -97,6 +112,7 @@ public class Entry {
 
     /**
      * To clear all the query params
+     *
      * @return instance of {@link Entry}
      */
     protected Entry clearParams() {
@@ -194,7 +210,7 @@ public class Entry {
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-an-entry">Create
      * A Entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -221,7 +237,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-an-entry">
      * Update
      * an entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -275,7 +291,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#atomic-updates-to-entries">
      * Atomic
      * Operation</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -317,7 +333,7 @@ public class Entry {
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">Get
      * Delete An Entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -367,7 +383,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-entry">
      * Delete
      * An Entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -393,7 +409,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#set-version-name-for-entry">
      * Set
      * Version Name for Entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> versionName(int version, JSONObject requestBody) {
@@ -434,7 +450,7 @@ public class Entry {
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-details-of-all-versions-of-an-entry">
      * Get Details of All Versions of an Entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> detailOfAllVersion() {
@@ -453,7 +469,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-version-name-of-entry">
      * Delete
      * Version Name of Entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> deleteVersionName(int versionNumber, JSONObject requestBody) {
@@ -481,7 +497,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-references-of-an-entry">
      * Get
      * references of an entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -505,7 +521,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-languages-of-an-entry">
      * Get
      * language of an entry</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -537,7 +553,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#localize-an-entry">
      * Localize an entry
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> localize(@NotNull JSONObject requestBody,
@@ -558,7 +574,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#unlocalize-an-entry">
      * unlocalize an entry
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> unLocalize(@NotNull String localeCode) {
@@ -578,7 +594,7 @@ public class Entry {
      * Export
      * an entry
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -614,7 +630,7 @@ public class Entry {
      * Import
      * an entry
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -642,7 +658,7 @@ public class Entry {
      * Import
      * an entry
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -688,7 +704,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry">
      * Publish an entry
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> publish(@NotNull JSONObject requestBody) {
@@ -718,7 +734,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-entry-with-references">
      * Publish an entry With reference
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -752,7 +768,7 @@ public class Entry {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#unpublish-an-entry">
      * Unpublish an entry
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> unpublish(@NotNull JSONObject requestBody) {

@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -16,9 +17,9 @@ import java.util.Map;
  *
  * @author ishaileshmishra
  * @version v0.1.0
- * @since 2022-10-22
+ * @since 2022 -10-22
  */
-public class Stack {
+public class Stack implements BaseImplementation<Stack> {
 
     private final StackService service;
     protected Retrofit client;
@@ -38,24 +39,6 @@ public class Stack {
     }
 
     /**
-     * The addHeader function adds a key-value pair to the headers map and returns
-     * the updated Stack
-     * object.
-     *
-     * @param key   A string representing the key of the header. It is marked
-     *              as @NotNull, which means it
-     *              cannot be null and must be provided.
-     * @param value The value parameter is of type Object, which means it can accept
-     *              any type of object as
-     *              its value.
-     * @return The method is returning a Stack object.
-     */
-    public Stack addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-        return this;
-    }
-
-    /**
      * The addParam function adds a key-value pair to a stack and returns the
      * updated stack.
      *
@@ -68,6 +51,46 @@ public class Stack {
      */
     public Stack addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of the Stack
+     */
+    @Override
+    public Stack addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of the Stack
+     */
+    @Override
+    public Stack addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of the Stack
+     */
+    @Override
+    public Stack addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
         return this;
     }
 
@@ -546,10 +569,10 @@ public class Stack {
     }
 
     /**
-     * You can pin a set of entries and assets (along with the deploy action, i.e.,
-     * publish/unpublish) to a
+     * You can pin a set of entries and assets (along with the deployment action, i.e.,
+     * publish/un-publish) to a
      * <b>release</b>, and then deploy this release to an environment. This will
-     * publish/unpublish all the items of the release to the specified environment.
+     * publish/un-publish all the items of the release to the specified environment.
      * Read more about Releases.
      *
      * @return Release
@@ -559,10 +582,10 @@ public class Stack {
     }
 
     /**
-     * You can pin a set of entries and assets (along with the deploy action, i.e.,
-     * publish/unpublish) to a
+     * You can pin a set of entries and assets (along with the deployment action, i.e.,
+     * publish/un-publish) to a
      * <b>release</b>, and then deploy this release to an environment. This will
-     * publish/unpublish all the items of the release to the specified environment.
+     * publish/un-publish all the items of the release to the specified environment.
      * Read more about Releases.
      *
      * @param releaseUid The unique ID of the release of which you want to retrieve
@@ -631,7 +654,7 @@ public class Stack {
 
     /**
      * The Publishing Queue displays the historical and current details of
-     * activities such as publish, unpublish, or
+     * activities such as publish, un-publish, or
      * delete that can be performed on entries and/or assets. It also shows details
      * of Release deployments. These
      * details include time, entry, content type, version, language, user,
@@ -649,7 +672,7 @@ public class Stack {
     }
 
     /**
-     * You can perform bulk operations such as Publish, Unpublish, and Delete on
+     * You can perform bulk operations such as Publish, Un-publish, and Delete on
      * multiple entries or assets, or Change
      * the Workflow Details of multiple entries or assets at the same time.
      * <p>
@@ -666,7 +689,7 @@ public class Stack {
 
     /**
      * The Publishing Queue displays the historical and current details of
-     * activities such as publish, unpublish, or
+     * activities such as publish, un-publish, or
      * delete that can be performed on entries and/or assets. It also shows details
      * of Release deployments. These
      * details include time, entry, content type, version, language, user,
@@ -798,6 +821,45 @@ public class Stack {
         return new Alias(this.client, aliasUid);
     }
 
+
+    /**
+     * The taxonomy works on data where hierarchy is configured
+     *
+     * <pre>
+     * {@code
+     * Stack stack = new Contentstack.Builder().setAuthtoken("authtoken").build().stack();
+     * Taxonomy taxonomy = stack.taxonomy();
+     * Call<ResponseBody> response = taxonomy.fetch().execute();
+     * }
+     * </pre>
+     *
+     * @return instance of Taxonomy
+     */
+    public Taxonomy taxonomy() {
+        return new Taxonomy(this.client, this.headers);
+    }
+
+
+    /**
+     * The taxonomy works on data where hierarchy is configured
+     *
+     * @param taxonomyUid the taxonomy uid
+     * @return instance of Taxonomy
+     * <p></p>
+     * <pre>
+     * {@code
+     * Stack stack = new Contentstack.Builder().setAuthtoken("authtoken").build().stack();
+     * Taxonomy taxonomy = stack.taxonomy("taxonomyId");
+     * taxonomy.terms();
+     * taxonomy.fetch();
+     * taxonomy.find();
+     * }
+     * </pre>
+     */
+    public Taxonomy taxonomy(@NotNull String taxonomyUid) {
+        return new Taxonomy(this.client, this.headers, taxonomyUid);
+    }
+
     /**
      * <b>Get stacks</b>
      * <br>
@@ -826,7 +888,7 @@ public class Stack {
      * UID in the header.</b>
      * <br>
      * <br>
-     * - Add headers using {@link #addHeader(String, Object)}
+     * - Add headers using {@link #addHeader(String, String)}
      * <br>
      * - Add query parameters using {@link #addParam(String, Object)}
      *
@@ -945,7 +1007,7 @@ public class Stack {
      * <ul>
      * <li>To Accept stack owned by other user, user
      * {@link #addParam(String, Object)} to add query parameters</li>
-     * <li>To Add Header use {@link #addHeader(String, Object)}</li>
+     * <li>To Add Header use {@link #addHeader(String, String)}</li>
      * </ul>
      *
      * @param ownershipToken the ownership token received via email by another user.
@@ -1116,16 +1178,16 @@ public class Stack {
     }
 
     /**
-     * <b>Unshare a stack</b>
+     * <b>Un-share a stack</b>
      * <p>
-     * The Unshare a stack removes the user account from the list of collaborators.
+     * The Un-share a stack removes the user account from the list of collaborators.
      * Once this call is executed, the user
      * will not be able to view the stack in their account.
      * </p>
      * <br>
      * <p>
      * In the 'Body' section, you need to provide the email ID of the user from whom
-     * you wish to unshare the stack.
+     * you wish to un-share the stack.
      * </p>
      * <b>Here is a sample of the Request Body:</b>
      *
@@ -1189,5 +1251,6 @@ public class Stack {
     public Call<ResponseBody> roles(@NotNull JSONObject body) {
         return service.updateUserRoles(this.headers, body);
     }
+
 
 }
