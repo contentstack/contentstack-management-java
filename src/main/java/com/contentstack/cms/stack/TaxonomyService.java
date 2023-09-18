@@ -16,35 +16,67 @@ public interface TaxonomyService {
     @GET("taxonomies/{taxonomy_uid}")
     Call<ResponseBody> fetch(@HeaderMap Map<String, Object> headers, @Path("taxonomy_uid") String uid, @QueryMap Map<String, Object> query);
 
-    @GET("taxonomies")
-    Call<ResponseBody> create(@HeaderMap Map<String, Object> headers, @Body JSONObject body);
+    @POST("taxonomies")
+    Call<ResponseBody> create(
+            @HeaderMap Map<String, Object> headers,
+            @Body JSONObject body);
 
     @PUT("taxonomies/{taxonomy_uid}")
-    Call<ResponseBody> update(@HeaderMap Map<String, Object> headers, @Path("taxonomy_uid") String uid, @Body JSONObject body);
+    Call<ResponseBody> update(
+            @HeaderMap Map<String, Object> headers,
+            @Path("taxonomy_uid") String uid,
+            @Body JSONObject body);
 
     @DELETE("taxonomies/{taxonomy_uid}")
-    Call<ResponseBody> delete(@HeaderMap Map<String, Object> headers, @Path("taxonomy_uid") String uid);
+    Call<ResponseBody> delete(
+            @HeaderMap Map<String, Object> headers,
+            @Path("taxonomy_uid") String uid);
 
     //--Terms--
     @POST("taxonomies/{taxonomy_uid}/terms")
-    Call<ResponseBody> createTerm(@HeaderMap HashMap<String, Object> headers, @Path("taxonomy_uid") String taxonomyId, @Body JSONObject body);
+    Call<ResponseBody> createTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @Body JSONObject body);
 
     @GET("taxonomies/{taxonomy_uid}/terms")
-    Call<ResponseBody> findTerm(@HeaderMap HashMap<String, Object> headers, @Path("taxonomy_uid") String taxonomyId, @QueryMap Map<String, Object> queryParams);
+    Call<ResponseBody> findTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @QueryMap Map<String, Object> queryParams);
 
     @GET("taxonomies/{taxonomy_uid}/terms/{term_id}")
-    Call<ResponseBody> fetchTerm(@HeaderMap HashMap<String, Object> headers, @Path("taxonomy_uid") String taxonomyId, @Path("term_id") String termId, @QueryMap Map<String, Object> queryParams);
+    Call<ResponseBody> fetchTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @Path("term_id") String termId,
+            @QueryMap Map<String, Object> queryParams);
 
     @GET("taxonomies/{taxonomy_uid}/terms/{term_id}/descendants")
-    Call<ResponseBody> descendantsTerm(@HeaderMap HashMap<String, Object> headers, @Path("taxonomy_uid") String taxonomyId, @Path("term_id") String termId, @QueryMap Map<String, Object> queryParams);
+    Call<ResponseBody> descendantsTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @Path("term_id") String termId,
+            @QueryMap Map<String, Object> queryParams);
 
     @GET("taxonomies/{taxonomy_uid}/terms/{term_id}/ancestors")
-    Call<ResponseBody> ancestorsTerm(@HeaderMap HashMap<String, Object> headers, @Path("taxonomy_uid") String taxonomyId, @Path("term_id") String termId, @QueryMap Map<String, Object> queryParams);
+    Call<ResponseBody> ancestorsTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @Path("term_id") String termId,
+            @QueryMap Map<String, Object> queryParams);
 
     @PUT("taxonomies/{taxonomy_uid}/terms/{term_id}")
-    Call<ResponseBody> updateTerm(@HeaderMap HashMap<String, Object> headers, @Path("taxonomy_uid") String taxonomyId, @Path("term_id") String termId, @Body JSONObject body);
+    Call<ResponseBody> updateTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @Path("term_id") String termId,
+            @Body JSONObject body);
 
-    @GET("taxonomies/all/terms?term={term_string}")
-    Call<ResponseBody> searchTerm(@HeaderMap HashMap<String, Object> headers, @Path("term_string") String termString);
 
+    @GET("taxonomies/all/terms")
+    Call<ResponseBody> searchTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Query("term") String termString
+    );
 }
