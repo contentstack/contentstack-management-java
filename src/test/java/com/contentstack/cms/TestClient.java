@@ -17,6 +17,7 @@ public class TestClient {
     public final static String API_KEY = (env.get("apiKey") != null) ? env.get("apiKey") : "apiKey99999999";
     public final static String MANAGEMENT_TOKEN = (env.get("managementToken") != null) ? env.get("managementToken") : "managementToken99999999";
 
+    public final static String DEV_HOST = (env.get("dev_host") != null) ? env.get("dev_host") : "***REMOVED***";
     private static Contentstack instance;
     private static Stack stackInstance;
 
