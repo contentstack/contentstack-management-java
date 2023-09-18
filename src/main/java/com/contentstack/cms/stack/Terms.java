@@ -222,7 +222,6 @@ public class Terms implements BaseImplementation<Terms> {
      *      Term term = stack.taxonomy("taxonomyId").terms().ancestors("termId");
      *     }
      *     </pre>
-     *
      */
     public Call<ResponseBody> ancestors(@NotNull String termUid) {
         return this.taxonomyService.ancestorsTerm(this.headers, this.taxonomyId, termUid, this.params);
@@ -231,7 +230,7 @@ public class Terms implements BaseImplementation<Terms> {
     /**
      * @param termUid - The term for which we need the details
      * @param body    the JSONObject body for the request
-     * @return  instance of Call
+     * @return instance of Call
      * <p>
      * <b>Example</b>
      * <pre>
@@ -257,7 +256,7 @@ public class Terms implements BaseImplementation<Terms> {
      * @param termString: The string for which we need to search for the matching terms, should either match with term uid or term name
      * @return instance of Call
      * <p>
-
+     *
      * <b>Example</b>
      * <pre>
      * {@code
@@ -265,8 +264,12 @@ public class Terms implements BaseImplementation<Terms> {
      * Term term = stack.taxonomy("taxonomyId").terms().search("search anything");
      * }
      * </pre>
+     * @throws IllegalArgumentException if the termString is empty
      */
     public Call<ResponseBody> search(@NotNull String termString) {
+        if (termString.isEmpty()) {
+            throw new IllegalArgumentException("termString must not be empty");
+        }
         return this.taxonomyService.searchTerm(this.headers, termString);
     }
 
