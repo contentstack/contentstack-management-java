@@ -138,7 +138,7 @@ class TaxonomyTest {
     @Test
     void deleteTest() {
         Request request = taxonomy.delete("taxonomyId").request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(5, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -147,6 +147,47 @@ class TaxonomyTest {
         Assertions.assertNull(request.body());
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/taxonomyId", request.url().toString());
+    }
+
+
+    @Test
+    void deleteTestWithHeaders() {
+        taxonomy.clearParams();
+        taxonomy.addHeader("Content-Type", "application/json");
+        HashMap<String, String> headers = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
+        headers.put("key_param1", "key_param_value");
+        headers.put("key_param2", "key_param_value");
+        params.put("key_param3", "key_param_value");
+        params.put("key_param4", "key_param_value");
+        taxonomy.addHeaders(headers);
+        taxonomy.addParams(params);
+        Request request = taxonomy.delete("taxonomyId").request();
+        Assertions.assertEquals(5, request.headers().names().size());
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/taxonomyId", request.url().toString());
+    }
+
+
+    @Test
+    void createTest() {
+        JSONObject obj = new JSONObject();
+        obj.put("name", "sample");
+        Request request = taxonomy.create(obj).request();
+        Assertions.assertEquals(4, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies", request.url().toString());
     }
 
     @Test
@@ -198,7 +239,6 @@ class TaxonomyTest {
         terms.clearParams();
         terms.addParam("include_referenced_entries_count", true);
         terms.addParam("include_children_count", false);
-
         Request request = terms.fetch(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
@@ -212,6 +252,38 @@ class TaxonomyTest {
         Assertions.assertNull(request.body());
         Assertions.assertEquals("include_children_count=false&include_referenced_entries_count=true", request.url().encodedQuery());
         Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/auth999999999/terms/auth999999999?include_children_count=false&include_referenced_entries_count=true", request.url().toString());
+    }
+
+
+    @Test
+    void testTermUpdate() {
+        terms.clearParams();
+        HashMap<String, String> headers = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
+        terms.addParam("include_referenced_entries_count", true);
+        terms.addParam("include_children_count", false);
+        terms.addHeader("Accept-Encoding", "UTF-8");
+        headers.put("Accept-Encoding", "UTF-8");
+        params.put("include_children_count", "true");
+        terms.addParams(params);
+        terms.addHeaders(headers);
+        Request request = terms.update(_uid, new JSONObject()).request();
+        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+    }
+
+    @Test
+    void testTermSearch() {
+        terms.clearParams();
+        Request request = terms.search("contentstack").request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
     }
 
     @Test
@@ -239,7 +311,7 @@ class TaxonomyTest {
         terms.addParam("include_referenced_entries_count", true);
         terms.addParam("include_children_count", false);
         Request request = terms.ancestors("termId45").request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -256,14 +328,13 @@ class TaxonomyTest {
     @Test
     void findTestAPI() throws IOException {
         Taxonomy taxonomy = new Contentstack.Builder()
-                .setAuthtoken("blt67b95aeb964f5262")
+                .setAuthtoken(TestClient.AUTHTOKEN)
                 .setHost("***REMOVED***")
                 .build()
                 .stack("blt12c1ba95c1b11e88", "")
                 .taxonomy();
         Response<ResponseBody> response = taxonomy.addHeader("authtoken", "blt67b95aeb964f5262").find().execute();
         System.out.println(response);
-        //Assertions.assertEquals(2, request.headers().names().size());
     }
 
 }
