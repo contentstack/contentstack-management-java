@@ -5,6 +5,7 @@ import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class TestClient {
 
@@ -41,12 +42,18 @@ public class TestClient {
         if (instance == null) {
             synchronized (Contentstack.class) {
                 if (instance == null) {
-                    instance = new Contentstack.Builder().setAuthtoken(AUTHTOKEN)
+                    instance = new Contentstack.Builder()
+                            .setAuthtoken(AUTHTOKEN)
+                            .setConnectionPool(5, 400, TimeUnit.MILLISECONDS)
                             .setHost("kpm.ishaileshmishra.io/path/another").build();
                 }
             }
         }
         return instance;
+    }
+
+    public static void main(String[] args) {
+        getCustomClient();
     }
 
     public static Stack getStack() {
