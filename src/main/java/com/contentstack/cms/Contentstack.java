@@ -8,6 +8,7 @@ import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
 import com.contentstack.cms.user.User;
 import com.google.gson.Gson;
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -22,6 +23,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import static com.contentstack.cms.core.Util.*;
@@ -468,6 +470,12 @@ public class Contentstack {
         private Boolean retry = Util.RETRY_ON_FAILURE;// Default base url for contentstack
 
         /**
+         * Default ConnectionPool holds up to 5 idle connections which
+         * will be evicted after 5 minutes of inactivity.
+         */
+        private ConnectionPool connectionPool = new ConnectionPool(); // Connection
+
+        /**
          * Instantiates a new Builder.
          */
         public Builder() {
@@ -479,11 +487,12 @@ public class Contentstack {
          * Proxy(Proxy.Type.HTTP, new
          * InetSocketAddress(proxyHost, proxyPort));
          * <br>
-         *
-         * <pre>
-         * {
-         *     Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
-         *     Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
+         * <p>
+         * {@code
+         * <p>
+         * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
+         * Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
+         * <p>
          * }
          * </pre>
          *
@@ -550,6 +559,36 @@ public class Contentstack {
             return this;
         }
 
+
+        /**
+         * Create a new connection pool with tuning parameters appropriate for a single-user application.
+         * The tuning parameters in this pool are subject to change in future OkHttp releases. Currently,
+         * this pool holds up to 5 idle connections which will be evicted after 5 minutes of inactivity.
+         * <p>
+         * <p>
+         * public ConnectionPool() {
+         * this(5, 5, TimeUnit.MINUTES);
+         * }
+         *
+         * @param maxIdleConnections Maximum number of idle connections
+         * @param keepAliveDuration  The Keep Alive Duration
+         * @param timeUnit           A TimeUnit represents time durations at a given unit of granularity and provides utility methods to convert across units
+         * @return instance of Builder
+         * <p>
+         * Example:
+         * {@code
+         * Contentstack cs = new Contentstack.Builder()
+         * .setAuthtoken(AUTHTOKEN)
+         * .setConnectionPool(5, 400, TimeUnit.MILLISECONDS)
+         * .setHost("host")
+         * .build();
+         * Connection}
+         */
+        public Builder setConnectionPool(int maxIdleConnections, int keepAliveDuration, TimeUnit timeUnit) {
+            this.connectionPool = new ConnectionPool(maxIdleConnections, keepAliveDuration, timeUnit);
+            return this;
+        }
+
         /**
          * Sets authtoken for the client
          *
@@ -582,7 +621,9 @@ public class Contentstack {
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
             this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
-            return new OkHttpClient.Builder().addInterceptor(this.authInterceptor)
+            return new OkHttpClient.Builder()
+                    .connectionPool(this.connectionPool)
+                    .addInterceptor(this.authInterceptor)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
                     .connectTimeout(Duration.ofSeconds(this.timeout))
