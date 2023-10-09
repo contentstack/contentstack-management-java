@@ -150,7 +150,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * all
      * environments
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -179,7 +179,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * a
      * single global field
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -212,7 +212,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * field
      *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
@@ -241,7 +241,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * field
      *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
@@ -266,7 +266,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * global
      * field
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
@@ -294,7 +294,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * field
      *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> imports(@NotNull JSONObject body) {
@@ -314,7 +314,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * field
      *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> export() {

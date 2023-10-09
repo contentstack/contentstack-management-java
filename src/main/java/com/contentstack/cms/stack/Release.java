@@ -66,7 +66,7 @@ public class Release implements BaseImplementation<Release> {
      * @param value The "value" parameter is of type Object, which means it can
      *              accept any type of
      *              object as its value.
-     * @return instance of {@link @Release}
+     * @return instance of Release
      */
     @Override
     public Release addParam(@NotNull String key, @NotNull Object value) {
@@ -81,7 +81,7 @@ public class Release implements BaseImplementation<Release> {
      *              header.
      * @param value The value parameter is a string that represents the value of the
      *              header.
-     * @return instance of {@link @Release}
+     * @return instance of Release
      */
     @Override
     public Release addHeader(@NotNull String key, @NotNull String value) {
@@ -93,7 +93,7 @@ public class Release implements BaseImplementation<Release> {
      * @param params The "params" parameter is a HashMap that maps String keys to
      *               Object values. It is
      *               annotated with @NotNull, indicating that it cannot be null.
-     * @return instance of {@link @Release}
+     * @return instance of Release
      */
     @Override
     public Release addParams(@NotNull HashMap<String, Object> params) {
@@ -106,7 +106,7 @@ public class Release implements BaseImplementation<Release> {
      *                is a String
      *                representing the header name and the value is a String
      *                representing the header value.
-     * @return instance of {@link @Release}
+     * @return instance of Release
      */
     @Override
     public Release addHeaders(@NotNull HashMap<String, String> headers) {

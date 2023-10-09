@@ -12,7 +12,6 @@ import java.util.HashMap;
 /**
  * A role is a collection of permissions that will be applicable to all the
  * users who are assigned this role.
- * <p>
  *
  * @author ***REMOVED***
  * @version v0.1.0
