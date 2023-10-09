@@ -88,12 +88,12 @@
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <dotenv-source.version>5.2.2</dotenv-source.version>
-        <rxjava-source.version>3.1.7</rxjava-source.version>
+        <rxjava-source.version>3.1.8</rxjava-source.version>
         <retrofit-source.version>2.9.0</retrofit-source.version>
         <converter-gson-version>2.9.0</converter-gson-version>
         <logging.version>5.0.0-alpha.11</logging.version>
         <jococo-plugin.version>0.8.7</jococo-plugin.version>
-        <lombok-source.version>1.18.28</lombok-source.version>
+        <lombok-source.version>1.18.30</lombok-source.version>
         <junit-jupiter.version>5.10.0</junit-jupiter.version>
         <junit-jupiter-engine.version>5.8.0-M1</junit-jupiter-engine.version>
         <gson.version>2.10.1</gson.version>
@@ -168,7 +168,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.5.0</version>
+            <version>5.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

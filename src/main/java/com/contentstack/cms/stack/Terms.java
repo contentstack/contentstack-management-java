@@ -9,8 +9,6 @@ import retrofit2.Call;
 import java.util.HashMap;
 
 /**
- * @author @ishaileshmishra
- * @since 1.1.0
  * provides an implementation
  * <ul>
  *     <li>Create a Term</li>
@@ -24,12 +22,31 @@ import java.util.HashMap;
  */
 public class Terms implements BaseImplementation<Terms> {
 
+    /**
+     * The Taxonomy service.
+     */
     final TaxonomyService taxonomyService;
+    /**
+     * The Headers.
+     */
     final HashMap<String, Object> headers;
+    /**
+     * The Taxonomy id.
+     */
     final String taxonomyId;
+    /**
+     * The Params.
+     */
     final HashMap<String, Object> params;
 
 
+    /**
+     * Instantiates a new Terms.
+     *
+     * @param service    the service
+     * @param headers    the headers
+     * @param taxonomyId the taxonomy id
+     */
     public Terms(@NotNull TaxonomyService service, HashMap<String, Object> headers, String taxonomyId) {
         this.taxonomyService = service;
         this.headers = headers;
@@ -98,17 +115,11 @@ public class Terms implements BaseImplementation<Terms> {
      * Create Terms call.
      *
      * @param body The JSONObject request body
-     * @return instance of Call
-     *
-     * <p></p>
-     * <b>Example</b>
-     * <pre>
-     *     {@code
+     * @return instance of Call <p></p> <b>Example</b> <pre>     {@code
      *     Stack stack = new Contentstack.Builder().build().stack(headers);
      *     JSONObject body = new JSONObject();
      *     Term term = stack.taxonomy("taxonomyId").terms().create(body);
-     *     }
-     * </pre>
+     *     } </pre>
      */
     public Call<ResponseBody> create(@NotNull JSONObject body) {
         return this.taxonomyService.createTerm(this.headers, taxonomyId, body);
@@ -155,11 +166,11 @@ public class Terms implements BaseImplementation<Terms> {
      *     {@code
      *     Stack stack = new Contentstack.Builder().build().stack(headers);
      *     Term term = stack.taxonomy("taxonomyId").terms().addParam("limit", 2).find();
-     *     }
+     *     }*
      * </pre>
      *
-     * @see #addParam(String, Object) to add query parameters
-     * returns instance of Call
+     * @return the call
+     * @see #addParam(String, Object) #addParam(String, Object)to add query parameters returns instance of Call
      */
     public Call<ResponseBody> find() {
         return this.taxonomyService.findTerm(this.headers, taxonomyId, this.params);
@@ -173,7 +184,7 @@ public class Terms implements BaseImplementation<Terms> {
      *     Stack stack = new Contentstack.Builder().build().stack(headers);
      *     Term term = stack.taxonomy("taxonomyId").terms().find();
      *     } </pre>
-     * @see #addParam(String, Object) #addParam(String, Object)to add query parameters
+     * @see #addParam(String, Object) #addParam(String, Object)#addParam(String, Object)to add query parameters
      */
     public Call<ResponseBody> fetch(@NotNull String termUid) {
         return this.taxonomyService.fetchTerm(this.headers, taxonomyId, termUid, this.params);
@@ -183,30 +194,10 @@ public class Terms implements BaseImplementation<Terms> {
      * Get descendants of a single Term
      *
      * @param termUid The term for which we need the details
-     * @return The details of the term descendants
-     * <p>
-     * URL/Query parameters
-     * <ul>
-     *     <li>
-     *     <b>depth</b> - Include the terms upto the depth specified if set to a number greater than 0, include all the terms if set to 0, default depth will be set to 1
-     *     </li><li>
-     *     <b>include_children_count</b> - Include count of number of children under each term
-     *     </li><li>
-     *     <b>include_referenced_entries_count</b> - Include count of the entries where atleast 1 term of this taxonomy is referred
-     *     </li><li>
-     *     <b>include_count</b> - Include count of the documents/nodes that matched the query
-     *     </li><li>
-     *     <b>skip</b> - Skip the number of documents/nodes
-     *     </li><li>
-     *     <b>limit</b> - Limit the result to number of documents/nodes
-     *     </li>
-     * </ul>
-     * <p> <b>Example</b> <pre> {@code
+     * @return The details of the term descendants <p> URL/Query parameters <ul>     <li>     <b>depth</b> - Include the terms upto the depth specified if set to a number greater than 0, include all the terms if set to 0, default depth will be set to 1     </li><li>     <b>include_children_count</b> - Include count of number of children under each term     </li><li>     <b>include_referenced_entries_count</b> - Include count of the entries where atleast 1 term of this taxonomy is referred     </li><li>     <b>include_count</b> - Include count of the documents/nodes that matched the query     </li><li>     <b>skip</b> - Skip the number of documents/nodes     </li><li>     <b>limit</b> - Limit the result to number of documents/nodes     </li> </ul> <p> <b>Example</b> <pre> {@code
      *      Stack stack = new Contentstack.Builder().build().stack(headers);
      *      Term term = stack.taxonomy("taxonomyId").terms().descendants("termId").;
-     *     }
-     *     </pre>
-     * <p>
+     *     }     </pre> <p>
      */
     public Call<ResponseBody> descendants(@NotNull String termUid) {
         return this.taxonomyService.descendantsTerm(this.headers, this.taxonomyId, termUid, this.params);
@@ -216,25 +207,21 @@ public class Terms implements BaseImplementation<Terms> {
      * Get ancestors of a single Term
      *
      * @param termUid The term for which we need the details
-     * @return The details of the term ancestors
-     * <p> <b>Example</b> <pre> {@code
+     * @return The details of the term ancestors <p> <b>Example</b> <pre> {@code
      *      Stack stack = new Contentstack.Builder().build().stack(headers);
      *      Term term = stack.taxonomy("taxonomyId").terms().ancestors("termId");
-     *     }
-     *     </pre>
+     *     }     </pre>
      */
     public Call<ResponseBody> ancestors(@NotNull String termUid) {
         return this.taxonomyService.ancestorsTerm(this.headers, this.taxonomyId, termUid, this.params);
     }
 
     /**
+     * Update call.
+     *
      * @param termUid - The term for which we need the details
      * @param body    the JSONObject body for the request
-     * @return instance of Call
-     * <p>
-     * <b>Example</b>
-     * <pre>
-     * {@code
+     * @return instance of Call <p> <b>Example</b> <pre> {@code
      *   body = new RequestBody{
      *   "term": {
      *     "name": "Term 1",
@@ -244,8 +231,7 @@ public class Terms implements BaseImplementation<Terms> {
      *
      * Stack stack = new Contentstack.Builder().build().stack(headers);
      * Term term = stack.taxonomy("taxonomyId").terms().update(body);
-     * }
-     * </pre>
+     * } </pre>
      */
     public Call<ResponseBody> update(@NotNull String termUid, @NotNull JSONObject body) {
         return this.taxonomyService.updateTerm(this.headers, this.taxonomyId, termUid, body);
@@ -253,17 +239,13 @@ public class Terms implements BaseImplementation<Terms> {
 
 
     /**
-     * @param termString: The string for which we need to search for the matching terms, should either match with term uid or term name
-     * @return instance of Call
-     * <p>
+     * Search call.
      *
-     * <b>Example</b>
-     * <pre>
-     * {@code
+     * @param termString : The string for which we need to search for the matching terms, should either match with term uid or term name
+     * @return instance of Call <p> <b>Example</b> <pre> {@code
      * Stack stack = new Contentstack.Builder().build().stack(headers);
      * Term term = stack.taxonomy("taxonomyId").terms().search("search anything");
-     * }
-     * </pre>
+     * } </pre>
      * @throws IllegalArgumentException if the termString is empty
      */
     public Call<ResponseBody> search(@NotNull String termString) {
@@ -274,6 +256,9 @@ public class Terms implements BaseImplementation<Terms> {
     }
 
 
+    /**
+     * Clear params.
+     */
     protected void clearParams() {
         this.params.clear();
     }
