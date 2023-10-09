@@ -159,7 +159,7 @@ public class PublishQueue implements BaseImplementation<PublishQueue> {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue">Get
      * publish queue
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -182,7 +182,7 @@ public class PublishQueue implements BaseImplementation<PublishQueue> {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue-activity">Get
      * publish queue activity
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -202,7 +202,7 @@ public class PublishQueue implements BaseImplementation<PublishQueue> {
      * scheduled action
      *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */

@@ -18,11 +18,8 @@ import java.util.Objects;
  *
  * @author ***REMOVED***
  * @version v0.1.0
- * @see <a href=
- * "https://www.contentstack.com/docs/developers/apis/content-management-api/#aliases">About
- * Aliases
- * </a>
- * @since 2022-10-20
+ * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#aliases">About Aliases </a>
+ * @since 2022 -10-20
  */
 public class Alias implements BaseImplementation<Alias> {
 
@@ -137,7 +134,6 @@ public class Alias implements BaseImplementation<Alias> {
     /**
      * The Get all aliases request returns comprehensive information of all the
      * aliases available in a particular stack in your account.
-     * <p>
      *
      * @return Call
      * @author ***REMOVED***
@@ -179,7 +175,6 @@ public class Alias implements BaseImplementation<Alias> {
      *
      * @param body the request body
      * @return Call
-     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#assign-or-update-an-alias">Update
      * a
@@ -201,7 +196,6 @@ public class Alias implements BaseImplementation<Alias> {
      * of your alias.
      *
      * @return Call
-     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-an-alias">Delete
      * a branch</a>
