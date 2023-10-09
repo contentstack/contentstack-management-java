@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 /**
- * The interface @{@link BaseImplementation}
+ * The interface BaseImplementation
  */
 public interface BaseImplementation<T> {
 

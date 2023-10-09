@@ -10,14 +10,32 @@ import retrofit2.Retrofit;
 import java.util.HashMap;
 
 
+/**
+ * The type Taxonomy.
+ */
 public class Taxonomy implements BaseImplementation<Taxonomy> {
 
     private String taxonomyId;
+    /**
+     * The Taxonomy service.
+     */
     final TaxonomyService taxonomyService;
+    /**
+     * The Headers.
+     */
     protected HashMap<String, Object> headers;
+    /**
+     * The Params.
+     */
     protected HashMap<String, Object> params;
 
 
+    /**
+     * Instantiates a new Taxonomy.
+     *
+     * @param client  the client
+     * @param headers the headers
+     */
     protected Taxonomy(Retrofit client, HashMap<String, Object> headers) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
@@ -25,6 +43,13 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
         this.taxonomyService = client.create(TaxonomyService.class);
     }
 
+    /**
+     * Instantiates a new Taxonomy.
+     *
+     * @param client     the client
+     * @param headers    the headers
+     * @param taxonomyId the taxonomy id
+     */
     protected Taxonomy(Retrofit client, HashMap<String, Object> headers, @NotNull String taxonomyId) {
         this.headers = new HashMap<>();
         this.params = new HashMap<>();
@@ -122,15 +147,9 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * </li>
      * </ul>
      *
-     * @return the call
-     *
-     * <p></p>
-     * <b>Example</b>
-     * <pre>
-     *     {@code
+     * @return the call <p></p> <b>Example</b> <pre>     {@code
      *     Response<ResponseBody> response = taxonomy.find().execute();
-     *     }
-     * </pre>
+     *     } </pre>
      */
     public Call<ResponseBody> find() {
         return this.taxonomyService.find(this.headers, this.params);
@@ -153,14 +172,9 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * </ul>
      *
      * @param taxonomyId the taxonomy id
-     * @return the call
-     * <p></p>
-     * <b>Example</b>
-     * <pre>
-     *     {@code
+     * @return the call <p></p> <b>Example</b> <pre>     {@code
      *     Response<ResponseBody> response = taxonomy.fetch("taxonomyId").execute();
-     *     }
-     * </pre>
+     *     } </pre>
      */
     public Call<ResponseBody> fetch(@NotNull String taxonomyId) {
         return this.taxonomyService.fetch(this.headers, taxonomyId, this.params);
@@ -170,16 +184,10 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * Create Taxonomy call.
      *
      * @param body the body
-     * @return the call
-     *
-     * <p></p>
-     * <b>Example</b>
-     * <pre>
-     *     {@code
+     * @return the call <p></p> <b>Example</b> <pre>     {@code
      *     JSONObject body = new JSONObject
      *     Response<ResponseBody> response = taxonomy.create(body).execute();
-     *     }
-     * </pre>
+     *     } </pre>
      */
     public Call<ResponseBody> create(@NotNull JSONObject body) {
         return this.taxonomyService.create(this.headers, body);
@@ -190,20 +198,14 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      *
      * @param taxonomyId - The taxonomy for which we need to update the details
      * @param body       the body
-     * @return the call
-     *
-     * <p></p>
-     * <b>Example</b>
-     * <pre>
-     *     {@code
+     * @return the call <p></p> <b>Example</b> <pre>     {@code
      *     JSONObject body = new JSONObject();
      *     JSONObject bodyContent = new JSONObject();
      *     bodyContent.put("name", "Taxonomy 1");
      *     bodyContent.put("description", "Description updated for Taxonomy 1);
      *     body.put("taxonomy", bodyContent);
      *     Response<ResponseBody> response = taxonomy.update("taxonomyId", body).execute();
-     *     }
-     * </pre>
+     *     } </pre>
      */
     public Call<ResponseBody> update(@NotNull String taxonomyId, @NotNull JSONObject body) {
         return this.taxonomyService.update(this.headers, taxonomyId, body);
@@ -213,14 +215,9 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * Delete Taxonomy call.
      *
      * @param taxonomyId - The taxonomy for which we need to update the details
-     * @return the call
-     * <p></p>
-     * <b>Example</b>
-     * <pre>
-     *     {@code
+     * @return the call <p></p> <b>Example</b> <pre>     {@code
      *     Response<ResponseBody> response = taxonomy.delete("taxonomyId").execute();
-     *     }
-     * </pre>
+     *     } </pre>
      */
     public Call<ResponseBody> delete(@NotNull String taxonomyId) {
         return this.taxonomyService.delete(this.headers, taxonomyId);
@@ -241,7 +238,7 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * <pre>
      *     {@code
      *     Term terms = stack("authtoken").taxonomy("taxonomyId").term();
-     *     }
+     *     }*
      * </pre>
      *
      * @return instance of {@link Terms}

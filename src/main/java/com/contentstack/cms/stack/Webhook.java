@@ -160,7 +160,7 @@ public class Webhook implements BaseImplementation<Webhook> {
      * a
      * Single Delivery Token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {

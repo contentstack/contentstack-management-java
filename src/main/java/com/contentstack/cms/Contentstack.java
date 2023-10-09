@@ -494,8 +494,6 @@ public class Contentstack {
          * Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
          * <p>
          * }
-         * </pre>
-         *
          * @param proxy the proxy
          * @return the Builder instance
          */
