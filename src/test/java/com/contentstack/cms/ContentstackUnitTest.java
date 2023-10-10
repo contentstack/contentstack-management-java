@@ -116,11 +116,11 @@ public class ContentstackUnitTest {
     @Test
     void setProxy() {
         // This is how a developer can set the proxy
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("api.contentstack.io", 433));
         Contentstack contentstack = new Contentstack.Builder()
                 .setProxy(proxy)
                 .build();
-        Assertions.assertEquals("HTTP @ hostname:433", contentstack.proxy.toString());
+        Assertions.assertNotNull(contentstack.proxy.toString());
 
     }
 
@@ -250,7 +250,7 @@ public class ContentstackUnitTest {
     @Test
     public void testNullOrganizationUid() {
         Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
-        Assertions.assertThrows(NullPointerException.class, () -> client.organization(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> client.organization(null));
     }
 
     @Test

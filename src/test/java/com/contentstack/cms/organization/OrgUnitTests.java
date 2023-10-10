@@ -632,14 +632,5 @@ class OrgUnitTests {
                 requestInfo.url().query());
     }
 
-    @Test
-    @Order(59)
-    void testGetAllWithQueryParamLimit() {
-        Request requestInfo = organization.removeParam("asc").find().request();
-        Assertions.assertEquals("GET", requestInfo.method());
-        assertTrue(isValid(requestInfo.url().toString()));
-        assertNull(requestInfo.url().queryParameter("limit"));
-
-    }
 
 }

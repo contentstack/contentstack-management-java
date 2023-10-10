@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -29,7 +30,7 @@ import java.util.Objects;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class AuditLog {
+public class AuditLog implements BaseImplementation<AuditLog> {
 
     protected final AuditLogService service;
     protected HashMap<String, Object> headers;
@@ -49,24 +50,28 @@ public class AuditLog {
         this.service = retrofit.create(AuditLogService.class);
     }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key   header key for the request
-     * @param value header value for the request
-     */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
+    @Override
+    public AuditLog addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+        return this;
     }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key   header key for the request
-     * @param value header value for the request
-     */
-    public void addParam(@NotNull String key, @NotNull Object value) {
-        this.params.put(key, value);
+    @Override
+    public AuditLog addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    @Override
+    public AuditLog addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    @Override
+    public AuditLog addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
     /**
