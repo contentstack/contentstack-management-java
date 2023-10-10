@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -16,7 +17,6 @@ import java.util.List;
  * <p>
  * Read more about <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#workflows">Workflow</a>
- *
  * <b>Note:</b> You cannot create workflows in a stack that supports branches
  * when using the classic Contentstack interface.
  *
@@ -24,7 +24,7 @@ import java.util.List;
  * @version v01.0
  * @since 2022-10-22
  */
-public class Workflow {
+public class Workflow implements BaseImplementation<Workflow> {
 
     protected final WorkflowService service;
     protected HashMap<String, Object> headers;
@@ -49,25 +49,6 @@ public class Workflow {
             throw new IllegalAccessError("Workflow uid can not be null or empty");
     }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key   header key for the request
-     * @param value header value for the request
-     */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-    }
-
-    /**
-     * Sets header for the request
-     *
-     * @param key   query param key for the request
-     * @param value query param value for the request
-     */
-    public void addParam(@NotNull String key, @NotNull Object value) {
-        this.params.put(key, value);
-    }
 
     /**
      * Set header for the request
@@ -94,7 +75,7 @@ public class Workflow {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-workflows">Get
      * all workflow
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {
@@ -111,7 +92,7 @@ public class Workflow {
      * a singel
      * workflow
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
@@ -139,7 +120,6 @@ public class Workflow {
      * To control who can edit an entry at different stages of the workflow, you can
      * pass the entry_lock parameter
      * inside each workflow stage.
-     *
      * <b>Note:</b> Workflow superusers, organization owners, and stack
      * owners/admins can edit or delete the entry in any workflow stage,
      * irrespective of the stage access rules set for
@@ -154,7 +134,7 @@ public class Workflow {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-workflow">Create
      * workflow
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
@@ -193,7 +173,7 @@ public class Workflow {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#add-or-update-workflow-details">Update
      * Workflow
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
@@ -208,9 +188,8 @@ public class Workflow {
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#disable-workflow">Disable
      * workflow
-     *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> disable() {
@@ -226,7 +205,7 @@ public class Workflow {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#enable-workflow">Enable
      * Workflow
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -243,7 +222,7 @@ public class Workflow {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-workflow">Delete
      * Workflow
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -279,7 +258,7 @@ public class Workflow {
      * Publish
      * Rule
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> createPublishRule(@NotNull JSONObject requestBody) {
@@ -303,7 +282,7 @@ public class Workflow {
      * Publish
      * Rules
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> updatePublishRule(@NotNull String ruleUid, @NotNull JSONObject requestBody) {
@@ -314,14 +293,14 @@ public class Workflow {
      * To Delete Publish Rules request allows you to delete an existing publish
      * rule.
      *
-     * @param ruleUid The UID of the publish rule that you want to delete
+     * @param ruleUid The UID of the publishing rule that you want to delete
      * @return Call
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-publish-rules">Delete
      * Publish
      * Rules
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -341,7 +320,7 @@ public class Workflow {
      * all publish
      * rule
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -356,15 +335,14 @@ public class Workflow {
      * a specific publish rule of a
      * Workflow.
      *
-     * @param ruleUid The UID of the publish rule that you want to fetch
+     * @param ruleUid The UID of the publishing rule that you want to fetch
      * @return Call
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-publish-rules">Get
      * all publish
      * rules
-     *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -388,7 +366,7 @@ public class Workflow {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-rules-by-content-types">Get
      * Publish Rules By Content Types
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -417,4 +395,58 @@ public class Workflow {
         return this.service.fetchTasks(this.headers, this.params);
     }
 
+    /**
+     * @param key   A string representing the key of the parameter. It cannot be
+     *              null and must be
+     *              provided as a non-null value.
+     * @param value The "value" parameter is of type Object, which means it can
+     *              accept any type of
+     *              object as its value.
+     * @return instance of the {@link Workflow}
+     */
+    @Override
+    public Workflow addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of the {@link Workflow}
+     */
+    @Override
+    public Workflow addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of the {@link Workflow}
+     */
+    @Override
+    public Workflow addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of the {@link Workflow}
+     */
+    @Override
+    public Workflow addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
+    }
 }

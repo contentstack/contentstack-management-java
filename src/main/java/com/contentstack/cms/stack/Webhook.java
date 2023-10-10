@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import com.contentstack.cms.core.Util;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -30,7 +31,7 @@ import java.util.HashMap;
  * </a>
  * @since 2022-10-22
  */
-public class Webhook {
+public class Webhook implements BaseImplementation<Webhook> {
 
     protected final WebhookService service;
     protected HashMap<String, Object> headers;
@@ -55,24 +56,60 @@ public class Webhook {
             throw new IllegalAccessError("Webhook uid can not be null or empty");
     }
 
+
     /**
-     * Sets header for the request
-     *
-     * @param key   header key for the request
-     * @param value header value for the request
+     * @param key   A string representing the key of the parameter. It cannot be
+     *              null and must be
+     *              provided as a non-null value.
+     * @param value The "value" parameter is of type Object, which means it can
+     *              accept any type of
+     *              object as its value.
+     * @return instance of {@link Webhook}
      */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
+    @Override
+    public Webhook addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+        return this;
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key   query param key for the request
-     * @param value query param value for the request
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of {@link Webhook}
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
-        this.params.put(key, value);
+    @Override
+    public Webhook addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of {@link Webhook}
+     */
+    @Override
+    public Webhook addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of {@link Webhook}
+     */
+    @Override
+    public Webhook addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
     /**
@@ -105,7 +142,7 @@ public class Webhook {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-webhooks">Get
      * all Webhooks
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -123,7 +160,7 @@ public class Webhook {
      * a
      * Single Delivery Token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
@@ -171,7 +208,7 @@ public class Webhook {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-webhook">Create
      * a Webhook
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
@@ -220,7 +257,7 @@ public class Webhook {
      * a
      * Webhook
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> update(JSONObject requestBody) {
@@ -240,7 +277,7 @@ public class Webhook {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-webhook">Delete
      * Webhook
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -261,7 +298,7 @@ public class Webhook {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#export-a-webhook">Export
      * Webhook
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -283,7 +320,7 @@ public class Webhook {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-a-webhook">Import
      * Webhook
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -304,7 +341,7 @@ public class Webhook {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#import-an-existing-webhook">Import
      * Existing
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> importExisting() {
@@ -370,7 +407,7 @@ public class Webhook {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-executions-of-a-webhook">Get
      * executions of a webhook
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -397,7 +434,7 @@ public class Webhook {
      * a
      * Webhook
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> retry(@NotNull String executionUid) {
@@ -422,7 +459,7 @@ public class Webhook {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-latest-execution-log-of-a-webhook">Get
      * latest execution log of a webhook
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> getExecutionLog(@NotNull String executionUid) {

@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -27,7 +28,7 @@ import java.util.Map;
  * </a>
  * @since 2022-10-22
  */
-public class Locale {
+public class Locale implements BaseImplementation<Locale> {
 
     protected final LocaleService localeService;
     protected Map<String, Object> headers;
@@ -59,21 +60,53 @@ public class Locale {
     /**
      * Sets header for the request
      *
-     * @param key   header key for the request
-     * @param value header value for the request
-     */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-    }
-
-    /**
-     * Sets header for the request
-     *
      * @param key   query param key for the request
      * @param value query param value for the request
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    @Override
+    public Locale addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of {@link Locale}
+     */
+    @Override
+    public Locale addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of {@link Locale}
+     */
+    @Override
+    public Locale addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of {@link Locale}
+     */
+    @Override
+    public Locale addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
     /**
@@ -114,7 +147,7 @@ public class Locale {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
      * all languages
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -135,7 +168,7 @@ public class Locale {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
      * all languages
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -165,7 +198,7 @@ public class Locale {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-languages">Get
      * all languages
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -192,7 +225,7 @@ public class Locale {
      * language
      *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -216,7 +249,7 @@ public class Locale {
      * language
      *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -245,7 +278,7 @@ public class Locale {
      *
      *
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -270,7 +303,7 @@ public class Locale {
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-fallback-language">Update
      * fallback language</a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> updateFallback(@NotNull JSONObject body) {
