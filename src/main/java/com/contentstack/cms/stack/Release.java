@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -12,7 +13,7 @@ import java.util.HashMap;
  * You can pin a set of entries and assets (along with the deploy action, i.e.,
  * publish/unpublish) to a ‘release’, and
  * then deploy this release to an environment. This will publish/unpublish all
- * the the items of the release to the
+ * the items of the release to the
  * specified environment. Read more about Releases.
  * <p>
  * You can now pass the branch header in the API request to fetch or manage
@@ -29,7 +30,7 @@ import java.util.HashMap;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class Release {
+public class Release implements BaseImplementation<Release> {
 
     protected final ReleaseService service;
     protected HashMap<String, Object> headers;
@@ -57,24 +58,60 @@ public class Release {
             throw new IllegalAccessError("Release Uid Can Not Be Null OR Empty");
     }
 
+
     /**
-     * Sets header for the request
-     *
-     * @param key   header key for the request
-     * @param value header value for the request
+     * @param key   A string representing the key of the parameter. It cannot be
+     *              null and must be
+     *              provided as a non-null value.
+     * @param value The "value" parameter is of type Object, which means it can
+     *              accept any type of
+     *              object as its value.
+     * @return instance of Release
      */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
+    @Override
+    public Release addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+        return this;
     }
 
     /**
-     * Sets header for the request
-     *
-     * @param key   query param key for the request
-     * @param value query param value for the request
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of Release
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
-        this.params.put(key, value);
+    @Override
+    public Release addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of Release
+     */
+    @Override
+    public Release addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of Release
+     */
+    @Override
+    public Release addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
     /**
@@ -103,7 +140,7 @@ public class Release {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-releases">Get
      * all Releases
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -123,7 +160,7 @@ public class Release {
      * a singel
      * release
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -145,7 +182,7 @@ public class Release {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-release">Create
      * a release
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -167,7 +204,7 @@ public class Release {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-a-release">Update
      * a release
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -187,7 +224,7 @@ public class Release {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-a-release">Delete
      * a release
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -211,7 +248,7 @@ public class Release {
      * a
      * release item
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -237,7 +274,7 @@ public class Release {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#deploy-a-release">Deploy
      * a release
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -260,7 +297,7 @@ public class Release {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#clone-a-release">Clone
      * all release
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> clone(@NotNull JSONObject requestBody) {

@@ -5,6 +5,7 @@ import com.contentstack.cms.stack.Stack;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class TestClient {
 
@@ -17,6 +18,7 @@ public class TestClient {
     public final static String API_KEY = (env.get("apiKey") != null) ? env.get("apiKey") : "apiKey99999999";
     public final static String MANAGEMENT_TOKEN = (env.get("managementToken") != null) ? env.get("managementToken") : "managementToken99999999";
 
+    public final static String DEV_HOST = (env.get("dev_host") != null) ? env.get("dev_host") : "***REMOVED***";
     private static Contentstack instance;
     private static Stack stackInstance;
 
@@ -40,12 +42,18 @@ public class TestClient {
         if (instance == null) {
             synchronized (Contentstack.class) {
                 if (instance == null) {
-                    instance = new Contentstack.Builder().setAuthtoken(AUTHTOKEN)
+                    instance = new Contentstack.Builder()
+                            .setAuthtoken(AUTHTOKEN)
+                            .setConnectionPool(5, 400, TimeUnit.MILLISECONDS)
                             .setHost("kpm.***REMOVED***.io/path/another").build();
                 }
             }
         }
         return instance;
+    }
+
+    public static void main(String[] args) {
+        getCustomClient();
     }
 
     public static Stack getStack() {

@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -24,7 +25,7 @@ import java.util.Objects;
  * @author ***REMOVED***
  * @since 2022-10-20
  */
-public class Asset {
+public class Asset implements BaseImplementation<Asset> {
 
     protected final Map<String, Object> headers;
     protected Map<String, Object> params;
@@ -50,26 +51,62 @@ public class Asset {
     }
 
 
-    public Asset addParam(String key, Object value) {
+    /**
+     * @param key   A string representing the key of the parameter. It cannot be
+     *              null and must be
+     *              provided as a non-null value.
+     * @param value The "value" parameter is of type Object, which means it can
+     *              accept any type of
+     *              object as its value.
+     * @return instance of Asset
+     */
+    public Asset addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
         return this;
     }
 
-    public Asset addHeader(String key, String value) {
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of Asset
+     */
+    public Asset addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
         return this;
     }
 
-    public Asset addHeaders(HashMap<String, String> headers) {
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of Asset
+     */
+    public Asset addHeaders(@NotNull HashMap<String, String> headers) {
         this.headers.putAll(headers);
         return this;
     }
 
-    public Asset addParams(HashMap<String, Object> headers) {
+
+    /**
+     * @param headers The "params" parameter is a HashMap that maps String keys to
+     *                Object values. It is
+     *                annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of Asset
+     */
+    public Asset addParams(@NotNull HashMap<String, Object> headers) {
         this.params.putAll(headers);
         return this;
     }
 
+
+    /**
+     * clears all params in the request
+     */
     protected void clearParams() {
         this.params.clear();
     }
