@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -29,13 +30,13 @@ import java.util.HashMap;
  * @author ishaileshmishra
  * @version v0.1.0
  * @see <a href=
- *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">
- *      Publish
- *      Queue
- *      </a>
+ * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">
+ * Publish
+ * Queue
+ * </a>
  * @since 2022-10-22
  */
-public class PublishQueue {
+public class PublishQueue implements BaseImplementation<PublishQueue> {
 
     protected final PublishQueueService service;
     protected HashMap<String, Object> headers;
@@ -63,35 +64,63 @@ public class PublishQueue {
             throw new IllegalAccessError("Publish Queue Uid can not be null or empty");
     }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
-     */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-    }
 
     /**
      * Sets header for the request
      *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
+     * @param key   query param key for the request
+     * @param value query param value for the request
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    @Override
+    public PublishQueue addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @param value The value parameter is a string that represents the value of the
+     *              header.
+     * @return instance of the {@link PublishQueue}
+     */
+    @Override
+    public PublishQueue addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    /**
+     * @param params The "params" parameter is a HashMap that maps String keys to
+     *               Object values. It is
+     *               annotated with @NotNull, indicating that it cannot be null.
+     * @return instance of the {@link PublishQueue}
+     */
+    @Override
+    public PublishQueue addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    /**
+     * @param headers A HashMap containing key-value pairs of headers, where the key
+     *                is a String
+     *                representing the header name and the value is a String
+     *                representing the header value.
+     * @return instance of the {@link PublishQueue}
+     */
+    @Override
+    public PublishQueue addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -127,10 +156,10 @@ public class PublishQueue {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue">Get
-     *      publish queue
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue">Get
+     * publish queue
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -150,10 +179,10 @@ public class PublishQueue {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue-activity">Get
-     *      publish queue activity
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue-activity">Get
+     * publish queue activity
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -169,11 +198,11 @@ public class PublishQueue {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#cancel-scheduled-action">Cancel
-     *      scheduled action
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#cancel-scheduled-action">Cancel
+     * scheduled action
      *
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
