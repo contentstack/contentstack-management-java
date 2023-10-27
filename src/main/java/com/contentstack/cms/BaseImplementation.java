@@ -20,7 +20,7 @@ public interface BaseImplementation<T> {
      *              object as its value.
      * @return The method is returning an object of type T.
      */
-     T addParam(@NotNull String key, @NotNull Object value);
+    T addParam(@NotNull String key, @NotNull Object value);
 
     /**
      * The function adds a header with a key-value pair to a request.
@@ -45,7 +45,7 @@ public interface BaseImplementation<T> {
      *               annotated with @NotNull, indicating that it cannot be null.
      * @return The method is returning an object of type T.
      */
-     T addParams(@NotNull HashMap<String, Object> params);
+    T addParams(@NotNull HashMap<String, Object> params);
 
     /**
      * The function adds headers to a HashMap.
@@ -56,5 +56,5 @@ public interface BaseImplementation<T> {
      *                representing the header value.
      * @return The method is returning an object of type T.
      */
-     T addHeaders(@NotNull HashMap<String, String> headers);
+    T addHeaders(@NotNull HashMap<String, String> headers);
 }
