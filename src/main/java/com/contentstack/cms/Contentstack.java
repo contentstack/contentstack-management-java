@@ -80,8 +80,8 @@ public class Contentstack {
      * @return User
      * @author ishaileshmishra
      * @see <a href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
-     * </a>
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     *      </a>
      * @since 2022-05-19
      */
     public User user() {
@@ -130,8 +130,8 @@ public class Contentstack {
      * @throws IOException the IOException
      * @author ishaileshmishra
      * @see <a href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
-     * </a>
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     *      </a>
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
@@ -183,10 +183,10 @@ public class Contentstack {
      * @throws IOException the IOException
      * @author ishaileshmishra
      * @see <a
-     * href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
-     * your account
-     * </a>
+     *      href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
+     *      your account
+     *      </a>
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
         if (this.authtoken != null)
@@ -201,7 +201,7 @@ public class Contentstack {
     private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
         if (loginResponse.isSuccessful()) {
             assert loginResponse.body() != null;
-            //logger.info(loginResponse.body().getNotice());
+            // logger.info(loginResponse.body().getNotice());
             this.authtoken = loginResponse.body().getUser().getAuthtoken();
             this.interceptor.setAuthtoken(this.authtoken);
         } else {
@@ -287,10 +287,10 @@ public class Contentstack {
      *
      * @param organizationUid The UID of the organization that you want to retrieve
      * @return the organization
-     * <br>
-     * <b>Example</b>
+     *         <br>
+     *         <b>Example</b>
      *
-     * <pre>
+     *         <pre>
      *         Contentstack contentstack = new Contentstack.Builder().build();
      *         Organization org = contentstack.organization();
      *         </pre>
@@ -398,12 +398,11 @@ public class Contentstack {
             // When API_Key is available
             headers.put(API_KEY, key);
         } else {
-            //When branch is available
+            // When branch is available
             headers.put(BRANCH, key);
         }
         return new Stack(this.instance, headers);
     }
-
 
     /**
      * <a href=
@@ -489,11 +488,14 @@ public class Contentstack {
          * <br>
          * <p>
          * {@code
-         * <p>
+         * 
+        <p>
          * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
          * Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
-         * <p>
+         * 
+        <p>
          * }
+         * 
          * @param proxy the proxy
          * @return the Builder instance
          */
@@ -557,11 +559,13 @@ public class Contentstack {
             return this;
         }
 
-
         /**
-         * Create a new connection pool with tuning parameters appropriate for a single-user application.
-         * The tuning parameters in this pool are subject to change in future OkHttp releases. Currently,
-         * this pool holds up to 5 idle connections which will be evicted after 5 minutes of inactivity.
+         * Create a new connection pool with tuning parameters appropriate for a
+         * single-user application.
+         * The tuning parameters in this pool are subject to change in future OkHttp
+         * releases. Currently,
+         * this pool holds up to 5 idle connections which will be evicted after 5
+         * minutes of inactivity.
          * <p>
          * <p>
          * public ConnectionPool() {
@@ -570,11 +574,13 @@ public class Contentstack {
          *
          * @param maxIdleConnections Maximum number of idle connections
          * @param keepAliveDuration  The Keep Alive Duration
-         * @param timeUnit           A TimeUnit represents time durations at a given unit of granularity and provides utility methods to convert across units
+         * @param timeUnit           A TimeUnit represents time durations at a given
+         *                           unit of granularity and provides utility methods to
+         *                           convert across units
          * @return instance of Builder
-         * <p>
-         * Example:
-         * {@code
+         *         <p>
+         *         Example:
+         *         {@code
          * Contentstack cs = new Contentstack.Builder()
          * .setAuthtoken(AUTHTOKEN)
          * .setConnectionPool(5, 400, TimeUnit.MILLISECONDS)
