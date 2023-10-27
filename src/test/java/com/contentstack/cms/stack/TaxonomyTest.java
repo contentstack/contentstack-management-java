@@ -118,7 +118,9 @@ class TaxonomyTest {
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/taxonomyId?limit=2&skip=2&include_count=false", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/taxonomies/taxonomyId?limit=2&skip=2&include_count=false",
+                request.url().toString());
     }
 
     @Test
@@ -149,7 +151,6 @@ class TaxonomyTest {
         Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/taxonomyId", request.url().toString());
     }
 
-
     @Test
     void deleteTestWithHeaders() {
         taxonomy.clearParams();
@@ -173,7 +174,6 @@ class TaxonomyTest {
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/taxonomyId", request.url().toString());
     }
-
 
     @Test
     void createTest() {
@@ -212,7 +212,8 @@ class TaxonomyTest {
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNotNull(request.body());
         Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/auth999999999/terms", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/auth999999999/terms",
+                request.url().toString());
     }
 
     @Test
@@ -231,7 +232,8 @@ class TaxonomyTest {
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
         Assertions.assertEquals("limit=3", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/" + _uid + "/terms?limit=3", request.url().toString());
+        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/" + _uid + "/terms?limit=3",
+                request.url().toString());
     }
 
     @Test
@@ -250,10 +252,12 @@ class TaxonomyTest {
         Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
-        Assertions.assertEquals("include_children_count=false&include_referenced_entries_count=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/auth999999999/terms/auth999999999?include_children_count=false&include_referenced_entries_count=true", request.url().toString());
+        Assertions.assertEquals("include_children_count=false&include_referenced_entries_count=true",
+                request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/taxonomies/auth999999999/terms/auth999999999?include_children_count=false&include_referenced_entries_count=true",
+                request.url().toString());
     }
-
 
     @Test
     void testTermUpdate() {
@@ -302,7 +306,9 @@ class TaxonomyTest {
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
         Assertions.assertEquals("include_count=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/auth999999999/terms/termId45/descendants?include_count=true", request.url().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/taxonomies/auth999999999/terms/termId45/descendants?include_count=true",
+                request.url().toString());
     }
 
     @Test
@@ -321,15 +327,18 @@ class TaxonomyTest {
         Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
-        Assertions.assertEquals("include_children_count=false&include_referenced_entries_count=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/auth999999999/terms/termId45/ancestors?include_children_count=false&include_referenced_entries_count=true", request.url().toString());
+        Assertions.assertEquals("include_children_count=false&include_referenced_entries_count=true",
+                request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/taxonomies/auth999999999/terms/termId45/ancestors?include_children_count=false&include_referenced_entries_count=true",
+                request.url().toString());
     }
 
     @Test
     void findTestAPI() throws IOException {
         Taxonomy taxonomy = new Contentstack.Builder()
                 .setAuthtoken(TestClient.AUTHTOKEN)
-                .setHost("dev18-app.csnonprod.com")
+                .setHost("api.contentstack.io")
                 .build()
                 .stack("blt12c1ba95c1b11e88", "")
                 .taxonomy();
