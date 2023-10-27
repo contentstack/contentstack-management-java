@@ -11,14 +11,18 @@ public class TestClient {
 
     final static Dotenv env = Dotenv.load();
 
-    public final static String ORGANIZATION_UID = (env.get("organizationUid") != null) ? env.get("organizationUid") : "orgId999999999";
+    public final static String ORGANIZATION_UID = (env.get("organizationUid") != null) ? env.get("organizationUid")
+            : "orgId999999999";
     public final static String AUTHTOKEN = (env.get("authToken") != null) ? env.get("authToken") : "auth999999999";
     public final static String USER_ID = (env.get("userId") != null) ? env.get("userId") : "c11e668e0295477f";
-    public final static String OWNERSHIP = (env.get("ownershipToken") != null) ? env.get("ownershipToken") : "ownershipTokenId";
+    public final static String OWNERSHIP = (env.get("ownershipToken") != null) ? env.get("ownershipToken")
+            : "ownershipTokenId";
     public final static String API_KEY = (env.get("apiKey") != null) ? env.get("apiKey") : "apiKey99999999";
-    public final static String MANAGEMENT_TOKEN = (env.get("managementToken") != null) ? env.get("managementToken") : "managementToken99999999";
+    public final static String MANAGEMENT_TOKEN = (env.get("managementToken") != null) ? env.get("managementToken")
+            : "managementToken99999999";
 
-    public final static String DEV_HOST = (env.get("dev_host") != null) ? env.get("dev_host") : "***REMOVED***";
+    public final static String DEV_HOST = "api.contentstack.io";
+    // (env.get("dev_host") != null) ? env.get("dev_host") : "api.contentstack.io";
     private static Contentstack instance;
     private static Stack stackInstance;
 
@@ -36,7 +40,6 @@ public class TestClient {
         }
         return instance;
     }
-
 
     public static Contentstack getCustomClient() {
         if (instance == null) {
@@ -71,4 +74,3 @@ public class TestClient {
     }
 
 }
-
