@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -11,17 +12,15 @@ import java.util.HashMap;
 /**
  * A role is a collection of permissions that will be applicable to all the
  * users who are assigned this role.
- * <p>
  *
  * @author ishaileshmishra
  * @version v0.1.0
  * @see <a href=
- *      "https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-roles">Roles
- *
- *      </a>
+ * "https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-roles">Roles
+ * </a>
  * @since 2022-10-22
  */
-public class Roles {
+public class Roles implements BaseImplementation<Roles> {
 
     protected final RolesService service;
     protected HashMap<String, Object> headers;
@@ -46,35 +45,11 @@ public class Roles {
             throw new IllegalAccessError("Role uid can not be null or empty");
     }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key
-     *              header key for the request
-     * @param value
-     *              header value for the request
-     */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-    }
-
-    /**
-     * Sets header for the request
-     *
-     * @param key
-     *              query param key for the request
-     * @param value
-     *              query param value for the request
-     */
-    public void addParam(@NotNull String key, @NotNull Object value) {
-        this.params.put(key, value);
-    }
 
     /**
      * Set header for the request
      *
-     * @param key
-     *            Removes query param using key of request
+     * @param key Removes query param using key of request
      */
     public void removeParam(@NotNull String key) {
         this.params.remove(key);
@@ -100,11 +75,11 @@ public class Roles {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-roles">Get
-     *      all
-     *      Roles
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-roles">Get
+     * all
+     * Roles
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -118,11 +93,11 @@ public class Roles {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-role">Get
-     *      a
-     *      single Roles
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-role">Get
+     * a
+     * single Roles
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -140,15 +115,14 @@ public class Roles {
      * permissions (which include the details of
      * the content types, environments, and languages that are accessible).
      *
-     * @param requestBody
-     *                    details of the delivery role in @{@link JSONObject} format
+     * @param requestBody details of the delivery role in @{@link JSONObject} format
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-role">Create
-     *      a
-     *      Roles
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#create-a-role">Create
+     * a
+     * Roles
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
@@ -167,14 +141,13 @@ public class Roles {
      * (which include the details of the content types, environments, and languages
      * that are accessible).
      *
-     * @param requestBody
-     *                    the body should be of @{@link JSONObject} type
+     * @param requestBody the body should be of @{@link JSONObject} type
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-role">Update
-     *      Role
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-role">Update
+     * Role
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -188,11 +161,11 @@ public class Roles {
      *
      * @return Call
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-role">Delete
-     *      a
-     *      Role
-     *      </a>
-     * @see #addHeader(String, Object) to add headers
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-role">Delete
+     * a
+     * Role
+     * </a>
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
@@ -200,4 +173,27 @@ public class Roles {
         return this.service.deleteRole(this.headers, this.roleUid);
     }
 
+    @Override
+    public Roles addParam(@NotNull String key, @NotNull Object value) {
+        this.params.put(key, value);
+        return this;
+    }
+
+    @Override
+    public Roles addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+    @Override
+    public Roles addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    @Override
+    public Roles addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
+    }
 }
