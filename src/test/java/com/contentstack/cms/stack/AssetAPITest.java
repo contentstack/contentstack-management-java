@@ -250,7 +250,7 @@ class AssetAPITest {
     @Test
     void testAssetUploadWithMultipleParams() throws IOException {
         String description = "The calender has been placed to assets by ishaileshmishra";
-        String filePath = "/Users/shailesh.mishra/Desktop/contentstack-management-java/src/test/resources/asset.png";
+        String filePath = "/Users/shaileshmishra/Documents/workspace/GitHub/contentstack-management-java/src/test/resources/asset.png";
         Contentstack client = new Contentstack.Builder().build();
         Stack stack = client.stack("Your-api-key", "authorization");
         Response<ResponseBody> upload = stack.asset()
