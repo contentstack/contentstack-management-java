@@ -36,7 +36,7 @@ import java.util.Map;
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#compare-branches"></a>Compare
  * Branches
  */
-public class Compare implements BaseImplementation {
+public class Compare implements BaseImplementation<Compare> {
 
     private final CompareService service;
     private final Map<String, String> headers;

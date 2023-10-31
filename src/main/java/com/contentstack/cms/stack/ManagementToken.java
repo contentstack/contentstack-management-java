@@ -1,5 +1,6 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -17,7 +18,7 @@ import java.util.HashMap;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class ManagementToken {
+public class ManagementToken implements BaseImplementation<ManagementToken> {
 
     protected final TokenService service;
     protected HashMap<String, Object> headers;
@@ -42,15 +43,6 @@ public class ManagementToken {
             throw new IllegalAccessError("Token uid Can Not Be Null OR Empty");
     }
 
-    /**
-     * Sets header for the request
-     *
-     * @param key   header key for the request
-     * @param value header value for the request
-     */
-    public void addHeader(@NotNull String key, @NotNull Object value) {
-        this.headers.put(key, value);
-    }
 
     /**
      * Sets header for the request
@@ -58,8 +50,29 @@ public class ManagementToken {
      * @param key   query param key for the request
      * @param value query param value for the request
      */
-    public void addParam(@NotNull String key, @NotNull Object value) {
+    @Override
+    public ManagementToken addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
+        return this;
+    }
+
+    @Override
+    public ManagementToken addHeader(@NotNull String key, @NotNull String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+
+
+    @Override
+    public ManagementToken addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    @Override
+    public ManagementToken addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
     }
 
     /**
@@ -89,7 +102,7 @@ public class ManagementToken {
      * all
      * Management Tokens
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
      * @since 0.1.0
      */
@@ -108,7 +121,7 @@ public class ManagementToken {
      * a
      * single management token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
@@ -129,7 +142,7 @@ public class ManagementToken {
      * a
      * management token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
@@ -157,7 +170,7 @@ public class ManagementToken {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#update-management-token">Update
      * management token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
@@ -173,7 +186,7 @@ public class ManagementToken {
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-management-token">Delete
      * management token
      * </a>
-     * @see #addHeader(String, Object) to add headers
+     * @see #addHeader(String, String) to add headers
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
