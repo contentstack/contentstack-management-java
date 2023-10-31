@@ -26,7 +26,7 @@ import java.util.Objects;
  * </a>
  * @since 2022-10-22
  */
-public class Branch implements BaseImplementation {
+public class Branch implements BaseImplementation<Branch> {
 
     protected final Map<String, Object> headers;
     protected Map<String, Object> params;

@@ -1,5 +1,6 @@
 package com.contentstack.cms.organization;
 
+import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -19,7 +20,7 @@ import java.util.Objects;
  * @version v0.1.0
  * @since 2022-10-20
  */
-public class Organization {
+public class Organization implements BaseImplementation<Organization> {
 
     private final OrganizationService service;
     protected HashMap<String, String> headers;
@@ -65,6 +66,18 @@ public class Organization {
         return this;
     }
 
+    @Override
+    public Organization addParams(@NotNull HashMap<String, Object> params) {
+        this.params.putAll(params);
+        return this;
+    }
+
+    @Override
+    public Organization addHeaders(@NotNull HashMap<String, String> headers) {
+        this.headers.putAll(headers);
+        return this;
+    }
+
     /**
      * Sets header for the request
      *
@@ -86,17 +99,6 @@ public class Organization {
 
     protected Organization clearParams() {
         this.params.clear();
-        return this;
-    }
-
-    /**
-     * Sets header for the request
-     *
-     * @param key header key for the request
-     * @return instance of {@link Organization}
-     */
-    public Organization removeParam(@NotNull String key) {
-        this.params.remove(key);
         return this;
     }
 

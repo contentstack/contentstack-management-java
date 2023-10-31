@@ -8,9 +8,14 @@ package com.contentstack.cms.core;
  * @since 2022-10-20
  */
 public class CMARuntimeException extends Exception {
-    // The code `public CMARuntimeException(String message) { super(message); }` is
-    // defining a constructor
-    // for the `CMARuntimeException` class.
+
+    /**
+     * The code `public CMARuntimeException(String message) { super(message); }` is
+     * defining a constructor
+     * for the `CMARuntimeException` class.
+     *
+     * @param message the message for exception
+     */
     public CMARuntimeException(String message) {
         super(message);
     }
