@@ -9,7 +9,8 @@ import retrofit2.Call;
 import java.util.HashMap;
 
 /**
- * provides an implementation
+ * Terms are the fundamental building blocks in a taxonomy.
+ * They are used to create hierarchical structures and are integrated into entries to classify and categorize information systematically.
  * <ul>
  *     <li>Create a Term</li>
  *     <li>Get all Terms of a Taxonomy</li>
@@ -235,6 +236,44 @@ public class Terms implements BaseImplementation<Terms> {
      */
     public Call<ResponseBody> update(@NotNull String termUid, @NotNull JSONObject body) {
         return this.taxonomyService.updateTerm(this.headers, this.taxonomyId, termUid, body);
+    }
+
+
+    /**
+     * @param termUid The term which we need to move(change the parent)
+     * @param body    the request body
+     *                <code>
+     *                //At Root Level:
+     *                {
+     *                "term": {
+     *                "parent_uid": null,
+     *                "order": 2
+     *                }
+     *                }
+     *                <p>
+     *                //Under an existing Term on a different level:
+     *                {
+     *                "term": {
+     *                "parent_uid": "term_1",
+     *                "order": 5
+     *                }
+     *                }
+     *                <p>
+     *                //Under an existing Term on the same level(Reorder Term):
+     *                {
+     *                "term": {
+     *                "parent_uid": "term_3",
+     *                "order": 1
+     *                }
+     *                }</code>
+     * @return Call
+     * @see  #addParam(String, Object) to provide additional params for below :
+     * <p><b>force</b> - It’s set to false by default, which will give an error if we
+     * try to move a term which has got child terms within it, when set to true,
+     * it’ll force move the term(which will also affect the ancestors hierarchy of all it’s child terms)
+     */
+    public Call<ResponseBody> reorder(@NotNull String termUid, @NotNull JSONObject body) {
+        return this.taxonomyService.reorder(this.headers, this.taxonomyId, termUid, this.params, body);
     }
 
 

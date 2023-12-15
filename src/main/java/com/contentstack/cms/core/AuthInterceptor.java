@@ -25,6 +25,7 @@ import java.io.IOException;
 public class AuthInterceptor implements Interceptor {
 
     protected String authtoken;
+    protected String[] earlyAccess;
 
     // The `public AuthInterceptor() {}` is a default constructor for the
     // `AuthInterceptor` class. It is
@@ -51,6 +52,10 @@ public class AuthInterceptor implements Interceptor {
         this.authtoken = authtoken;
     }
 
+    public void setEarlyAccess(String[] earlyAccess) {
+        this.earlyAccess = earlyAccess;
+    }
+
     /**
      * This function intercepts a request and adds headers to it, including a user
      * agent, content type, and
@@ -72,6 +77,10 @@ public class AuthInterceptor implements Interceptor {
 
         if (this.authtoken != null) {
             request.addHeader(Util.AUTHTOKEN, this.authtoken);
+        }
+        if (this.earlyAccess!=null && this.earlyAccess.length > 0) {
+            String commaSeparated = String.join(", ", earlyAccess);
+            request.addHeader(Util.EARLY_ACCESS_HEADER, commaSeparated);
         }
         return chain.proceed(request.build());
     }

@@ -11,7 +11,11 @@ import java.util.HashMap;
 
 
 /**
- * The type Taxonomy.
+ * Taxonomy is a system that classifies and organizes content in your collection or system.
+ * It simplifies finding and retrieving information by categorizing items based on specific
+ * criteria like their purpose, audience, or other relevant factors.
+ * <p>
+ * This hierarchical organization streamlines navigation and search processes.
  */
 public class Taxonomy implements BaseImplementation<Taxonomy> {
 
@@ -147,7 +151,7 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * </li>
      * </ul>
      *
-     * @return the call <p></p> <b>Example</b> <pre>     {@code
+     * @return the call <b>Example</b> <pre>     {@code
      *     Response<ResponseBody> response = taxonomy.find().execute();
      *     } </pre>
      */
@@ -172,7 +176,7 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * </ul>
      *
      * @param taxonomyId the taxonomy id
-     * @return the call <p></p> <b>Example</b> <pre>     {@code
+     * @return the call <b>Example</b> <pre>     {@code
      *     Response<ResponseBody> response = taxonomy.fetch("taxonomyId").execute();
      *     } </pre>
      */
@@ -184,7 +188,7 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * Create Taxonomy call.
      *
      * @param body the body
-     * @return the call <p></p> <b>Example</b> <pre>     {@code
+     * @return the call <b>Example</b> <pre>     {@code
      *     JSONObject body = new JSONObject
      *     Response<ResponseBody> response = taxonomy.create(body).execute();
      *     } </pre>
@@ -198,7 +202,7 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      *
      * @param taxonomyId - The taxonomy for which we need to update the details
      * @param body       the body
-     * @return the call <p></p> <b>Example</b> <pre>     {@code
+     * @return the call <b>Example</b> <pre>     {@code
      *     JSONObject body = new JSONObject();
      *     JSONObject bodyContent = new JSONObject();
      *     bodyContent.put("name", "Taxonomy 1");
@@ -215,13 +219,14 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * Delete Taxonomy call.
      *
      * @param taxonomyId - The taxonomy for which we need to update the details
-     * @return the call <p></p> <b>Example</b> <pre>     {@code
+     * @return the call <b>Example</b> <pre>     {@code
      *     Response<ResponseBody> response = taxonomy.delete("taxonomyId").execute();
      *     } </pre>
      */
     public Call<ResponseBody> delete(@NotNull String taxonomyId) {
         return this.taxonomyService.delete(this.headers, taxonomyId);
     }
+
 
     /**
      * Clear params for internal uses only for testing
@@ -233,12 +238,11 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
 
     /**
      * Get terms information
-     * <p>
      * <p>Examples</p>
      * <pre>
      *     {@code
      *     Term terms = stack("authtoken").taxonomy("taxonomyId").term();
-     *     }*
+     *     }
      * </pre>
      *
      * @return instance of {@link Terms}
@@ -246,6 +250,5 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
     public Terms terms() {
         return new Terms(this.taxonomyService, this.headers, this.taxonomyId);
     }
-
 
 }

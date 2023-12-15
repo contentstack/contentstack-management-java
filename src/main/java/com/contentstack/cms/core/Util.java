@@ -38,6 +38,7 @@ public class Util {
     public static final String API_KEY = "api_key";
     public static final String AUTHORIZATION = "authorization";
     public static final String AUTHTOKEN = "authtoken";
+    public static final String EARLY_ACCESS_HEADER = "x-header-ea";
     public static final String BRANCH = "branch";
     public static final String X_USER_AGENT = "X-User-Agent";
     public static final String USER_AGENT = "User-Agent";
