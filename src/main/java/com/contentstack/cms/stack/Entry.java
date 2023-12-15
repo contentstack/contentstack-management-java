@@ -104,6 +104,7 @@ public class Entry implements BaseImplementation<Entry> {
      * Set header for the request
      *
      * @param key Removes query param using key of request
+     * @return instance of {@link Entry}
      */
     public Entry removeParam(@NotNull String key) {
         this.params.remove(key);
