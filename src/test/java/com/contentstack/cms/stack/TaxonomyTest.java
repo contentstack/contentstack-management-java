@@ -201,7 +201,7 @@ class TaxonomyTest {
         term.put("term", termDetails);
         term.put("parent_uid", null);
         Request request = terms.create(term).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -221,7 +221,7 @@ class TaxonomyTest {
         terms.clearParams();
         terms.addParam("limit", 3);
         Request request = terms.find().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -279,11 +279,30 @@ class TaxonomyTest {
         Assertions.assertEquals(5, request.url().pathSegments().size());
     }
 
+
+    @Test
+    void testTermMoveOrReorder() {
+        terms.clearParams();
+        HashMap<String, String> headers = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
+        terms.addHeader("Accept-Encoding", "UTF-8");
+        headers.put("Accept-Encoding", "UTF-8");
+        params.put("force", true);
+        terms.addParams(params);
+        terms.addHeaders(headers);
+        Request request = terms.reorder(_uid, new JSONObject()).request();
+        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+    }
+
     @Test
     void testTermSearch() {
         terms.clearParams();
         Request request = terms.search("contentstack").request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
