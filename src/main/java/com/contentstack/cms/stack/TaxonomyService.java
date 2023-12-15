@@ -11,10 +11,15 @@ import java.util.Map;
 public interface TaxonomyService {
 
     @GET("taxonomies")
-    Call<ResponseBody> find(@HeaderMap Map<String, Object> headers, @QueryMap Map<String, Object> params);
+    Call<ResponseBody> find(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> params);
 
     @GET("taxonomies/{taxonomy_uid}")
-    Call<ResponseBody> fetch(@HeaderMap Map<String, Object> headers, @Path("taxonomy_uid") String uid, @QueryMap Map<String, Object> query);
+    Call<ResponseBody> fetch(
+            @HeaderMap Map<String, Object> headers,
+            @Path("taxonomy_uid") String uid,
+            @QueryMap Map<String, Object> query);
 
     @POST("taxonomies")
     Call<ResponseBody> create(
@@ -32,7 +37,8 @@ public interface TaxonomyService {
             @HeaderMap Map<String, Object> headers,
             @Path("taxonomy_uid") String uid);
 
-    //--Terms--
+
+    //    --Terms--
     @POST("taxonomies/{taxonomy_uid}/terms")
     Call<ResponseBody> createTerm(
             @HeaderMap HashMap<String, Object> headers,
@@ -73,10 +79,16 @@ public interface TaxonomyService {
             @Path("term_id") String termId,
             @Body JSONObject body);
 
+    @PUT("taxonomies/{taxonomy_uid}/terms/{term_id}/move")
+    Call<ResponseBody> reorder(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @Path("term_id") String termId,
+            @QueryMap Map<String, Object> queryParams,
+            @Body JSONObject body);
 
-    @GET("taxonomies/all/terms")
+    @GET("taxonomies/$all/terms")
     Call<ResponseBody> searchTerm(
             @HeaderMap HashMap<String, Object> headers,
-            @Query("term") String termString
-    );
+            @Query("typeahead") String termString);
 }
