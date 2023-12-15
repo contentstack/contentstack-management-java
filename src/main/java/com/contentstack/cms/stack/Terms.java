@@ -116,7 +116,7 @@ public class Terms implements BaseImplementation<Terms> {
      * Create Terms call.
      *
      * @param body The JSONObject request body
-     * @return instance of Call <p></p> <b>Example</b> <pre>     {@code
+     * @return instance of Call <br> <b>Example</b> <pre>     {@code
      *     Stack stack = new Contentstack.Builder().build().stack(headers);
      *     JSONObject body = new JSONObject();
      *     Term term = stack.taxonomy("taxonomyId").terms().create(body);
@@ -161,7 +161,7 @@ public class Terms implements BaseImplementation<Terms> {
      * <b>limit</b> - Limit the result to number of documents/nodes
      * </li>
      * </ul>
-     * <p></p>
+     * <br>
      * <b>Example</b>
      * <pre>
      *     {@code
@@ -181,7 +181,7 @@ public class Terms implements BaseImplementation<Terms> {
      * Fetch single term based on term uid.
      *
      * @param termUid The term for which we need the details
-     * @return instance of call <p> Supported Query Parameters: to use query parameters use #addParams("key", "value"); <ul>  <li><b>include_children_count</b> - Include count of number of children under each term <li>     <b>include_referenced_entries_count</b> - Include count of the entries where this term is referred </li> </ul> <p></p> <b>Example</b> <pre>     {@code
+     * @return instance of call <br> Supported Query Parameters: to use query parameters use #addParams("key", "value"); <ul>  <li><b>include_children_count</b> - Include count of number of children under each term <li>     <b>include_referenced_entries_count</b> - Include count of the entries where this term is referred </li> </ul> <br> <b>Example</b> <pre>     {@code
      *     Stack stack = new Contentstack.Builder().build().stack(headers);
      *     Term term = stack.taxonomy("taxonomyId").terms().find();
      *     } </pre>
@@ -198,7 +198,7 @@ public class Terms implements BaseImplementation<Terms> {
      * @return The details of the term descendants <p> URL/Query parameters <ul>     <li>     <b>depth</b> - Include the terms upto the depth specified if set to a number greater than 0, include all the terms if set to 0, default depth will be set to 1     </li><li>     <b>include_children_count</b> - Include count of number of children under each term     </li><li>     <b>include_referenced_entries_count</b> - Include count of the entries where atleast 1 term of this taxonomy is referred     </li><li>     <b>include_count</b> - Include count of the documents/nodes that matched the query     </li><li>     <b>skip</b> - Skip the number of documents/nodes     </li><li>     <b>limit</b> - Limit the result to number of documents/nodes     </li> </ul> <p> <b>Example</b> <pre> {@code
      *      Stack stack = new Contentstack.Builder().build().stack(headers);
      *      Term term = stack.taxonomy("taxonomyId").terms().descendants("termId").;
-     *     }     </pre> <p>
+     *     }     </pre> <br>
      */
     public Call<ResponseBody> descendants(@NotNull String termUid) {
         return this.taxonomyService.descendantsTerm(this.headers, this.taxonomyId, termUid, this.params);
@@ -250,7 +250,7 @@ public class Terms implements BaseImplementation<Terms> {
      *                "order": 2
      *                }
      *                }
-     *                <p>
+     *                <br>
      *                //Under an existing Term on a different level:
      *                {
      *                "term": {
@@ -258,7 +258,7 @@ public class Terms implements BaseImplementation<Terms> {
      *                "order": 5
      *                }
      *                }
-     *                <p>
+     *                <br>
      *                //Under an existing Term on the same level(Reorder Term):
      *                {
      *                "term": {
