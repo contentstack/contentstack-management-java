@@ -51,6 +51,7 @@ public class Contentstack {
     protected final Boolean retryOnFailure;
     protected final Proxy proxy;
     protected AuthInterceptor interceptor;
+    protected String[] earlyAccess;
     protected User user;
 
     /**
@@ -80,8 +81,8 @@ public class Contentstack {
      * @return User
      * @author ishaileshmishra
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     * </a>
      * @since 2022-05-19
      */
     public User user() {
@@ -130,8 +131,8 @@ public class Contentstack {
      * @throws IOException the IOException
      * @author ishaileshmishra
      * @see <a href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
-     *      </a>
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
+     * </a>
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
         if (this.authtoken != null)
@@ -183,10 +184,10 @@ public class Contentstack {
      * @throws IOException the IOException
      * @author ishaileshmishra
      * @see <a
-     *      href=
-     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
-     *      your account
-     *      </a>
+     * href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
+     * your account
+     * </a>
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
         if (this.authtoken != null)
@@ -287,11 +288,12 @@ public class Contentstack {
      *
      * @param organizationUid The UID of the organization that you want to retrieve
      * @return the organization
-     *         <br>
-     *         <b>Example</b>
+     * <br>
+     * <b>Example</b>
      *
-     *         <pre>
+     * <pre>
      *         Contentstack contentstack = new Contentstack.Builder().build();
+     *         <br>
      *         Organization org = contentstack.organization();
      *         </pre>
      */
@@ -447,6 +449,7 @@ public class Contentstack {
         this.retryOnFailure = builder.retry;
         this.proxy = builder.proxy;
         this.interceptor = builder.authInterceptor;
+        this.earlyAccess = builder.earlyAccess;
     }
 
     /**
@@ -461,6 +464,7 @@ public class Contentstack {
         private AuthInterceptor authInterceptor;
 
         private String authtoken; // authtoken for client
+        private String[] earlyAccess;
         private Retrofit instance; // client instance
         private String hostname = Util.HOST; // Default Host for Contentstack API (default: api.contentstack.io)
         private String port = Util.PORT; // Default PORT for Contentstack API
@@ -488,14 +492,14 @@ public class Contentstack {
          * <br>
          * <p>
          * {@code
-         * 
-        <p>
+         *
+         * <p>
          * Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("hostname", 433));
          * Contentstack contentstack = new Contentstack.Builder().setProxy(proxy).build();
-         * 
-        <p>
+         *
+         * <p>
          * }
-         * 
+         *
          * @param proxy the proxy
          * @return the Builder instance
          */
@@ -578,9 +582,9 @@ public class Contentstack {
          *                           unit of granularity and provides utility methods to
          *                           convert across units
          * @return instance of Builder
-         *         <p>
-         *         Example:
-         *         {@code
+         * <p>
+         * Example:
+         * {@code
          * Contentstack cs = new Contentstack.Builder()
          * .setAuthtoken(AUTHTOKEN)
          * .setConnectionPool(5, 400, TimeUnit.MILLISECONDS)
@@ -601,6 +605,12 @@ public class Contentstack {
          */
         public Builder setAuthtoken(String authtoken) {
             this.authtoken = authtoken;
+            return this;
+        }
+
+
+        public Builder earlyAccess(String[] earlyAccess) {
+            this.earlyAccess = earlyAccess;
             return this;
         }
 

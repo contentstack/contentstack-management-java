@@ -7,6 +7,10 @@ import retrofit2.http.*;
 
 import java.util.Map;
 
+
+/**
+ * The interface Alias service.
+ */
 public interface AliasService {
 
     @GET("stacks/branch_aliases")
