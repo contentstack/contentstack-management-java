@@ -845,7 +845,7 @@ public class Stack implements BaseImplementation<Stack> {
      *
      * @param taxonomyUid the taxonomy uid
      * @return instance of Taxonomy
-     * <p></p>
+     * <br>
      * <pre>
      * {@code
      * Stack stack = new Contentstack.Builder().setAuthtoken("authtoken").build().stack();
