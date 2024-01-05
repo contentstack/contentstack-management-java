@@ -13,6 +13,7 @@ import retrofit2.Retrofit;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.nio.file.InvalidPathException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -306,11 +307,8 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> uploadAsset(@NotNull String filePath, String description) {
-        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), description);
-        MultipartBody.Part partFile = createMultipartBody(filePath, null, null, null, null);
-        return this.service.uploadAsset(this.headers, partFile, body, this.params);
+        return uploadAsset(filePath, null, null, description, null);
     }
-
 
     /**
      * The <b>Upload asset</b> request uploads an asset file to your stack.
@@ -327,9 +325,15 @@ public class Asset implements BaseImplementation<Asset> {
      * @return Call
      */
     public Call<ResponseBody> uploadAsset(@NotNull String filePath, String parentUid, String title, String description, String[] tags) {
-        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), description);
-        MultipartBody.Part partFile = createMultipartBody(filePath, parentUid, title, description, tags);
-        return this.service.uploadAsset(this.headers, partFile, body, this.params);
+        if (filePath.isBlank()) {
+            throw new InvalidPathException(filePath, "The filePath cannot be blank");
+        }
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new InvalidPathException(filePath, String.format("File at `{}` does not exist", filePath));
+        }
+        MultipartBody body = createMultipartBody(file, parentUid, title, description, tags);
+        return this.service.uploadAsset(this.headers, body, this.params);
     }
 
     private String tagConvertor(String[] tags) {
@@ -344,33 +348,24 @@ public class Asset implements BaseImplementation<Asset> {
     }
 
 
-    private MultipartBody.Part createMultipartBody(String filePath, String parentUid, String title, String description, String[] tags) {
-        MultipartBody.Builder builder = new MultipartBody.Builder();
-        builder.setType(MultipartBody.FORM);
-
-        if (!filePath.isEmpty()) {
-            File file = new File(filePath);
-            if (file.exists()) {
-                RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                builder.addFormDataPart("asset[upload]", file.getName(), fileBody);
-            }
-        }
-
-        // Add other parts
-        if (parentUid != null) {
+    private MultipartBody createMultipartBody(File file, String parentUid, String title, String description, String[] tags) {
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("asset[upload]", file.getName(), MultipartBody.create(MultipartBody.FORM, file));
+        // Adding other parts
+        if (parentUid != null && !parentUid.isBlank()) {
             builder.addFormDataPart("asset[parent_uid]", parentUid);
         }
-        if (title != null) {
+        if (title != null && !title.isBlank()) {
             builder.addFormDataPart("asset[title]", title);
         }
-        if (description != null) {
+        if (description != null && !description.isBlank()) {
             builder.addFormDataPart("asset[description]", description);
         }
-        if (tags != null) {
+        if (tags != null && tags.length > 0) {
             builder.addFormDataPart("asset[tags]", tagConvertor(tags));
         }
-
-        return builder.build().part(0);
+        return builder.build();
     }
 
 

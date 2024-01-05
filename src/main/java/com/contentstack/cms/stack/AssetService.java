@@ -40,6 +40,12 @@ public interface AssetService {
             @Part("asset[description]") RequestBody description,
             @QueryMap(encoded = true) Map<String, Object> query);
 
+    @POST("assets")
+    Call<ResponseBody> uploadAsset(
+            @HeaderMap Map<String, Object> headers,
+            @Body MultipartBody body,
+            @QueryMap(encoded = true) Map<String, Object> query);
+
     @Multipart
     @PUT("assets/{asset_uid}")
     Call<ResponseBody> replace(
