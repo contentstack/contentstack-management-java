@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.0
+
+### Jan 18, 2024
+
+- New Features:
+    - Query filter support in Taxonomy
+        - query filter support in Entry
+        - query filter support in Taxonomy
+
 ## v1.2.0
 
 ### Dec 18, 2023
@@ -7,20 +16,18 @@
 - New Features:
     - Early access header support
 
-
-
 ## v1.1.0
 
 ### Oct 31, 2023
 
 - New Features:
-  - Taxonomy 
-  - Teams
+    - Taxonomy
+    - Teams
 
 Bug Fixes:
-  - KeepAliveDuration
-  - SNYK issues fixed
 
+- KeepAliveDuration
+- SNYK issues fixed
 
 ## v1.0.0
 
