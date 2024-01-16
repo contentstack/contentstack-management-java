@@ -782,13 +782,14 @@ public class Entry implements BaseImplementation<Entry> {
     /**
      * Get instance of  taxonomy search filter class instance through which we can query on taxonomy based on content type
      * <p><b>Examples</b></p>
-     * <p>
      * <pre>
      *           JSONObject query = new JSONObject();
      *         query.put("taxonomies.taxonomy_uid", "{ \"$in\" : [\"term_uid1\" , \"term_uid2\" ] }");
-     *         Response<ResponseBody> response = entry.query(query).execute();
+     *         Call response = entry.query(query).execute();
      *     </pre>
-     * instance of {@link Terms}
+     *
+     * @param query the request body of  type {@link JSONObject}
+     * @return instance of {@link Terms}
      */
     public Call<ResponseBody> query(@NotNull JSONObject query) {
         validateCT();
