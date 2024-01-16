@@ -251,4 +251,16 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
         return new Terms(this.taxonomyService, this.headers, this.taxonomyId);
     }
 
+
+    /**
+     * Get instance of  taxonomy search filter class instance through which we can query on taxonomy based on Entry
+     * <p>Example usage:</p>
+     * <pre>JSONObject object = new JSonObject();</pre>
+     * <pre>object.put("taxonomies.color", Object)</pre>
+     * <pre>Taxonomy taxonomy = stack("authtoken").taxonomy("taxonomyId").filterTaxonomy(object);</pre>
+     */
+    public Call<ResponseBody> query(JSONObject query) {
+        return this.taxonomyService.filterTaxonomy(this.headers, query);
+    }
+
 }

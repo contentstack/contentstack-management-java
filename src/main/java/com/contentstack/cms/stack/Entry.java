@@ -744,12 +744,12 @@ public class Entry implements BaseImplementation<Entry> {
     }
 
     /**
-     * To Unpublish an entry call will unpublish an entry at once, and also, gives
-     * you the provision to unpublish an
+     * To Un-publish an entry call will un-publish an entry at once, and also, gives
+     * you the provision to un-publish an
      * entry automatically at a later date/time.
      * <p>
      * In the 'Body' section, you can specify the locales and environments from
-     * which you want to unpublish the entry.
+     * which you want to un-publish the entry.
      * These details should be specified in the
      * <p>
      * <b>entry</b> parameter. However, if
@@ -776,6 +776,23 @@ public class Entry implements BaseImplementation<Entry> {
         validateCT();
         validateEntry();
         return this.service.unpublish(this.headers, this.contentTypeUid, this.entryUid, requestBody);
+    }
+
+
+    /**
+     * Get instance of  taxonomy search filter class instance through which we can query on taxonomy based on content type
+     * <p><b>Examples</b></p>
+     * <p>
+     * <pre>
+     *           JSONObject query = new JSONObject();
+     *         query.put("taxonomies.taxonomy_uid", "{ \"$in\" : [\"term_uid1\" , \"term_uid2\" ] }");
+     *         Response<ResponseBody> response = entry.query(query).execute();
+     *     </pre>
+     * instance of {@link Terms}
+     */
+    public Call<ResponseBody> query(@NotNull JSONObject query) {
+        validateCT();
+        return this.service.filterTaxonomy(this.headers, this.contentTypeUid, query);
     }
 
 }
