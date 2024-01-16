@@ -3,6 +3,7 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
@@ -766,6 +767,25 @@ class EntryFieldUnitTests {
         .versionName(1, _verRequestBody)
         .request();
         Assertions.assertEquals(3, resp.headers().size());
+    }
+
+    @Test
+    void queryFiltersOnTaxonomy() {
+        JSONObject query = new JSONObject();
+        query.put("taxonomies.taxonomy_uid", "{ \"$in\" : [\"term_uid1\" , \"term_uid2\" ] }");
+        Request request = entryInstance.query(query).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertEquals("product", request.url().pathSegments().get(2));
+        Assertions.assertEquals("entries", request.url().pathSegments().get(3));
+        Assertions.assertNull(request.body());
+        Assertions.assertEquals("query={\"taxonomies.taxonomy_uid\":\"{ \\\"$in\\\" : [\\\"term_uid1\\\" , \\\"term_uid2\\\" ] }\"}", request.url().query());
+
     }
 
 }

@@ -15,10 +15,10 @@ import java.util.Objects;
  */
 public class Util {
 
-    // The line `public static final String SDK_VERSION = "1.0.0";`
+    // The line `public static final String SDK_VERSION = "1.2.0";`
     // named `SDK_VERSION` of type `String`. The value of this constant is set to
-    // "1.0.0".
-    public static final String SDK_VERSION = "1.0.0";
+    // "1.2.0".
+    public static final String SDK_VERSION = "1.2.0";
 
     static final String PRIVATE_CONSTRUCTOR = "private constructor can't be accessed outside the class";
     public static final Boolean RETRY_ON_FAILURE = true;

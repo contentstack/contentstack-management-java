@@ -365,4 +365,27 @@ class TaxonomyTest {
         System.out.println(response);
     }
 
+    @Test
+    void queryFiltersOnTaxonomy() {
+        Taxonomy taxonomy = new Contentstack.Builder()
+                .setAuthtoken(TestClient.AUTHTOKEN)
+                .setHost("api.contentstack.io")
+                .build()
+                .stack("blt12c1ba95c1b11e88")
+                .taxonomy();
+        JSONObject query = new JSONObject();
+        query.put("taxonomies.taxonomy_uid", "{ \"$in\" : [\"term_uid1\" , \"term_uid2\" ] }");
+        Request request = taxonomy.query(query).request();
+        Assertions.assertEquals(1, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertEquals("entries", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertEquals("query={\"taxonomies.taxonomy_uid\":\"{ \\\"$in\\\" : [\\\"term_uid1\\\" , \\\"term_uid2\\\" ] }\"}", request.url().query());
+    }
+
 }
