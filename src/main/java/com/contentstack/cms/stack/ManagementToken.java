@@ -9,7 +9,6 @@ import retrofit2.Call;
 import java.util.HashMap;
 
 /**
- * <b>Management tokens: </b> <br>
  * To authenticate Content Management API (CMA) requests over your stack
  * content, you can use Management Tokens
  * <br>
