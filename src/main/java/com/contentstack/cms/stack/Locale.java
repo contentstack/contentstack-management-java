@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <b>Languages</b>
- * <br>
  * Contentstack has a sophisticated multilingual capability. It allows you to
  * create and publish entries in any
  * language. This feature allows you to set up multilingual websites and cater
