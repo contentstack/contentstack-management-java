@@ -25,8 +25,6 @@ class TaxonomyTest {
     protected static Terms terms;
     protected static JSONObject body;
 
-    // Create a JSONObject, JSONObject could be created in multiple ways.
-    // We choose JSONParser that converts string to JSONObject
     static String theBody = "{\n" +
             "  \"taxonomy\": {\n" +
             "    \"name\": \"Taxonomy 1\",\n" +
@@ -371,7 +369,7 @@ class TaxonomyTest {
                 .setAuthtoken(TestClient.AUTHTOKEN)
                 .setHost("api.contentstack.io")
                 .build()
-                .stack("blt12c1ba95c1b11e88")
+                .stack("fakestackkey")
                 .taxonomy();
         JSONObject query = new JSONObject();
         query.put("taxonomies.taxonomy_uid", "{ \"$in\" : [\"term_uid1\" , \"term_uid2\" ] }");
