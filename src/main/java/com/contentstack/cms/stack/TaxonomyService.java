@@ -91,4 +91,11 @@ public interface TaxonomyService {
     Call<ResponseBody> searchTerm(
             @HeaderMap HashMap<String, Object> headers,
             @Query("typeahead") String termString);
+
+
+    @GET("taxonomies/entries")
+    Call<ResponseBody> filterTaxonomy(
+            @HeaderMap HashMap<String, Object> headers,
+            @Query("query") JSONObject queryObject
+    );
 }
