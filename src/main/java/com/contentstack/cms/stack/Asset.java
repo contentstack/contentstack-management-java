@@ -13,6 +13,7 @@ import retrofit2.Retrofit;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.util.HashMap;
 import java.util.Map;
@@ -330,7 +331,7 @@ public class Asset implements BaseImplementation<Asset> {
         }
         File file = new File(filePath);
         if (!file.exists()) {
-            throw new InvalidPathException(filePath, String.format("File at `{}` does not exist", filePath));
+            throw new InvalidPathException(filePath, String.format("File at `%s` does not exist", filePath));
         }
         MultipartBody body = createMultipartBody(file, parentUid, title, description, tags);
         return this.service.uploadAsset(this.headers, body, this.params);
@@ -350,8 +351,12 @@ public class Asset implements BaseImplementation<Asset> {
 
     private MultipartBody createMultipartBody(File file, String parentUid, String title, String description, String[] tags) {
         MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("asset[upload]", file.getName(), MultipartBody.create(MultipartBody.FORM, file));
+                .setType(MultipartBody.FORM);
+        try {
+            builder.addFormDataPart("asset[upload]", file.getName(), MultipartBody.create(MediaType.parse(Files.probeContentType(file.toPath())), file));
+        } catch (IOException e) {
+            builder.addFormDataPart("asset[upload]", file.getName(), MultipartBody.create(MultipartBody.FORM, file));
+        }
         // Adding other parts
         if (parentUid != null && !parentUid.isBlank()) {
             builder.addFormDataPart("asset[parent_uid]", parentUid);
