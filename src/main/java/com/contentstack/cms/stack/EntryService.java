@@ -146,4 +146,11 @@ public interface EntryService {
             @Path("content_type_uid") String contentTypeUid,
             @Path("entry_uid") String entryUid,
             @Body JSONObject requestBody);
+
+    @GET("content_types/{content_type_uid}/entries")
+    Call<ResponseBody> filterTaxonomy(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Query("query") JSONObject queryObject);
+
 }

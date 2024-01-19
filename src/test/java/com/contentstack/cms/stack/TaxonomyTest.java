@@ -25,8 +25,6 @@ class TaxonomyTest {
     protected static Terms terms;
     protected static JSONObject body;
 
-    // Create a JSONObject, JSONObject could be created in multiple ways.
-    // We choose JSONParser that converts string to JSONObject
     static String theBody = "{\n" +
             "  \"taxonomy\": {\n" +
             "    \"name\": \"Taxonomy 1\",\n" +
@@ -363,6 +361,29 @@ class TaxonomyTest {
                 .taxonomy();
         Response<ResponseBody> response = taxonomy.addHeader("authtoken", "blt67b95aeb964f5262").find().execute();
         System.out.println(response);
+    }
+
+    @Test
+    void queryFiltersOnTaxonomy() {
+        Taxonomy taxonomy = new Contentstack.Builder()
+                .setAuthtoken(TestClient.AUTHTOKEN)
+                .setHost("api.contentstack.io")
+                .build()
+                .stack("fakestackkey")
+                .taxonomy();
+        JSONObject query = new JSONObject();
+        query.put("taxonomies.taxonomy_uid", "{ \"$in\" : [\"term_uid1\" , \"term_uid2\" ] }");
+        Request request = taxonomy.query(query).request();
+        Assertions.assertEquals(1, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertEquals("entries", request.url().pathSegments().get(2));
+        Assertions.assertNull(request.body());
+        Assertions.assertEquals("query={\"taxonomies.taxonomy_uid\":\"{ \\\"$in\\\" : [\\\"term_uid1\\\" , \\\"term_uid2\\\" ] }\"}", request.url().query());
     }
 
 }
