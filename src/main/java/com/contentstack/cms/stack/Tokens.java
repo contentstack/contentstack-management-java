@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import retrofit2.Retrofit;
 
 /**
- * <b>Tokens</b>
- * <br>
  * Contentstack provides different types of tokens to authorize API requests
  *
  * @author ishaileshmishra
