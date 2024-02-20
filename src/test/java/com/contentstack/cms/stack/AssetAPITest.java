@@ -30,7 +30,7 @@ class AssetAPITest {
 
     @Order(1)
     @Test
-    void testFindAssets() throws IOException {
+    void testFindAssets() {
         asset.clearParams();
         asset.addParam("include_folders", true);
         asset.addParam("environment", "production");
@@ -141,10 +141,9 @@ class AssetAPITest {
         asset.addHeader("api_key", API_KEY);
         asset.addHeader("authorization", MANAGEMENT_TOKEN);
         asset.addHeader("authtoken", AUTHTOKEN);
-        String filePath = "/Users/shaileshmishra/Desktop/pexels.png";
-        String description = "The calender has been placed to assets by ishaileshmishra";
+        String filePath = "/Users/shaileshmishra/Desktop/image.jpeg";
+        String description = "The calender has been placed to assets by shaileshmishra";
         Request request = asset.uploadAsset(filePath, description).request();
-
         // The assertions
         Assertions.assertEquals(3, request.headers().size());
         Assertions.assertTrue(request.headers().names().contains("api_key"));
