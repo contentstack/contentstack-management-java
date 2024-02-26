@@ -257,7 +257,7 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      * <p>Example usage:</p>
      * <pre>JSONObject object = new JSonObject();</pre>
      * <pre>object.put("taxonomies.color", Object)</pre>
-     * <pre>Taxonomy taxonomy = stack("authtoken").taxonomy("taxonomyId").filterTaxonomy(object);</pre>
+     * <pre>Taxonomy taxonomy = stack("authtoken").taxonomy("taxonomyId").query(object);</pre>
      *
      * @param query the query of type @{@link JSONObject}
      * @return instance of  {@link Call}
