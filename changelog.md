@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.1
+
+### Feb 22, 2024
+
+- Fix:
+    - auto checking data type of the asset object
+
 ## v1.3.0
 
 ### Jan 18, 2024
