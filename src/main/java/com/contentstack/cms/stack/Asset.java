@@ -327,50 +327,16 @@ public class Asset implements BaseImplementation<Asset> {
      * @return Call
      */
     public Call<ResponseBody> uploadAsset(@NotNull String filePath, String parentUid, String title, String description, String[] tags) {
-        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), description);
+        RequestBody body = RequestBody.create(Objects.requireNonNull(MediaType.parse("multipart/form-data")), description);
         MultipartBody.Part partFile = createMultipartBody(filePath, parentUid, title, description, tags);
         return this.service.uploadAsset(this.headers, partFile, body, this.params);
-    }
-
-    private String tagConvertor(String[] tags) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < tags.length; i++) {
-            stringBuilder.append(tags[i]);
-            if (i < tags.length - 1) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
     }
 
 
     private MultipartBody.Part createMultipartBody(String filePath, String parentUid, String title, String description, String[] tags) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
-
-        if (!filePath.isEmpty()) {
-            File file = new File(filePath);
-            if (file.exists()) {
-                RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                builder.addFormDataPart("asset[upload]", file.getName(), fileBody);
-            }
-        }
-
-        // Add other parts
-        if (parentUid != null) {
-            builder.addFormDataPart("asset[parent_uid]", parentUid);
-        }
-        if (title != null) {
-            builder.addFormDataPart("asset[title]", title);
-        }
-        if (description != null) {
-            builder.addFormDataPart("asset[description]", description);
-        }
-        if (tags != null) {
-            builder.addFormDataPart("asset[tags]", tagConvertor(tags));
-        }
-
-        return builder.build().part(0);
+        return new FileUploader().createMultipartBody(filePath, parentUid, title, description, tags);
     }
 
 
@@ -403,7 +369,7 @@ public class Asset implements BaseImplementation<Asset> {
     public Call<ResponseBody> replace(@NotNull String filePath, @NotNull String description) {
         Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
         MultipartBody.Part assetPath = uploadFile(filePath);
-        RequestBody body = RequestBody.create(MediaType.parse(String.valueOf(MultipartBody.FORM)), description);
+        RequestBody body = RequestBody.create(Objects.requireNonNull(MediaType.parse(String.valueOf(MultipartBody.FORM))), description);
         return this.service.replace(this.headers, this.assetUid, assetPath, body, this.params);
     }
 
