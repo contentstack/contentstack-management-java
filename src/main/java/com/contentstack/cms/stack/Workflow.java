@@ -9,6 +9,7 @@ import retrofit2.Retrofit;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Workflow is a tool that allows you to streamline the process of content
@@ -31,15 +32,17 @@ public class Workflow implements BaseImplementation<Workflow> {
     protected HashMap<String, Object> params;
     private String workflowUid;
 
-    protected Workflow(Retrofit retrofit) {
+    protected Workflow(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(WorkflowService.class);
     }
 
-    protected Workflow(Retrofit retrofit, @NotNull String uid) {
+    protected Workflow(Retrofit retrofit,Map<String, Object> headers, @NotNull String uid) {
         this.workflowUid = uid;
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(WorkflowService.class);
     }

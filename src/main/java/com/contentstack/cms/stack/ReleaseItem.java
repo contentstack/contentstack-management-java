@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Get all items in a Release request retrieves a list of all items (entries
@@ -29,8 +30,9 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
     protected HashMap<String, Object> params;
     private final String releaseUid;
 
-    protected ReleaseItem(Retrofit retrofit, String releaseUid) {
+    protected ReleaseItem(Retrofit retrofit,Map<String, Object> headers, String releaseUid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.releaseUid = releaseUid;
         this.service = retrofit.create(ReleaseService.class);

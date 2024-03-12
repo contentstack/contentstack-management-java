@@ -18,14 +18,16 @@ public class Folder implements BaseImplementation<Folder> {
     protected final AssetService service;
     private String folderUid;
 
-    protected Folder(Retrofit instance) {
+    protected Folder(Retrofit instance,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         params = new HashMap<>();
         this.service = instance.create(AssetService.class);
     }
 
-    protected Folder(Retrofit instance, String folderUid) {
+    protected Folder(Retrofit instance,Map<String, Object> headers, String folderUid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         params = new HashMap<>();
         this.folderUid = folderUid;
         this.service = instance.create(AssetService.class);

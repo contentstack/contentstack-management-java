@@ -117,7 +117,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @return Folder
      */
     public Folder folder() {
-        return new Folder(this.instance);
+        return new Folder(this.instance,this.headers);
     }
 
     /**
@@ -127,7 +127,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @return Folder
      */
     public Folder folder(@NotNull String folderUid) {
-        return new Folder(this.instance, folderUid);
+        return new Folder(this.instance,this.headers, folderUid);
     }
 
     /**
