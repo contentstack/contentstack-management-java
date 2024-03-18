@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A role is a collection of permissions that will be applicable to all the
@@ -27,14 +28,16 @@ public class Roles implements BaseImplementation<Roles> {
     protected HashMap<String, Object> params;
     protected String roleUid;
 
-    protected Roles(Retrofit retrofit) {
+    protected Roles(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(RolesService.class);
     }
 
-    protected Roles(Retrofit retrofit, String roleUid) {
+    protected Roles(Retrofit retrofit,Map<String, Object> headers, String roleUid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.roleUid = roleUid;
         this.service = retrofit.create(RolesService.class);
