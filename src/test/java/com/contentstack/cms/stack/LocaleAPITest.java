@@ -3,6 +3,8 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
+import com.contentstack.cms.core.Util;
+
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -20,11 +22,14 @@ public class LocaleAPITest {
     protected static String API_KEY = TestClient.API_KEY;
     protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     static Locale locale;
+    protected static Stack stackInstance;
 
     @BeforeAll
     public static void setupEnv() {
-        Contentstack contentstack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
-        Stack stackInstance = contentstack.stack(API_KEY, MANAGEMENT_TOKEN);
+        // Contentstack contentstack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
+        // Stack stackInstance = contentstack.stack(API_KEY, MANAGEMENT_TOKEN);
+         stackInstance = TestClient.getStack().addHeader(Util.API_KEY, API_KEY)
+                .addHeader("api_key", API_KEY);
         locale = stackInstance.locale(MANAGEMENT_TOKEN);
     }
 

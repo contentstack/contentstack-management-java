@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -37,14 +38,16 @@ public class AuditLog implements BaseImplementation<AuditLog> {
     protected HashMap<String, Object> params;
     private String logItemUid;
 
-    protected AuditLog(Retrofit retrofit) {
+    protected AuditLog(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(AuditLogService.class);
     }
 
-    protected AuditLog(Retrofit retrofit, String uid) {
+    protected AuditLog(Retrofit retrofit,Map<String, Object> headers, String uid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.logItemUid = uid;
         this.service = retrofit.create(AuditLogService.class);

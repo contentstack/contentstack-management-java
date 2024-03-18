@@ -3,6 +3,8 @@ package com.contentstack.cms.stack;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
+import com.contentstack.cms.core.Util;
+
 import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
@@ -17,17 +19,21 @@ public class EnvironmentAPITest {
     protected static String API_KEY = TestClient.API_KEY;
     protected static String MANAGEMENT_TOKEN = TestClient.AUTHTOKEN;
     static Environment environment;
+    protected static Stack stackInstance;
+   
 
     @BeforeAll
     public static void setupEnv() {
-        Contentstack contentstack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
-        Stack stackInstance = contentstack.stack(API_KEY, MANAGEMENT_TOKEN);
+        // Contentstack contentstack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
+        // Stack stackInstance = contentstack.stack(API_KEY, MANAGEMENT_TOKEN);
+        stackInstance = TestClient.getStack().addHeader(Util.API_KEY, API_KEY)
+                .addHeader("api_key", API_KEY);
         environment = stackInstance.environment("production");
     }
 
     @Test
     @Order(1)
-    void fetchLocales() {
+    void fetchEnvironments() {
         environment.addParam("include_count", false);
         environment.addParam("asc", "created_at");
         environment.addParam("desc", "updated_at");
@@ -46,7 +52,7 @@ public class EnvironmentAPITest {
 
     @Test
     @Order(2)
-    void addLocale() {
+    void fetchEnvironment() {
         try {
             Response<ResponseBody> response = environment.fetch().execute();
             if (response.isSuccessful()) {
@@ -61,7 +67,7 @@ public class EnvironmentAPITest {
 
     @Test
     @Order(3)
-    void getLocale() {
+    void createEnvironment() {
         // add_env.json
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
@@ -78,7 +84,7 @@ public class EnvironmentAPITest {
 
     @Test
     @Order(4)
-    void updateLocale() {
+    void updateEnvironment() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
         try {
             Response<ResponseBody> response = environment.update(requestBody).execute();
@@ -94,7 +100,7 @@ public class EnvironmentAPITest {
 
     @Test
     @Order(5)
-    void deleteLocale() {
+    void deleteEnvironment() {
         try {
             Response<ResponseBody> response = environment.delete().execute();
             if (response.isSuccessful()) {
