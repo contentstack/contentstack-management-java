@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Labels allow you to group a collection of content within a stack. Using
@@ -32,15 +33,17 @@ public class Label implements BaseImplementation<Label> {
     protected HashMap<String, Object> params;
     protected String labelUid;
 
-    protected Label(Retrofit retrofit) {
+    protected Label(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(LabelService.class);
     }
 
-    protected Label(Retrofit retrofit, String labelUid) {
+    protected Label(Retrofit retrofit,Map<String, Object> headers, String labelUid) {
         this.labelUid = labelUid;
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(LabelService.class);
     }
