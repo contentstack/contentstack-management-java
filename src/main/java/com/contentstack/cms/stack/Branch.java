@@ -34,15 +34,17 @@ public class Branch implements BaseImplementation<Branch> {
     private Retrofit instance;
     private String baseBranchId;
 
-    protected Branch(Retrofit instance) {
+    protected Branch(Retrofit instance,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.headers.put("Content-Type", "application/json");
         this.params = new HashMap<>();
         this.service = instance.create(BranchService.class);
     }
 
-    protected Branch(Retrofit instance, String uid) {
+    protected Branch(Retrofit instance,Map<String, Object> headers, String uid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.headers.put("Content-Type", "application/json");
         this.baseBranchId = uid;
         this.params = new HashMap<>();

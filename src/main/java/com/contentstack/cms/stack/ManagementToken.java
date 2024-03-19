@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * To authenticate Content Management API (CMA) requests over your stack
@@ -24,14 +25,16 @@ public class ManagementToken implements BaseImplementation<ManagementToken> {
     protected HashMap<String, Object> params;
     private String tokenUid;
 
-    protected ManagementToken(TokenService service) {
+    protected ManagementToken(TokenService service,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = service;
     }
 
-    protected ManagementToken(TokenService service, String tokenUid) {
+    protected ManagementToken(TokenService service,Map<String, Object> headers, String tokenUid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = service;
         this.tokenUid = tokenUid;

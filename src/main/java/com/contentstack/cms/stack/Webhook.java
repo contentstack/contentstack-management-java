@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A webhook is a mechanism that sends real-time information to any third-party
@@ -38,14 +39,16 @@ public class Webhook implements BaseImplementation<Webhook> {
     protected HashMap<String, Object> params;
     private String webhookUid;
 
-    protected Webhook(Retrofit retrofit) {
+    protected Webhook(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(WebhookService.class);
     }
 
-    protected Webhook(Retrofit retrofit, String uid) {
+    protected Webhook(Retrofit retrofit,Map<String, Object> headers, String uid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.webhookUid = uid;
         this.service = retrofit.create(WebhookService.class);

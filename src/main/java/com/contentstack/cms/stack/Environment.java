@@ -27,15 +27,17 @@ public class Environment implements BaseImplementation<Environment> {
     protected final EnvironmentService service;
     protected String environment;
 
-    protected Environment(Retrofit instance) {
+    protected Environment(Retrofit instance, Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = instance.create(EnvironmentService.class);
     }
 
-    protected Environment(Retrofit instance, String environment) {
+    protected Environment(Retrofit instance, Map<String, Object> headers, String environment) {
         this.environment = environment;
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = instance.create(EnvironmentService.class);
     }

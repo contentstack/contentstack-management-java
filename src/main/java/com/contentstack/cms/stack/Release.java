@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * You can pin a set of entries and assets (along with the deploy action, i.e.,
@@ -38,15 +39,17 @@ public class Release implements BaseImplementation<Release> {
     protected String releaseUid;
     private final Retrofit retrofit;
 
-    protected Release(Retrofit retrofit) {
+    protected Release(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.retrofit = retrofit;
         this.service = this.retrofit.create(ReleaseService.class);
     }
 
-    protected Release(Retrofit retrofit, String uid) {
+    protected Release(Retrofit retrofit,Map<String, Object> headers, String uid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.releaseUid = uid;
         this.retrofit = retrofit;
@@ -254,7 +257,7 @@ public class Release implements BaseImplementation<Release> {
      */
     public ReleaseItem item() {
         validate();
-        return new ReleaseItem(this.retrofit, this.releaseUid);
+        return new ReleaseItem(this.retrofit,this.headers, this.releaseUid);
     }
 
     /**

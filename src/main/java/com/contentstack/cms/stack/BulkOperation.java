@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * You can perform bulk operations such as Publish, Unpublished, and Delete on
@@ -48,8 +49,9 @@ public class BulkOperation implements BaseImplementation<BulkOperation> {
      *
      * @param retrofit the retrofit
      */
-    protected BulkOperation(Retrofit retrofit) {
+    protected BulkOperation(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.retrofit = retrofit;
         this.service = this.retrofit.create(BulkOperationService.class);

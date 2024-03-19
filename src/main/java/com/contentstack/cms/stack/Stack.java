@@ -360,7 +360,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return GlobalField
      */
     public GlobalField globalField() {
-        return new GlobalField(this.client);
+        return new GlobalField(this.client,this.headers);
     }
 
     /**
@@ -374,7 +374,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return GlobalField
      */
     public GlobalField globalField(@NotNull String globalFiledUid) {
-        return new GlobalField(this.client, globalFiledUid);
+        return new GlobalField(this.client,this.headers,globalFiledUid);
     }
 
     /**
@@ -390,7 +390,7 @@ public class Stack implements BaseImplementation<Stack> {
      * "https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
      */
     public Locale locale() {
-        return new Locale(this.client);
+        return new Locale(this.client,this.headers);
     }
 
     /**
@@ -407,7 +407,7 @@ public class Stack implements BaseImplementation<Stack> {
      * "https://www.contentstack.com/docs/developers/multilingual-content">Languages</a>
      */
     public Locale locale(String code) {
-        return new Locale(this.client, code);
+        return new Locale(this.client,this.headers, code);
     }
 
     /**
@@ -422,7 +422,7 @@ public class Stack implements BaseImplementation<Stack> {
      * "https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
      */
     public Environment environment() {
-        return new Environment(this.client);
+        return new Environment(this.client,this.headers);
     }
 
     /**
@@ -438,7 +438,7 @@ public class Stack implements BaseImplementation<Stack> {
      * "https://www.contentstack.com/docs/developers/set-up-environments">Environments</a>
      */
     public Environment environment(String environment) {
-        return new Environment(this.client, environment);
+        return new Environment(this.client,this.headers, environment);
     }
 
     /**
@@ -457,7 +457,7 @@ public class Stack implements BaseImplementation<Stack> {
      * module resides.
      */
     public Label label() {
-        return new Label(this.client);
+        return new Label(this.client,this.headers);
     }
 
     /**
@@ -477,7 +477,7 @@ public class Stack implements BaseImplementation<Stack> {
      * module resides.
      */
     public Label label(String labelUid) {
-        return new Label(this.client, labelUid);
+        return new Label(this.client,this.headers, labelUid);
     }
 
     /**
@@ -497,7 +497,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return instance of {@link Extensions}
      */
     public Extensions extensions() {
-        return new Extensions(this.client);
+        return new Extensions(this.client,this.headers);
     }
 
     /**
@@ -522,7 +522,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return instance of {@link Extensions}
      */
     public Extensions extensions(String customFieldUid) {
-        return new Extensions(this.client, customFieldUid);
+        return new Extensions(this.client,this.headers, customFieldUid);
     }
 
     /**
@@ -543,7 +543,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Tokens
      */
     public Tokens tokens() {
-        return new Tokens(this.client);
+        return new Tokens(this.client,this.headers);
     }
 
     /**
@@ -553,7 +553,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Role
      */
     public Roles roles() {
-        return new Roles(this.client);
+        return new Roles(this.client,this.headers);
     }
 
     /**
@@ -565,7 +565,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Role
      */
     public Roles roles(String roleUid) {
-        return new Roles(this.client, roleUid);
+        return new Roles(this.client, this.headers,roleUid);
     }
 
     /**
@@ -578,7 +578,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Release
      */
     public Release releases() {
-        return new Release(this.client);
+        return new Release(this.client,this.headers);
     }
 
     /**
@@ -593,7 +593,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Release
      */
     public Release releases(String releaseUid) {
-        return new Release(this.client, releaseUid);
+        return new Release(this.client,this.headers,releaseUid);
     }
 
     /**
@@ -607,7 +607,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Workflow
      */
     public Workflow workflow() {
-        return new Workflow(this.client);
+        return new Workflow(this.client,this.headers);
     }
 
     /**
@@ -622,7 +622,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Workflow
      */
     public Workflow workflow(@NotNull String workflowUid) {
-        return new Workflow(this.client, workflowUid);
+        return new Workflow(this.client, this.headers,workflowUid);
     }
 
     /**
@@ -635,7 +635,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return AuditLog
      */
     public AuditLog auditLog() {
-        return new AuditLog(this.client);
+        return new AuditLog(this.client,this.headers);
     }
 
     /**
@@ -649,7 +649,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return AuditLog
      */
     public AuditLog auditLog(@NotNull String logItemUid) {
-        return new AuditLog(this.client, logItemUid);
+        return new AuditLog(this.client,this.headers, logItemUid);
     }
 
     /**
@@ -668,7 +668,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return PublishQueue
      */
     public PublishQueue publishQueue() {
-        return new PublishQueue(this.client);
+        return new PublishQueue(this.client,this.headers);
     }
 
     /**
@@ -684,7 +684,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return BulkOperation
      */
     public BulkOperation bulkOperation() {
-        return new BulkOperation(this.client);
+        return new BulkOperation(this.client,this.headers);
     }
 
     /**
@@ -707,7 +707,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return PublishQueue
      */
     public PublishQueue publishQueue(@NotNull String publishQueueUid) {
-        return new PublishQueue(this.client, publishQueueUid);
+        return new PublishQueue(this.client,this.headers, publishQueueUid);
     }
 
     /**
@@ -731,7 +731,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Webhook
      */
     public Webhook webhook() {
-        return new Webhook(this.client);
+        return new Webhook(this.client,this.headers);
     }
 
     /**
@@ -758,7 +758,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Webhook
      */
     public Webhook webhook(String webhookUid) {
-        return new Webhook(this.client, webhookUid);
+        return new Webhook(this.client,this.headers, webhookUid);
     }
 
     /**
@@ -774,7 +774,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Branch
      */
     public Branch branch() {
-        return new Branch(this.client);
+        return new Branch(this.client,this.headers);
     }
 
     /**
@@ -792,7 +792,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Branch
      */
     public Branch branch(String branchUid) {
-        return new Branch(this.client, branchUid);
+        return new Branch(this.client,this.headers, branchUid);
     }
 
     /**
@@ -803,7 +803,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Alias
      */
     public Alias alias() {
-        return new Alias(this.client);
+        return new Alias(this.client,this.headers);
     }
 
     /**
@@ -818,7 +818,7 @@ public class Stack implements BaseImplementation<Stack> {
      * @return Alias
      */
     public Alias alias(String aliasUid) {
-        return new Alias(this.client, aliasUid);
+        return new Alias(this.client, this.headers,aliasUid);
     }
 
 

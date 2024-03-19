@@ -35,8 +35,9 @@ public class Alias implements BaseImplementation<Alias> {
     // also creates an
     // instance of the `AliasService` interface using the provided `Retrofit`
     // instance.
-    protected Alias(Retrofit instance) {
+    protected Alias(Retrofit instance,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.headers.put("Content-Type", "application/json");
         params = new HashMap<>();
         this.service = instance.create(AliasService.class);
@@ -45,8 +46,9 @@ public class Alias implements BaseImplementation<Alias> {
     // The `protected Alias(Retrofit instance, String aliasUid)` constructor is used
     // to create an
     // instance of the `Alias` class with a specific alias UID.
-    protected Alias(Retrofit instance, String aliasUid) {
+    protected Alias(Retrofit instance,Map<String, Object> headers, String aliasUid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.headers.put("Content-Type", "application/json");
         params = new HashMap<>();
         this.uid = aliasUid;

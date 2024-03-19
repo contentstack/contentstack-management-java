@@ -36,14 +36,16 @@ public class Extensions implements BaseImplementation<Extensions> {
     protected HashMap<String, Object> params;
     protected String customFieldUid;
 
-    protected Extensions(Retrofit retrofit) {
+    protected Extensions(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(ExtensionsService.class);
     }
 
-    protected Extensions(Retrofit retrofit, String fieldUid) {
+    protected Extensions(Retrofit retrofit,Map<String, Object> headers, String fieldUid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.customFieldUid = fieldUid;
         this.service = retrofit.create(ExtensionsService.class);

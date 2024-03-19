@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Publish Queue displays the historical and current details of activities
@@ -44,15 +45,17 @@ public class PublishQueue implements BaseImplementation<PublishQueue> {
     private String publishQueueUid;
     private final Retrofit retrofit;
 
-    protected PublishQueue(Retrofit retrofit) {
+    protected PublishQueue(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.retrofit = retrofit;
         this.service = this.retrofit.create(PublishQueueService.class);
     }
 
-    protected PublishQueue(Retrofit retrofit, String uid) {
+    protected PublishQueue(Retrofit retrofit,Map<String, Object> headers, String uid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.retrofit = retrofit;
         this.publishQueueUid = uid;
