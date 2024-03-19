@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.2
+-Fix:
+    - Constructor in Java class files now include missing headers
+### Mar 26, 2024  
+
 ## v1.3.1
 
 ### Feb 22, 2024
