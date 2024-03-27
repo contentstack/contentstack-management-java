@@ -41,7 +41,7 @@ import java.util.Map;
  * @author ***REMOVED***
  * @version v1.0.0
  * @see <a href=
- * "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#merge-branches">Merge
+ * "https://www.contentstack.com/docs/developers/apis/content-management-api/#merge-branches">Merge
  * Branches </a>
  * @since 2023 -June-30
  */
@@ -128,7 +128,7 @@ public class Merge implements BaseImplementation<Merge> {
      *
      * @return the call
      * @see <a href=
-     * "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#get-all-merge-jobs"></a>Get
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-merge-jobs"></a>Get
      * all
      * Merge Jobs
      */
@@ -144,7 +144,7 @@ public class Merge implements BaseImplementation<Merge> {
      * @param mergeJobUid the key of the header to be added
      * @return the call
      * @see <a href=
-     * "https://stag-www.contentstack.com/docs/developers/apis/content-management-api/#get-single-merge-job"></a>Get
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-single-merge-job"></a>Get
      * a
      * Single Merge Job
      */
