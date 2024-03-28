@@ -1,0 +1,8 @@
+{
+    "term": {
+      "uid": "term_a",
+      "name": "Term A",
+      "description": "Term A Description for Taxonomy sample",
+      "parent_uid": null
+    }
+  }
