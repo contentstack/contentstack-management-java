@@ -6,8 +6,10 @@ import okhttp3.RequestBody;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
+
+import javax.activation.MimetypesFileTypeMap;
 
 public class FileUploader {
 
@@ -49,7 +51,9 @@ public class FileUploader {
     // Helper method to get content type of file
     private String getContentType(File file) {
         try {
-            return Files.probeContentType(file.toPath());
+            java.nio.file.Path source = Paths.get(file.toString());
+            MimetypesFileTypeMap m = new MimetypesFileTypeMap(source.toString());
+            return m.getContentType(file);
         } catch (IOException e) {
             throw new RuntimeException("Failed to determine content type of file", e);
         }
