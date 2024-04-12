@@ -1,16 +1,69 @@
 {
   "content_type": {
+    "title": "fake_content_type",
+    "uid": "fake_content_type",
+    "schema": [{
+      "display_name": "Title",
+      "uid": "title",
+      "data_type": "text",
+      "field_metadata": {
+        "_default": true
+      },
+      "unique": false,
+      "mandatory": true,
+      "multiple": false
+    },
+      {
+        "display_name": "URL",
+        "uid": "url",
+        "data_type": "text",
+        "field_metadata": {
+          "_default": true
+        },
+        "unique": false,
+        "multiple": false
+      },
+      {
+        "display_name": "Single Line Textbox",
+        "uid": "single_line_textbox",
+        "data_type": "text",
+        "field_metadata": {
+          "_default": true
+        },
+        "unique": false,
+        "multiple": false
+      },
+      {
+        "display_name": "Multi Line Textbox",
+        "uid": "multi_line_textbox",
+        "data_type": "text",
+        "field_metadata": {
+          "_default": true
+        },
+        "unique": false,
+        "multiple": false
+      }
+    ],
     "field_rules": [{
       "conditions": [{
-        "operand_field": "operand_field_uid",
+        "operand_field": "single_line_textbox",
         "operator": "equals",
-        "value": "value_corresponding_to_operator"
+        "value": "abc"
       }],
       "match_type": "all",
       "actions": [{
         "action": "show",
-        "target_field": "target_field_uid"
+        "target_field": "multi_line_textbox"
       }]
-    }]
+    }],
+    "options": {
+      "title": "title",
+      "publishable": true,
+      "is_page": true,
+      "singleton": false,
+      "sub_title": ["url"],
+      "url_pattern": "/:title",
+      "url_prefix": "/"
+    }
   }
 }

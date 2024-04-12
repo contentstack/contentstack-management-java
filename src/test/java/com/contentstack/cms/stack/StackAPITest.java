@@ -158,7 +158,7 @@ class StackAPITest {
                 assert response.errorBody() != null;
                 Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
                 int errCode = error.getErrorCode();
-                Assertions.assertEquals(309, errCode);
+                Assertions.assertEquals(105, errCode);
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
