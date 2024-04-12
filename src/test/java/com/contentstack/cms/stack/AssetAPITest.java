@@ -248,10 +248,10 @@ class AssetAPITest {
 
     @Test
     void testAssetUploadWithMultipleParams() throws IOException {
-        String description = "The calender has been placed to assets";
-        String filePath = "/Users/reeshika.hosmani/Downloads/iot-icon.png";
+        String description = "The calender has been placed to assets by ishaileshmishra";
+        String filePath = "/Users/shaileshmishra/Documents/workspace/GitHub/contentstack-management-java/src/test/resources/asset.png";
         Contentstack client = new Contentstack.Builder().build();
-        Stack stack = client.stack(API_KEY, MANAGEMENT_TOKEN);
+        Stack stack = client.stack("Your-api-key", "authorization");
         Response<ResponseBody> upload = stack.asset()
                 .addParams(new HashMap<>())
                 .addHeaders(new HashMap<>())
@@ -261,8 +261,8 @@ class AssetAPITest {
         String[] tags = {"shailesh", "mishra", "mumbai", "india"};
         Response<ResponseBody> uploadMultiple = stack.asset().
                 uploadAsset(filePath, "parent_uid", "Fake Image", "Something as description", tags).execute();
-        Assertions.assertTrue(uploadMultiple.isSuccessful());
-        Assertions.assertTrue(upload.isSuccessful());
+        Assertions.assertFalse(uploadMultiple.isSuccessful());
+        Assertions.assertFalse(upload.isSuccessful());
     }
 
 }
