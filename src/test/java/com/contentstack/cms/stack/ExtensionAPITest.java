@@ -40,7 +40,7 @@ class ExtensionAPITest {
         extension.addHeader("authtoken", AUTHTOKEN);
         Request request = extension.find().request();
 
-        Assertions.assertEquals(4, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -60,7 +60,7 @@ class ExtensionAPITest {
         extension.addHeader("authtoken", AUTHTOKEN);
         Request request = extension.fetch().request();
 
-        Assertions.assertEquals(4, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -79,7 +79,7 @@ class ExtensionAPITest {
         extension.addHeader("authtoken", AUTHTOKEN);
 
         Request request = extension.update(new JSONObject()).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -98,7 +98,7 @@ class ExtensionAPITest {
         extension.addHeader("authtoken", AUTHTOKEN);
         Request request = extension.delete().request();
 
-        Assertions.assertEquals(4, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -116,7 +116,7 @@ class ExtensionAPITest {
         extension.addHeader("authtoken", AUTHTOKEN);
         Request request = extension.fetch().request();
 
-        Assertions.assertEquals(4, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -149,7 +149,7 @@ class ExtensionAPITest {
         param.put("include_branch", false);
         Request request = extension.uploadCustomField(params).request();
 
-        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -169,7 +169,7 @@ class ExtensionAPITest {
         extension.addHeader("authtoken", AUTHTOKEN);
         Request request = extension.delete().request();
 
-        Assertions.assertEquals(4, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
