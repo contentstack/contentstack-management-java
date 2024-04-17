@@ -7,7 +7,7 @@
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
