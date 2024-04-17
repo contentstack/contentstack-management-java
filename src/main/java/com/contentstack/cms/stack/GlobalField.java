@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A Global field is a reusable field (or group of fields) that you can define
@@ -37,14 +38,16 @@ public class GlobalField implements BaseImplementation<GlobalField> {
     protected HashMap<String, Object> params;
     protected String globalFiledUid;
 
-    protected GlobalField(Retrofit retrofit) {
+    protected GlobalField(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = retrofit.create(GlobalFieldService.class);
     }
 
-    protected GlobalField(Retrofit retrofit, String uid) {
+    protected GlobalField(Retrofit retrofit,Map<String, Object> headers, String uid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.globalFiledUid = uid;
         this.service = retrofit.create(GlobalFieldService.class);

@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -31,14 +32,16 @@ public class DeliveryToken implements BaseImplementation<DeliveryToken> {
     private String tokenUid;
     String ERROR = "Token UID Can Not Be Null OR Empty";
 
-    protected DeliveryToken(TokenService service) {
+    protected DeliveryToken(TokenService service, Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.service = service;
     }
 
-    protected DeliveryToken(TokenService service, @NotNull String tokenUid) {
+    protected DeliveryToken(TokenService service, Map<String, Object> headers, @NotNull String tokenUid) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.tokenUid = tokenUid;
         this.service = service;

@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import java.util.Map;
+
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Retrofit;
 
@@ -13,9 +15,11 @@ import retrofit2.Retrofit;
 public class Tokens {
 
     protected final TokenService service;
+     protected final Map<String, Object> headers;
 
-    protected Tokens(Retrofit retrofit) {
+    protected Tokens(Retrofit retrofit,Map<String, Object> headers) {
         this.service = retrofit.create(TokenService.class);
+        this.headers = headers;
     }
 
     /**
@@ -32,7 +36,7 @@ public class Tokens {
      * @since 0.1.0
      */
     public DeliveryToken deliveryTokens() {
-        return new DeliveryToken(this.service);
+        return new DeliveryToken(this.service,this.headers);
     }
 
     /**
@@ -51,7 +55,7 @@ public class Tokens {
      * @since 0.1.0
      */
     public DeliveryToken deliveryTokens(@NotNull String tokenUid) {
-        return new DeliveryToken(this.service, tokenUid);
+        return new DeliveryToken(this.service,this.headers, tokenUid);
     }
 
     /**
@@ -66,7 +70,7 @@ public class Tokens {
      * @since 0.1.0
      */
     public ManagementToken managementToken() {
-        return new ManagementToken(this.service);
+        return new ManagementToken(this.service,this.headers);
     }
 
     /**
@@ -82,7 +86,7 @@ public class Tokens {
      * @since 0.1.0
      */
     public ManagementToken managementToken(@NotNull String managementTokenUid) {
-        return new ManagementToken(this.service, managementTokenUid);
+        return new ManagementToken(this.service,this.headers, managementTokenUid);
     }
 
 }
