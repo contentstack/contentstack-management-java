@@ -38,14 +38,16 @@ public class Locale implements BaseImplementation<Locale> {
      *
      * @param client the retrofit client
      */
-    public Locale(Retrofit client) {
+    public Locale(Retrofit client,Map<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.localeService = client.create(LocaleService.class);
     }
 
-    public Locale(Retrofit client, String code) {
+    public Locale(Retrofit client,Map<String, Object> headers, String code) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.code = code;
         this.params = new HashMap<>();
         this.localeService = client.create(LocaleService.class);

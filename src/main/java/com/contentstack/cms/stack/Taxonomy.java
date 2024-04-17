@@ -42,6 +42,7 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      */
     protected Taxonomy(Retrofit client, HashMap<String, Object> headers) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.headers.putAll(headers);
         this.taxonomyService = client.create(TaxonomyService.class);
@@ -56,6 +57,7 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      */
     protected Taxonomy(Retrofit client, HashMap<String, Object> headers, @NotNull String taxonomyId) {
         this.headers = new HashMap<>();
+        this.headers.putAll(headers);
         this.params = new HashMap<>();
         this.taxonomyId = taxonomyId;
         this.headers.putAll(headers);
