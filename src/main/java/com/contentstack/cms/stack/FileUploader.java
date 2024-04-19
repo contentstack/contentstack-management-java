@@ -14,7 +14,7 @@ import javax.activation.MimetypesFileTypeMap;
 public class FileUploader {
 
 
-    public MultipartBody.Part createMultipartBody(String filePath, String parentUid, String title, String description, String[] tags) {
+    public MultipartBody createMultipartBody(String filePath, String parentUid, String title, String description, String[] tags) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
 
@@ -28,24 +28,21 @@ public class FileUploader {
             }
         }
 
-        // Add other parts if not null
-        addFormDataPartIfNotNull(builder, "asset[parent_uid]", parentUid);
-        addFormDataPartIfNotNull(builder, "asset[title]", title);
-        addFormDataPartIfNotNull(builder, "asset[description]", description);
-
-        // Handle tags array null case
-        if (tags != null) {
-            addFormDataPartIfNotNull(builder, "asset[tags]", tagConvertor(tags));
+        //Adding additional parameters
+          if (parentUid != null && !parentUid.isBlank()) {
+            builder.addFormDataPart("asset[parent_uid]", parentUid);
+        }
+        if (title != null && !title.isBlank()) {
+            builder.addFormDataPart("asset[title]", title);
+        }
+        if (description != null && !description.isBlank()) {
+            builder.addFormDataPart("asset[description]", description);
+        }
+        if (tags != null && tags.length > 0) {
+            builder.addFormDataPart("asset[tags]", tagConvertor(tags));
         }
 
-        return builder.build().part(0);
-    }
-
-    // Helper method to add form data part if value is not null
-    private void addFormDataPartIfNotNull(MultipartBody.Builder builder, String name, String value) {
-        if (value != null) {
-            builder.addFormDataPart(name, value);
-        }
+        return builder.build();
     }
 
     // Helper method to get content type of file
