@@ -306,9 +306,8 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> uploadAsset(@NotNull String filePath, String description) {
-        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), description);
-        MultipartBody.Part partFile = createMultipartBody(filePath, null, null, null, null);
-        return this.service.uploadAsset(this.headers, partFile, body, this.params);
+        MultipartBody body = createMultipartBody(filePath, null, null, description, null);
+        return this.service.uploadAsset(this.headers, body, this.params);
     }
 
 
@@ -327,13 +326,12 @@ public class Asset implements BaseImplementation<Asset> {
      * @return Call
      */
     public Call<ResponseBody> uploadAsset(@NotNull String filePath, String parentUid, String title, String description, String[] tags) {
-        RequestBody body = RequestBody.create(Objects.requireNonNull(MediaType.parse("multipart/form-data")), description);
-        MultipartBody.Part partFile = createMultipartBody(filePath, parentUid, title, description, tags);
-        return this.service.uploadAsset(this.headers, partFile, body, this.params);
+        MultipartBody body = createMultipartBody(filePath, parentUid, title, description, tags);
+        return this.service.uploadAsset(this.headers, body, this.params);
     }
 
 
-    private MultipartBody.Part createMultipartBody(String filePath, String parentUid, String title, String description, String[] tags) {
+    private MultipartBody createMultipartBody(String filePath, String parentUid, String title, String description, String[] tags) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         return new FileUploader().createMultipartBody(filePath, parentUid, title, description, tags);
