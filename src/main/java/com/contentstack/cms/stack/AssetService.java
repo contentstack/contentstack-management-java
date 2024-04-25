@@ -32,12 +32,10 @@ public interface AssetService {
             @HeaderMap Map<String, Object> headers,
             @QueryMap(encoded = true) Map<String, Object> query);
 
-    @Multipart
     @POST("assets")
     Call<ResponseBody> uploadAsset(
             @HeaderMap Map<String, Object> headers,
-            @Part MultipartBody.Part file,
-            @Part("asset[description]") RequestBody description,
+            @Body MultipartBody body,
             @QueryMap(encoded = true) Map<String, Object> query);
 
     @Multipart
