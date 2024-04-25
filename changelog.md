@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.4.0
+-Enhancement:
+    - Passed the additional parameters in upload asset method
+### Apr 23, 2024
+
 ## v1.3.3
 -Fix:
     - Constructor in Java class files now include missing headers
