@@ -29,13 +29,13 @@ public class FileUploader {
         }
 
         //Adding additional parameters
-          if (parentUid != null && !parentUid.isBlank()) {
+          if (parentUid != null) {
             builder.addFormDataPart("asset[parent_uid]", parentUid);
         }
-        if (title != null && !title.isBlank()) {
+        if (title != null ) {
             builder.addFormDataPart("asset[title]", title);
         }
-        if (description != null && !description.isBlank()) {
+        if (description != null) {
             builder.addFormDataPart("asset[description]", description);
         }
         if (tags != null && tags.length > 0) {
