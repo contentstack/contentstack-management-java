@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.4.1
+-Fix:
+    - removed isBlank() method 
+### Apr 30, 2024
+
 ## v1.4.0
 -Enhancement:
     - Passed the additional parameters in upload asset method
