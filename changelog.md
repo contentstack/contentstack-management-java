@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.2
+
+### May 27, 2024
+
+- Sanity reports added
+- Fixed Snyk issues
+
 ## v1.4.1
 -Fix:
     - removed isBlank() method 
