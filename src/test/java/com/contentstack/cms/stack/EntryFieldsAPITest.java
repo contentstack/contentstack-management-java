@@ -378,7 +378,7 @@ class EntryFieldsAPITest {
         Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertEquals("product", request.url().pathSegments().get(2));
+        Assertions.assertEquals("test", request.url().pathSegments().get(2));
         Assertions.assertEquals("entries", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
         Assertions.assertEquals("query={\"taxonomies.taxonomy_uid\":\"{ \\\"$in\\\" : [\\\"term_uid1\\\" , \\\"term_uid2\\\" ] }\"}", request.url().query());
