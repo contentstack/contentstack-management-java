@@ -2,7 +2,6 @@ package com.contentstack.cms;
 import com.slack.api.Slack;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,12 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SanityReport {
-    public static void main(String[] args) throws SlackApiException {
-        try {
-            Dotenv dotenv = Dotenv.load();
-            String slackToken = dotenv.get("SLACK_BOT_TOKEN");
-            String slackChannel = dotenv.get("SLACK_CHANNEL");
-            File input = new File("./target/site/surefire-report.html");
+
+    public static String buildSlackMessage(File input) throws IOException {
             Document doc = Jsoup.parse(input, "UTF-8");
             Element summaryTable = doc.select("table.bodyTable").first();
             Element summaryRow = summaryTable.select("tr.b").first();
@@ -54,66 +49,56 @@ public class SanityReport {
                 "• Total Duration: *%dm %ds*",
                 totalCount, Integer.parseInt(totalCount) - (Integer.parseInt(totalErrors) + Integer.parseInt(totalFailures)), totalFailures, totalSkipped, totalErrors, durationInMinutes, durationInSeconds
             );
-            publishMessage(slackToken, slackChannel, slackMessage, input);
-
-        } catch (IOException e) {
-            System.out.println(e);
-        } catch (NumberFormatException e) {
-            System.out.println(e);
-        }
+        return slackMessage;
     }
 
-    private static void publishMessage(String token, String channel, String text, File report) {
+    public static void publishMessage(String token, String channel, String text, File report) throws IOException, SlackApiException, InterruptedException {
         try {
             Slack slack = Slack.getInstance();
-            String filePath = "./target/site/surefire-report.html";
-            String filename = "surefire-report.html";
-            String filetype = "text";
-            String initialComment = "Here is the report generated.";
-            String title = "Reports File";
+
             // Post the message to the Slack channel
             ChatPostMessageResponse messageResponse = slack.methods(token).chatPostMessage(req -> req
-                .channel(channel)
-                .text(text)
+                    .channel(channel)
+                    .text(text)
             );
             // Check if posting message was successful
             if (!messageResponse.isOk()) {
                 System.out.println("Message has not been posted");
             }
-            try {
-                uploadFileToSlack(token, channel, filePath, filename, filetype, initialComment, title);
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+            // Upload report file (optional)
+            if (report != null) {
+                uploadFileToSlack(token, channel, report.getAbsolutePath());
             }
         } catch (IOException | SlackApiException e) {
             System.out.println(e);
         }
     }
-    
-    public static void uploadFileToSlack(String token, String channelName, String filePath, String filename, String filetype, String initialComment, String title) throws IOException, InterruptedException {
+
+    private static void uploadFileToSlack(String token, String channelName, String filePath) throws IOException, InterruptedException {
         Path path = Paths.get(filePath);
         String boundary = "----WebKitFormBoundary7MA4YWxkTrZu0gW";
         Map<String, String> params = new HashMap<>();
         params.put("channels", channelName);
-        if (filename != null) params.put("filename", filename);
-        if (filetype != null) params.put("filetype", filetype);
-        if (initialComment != null) params.put("initial_comment", initialComment);
-        if (title != null) params.put("title", title);
+        params.put("filename", new File(filePath).getName());
+        params.put("filetype", "text");
+        params.put("initial_comment", "Here is the report generated.");
+        params.put("title", "Reports File");
 
         String body = buildMultipartBody(params, Files.readAllBytes(path), boundary);
 
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://slack.com/api/files.upload"))
-            .header("Authorization", "Bearer " + token)
-            .header("Content-Type", "multipart/form-data; boundary=" + boundary)
-            .POST(BodyPublishers.ofString(body))
-            .build();
+                .uri(URI.create("https://slack.com/api/files.upload"))
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                .POST(BodyPublishers.ofString(body))
+                .build();
 
         HttpClient client = HttpClient.newHttpClient();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
     }
 
+  
     private static String buildMultipartBody(Map<String, String> params, byte[] fileContent, String boundary) {
         StringBuilder sb = new StringBuilder();
 
