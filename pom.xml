@@ -200,24 +200,9 @@
             <version>1.17.2</version>
         </dependency>
         <dependency>
-        <groupId>com.slack.api</groupId>
-        <artifactId>bolt</artifactId>
-        <version>1.38.0</version>
-        </dependency>
-        <dependency>
-        <groupId>com.slack.api</groupId>
-        <artifactId>bolt-servlet</artifactId>
-        <version>1.38.0</version>
-        </dependency>
-        <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>1.7.36</version>
-        </dependency>
-        <dependency>
-        <groupId>com.slack.api</groupId>
-        <artifactId>bolt-jetty</artifactId> 
-        <version>1.38.0</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
         </dependency>
           <dependency>
             <groupId>com.slack.api</groupId>
@@ -229,6 +214,12 @@
             <artifactId>slack-app-backend</artifactId>
             <version>1.38.0</version>
         </dependency> 
+        <dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.8.0</version>
+			<scope>test</scope>
+		</dependency>
 
 
     </dependencies>
@@ -243,9 +234,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-                     <includes>
+                     <!-- <includes>
                          <include>**/*TestSuite.java</include>
-                     </includes>
+                     </includes> -->
+                     <suiteXmlFiles>
+						<suiteXmlFile>${basedir}/testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
                      <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
