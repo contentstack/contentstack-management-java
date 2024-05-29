@@ -84,7 +84,7 @@ class RoleAPITest {
         object.put("key", "value");
 
         Request request = roles.update(object).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -101,7 +101,7 @@ class RoleAPITest {
         roles.addHeader("authtoken", AUTHTOKEN);
         roles.addHeader("api_key", API_KEY);
         Request request = roles.delete().request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

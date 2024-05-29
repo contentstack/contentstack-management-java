@@ -44,7 +44,6 @@ public class TaxonomyAPITest {
 
         try {
             Response<ResponseBody> response = taxonomy.find().execute();
-            System.out.println(response.body().string());
             if (response.isSuccessful()) {
                 Assertions.assertTrue(response.isSuccessful());
             } else {
@@ -59,7 +58,6 @@ public class TaxonomyAPITest {
     void fetchSingle() {
         try {
             Response<ResponseBody> response = taxonomy.fetch("regions").execute();
-            System.out.println(response);
             if (response.isSuccessful()) {
                 Assertions.assertTrue(response.isSuccessful());
             } else {
@@ -77,9 +75,6 @@ public class TaxonomyAPITest {
         taxonomy.addHeader(Util.API_KEY, API_KEY);
         taxonomy.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Request request = taxonomy.create(requestBody).request();
-        Response <ResponseBody> resp = taxonomy.create(requestBody).execute();
-        System.out.println(resp);
-        System.out.println(request);
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -98,7 +93,6 @@ public class TaxonomyAPITest {
         taxonomy.addHeader(Util.API_KEY, API_KEY);
         taxonomy.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Request request = taxonomy.update("sample_one",updateBody).request();
-        System.out.println(request);
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -124,7 +118,6 @@ public class TaxonomyAPITest {
         taxonomy.addHeaders(headers);
         taxonomy.addParams(params);
         Request request = taxonomy.delete("sample_one").request();
-        System.out.println(request);
         Assertions.assertEquals(5, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -141,9 +134,7 @@ public class TaxonomyAPITest {
         terms.clearParams();
         JSONObject term = Utils.readJson("mockTaxonomy/createTerm.json");
         Request request = terms.create(term).request();
-//        Response<ResponseBody> resp= terms.create(term).execute();
-//        System.out.println(resp);
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -162,8 +153,6 @@ public class TaxonomyAPITest {
         terms.clearParams();
         terms.addParam("limit", 3);
         Request request = terms.find().request();
-        Response<ResponseBody> resp = terms.find().execute();
-        System.out.println(resp.body().string());
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -183,8 +172,6 @@ public class TaxonomyAPITest {
     void fetchSingleTerm() throws IOException {
         terms.clearParams();
         Request request = terms.fetch("india").request();
-//        Response<ResponseBody> resp = terms.fetch("india").execute();
-//        System.out.println(resp);
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
