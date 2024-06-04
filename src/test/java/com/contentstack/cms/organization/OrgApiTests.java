@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Tag("unit")
+public
 class OrgApiTests {
 
     private static Organization ORG;
@@ -390,7 +391,7 @@ class OrgApiTests {
                 .addHeader("api_key", TestClient.API_KEY)
                 .addParam("include_plan", true);
         Response<ResponseBody> response = ORG.allInvitations().execute();
-        Assertions.assertFalse(response.isSuccessful());
+        Assertions.assertTrue(response.isSuccessful());
     }
 
 }
