@@ -1,8 +1,8 @@
 
 {
     "taxonomy": {
-      "uid": "sample_one",
-      "name": "Sample One",
+      "uid": "sample_two",
+      "name": "Sample Two",
       "description": "Description for the sample one taxonomy."
     }
   }
