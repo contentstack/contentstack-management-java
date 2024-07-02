@@ -214,12 +214,12 @@
             <artifactId>slack-app-backend</artifactId>
             <version>1.38.0</version>
         </dependency> 
-        <dependency>
+        <!-- <dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>7.8.0</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 
 
     </dependencies>
@@ -234,12 +234,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-                     <!-- <includes>
+                     <includes>
                          <include>**/*TestSuite.java</include>
-                     </includes> -->
-                     <suiteXmlFiles>
+                     </includes>
+                     <!-- <suiteXmlFiles>
 						<suiteXmlFile>${basedir}/testng.xml</suiteXmlFile>
-					</suiteXmlFiles>
+					</suiteXmlFiles> -->
                      <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
