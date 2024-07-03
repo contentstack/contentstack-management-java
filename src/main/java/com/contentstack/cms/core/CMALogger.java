@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 /**
  * The Contentstack Logger
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @since 2022-10-20
  */

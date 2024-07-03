@@ -28,7 +28,7 @@ import java.util.Map;
  * concerned Contentstack module resides.
  * <br>
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @see <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-queue">

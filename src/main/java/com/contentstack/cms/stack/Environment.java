@@ -16,7 +16,7 @@ import java.util.Objects;
  * content delivery destination where the
  * entries need to be published.
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @since 2022-10-22
  */

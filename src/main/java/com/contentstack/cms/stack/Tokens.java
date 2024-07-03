@@ -8,7 +8,7 @@ import retrofit2.Retrofit;
 /**
  * Contentstack provides different types of tokens to authorize API requests
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @since 2022-10-22
  */

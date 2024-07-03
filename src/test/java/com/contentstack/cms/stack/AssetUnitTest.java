@@ -168,7 +168,7 @@ class AssetUnitTest {
         asset.addParam("include_dimension", true);
 
         String filePath = "/Users/shaileshmishra/Downloads/calendar.png";
-        Request resp = asset.replace(filePath, "The calender has been placed to assets by ***REMOVED***")
+        Request resp = asset.replace(filePath, "The calender has been placed to assets by ishaileshmishra")
                 .request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
