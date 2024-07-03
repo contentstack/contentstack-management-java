@@ -1,0 +1,66 @@
+{
+    "role": {
+        "name": "test",
+        "description": "Test for taxonomy permissions",
+        "rules": [
+            {
+                "module": "branch",
+                "branches": [
+                    "main"
+                ],
+                "acl": {
+                    "read": true
+                }
+            },
+            {
+                "module": "environment",
+                "environments": [],
+                "acl": {
+                    "read": true
+                }
+            },
+            {
+                "module": "locale",
+                "locales": [],
+                "acl": {
+                    "read": true
+                }
+            },
+            {
+                "module": "taxonomy",
+                "taxonomies": [
+                    "sample_two"
+                ],
+                "terms": [
+                    "term_a"
+                ],
+                "content_types": [
+                    {
+                        "uid": "$all",
+                        "acl": {
+                            "read": true,
+                            "sub_acl": {
+                                "read": true,
+                                "create": true,
+                                "update": true,
+                                "delete": true,
+                                "publish": true
+                            }
+                        }
+                    }
+                ],
+                "acl": {
+                    "read": true,
+                    "sub_acl": {
+                        "read": true,
+                        "create": true,
+                        "update": true,
+                        "delete": true,
+                        "publish": true
+                    }
+                }
+            }
+        ],
+        "uid": "role_uid"
+    }
+}

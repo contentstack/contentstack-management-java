@@ -20,7 +20,7 @@ import java.util.Objects;
  * requests over your stack content, you can use Management Tokens
  * <br>
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @since 2022-10-22
  */

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.3
+
+### July 08, 2024
+
+- SRE issues fixed
+
 ## v1.4.2
 
 ### May 27, 2024

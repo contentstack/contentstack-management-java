@@ -17,7 +17,7 @@ import java.util.Map;
  * to a wide variety of audience by serving
  * content in their local language(s).
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @see <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#languages">

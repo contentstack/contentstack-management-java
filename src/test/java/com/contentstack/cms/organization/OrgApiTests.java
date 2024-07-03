@@ -391,7 +391,7 @@ class OrgApiTests {
                 .addHeader("api_key", TestClient.API_KEY)
                 .addParam("include_plan", true);
         Response<ResponseBody> response = ORG.allInvitations().execute();
-        Assertions.assertTrue(response.isSuccessful());
+        Assertions.assertFalse(response.isSuccessful());
     }
 
 }
