@@ -457,7 +457,7 @@ class OrgUnitTests {
     @Test
     @Order(38)
     void testTransferOwnershipMethod() {
-        //String transferToEmail = "***REMOVED***@gmail.com";
+        //String transferToEmail = "ishaileshmishra@gmail.com";
         Request requestInfo = organization.transferOwnership(new JSONObject()).request();
         Assertions.assertEquals("POST",
                 requestInfo.method());
@@ -466,7 +466,7 @@ class OrgUnitTests {
     @Test
     @Order(39)
     void testTransferOwnershipEncodedPath() {
-        // String transferToEmail = "***REMOVED***@gmail.com";
+        // String transferToEmail = "ishaileshmishra@gmail.com";
         Request requestInfo = organization.transferOwnership(new JSONObject()).request();
         Assertions.assertEquals("/v3/organizations/" + organizationUid + "/transfer-ownership",
                 requestInfo.url().encodedPath());
@@ -481,7 +481,7 @@ class OrgUnitTests {
     @Test
     @Order(41)
     void testTransferOwnershipRequestBody() {
-        //String transferToEmail = "***REMOVED***@gmail.com";
+        //String transferToEmail = "ishaileshmishra@gmail.com";
         Request requestInfo = organization.transferOwnership(new JSONObject()).request();
         assertNull(
                 requestInfo.url().encodedQuery());

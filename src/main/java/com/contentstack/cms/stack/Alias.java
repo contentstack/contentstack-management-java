@@ -16,7 +16,7 @@ import java.util.Objects;
  * ID in your frontend code to pull content
  * from the target branch associated with an alias.
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @see <a href= "https://www.contentstack.com/docs/developers/apis/content-management-api/#aliases">About Aliases </a>
  * @since 2022 -10-20
@@ -138,7 +138,7 @@ public class Alias implements BaseImplementation<Alias> {
      * aliases available in a particular stack in your account.
      *
      * @return Call
-     * @author ***REMOVED***
+     * @author ishaileshmishra
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-aliases">Get
      * all
@@ -153,7 +153,7 @@ public class Alias implements BaseImplementation<Alias> {
      * The Get a single alias request returns information of a specific alias.
      *
      * @return Call
-     * @author ***REMOVED***
+     * @author ishaileshmishra
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-branch">
      * Get a single branch</a>

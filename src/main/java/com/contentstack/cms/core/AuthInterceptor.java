@@ -19,7 +19,7 @@ import java.io.IOException;
  * API implementation, you'll want to pass the auth token as the value for the
  * Authorization header.
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @since v0.1.0
  */
 public class AuthInterceptor implements Interceptor {
