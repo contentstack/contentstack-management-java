@@ -11,7 +11,7 @@ import retrofit2.Response;
 import java.io.IOException;
 
 /*
- @author  ***REMOVED***@gmail.com
+ @author  ishaileshmishra@gmail.com
  @since   CMS v0.0.1
  */
 public class ContentstackAPITest {

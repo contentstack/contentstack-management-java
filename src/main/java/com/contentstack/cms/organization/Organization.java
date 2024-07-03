@@ -16,7 +16,7 @@ import java.util.Objects;
  * users. Organization allows easy management of projects as well as users
  * within the Organization.
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @since 2022-10-20
  */

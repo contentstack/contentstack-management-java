@@ -25,7 +25,7 @@ import java.util.Objects;
  * key in the response. This key specifies the unique ID of the branch where the
  * concerned Contentstack module resides.
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @since 2022-10-22
  */
