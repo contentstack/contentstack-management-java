@@ -2,13 +2,19 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
+import com.contentstack.cms.Utils;
 import com.contentstack.cms.core.Util;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 @Tag("unit")
@@ -206,9 +212,29 @@ class RoleUnitTest {
 
     @Test
     @Order(8)
-    void createRole() {
+    void createRole() throws IOException {
         Request request = roles.create(body).request();
+        Call<ResponseBody> responseBody = roles.create(body);
+        Response<ResponseBody> resp = responseBody.execute();
+        System.out.println(resp.toString());
         Assertions.assertEquals(0, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("roles", request.url().pathSegments().get(1));
+        Assertions.assertNotNull(request.body());
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/roles",
+                request.url().toString());
+    }
+    @Test
+    @Order(9)
+    void createRoleWithTaxonomy() throws IOException {
+        JSONObject roleBody = Utils.readJson("mockrole/createRole.json");
+        Request request = roles.create(roleBody).request();
+        Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());
@@ -222,7 +248,7 @@ class RoleUnitTest {
     }
 
     @Test
-    @Order(9)
+    @Order(10)
     void updateRole() {
         Request request = roles.update(body).request();
         Assertions.assertEquals(0, request.headers().names().size());
@@ -236,7 +262,7 @@ class RoleUnitTest {
     }
 
     @Test
-    @Order(10)
+    @Order(11)
     void deleteRole() {
         Request request = roles.delete().request();
         Assertions.assertEquals(1, request.headers().names().size());
