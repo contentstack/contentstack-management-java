@@ -130,27 +130,46 @@ class RoleAPITest {
         JSONObject requestTaxonomy = Utils.readJson("mocktaxonomy/create.json");
         taxonomy.addHeader(Util.API_KEY, API_KEY);
         taxonomy.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-        Call<ResponseBody> responseTaxonomy = taxonomy.create(requestTaxonomy);
-        Response<ResponseBody> response1 = responseTaxonomy.execute();
-        System.out.println("Taxonomy created" + response1.body().string());
+        Request request = taxonomy.create(requestTaxonomy).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies", request.url().toString());
 
     }
     @Test
     void createRoleWithRule2() throws IOException{
         JSONObject requestTerm = Utils.readJson("mocktaxonomy/createTerm.json");
-
-        Response<ResponseBody> response2 = term.create(requestTerm).execute();
-        System.out.println("Term created" + response2.toString());
+        Request request = term.create(requestTerm).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/sample_two/terms", request.url().toString());
       
     }
     @Test
     void createRoleWithTaxonomy() throws IOException{
         JSONObject requestBody = Utils.readJson("mockrole/createRole.json");
-    
-        Call<ResponseBody> responseCall = roles.create(requestBody);
-        Response<ResponseBody> response = responseCall.execute();
-        System.out.println("Role created" + response.body().string());
-        
+        Request request = roles.create(requestBody).request();
+        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("roles", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/roles", request.url().toString());
 
     }
 

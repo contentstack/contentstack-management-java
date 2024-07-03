@@ -234,10 +234,6 @@ class RoleUnitTest {
     void createRoleWithTaxonomy() throws IOException {
         JSONObject roleBody = Utils.readJson("mockrole/createRole.json");
         Request request = roles.create(roleBody).request();
-        // Call<ResponseBody> responseBody = roles.create(roleBody);
-        // Response<ResponseBody> resp = responseBody.execute();
-        // System.out.println(resp.toString());
-        System.out.println(request.toString());
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
