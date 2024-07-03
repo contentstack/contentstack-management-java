@@ -160,8 +160,10 @@ class RoleAPITest {
     @Test
     void createRoleWithTaxonomy() throws IOException{
         JSONObject requestBody = Utils.readJson("mockrole/createRole.json");
+        roles.addHeader(Util.API_KEY, API_KEY);
+        roles.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Request request = roles.create(requestBody).request();
-        Assertions.assertEquals(2, request.headers().names().size());
+        Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals("api.contentstack.io", request.url().host());

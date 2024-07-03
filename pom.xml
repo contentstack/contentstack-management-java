@@ -7,7 +7,7 @@
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>1.4.2</version>
+    <version>1.4.3</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
@@ -199,29 +199,6 @@
             <artifactId>jsoup</artifactId>
             <version>1.17.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.36</version>
-        </dependency>
-          <dependency>
-            <groupId>com.slack.api</groupId>
-            <artifactId>slack-api-client</artifactId>
-            <version>1.38.0</version> 
-        </dependency>
-        <dependency>
-            <groupId>com.slack.api</groupId>
-            <artifactId>slack-app-backend</artifactId>
-            <version>1.38.0</version>
-        </dependency> 
-        <!-- <dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>7.8.0</version>
-			<scope>test</scope>
-		</dependency> -->
-
-
     </dependencies>
 
 
@@ -237,9 +214,6 @@
                      <includes>
                          <include>**/*TestSuite.java</include>
                      </includes>
-                     <!-- <suiteXmlFiles>
-						<suiteXmlFile>${basedir}/testng.xml</suiteXmlFile>
-					</suiteXmlFiles> -->
                      <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
