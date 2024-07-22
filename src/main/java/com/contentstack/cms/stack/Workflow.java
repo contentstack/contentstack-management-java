@@ -21,7 +21,7 @@ import java.util.Map;
  * <b>Note:</b> You cannot create workflows in a stack that supports branches
  * when using the classic Contentstack interface.
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v01.0
  * @since 2022-10-22
  */
