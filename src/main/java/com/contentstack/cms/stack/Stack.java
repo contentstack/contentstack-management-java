@@ -15,7 +15,7 @@ import java.util.Map;
  * property). Within a stack, you can create
  * content structures, content entries, users, etc. related to the project.
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @since 2022 -10-22
  */

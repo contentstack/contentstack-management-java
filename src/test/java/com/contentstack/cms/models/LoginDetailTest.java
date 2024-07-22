@@ -86,24 +86,24 @@ public class LoginDetailTest {
     @Test
     void getterSetterUserModelFirstName() {
         UserModel userModel = new UserModel();
-        userModel.setFirstName("***REMOVED***");
-        Assertions.assertEquals("***REMOVED***",
+        userModel.setFirstName("ishaileshmishra");
+        Assertions.assertEquals("ishaileshmishra",
                 userModel.getFirstName());
     }
 
     @Test
     void getterSetterUserModelLastName() {
         UserModel userModel = new UserModel();
-        userModel.setLastName("***REMOVED***");
-        Assertions.assertEquals("***REMOVED***",
+        userModel.setLastName("ishaileshmishra");
+        Assertions.assertEquals("ishaileshmishra",
                 userModel.getLastName());
     }
 
     @Test
     void getterSetterUserModelUsername() {
         UserModel userModel = new UserModel();
-        userModel.setUsername("***REMOVED***");
-        Assertions.assertEquals("***REMOVED***",
+        userModel.setUsername("ishaileshmishra");
+        Assertions.assertEquals("ishaileshmishra",
                 userModel.getUsername());
     }
 

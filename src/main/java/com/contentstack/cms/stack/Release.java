@@ -27,7 +27,7 @@ import java.util.Map;
  * Read more about <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#releases">Releases</a>
  *
- * @author ***REMOVED***
+ * @author ishaileshmishra
  * @version v0.1.0
  * @since 2022-10-22
  */
