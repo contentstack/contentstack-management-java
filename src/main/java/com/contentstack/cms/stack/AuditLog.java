@@ -27,7 +27,7 @@ import java.util.Objects;
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#audit-log">Audit
  * Log</a>
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v0.1.0
  * @since 2022-10-22
  */

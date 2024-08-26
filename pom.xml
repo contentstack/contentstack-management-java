@@ -7,7 +7,7 @@
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
@@ -54,7 +54,7 @@
             <organizationUrl>https://www.contentstack.com/</organizationUrl>
         </developer>
         <developer>
-            <name>ishaileshmishra</name>
+            <name>***REMOVED***</name>
             <email>mshaileshr@gmail.com</email>
             <organization>contentstack</organization>
             <organizationUrl>https://www.contentstack.com/</organizationUrl>
@@ -91,11 +91,11 @@
         <rxjava-source.version>3.1.8</rxjava-source.version>
         <retrofit-source.version>2.10.0</retrofit-source.version>
         <converter-gson-version>2.10.0</converter-gson-version>
-        <logging.version>5.0.0-alpha.12</logging.version>
+        <okhttp.version>4.12.0</okhttp.version>
         <jococo-plugin.version>0.8.7</jococo-plugin.version>
         <lombok-source.version>1.18.32</lombok-source.version>
         <junit-jupiter.version>5.10.1</junit-jupiter.version>
-        <junit-jupiter-engine.version>5.8.0-M1</junit-jupiter-engine.version>
+        <junit-jupiter-engine.version>5.10.1</junit-jupiter-engine.version>
         <gson.version>2.10.1</gson.version>
         <maven-site-plugin.version>3.3</maven-site-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
@@ -132,8 +132,19 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>logging-interceptor</artifactId>
-            <version>${logging.version}</version>
+            <version>${okhttp.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>${okhttp.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -253,7 +264,7 @@
             </plugin>
 
             <!--  -overview
-            "/Users/shaileshmishra/Documents/Workspace/contentstack/java/contentstack-management-java/src/main/overview.html"
+            "***REMOVED***tentstack/java/contentstack-management-java/src/main/overview.html"
             -bottom  "<b>Copyright © 2012-2022 Contentstack </b><sup>TM</sup>"-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
