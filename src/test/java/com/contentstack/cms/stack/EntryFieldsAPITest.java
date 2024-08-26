@@ -62,7 +62,7 @@ class EntryFieldsAPITest {
     void testEntryCreate() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryCreate = new JSONObject();
         entryCreate.put("entry", body);
         Request request = entry.create(entryCreate).request();
@@ -82,7 +82,7 @@ class EntryFieldsAPITest {
     void testUpdate() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryUpdate = new JSONObject();
         entryUpdate.put("entry", body);
 
@@ -105,7 +105,7 @@ class EntryFieldsAPITest {
     void testAtomicOperation() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -145,7 +145,7 @@ class EntryFieldsAPITest {
     void testEntryVersionName() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -187,7 +187,7 @@ class EntryFieldsAPITest {
     void testEntryDeleteVersionName() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -229,7 +229,7 @@ class EntryFieldsAPITest {
     void testEntryLocalise() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -303,7 +303,7 @@ class EntryFieldsAPITest {
     void testEntryPublish() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -326,7 +326,7 @@ class EntryFieldsAPITest {
     void testEntryPublishWithReference() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
         Request request = entry.publishWithReference(entryBody).request();
@@ -347,7 +347,7 @@ class EntryFieldsAPITest {
     void testPublishWithReference() {
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
-        body.put("url", "www.ishaileshmishra.in/stack/content_type/entry/fakeuid/code");
+        body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 

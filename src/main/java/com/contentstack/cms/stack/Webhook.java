@@ -24,7 +24,7 @@ import java.util.Map;
  * Read more
  * about Webhooks.</a>
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v0.1.0
  * @see <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-delivery-token">
