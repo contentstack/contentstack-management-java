@@ -1,11 +1,5 @@
 # Changelog
 
-## v1.4.4
-
-### Sept 04, 2024
-
-- Early access header tests
-
 ## v1.4.3
 
 ### July 08, 2024
