@@ -102,10 +102,17 @@ class EntryFieldUnitTests {
     }
 
     @Test
-    void testIncludeReference() {
+    void testIncludeReferenceMultipleReferences() {
         String[] array = {"reference","navigation_menu.page_reference"};
         Request req = entryInstance.includeReference(array).request();
         Assertions.assertEquals("include[]=reference&include[]=navigation_menu.page_reference", req.url().query());
+    }
+
+    @Test
+    void testIncludeReferenceSingleReference() {
+        Request req = entryInstance.includeReference("reference").request();
+        
+        Assertions.assertEquals("include[]=reference", req.url().query());
     }
 
     @Test
