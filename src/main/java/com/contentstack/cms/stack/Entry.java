@@ -7,7 +7,10 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -85,26 +88,14 @@ public class Entry implements BaseImplementation<Entry> {
      */
     @Override
     public Entry addParam(@NotNull String key, @NotNull Object value) {
-        if (key.equals("include[]")) {
-            if (value instanceof String[]) {
-                for (String item : (String[]) value) {
-                    this.params.put(key + includeCounter++, item);
-                }
-            } else if (value instanceof String) {
-                this.params.put(key + includeCounter++, value);
-            }
-        } else {
-            this.params.put(key, value);
-        }
+        this.params.put(key, value);
         return this;
     }
 
 
     @Override
     public Entry addParams(@NotNull HashMap<String, Object> params) {
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            addParam(entry.getKey(), entry.getValue());
-        }
+        this.params.putAll(params);
         return this;
     }
 
@@ -135,6 +126,19 @@ public class Entry implements BaseImplementation<Entry> {
         return this;
     }
 
+    public Call<ResponseBody> includeReference(@NotNull Object referenceFields) {
+        List<String> referenceList = new ArrayList<>();
+        if (referenceFields instanceof String) {
+            referenceList.add((String) referenceFields);
+        } else if (referenceFields instanceof String[]) {
+            referenceList.addAll(Arrays.asList((String[]) referenceFields));
+        } else {
+            throw new IllegalArgumentException("Reference fields must be a String or an array of Strings");
+        }
+        validateCT();
+        validateEntry();
+        return this.service.referCall(this.headers, this.contentTypeUid, referenceList);
+}
     /**
      * <b>Fetches the list of all the entries of a particular content type.</b>
      * It also returns the content of each entry in JSON format. You can also

@@ -100,22 +100,12 @@ class EntryFieldUnitTests {
         Request resp = entryInstance.fetch().request();
         Assertions.assertEquals("include_publish_details=true&locale=en-us&include_workflow=false", resp.url().query());
     }
-    
-    @Test
-    void testaddParam(){
-        String[] array = {"reference","navigation_menu.page_reference"};
-        entryInstance.addParam("include[]", array);
-        Request request = entryInstance.find().request();
-        Assertions.assertEquals("include[]1=reference&include[]2=navigation_menu.page_reference", request.url().query());
-    }
 
     @Test
-    void testaddParams() throws IOException{
-        HashMap<String, Object> paramslist = new HashMap<>();
-        paramslist.put("include[]",  new String[]{"reference", "navigation_menu.page_reference"});
-        entryInstance.addParams(paramslist);
-        Request request = entryInstance.find().request();
-       Assertions.assertEquals("include[]1=reference&include[]2=navigation_menu.page_reference", request.url().query());
+    void testIncludeReference() {
+        String[] array = {"reference","navigation_menu.page_reference"};
+        Request req = entryInstance.includeReference(array).request();
+        Assertions.assertEquals("include[]=reference&include[]=navigation_menu.page_reference", req.url().query());
     }
 
     @Test
