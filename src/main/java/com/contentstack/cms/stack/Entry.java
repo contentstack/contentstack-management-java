@@ -35,6 +35,7 @@ public class Entry implements BaseImplementation<Entry> {
     protected final EntryService service;
     protected final String contentTypeUid;
     protected final String entryUid;
+    private int includeCounter = 1;
 
     protected Entry(Retrofit instance, Map<String, Object> headers, String contentTypeUid) {
         this.contentTypeUid = contentTypeUid;
@@ -82,15 +83,28 @@ public class Entry implements BaseImplementation<Entry> {
      * @param value query param value for the request
      * @return instance of {@link Entry}
      */
+    @Override
     public Entry addParam(@NotNull String key, @NotNull Object value) {
-        this.params.put(key, value);
+        if (key.equals("include[]")) {
+            if (value instanceof String[]) {
+                for (String item : (String[]) value) {
+                    this.params.put(key + includeCounter++, item);
+                }
+            } else if (value instanceof String) {
+                this.params.put(key + includeCounter++, value);
+            }
+        } else {
+            this.params.put(key, value);
+        }
         return this;
     }
 
 
     @Override
     public Entry addParams(@NotNull HashMap<String, Object> params) {
-        this.params.putAll(params);
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            addParam(entry.getKey(), entry.getValue());
+        }
         return this;
     }
 

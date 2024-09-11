@@ -2,13 +2,20 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
+import com.google.gson.JsonArray;
+
 import okhttp3.Request;
+
 import okhttp3.ResponseBody;
+import retrofit2.Response;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,6 +99,23 @@ class EntryFieldUnitTests {
         entryInstance.addParam("include_publish_details", true);
         Request resp = entryInstance.fetch().request();
         Assertions.assertEquals("include_publish_details=true&locale=en-us&include_workflow=false", resp.url().query());
+    }
+    
+    @Test
+    void testaddParam(){
+        String[] array = {"reference","navigation_menu.page_reference"};
+        entryInstance.addParam("include[]", array);
+        Request request = entryInstance.find().request();
+        Assertions.assertEquals("include[]1=reference&include[]2=navigation_menu.page_reference", request.url().query());
+    }
+
+    @Test
+    void testaddParams() throws IOException{
+        HashMap<String, Object> paramslist = new HashMap<>();
+        paramslist.put("include[]",  new String[]{"reference", "navigation_menu.page_reference"});
+        entryInstance.addParams(paramslist);
+        Request request = entryInstance.find().request();
+       Assertions.assertEquals("include[]1=reference&include[]2=navigation_menu.page_reference", request.url().query());
     }
 
     @Test
