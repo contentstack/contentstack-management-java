@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.*;
 
+import java.util.List;
 import java.util.Map;
 
 public interface EntryService {
@@ -14,6 +15,12 @@ public interface EntryService {
             @HeaderMap Map<String, Object> headers,
             @Path("content_type_uid") String contentTypeUid,
             @QueryMap(encoded = true) Map<String, Object> queryParameter);
+            
+    @GET("content_types/{content_type_uid}/entries")
+    Call<ResponseBody> referCall(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Query("include[]") List<String> values);       
 
     @Headers("Content-Type: application/json")
     @GET("content_types/{content_type_uid}/entries/{entry_uid}")
