@@ -14,13 +14,7 @@ public interface EntryService {
     Call<ResponseBody> fetch(
             @HeaderMap Map<String, Object> headers,
             @Path("content_type_uid") String contentTypeUid,
-            @QueryMap(encoded = true) Map<String, Object> queryParameter);
-            
-    @GET("content_types/{content_type_uid}/entries")
-    Call<ResponseBody> referCall(
-            @HeaderMap Map<String, Object> headers,
-            @Path("content_type_uid") String contentTypeUid,
-            @Query("include[]") List<String> values);       
+            @QueryMap(encoded = true) Map<String, Object> queryParameter);      
 
     @Headers("Content-Type: application/json")
     @GET("content_types/{content_type_uid}/entries/{entry_uid}")
