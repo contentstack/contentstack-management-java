@@ -126,19 +126,30 @@ public class Entry implements BaseImplementation<Entry> {
         return this;
     }
 
-    public Call<ResponseBody> includeReference(@NotNull Object referenceFields) {
-        List<String> referenceList = new ArrayList<>();
-        if (referenceFields instanceof String) {
-            referenceList.add((String) referenceFields);
-        } else if (referenceFields instanceof String[]) {
-            referenceList.addAll(Arrays.asList((String[]) referenceFields));
+    protected Entry addToParams(@NotNull String key, @NotNull Object value){
+        if (key.equals("include[]")) {
+            if (value instanceof String[]) {
+                for (String item : (String[]) value) {
+                    this.params.put(key + includeCounter++, item);
+                }
+            } else if (value instanceof String) {
+                this.params.put(key, value);
+            }
+        } else {
+            this.params.put(key, value);
+        }
+        return this;
+    }
+
+    public Call<ResponseBody> includeReference(@NotNull Object referenceField){
+        if (referenceField instanceof String || referenceField instanceof String[]) {
+            addToParams("include[]", referenceField);
         } else {
             throw new IllegalArgumentException("Reference fields must be a String or an array of Strings");
         }
         validateCT();
-        validateEntry();
-        return this.service.referCall(this.headers, this.contentTypeUid, referenceList);
-}
+        return this.service.fetch(this.headers, this.contentTypeUid, this.params);
+    }
     /**
      * <b>Fetches the list of all the entries of a particular content type.</b>
      * It also returns the content of each entry in JSON format. You can also
