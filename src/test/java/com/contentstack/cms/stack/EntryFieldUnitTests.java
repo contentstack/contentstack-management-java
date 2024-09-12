@@ -100,19 +100,28 @@ class EntryFieldUnitTests {
         Request resp = entryInstance.fetch().request();
         Assertions.assertEquals("include_publish_details=true&locale=en-us&include_workflow=false", resp.url().query());
     }
-
+    @Test 
+    void testIncludeReferenceSingleReference(){
+        Request request = entryInstance.includeReference("reference").request();
+        Assertions.assertEquals("include[]=reference", request.url().query());
+    }
     @Test
     void testIncludeReferenceMultipleReferences() {
         String[] array = {"reference","navigation_menu.page_reference"};
         Request req = entryInstance.includeReference(array).request();
-        Assertions.assertEquals("include[]=reference&include[]=navigation_menu.page_reference", req.url().query());
+        Assertions.assertEquals("include[]1=reference&include[]2=navigation_menu.page_reference", req.url().query());
     }
 
     @Test
-    void testIncludeReferenceSingleReference() {
-        Request req = entryInstance.includeReference("reference").request();
-        
-        Assertions.assertEquals("include[]=reference", req.url().query());
+    void testIncludeReferenceMultipleReferencesWithParams() throws IOException {
+        entryInstance.clearParams();
+        entryInstance.addParam("locale", "en-us");
+        String[] array = {"reference","navigation_menu.page_reference"};
+        entryInstance.addParam("include_workflow", false);
+        entryInstance.addParam("include_publish_details", true);
+        Request req = entryInstance.includeReference(array).request();
+        Assertions.assertEquals("include[]1=reference&include_publish_details=true&include[]2=navigation_menu.page_reference&locale=en-us&include_workflow=false", req.url().query());
+
     }
 
     @Test
