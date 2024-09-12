@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.0
+
+### Sept 16, 2024
+
+- includeReference method implemented
+
 ## v1.4.3
 
 ### July 08, 2024
