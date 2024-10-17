@@ -19,7 +19,7 @@ import java.util.HashMap;
  * can have many users with varying
  * permissions and roles.
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v0.1.0
  * @since 2022-10-22
  */
@@ -45,7 +45,7 @@ public class User implements BaseImplementation {
      *               contentstack.user().execute();<br>
      *
      *               <br>
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      */
     public User(Retrofit client) {
         this.params = new HashMap<>();
