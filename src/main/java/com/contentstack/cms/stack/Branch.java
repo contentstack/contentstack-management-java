@@ -18,7 +18,7 @@ import java.util.Objects;
  * parallel in a more collaborative, organized,
  * and structured manner without impacting each other.
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v1.0.0
  * @see <a href=
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#branches">About
