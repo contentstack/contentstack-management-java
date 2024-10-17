@@ -19,7 +19,7 @@ import java.util.Map;
  * "https://www.contentstack.com/docs/developers/apis/content-management-api/#release-items">Release
  * Items</a>
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v0.1.0
  * @since 2022-10-22
  */

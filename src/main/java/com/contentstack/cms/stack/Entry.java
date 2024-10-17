@@ -7,7 +7,10 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,7 +25,7 @@ import java.util.Objects;
  * key in the response. This key specifies the unique ID of the branch where the
  * concerned Contentstack module resides.
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v0.1.0
  * @since 2022-10-22
  */
@@ -35,6 +38,7 @@ public class Entry implements BaseImplementation<Entry> {
     protected final EntryService service;
     protected final String contentTypeUid;
     protected final String entryUid;
+    private int includeCounter = 1;
 
     protected Entry(Retrofit instance, Map<String, Object> headers, String contentTypeUid) {
         this.contentTypeUid = contentTypeUid;
@@ -82,6 +86,7 @@ public class Entry implements BaseImplementation<Entry> {
      * @param value query param value for the request
      * @return instance of {@link Entry}
      */
+    @Override
     public Entry addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
         return this;
@@ -121,6 +126,30 @@ public class Entry implements BaseImplementation<Entry> {
         return this;
     }
 
+    protected Entry addToParams(@NotNull String key, @NotNull Object value){
+        if (key.equals("include[]")) {
+            if (value instanceof String[]) {
+                for (String item : (String[]) value) {
+                    this.params.put(key + includeCounter++, item);
+                }
+            } else if (value instanceof String) {
+                this.params.put(key, value);
+            }
+        } else {
+            this.params.put(key, value);
+        }
+        return this;
+    }
+
+    public Call<ResponseBody> includeReference(@NotNull Object referenceField){
+        if (referenceField instanceof String || referenceField instanceof String[]) {
+            addToParams("include[]", referenceField);
+        } else {
+            throw new IllegalArgumentException("Reference fields must be a String or an array of Strings");
+        }
+        validateCT();
+        return this.service.fetch(this.headers, this.contentTypeUid, this.params);
+    }
     /**
      * <b>Fetches the list of all the entries of a particular content type.</b>
      * It also returns the content of each entry in JSON format. You can also

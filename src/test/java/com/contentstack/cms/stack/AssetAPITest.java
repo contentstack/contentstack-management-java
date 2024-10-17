@@ -174,7 +174,7 @@ class AssetAPITest {
         asset.addHeader("authorization", MANAGEMENT_TOKEN);
         // Create Asset Instance to find all assets
         String filePath = "/Users/shaileshmishra/Downloads/calendar.png";
-        Response<ResponseBody> resp = asset.replace(filePath, "Assets created by ishaileshmishra").execute();
+        Response<ResponseBody> resp = asset.replace(filePath, "Assets created by ***REMOVED***").execute();
         // The assertions
         Assertions.assertEquals(6, resp.raw().request().headers().size());
         Assertions.assertTrue(resp.raw().request().headers().names().contains("api_key"));
@@ -248,7 +248,7 @@ class AssetAPITest {
 
     @Test
     void testAssetUploadWithMultipleParams() throws IOException {
-        String description = "The calender has been placed to assets by ishaileshmishra";
+        String description = "The calender has been placed to assets by ***REMOVED***";
         String filePath = "/Users/shaileshmishra/Documents/workspace/GitHub/contentstack-management-java/src/test/resources/asset.png";
         Contentstack client = new Contentstack.Builder().build();
         Stack stack = client.stack("Your-api-key", "authorization");
