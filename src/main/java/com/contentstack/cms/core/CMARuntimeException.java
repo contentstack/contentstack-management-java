@@ -3,7 +3,7 @@ package com.contentstack.cms.core;
 /**
  * CMARuntimeException that extends Exception class
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v0.1.0
  * @since 2022-10-20
  */

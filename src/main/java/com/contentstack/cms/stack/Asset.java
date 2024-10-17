@@ -22,7 +22,7 @@ import java.util.Objects;
  * so on) uploaded in your Contentstack
  * repository for future use.
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @since 2022-10-20
  */
 public class Asset implements BaseImplementation<Asset> {
@@ -187,7 +187,7 @@ public class Asset implements BaseImplementation<Asset> {
      * Example:file_size
      *
      * @return Call
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-assets">Get
      * all
@@ -210,7 +210,7 @@ public class Asset implements BaseImplementation<Asset> {
      * published in each of the environment.
      *
      * @return Call
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-a-single-asset">Get
      * a single asset</a>
@@ -228,7 +228,7 @@ public class Asset implements BaseImplementation<Asset> {
      *
      * @param folderUid The folderUid of specific folder
      * @return Call
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-of-a-specific-folder">Get
      * Assets of a Specific Folder</a>
@@ -249,7 +249,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @param folderUid        folder uid
      * @param isIncludeFolders provide true/false
      * @return Call
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#get-assets-and-subfolders-of-a-parent-folder">Get
      * Assets and Subfolders of a Parent Folder</a>
@@ -296,7 +296,7 @@ public class Asset implements BaseImplementation<Asset> {
      *                    in the response.</li>
      *                    </ul>
      * @return Call
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-asset">
      * Upload
@@ -410,7 +410,7 @@ public class Asset implements BaseImplementation<Asset> {
      *
      * @param body the JSONObject request body
      * @return Call
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
      * Generate Permanent Asset URL </a>
@@ -439,7 +439,7 @@ public class Asset implements BaseImplementation<Asset> {
      *
      * @param slugUrl The unique identifier of the asset.
      * @return Call
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#generate-permanent-asset-url">
      * Generate Permanent Asset Url</a>
