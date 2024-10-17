@@ -14,7 +14,7 @@ import java.util.Map;
  * A role is a collection of permissions that will be applicable to all the
  * users who are assigned this role.
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v0.1.0
  * @see <a href=
  * "https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-roles">Roles
