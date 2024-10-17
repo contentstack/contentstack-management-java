@@ -48,7 +48,7 @@ public class TestClient {
                     instance = new Contentstack.Builder()
                             .setAuthtoken(AUTHTOKEN)
                             .setConnectionPool(5, 400, TimeUnit.MILLISECONDS)
-                            .setHost("kpm.ishaileshmishra.io/path/another").build();
+                            .setHost("kpm.***REMOVED***.io/path/another").build();
                 }
             }
         }

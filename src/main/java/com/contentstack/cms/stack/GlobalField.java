@@ -24,7 +24,7 @@ import java.util.Map;
  * key in the response. This key specifies the unique ID of the branch where the
  * concerned Contentstack module resides.
  *
- * @author ishaileshmishra
+ * @author ***REMOVED***
  * @version v0.1.0
  * @since 2022-10-22
  */
