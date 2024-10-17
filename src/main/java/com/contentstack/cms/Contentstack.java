@@ -79,7 +79,7 @@ public class Contentstack {
      * <br>
      *
      * @return User
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
      * </a>
@@ -129,7 +129,7 @@ public class Contentstack {
      * @param password the password of the user
      * @return LoginDetails
      * @throws IOException the IOException
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
      * </a>
@@ -182,7 +182,7 @@ public class Contentstack {
      * @return LoginDetails
      * @throws IOException the io exception
      * @throws IOException the IOException
-     * @author ishaileshmishra
+     * @author ***REMOVED***
      * @see <a
      * href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login

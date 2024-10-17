@@ -1,9 +1,15 @@
 package com.contentstack.cms;
 
+import com.contentstack.cms.core.AuthInterceptor;
 import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
 import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
@@ -262,5 +268,66 @@ public class ContentstackUnitTest {
         Assertions.assertThrows(IllegalStateException.class, () -> client.organization(emptyOrganizationUid));
     }
 
+    @Test
+    public void testEarlyAccessHeader() throws IOException, InterruptedException {
+        MockWebServer mockWebServer = new MockWebServer();
+        mockWebServer.enqueue(new MockResponse().setBody("{}"));
+
+        AuthInterceptor authInterceptor = new AuthInterceptor();
+        authInterceptor.setEarlyAccess(new String[]{"Taxonomy"});
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(mockWebServer.url("/"))
+                .build();
+
+        client.newCall(request).execute();
+        RecordedRequest recordedRequest = mockWebServer.takeRequest();
+        String earlyAccessHeader = recordedRequest.getHeader("x-header-ea");
+
+        Assertions.assertNotNull(earlyAccessHeader);
+        Assertions.assertEquals("Taxonomy", earlyAccessHeader);
+
+        mockWebServer.shutdown();
+    } 
+    @Test
+    public void testEarlyAccessMultipleHeader() throws IOException, InterruptedException {
+        MockWebServer mockWebServer = new MockWebServer();
+        mockWebServer.enqueue(new MockResponse().setBody("{}"));
+
+        AuthInterceptor authInterceptor = new AuthInterceptor();
+        authInterceptor.setEarlyAccess(new String[]{"Taxonomy","Teams"});
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(mockWebServer.url("/"))
+                .build();
+
+        client.newCall(request).execute();
+        RecordedRequest recordedRequest = mockWebServer.takeRequest();
+        String earlyAccessHeader = recordedRequest.getHeader("x-header-ea");
+
+        Assertions.assertNotNull(earlyAccessHeader);
+        Assertions.assertEquals("Taxonomy, Teams", earlyAccessHeader);
+
+        mockWebServer.shutdown();
+    }               
+
+    @Test
+    public void testEarlyAccessHeaderEmpty() {
+        String[] emptyEarlyAccessFeatures = {};
+        Contentstack client = new Contentstack.Builder()
+                .earlyAccess(emptyEarlyAccessFeatures)
+                .build();
+        
+        Assertions.assertNotNull(client.earlyAccess);
+        Assertions.assertEquals(0, client.earlyAccess.length);
+    }
 
 }
