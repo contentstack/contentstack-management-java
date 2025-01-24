@@ -154,4 +154,19 @@ public interface EntryService {
             @Path("content_type_uid") String contentTypeUid,
             @Query("query") JSONObject queryObject);
 
+    @POST("content_types/{content_type_uid}/entries/{entry_uid}/workflow")
+    Call<ResponseBody> setWorkflowStage(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Path("entry_uid") String entryUid,
+            @QueryMap Map<String, Object> params,
+            @Body JSONObject body);
+           
+    @POST("content_types/{content_type_uid}/entries/{entry_uid}/workflow")
+    Call<ResponseBody> publishRequestApproval(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Path("entry_uid") String entryUid,
+            @QueryMap Map<String, Object> params,
+            @Body JSONObject body);         
 }
