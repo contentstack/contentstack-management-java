@@ -825,4 +825,40 @@ public class Entry implements BaseImplementation<Entry> {
         return this.service.filterTaxonomy(this.headers, this.contentTypeUid, query);
     }
 
+
+    /**
+     * The Set Entry Workflow Stage request allows you to either set a particular workflow stage of an entry or update the workflow stage details of an entry.
+     * To configure the permissions for your application via OAuth, 
+     * please include the cm.entry.workflow:write scope.
+     * In the 'Body' section, you need to provide the details of the workflow stage. 
+     * Enter a comment for the assigned user, if needed; provide the due date; 
+     * set notification settings to ‘true’, so that the specified user will be notified of it; 
+     * enter the UID of the workflow stage; and finally, enter the user details, such as UID, name, and email address of the user.
+     * param query the request body of  type {@link JSONObject}
+     */
+
+    public Call<ResponseBody> setWorkflowStage(@NotNull JSONObject workflow) {
+        validateCT();
+        validateEntry();
+        return this.service.setWorkflowStage(this.headers, this.contentTypeUid, this.entryUid, this.params, workflow);
+    }
+
+
+   /**  
+    * This multipurpose request allows you to either send a publish request or accept/reject a received publish request.
+    * When executing the API request, in the 'Header' section,
+    * you need to provide the API Key of your stack and the authtoken that you receive after logging into your account.
+    * In the 'Body' section, you need to provide the details of the publish rule, 
+    * such as its UID, action (‘publish’, ‘unpublish’, or ’both’), 
+    * status (this could be ‘0’ for Approval Requested, ‘1’ for ‘Approval Accepted’, and ‘-1’ for ‘Approval Rejected’), 
+    * notification setting, and comment for the approver.
+    * param query the request body of  type {@link JSONObject}
+    */
+
+    public Call<ResponseBody> publishRequest(@NotNull JSONObject publishing_rule) {
+        validateCT();
+        validateEntry();
+        return this.service.publishRequestApproval(this.headers, this.contentTypeUid, this.entryUid, this.params, publishing_rule);
+    }
+
 }
