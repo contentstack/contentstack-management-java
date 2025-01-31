@@ -11,6 +11,8 @@ import retrofit2.Response;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -816,6 +818,98 @@ class EntryFieldUnitTests {
         Assertions.assertNull(request.body());
         Assertions.assertEquals("query={\"taxonomies.taxonomy_uid\":\"{ \\\"$in\\\" : [\\\"term_uid1\\\" , \\\"term_uid2\\\" ] }\"}", request.url().query());
 
+    }
+
+    @Test
+    void testSetWorkflowStage() throws ParseException, IOException {
+        String workflowStagePayload = "{\n" +
+            "  \"workflow\": {\n" +
+            "    \"workflow_stage\": {\n" +
+            "      \"uid\": \"uid\",\n" +
+            "      \"assigned_by_roles\": [{ \"uid\": \"uid\", \"name\": \"Content Manager\" }],\n" +
+            "      \"due_date\": \"Thu Feb 06 2025\",\n" +
+            "      \"comment\": \"Review the entry\",\n" +
+            "      \"notify\": true,\n" +
+            "      \"assigned_to\": [{ \"uid\": \"user_uid\", \"name\": \"name\", \"email\": \"mail.com\" }]\n" +
+            "    }\n" +
+            "  }\n" +
+            "}";
+        JSONParser parser = new JSONParser();
+        JSONObject body = (JSONObject) parser.parse(workflowStagePayload);
+        Entry entry1 = TestClient.getClient().stack(API_KEY,MANAGEMENT_TOKEN).contentType("author").entry("entry_uid");
+        Request request = entry1.setWorkflowStage(body).request();
+        Assertions.assertNotNull(request);
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertEquals("author", request.url().pathSegments().get(2));
+        Assertions.assertEquals("entries", request.url().pathSegments().get(3));
+        Assertions.assertEquals("entry_uid", request.url().pathSegments().get(4));
+        Assertions.assertEquals("workflow", request.url().pathSegments().get(5));
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/author/entries/entry_uid/workflow", request.url().toString());   
+    }
+
+    @Test
+    void setWorkflowStage_VerifyQueryParams() throws ParseException {
+        String payload = "{ \"workflow\": { \"workflow_stage\": { \"uid\": \"stage_uid\" } } }";
+        JSONParser parser = new JSONParser();
+        JSONObject body = (JSONObject) parser.parse(payload);
+        Entry entry = TestClient.getClient().stack(API_KEY, MANAGEMENT_TOKEN).contentType("author").entry("entry_uid");
+        entry.addParam("locale", "en-us");
+        Request request = entry.setWorkflowStage(body).request();
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("locale=en-us", request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/author/entries/entry_uid/workflow?locale=en-us", request.url().toString());
+    }
+
+    @Test
+    void testPublishRequest_ValidRequest() throws ParseException {
+        Contentstack contentstack = new Contentstack.Builder().setAuthtoken(TestClient.AUTHTOKEN).build();
+        Stack stack = contentstack.stack(TestClient.API_KEY, TestClient.MANAGEMENT_TOKEN);
+        String publishRequestPayload = "{\n" +
+                "    \"workflow\": {\n" +
+                "        \"publishing_rule\": {\n" +
+                "            \"uid\": \"rule_uid\",\n" +
+                "            \"action\": \"publish\",\n" +
+                "            \"status\": 1,\n" +
+                "            \"notify\": true,\n" +
+                "            \"comment\": \"Approve this entry.\"\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+        JSONParser parser = new JSONParser();
+        JSONObject body = (JSONObject) parser.parse(publishRequestPayload);
+        Request request = stack.contentType("author").entry("entry_uid").publishRequest(body).request();
+
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertEquals("https", request.url().scheme());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertEquals("author", request.url().pathSegments().get(2));
+        Assertions.assertEquals("entries", request.url().pathSegments().get(3));
+        Assertions.assertEquals("entry_uid", request.url().pathSegments().get(4));
+        Assertions.assertEquals("workflow", request.url().pathSegments().get(5));
+        Assertions.assertTrue(request.headers().names().contains("authorization"));
+        Assertions.assertTrue(request.headers().names().contains("api_key"));
+    }
+
+    @Test
+    void testPublishRequest_InvalidRequestBody() throws ParseException, IOException {
+        Contentstack contentstack = new Contentstack.Builder().setAuthtoken(TestClient.AUTHTOKEN).build();
+        Stack stack = contentstack.stack(TestClient.API_KEY, TestClient.MANAGEMENT_TOKEN);
+        String invalidPayload = "{ \"invalid_field\": \"invalid_value\" }";
+        JSONParser parser = new JSONParser();
+        JSONObject body = (JSONObject) parser.parse(invalidPayload);
+        Request request = stack.contentType("author").entry("entry_uid").publishRequest(body).request();
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.headers().names().contains("authorization"));
+        Assertions.assertTrue(request.headers().names().contains("api_key"));
+        Assertions.assertEquals("https", request.url().scheme());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
     }
 
 }
