@@ -22,7 +22,7 @@ jobs:
         run: mvn jacoco:prepare-agent jacoco:report
 
       - name: Upload Code Coverage Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
           path: target/site/jacoco
