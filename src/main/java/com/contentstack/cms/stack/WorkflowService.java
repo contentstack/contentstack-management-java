@@ -45,14 +45,6 @@ public interface WorkflowService {
             @HeaderMap Map<String, Object> headers,
             @Path("workflow_uid") String workflowUid);
 
-    @POST("content_types/{content_type_uid}/entries/{entry_uid}/workflow")
-    Call<ResponseBody> updateWorkflowStage(
-            @HeaderMap Map<String, Object> headers,
-            @Path("content_type_uid") String contentTypeUid,
-            @Path("entry_uid") String entryUid,
-            @QueryMap Map<String, Object> params,
-            @Body JSONObject body);
-
     @POST("workflows/publishing_rules")
     Call<ResponseBody> createPublishRules(
             @HeaderMap Map<String, Object> headers,
@@ -84,14 +76,6 @@ public interface WorkflowService {
             @HeaderMap Map<String, Object> headers,
             @Path("content_type_uid") String contentTypeUid,
             @QueryMap Map<String, Object> params);
-
-    @POST("content_types/{content_type_uid}/entries/{entry_uid}/workflow")
-    Call<ResponseBody> publishRequestApproval(
-            @HeaderMap Map<String, Object> headers,
-            @Path("content_type_uid") String contentTypeUid,
-            @Path("entry_uid") String entryUid,
-            @QueryMap Map<String, Object> params,
-            @Body JSONObject body);
 
     @GET("workflows/content_type/{content_type_uid}")
     Call<ResponseBody> fetchTasks(
