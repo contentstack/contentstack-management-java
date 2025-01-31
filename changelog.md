@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.2
+
+### Feb 03, 2025
+
+- Feature added related to entry workflow methods
+
 ## v1.5.1
 
 ### Jan 20, 2025
