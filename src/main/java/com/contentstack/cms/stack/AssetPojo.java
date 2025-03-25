@@ -1,6 +1,4 @@
 package com.contentstack.cms.stack;
-import java.util.Map;
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class AssetPojo {
@@ -38,18 +36,7 @@ public class AssetPojo {
     @SerializedName("name")
     protected String name;
 
-    // Store any unknown/dynamic fields
-    @Expose(serialize = false, deserialize = false) 
-    protected transient Map<String, Object> additionalFields;
-
-    public Map<String, Object> getAdditionalFields() {
-        return additionalFields;
-    }
-
-    public void setAdditionalFields(Map<String, Object> additionalFields) {
-        this.additionalFields = additionalFields;
-    }
-
+   
     // Getters
     public String getTitle() { 
         if (contentType.equals("application/vnd.contenstack.folder")) {
