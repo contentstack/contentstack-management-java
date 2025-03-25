@@ -35,7 +35,6 @@ public class AssetPojo {
 
     @SerializedName("name")
     protected String name;
-
    
     // Getters
     public String getTitle() { 
@@ -44,12 +43,5 @@ public class AssetPojo {
         }
         return title; }
 
-    @Override
-    public String toString() {
-        return new com.google.gson.GsonBuilder()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
-    }
 }
 
