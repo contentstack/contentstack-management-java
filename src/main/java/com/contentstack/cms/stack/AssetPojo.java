@@ -6,41 +6,41 @@ import com.google.gson.annotations.SerializedName;
 public class AssetPojo {
 
     @SerializedName("uid")
-    private String uid;
+    protected String uid;
 
     @SerializedName("title")
-    private String title;
+    protected String title;
 
     @SerializedName("content_type")
-    private String contentType;
+    protected String contentType;
 
     @SerializedName("file_size")
-    private String fileSize;
+    protected String fileSize;
 
     @SerializedName("filename")
-    private String filename;
+    protected String filename;
 
     @SerializedName("url")
-    private String url;
+    protected String url;
 
     @SerializedName("description")
-    private String description;
+    protected String description;
 
     @SerializedName("_version")
-    private int version;
+    protected int version;
 
     @SerializedName("is_dir")
-    private boolean isDir;
+    protected boolean isDir;
 
     @SerializedName("tags")
-    private String[] tags;
+    protected String[] tags;
 
     @SerializedName("name")
-    private String name;
+    protected String name;
 
     // Store any unknown/dynamic fields
     @Expose(serialize = false, deserialize = false) 
-    private transient Map<String, Object> additionalFields;
+    protected transient Map<String, Object> additionalFields;
 
     public Map<String, Object> getAdditionalFields() {
         return additionalFields;
@@ -51,20 +51,11 @@ public class AssetPojo {
     }
 
     // Getters
-    public String getUid() { return uid; }
     public String getTitle() { 
         if (contentType.equals("application/vnd.contenstack.folder")) {
             return name;
         }
         return title; }
-    public String getContentType() { return contentType; }
-    public String getFileSize() { return fileSize; }
-    public String getFilename() { return filename; }
-    public String getUrl() { return url; }
-    public String getDescription() { return description; }
-    public int getVersion() { return version; }
-    public boolean isDir() { return isDir; }
-    public String[] getTags() { return tags; }
 
     @Override
     public String toString() {
