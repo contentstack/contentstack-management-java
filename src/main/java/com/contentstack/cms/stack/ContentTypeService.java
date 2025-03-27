@@ -14,8 +14,19 @@ public interface ContentTypeService {
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> query);
 
+    @GET("content_types")
+    Call<ContentTypesResponse> fetchPojo(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> query);
+        
     @GET("content_types/{content_type_uid}")
     Call<ResponseBody> single(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @QueryMap Map<String, Object> queryParam);
+
+    @GET("content_types/{content_type_uid}")
+    Call<ContentTypeResponse> singlePojo(
             @HeaderMap Map<String, Object> headers,
             @Path("content_type_uid") String contentTypeUid,
             @QueryMap Map<String, Object> queryParam);
