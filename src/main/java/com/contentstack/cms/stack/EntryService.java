@@ -129,13 +129,6 @@ public interface EntryService {
             @Path("entry_uid") String entryUid,
             @QueryMap(encoded = true) Map<String, Object> queryOptions);
 
-    @GET("content_types/{content_type_uid}/entries/{entry_uid}/export")
-    Call<ResponseBody> exportPojo(
-            @HeaderMap Map<String, Object> headers,
-            @Path("content_type_uid") String contentTypeUid,
-            @Path("entry_uid") String entryUid,
-            @QueryMap(encoded = true) Map<String, Object> queryOptions);
-
     @POST("content_types/{content_type_uid}/entries/import")
     Call<ResponseBody> imports(
             @HeaderMap Map<String, Object> headers,
