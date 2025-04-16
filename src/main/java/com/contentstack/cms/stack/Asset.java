@@ -60,6 +60,7 @@ public class Asset implements BaseImplementation<Asset> {
      *              object as its value.
      * @return instance of Asset
      */
+    @Override
     public Asset addParam(@NotNull String key, @NotNull Object value) {
         this.params.put(key, value);
         return this;
@@ -74,6 +75,7 @@ public class Asset implements BaseImplementation<Asset> {
      *              header.
      * @return instance of Asset
      */
+    @Override
     public Asset addHeader(@NotNull String key, @NotNull String value) {
         this.headers.put(key, value);
         return this;
@@ -86,6 +88,7 @@ public class Asset implements BaseImplementation<Asset> {
      *                representing the header value.
      * @return instance of Asset
      */
+    @Override
     public Asset addHeaders(@NotNull HashMap<String, String> headers) {
         this.headers.putAll(headers);
         return this;
@@ -98,6 +101,7 @@ public class Asset implements BaseImplementation<Asset> {
      *                annotated with @NotNull, indicating that it cannot be null.
      * @return instance of Asset
      */
+    @Override
     public Asset addParams(@NotNull HashMap<String, Object> headers) {
         this.params.putAll(headers);
         return this;
@@ -198,6 +202,10 @@ public class Asset implements BaseImplementation<Asset> {
         return this.service.fetch(this.headers, this.params);
     }
 
+    public Call<AssetListResponse> findAsPojo() {
+        return this.service.fetchPojo(this.headers, this.params);
+    }
+
     /**
      * The Get an asset call returns comprehensive information about a specific
      * version of an asset of a stack
@@ -221,6 +229,11 @@ public class Asset implements BaseImplementation<Asset> {
         return this.service.single(this.headers, this.assetUid, this.params);
     }
 
+    public Call<AssetResponse> fetchAsPojo() { // New method for POJO conversion
+        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        return this.service.singlePojo(this.headers, this.assetUid, this.params);
+    }
+
     /**
      * The Get assets of a specific folder retrieves all assets of a specific asset
      * folder; however, it doesn't retrieve
@@ -239,6 +252,11 @@ public class Asset implements BaseImplementation<Asset> {
     public Call<ResponseBody> byFolderUid(@NotNull String folderUid) {
         this.params.put("folder", folderUid);
         return this.service.specificFolder(this.headers, this.params);
+    }
+
+    public Call<AssetListResponse> byFolderUidAsPojo(@NotNull String folderUid) {
+        this.params.put("folder", folderUid);
+        return this.service.specificFolderPojo(this.headers, this.params);
     }
 
     /**
@@ -263,6 +281,13 @@ public class Asset implements BaseImplementation<Asset> {
         this.params.put("include_folders", isIncludeFolders);
         return this.service.subfolder(this.headers, this.params);
     }
+
+    public Call<AssetListResponse> subfolderAsPojo(
+        @NotNull String folderUid, Boolean isIncludeFolders) {
+    this.params.put("folder", folderUid);
+    this.params.put("include_folders", isIncludeFolders);
+    return this.service.subfolderPojo(this.headers, this.params);
+}
 
     /**
      * The <b>Upload asset</b> request uploads an asset file to your stack.
@@ -731,6 +756,10 @@ public class Asset implements BaseImplementation<Asset> {
         return this.service.singleFolderByName(this.headers, this.params);
     }
 
+    public Call<AssetListResponse> getSingleFolderByNameAsPojo() {
+        return this.service.singleFolderByNamePojo(this.headers, this.params);
+    }
+
     /**
      * Get sub-folders of a parent folder request retrieves the details of only the
      * sub-folders of a specific asset
@@ -748,6 +777,10 @@ public class Asset implements BaseImplementation<Asset> {
      */
     public Call<ResponseBody> getSubfolder() {
         return this.service.getSubfolder(this.headers, this.params);
+    }
+
+    public Call<AssetListResponse> getSubfolderAsPojo() {
+        return this.service.getSubfolderPojo(this.headers, this.params);
     }
 
     protected Asset removeParam(String key) {
