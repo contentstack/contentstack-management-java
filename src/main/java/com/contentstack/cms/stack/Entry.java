@@ -189,6 +189,11 @@ public class Entry implements BaseImplementation<Entry> {
         return this.service.fetch(this.headers, this.contentTypeUid, this.params);
     }
 
+    public Call<EntryListResponse> findAsPojo() {
+        validateCT();
+        return this.service.fetchPojo(this.headers, this.contentTypeUid, this.params);
+    }
+
     /**
      * <b>The Get a single entry request fetches a particular entry of a content
      * type.</b>
@@ -213,6 +218,11 @@ public class Entry implements BaseImplementation<Entry> {
         validateCT();
         validateEntry();
         return this.service.single(headers, this.contentTypeUid, this.entryUid, this.params);
+    }
+    public Call<EntryResponse> fetchAsPojo() {
+        validateCT();
+        validateEntry();
+        return this.service.singlePojo(headers, this.contentTypeUid, this.entryUid, this.params);
     }
 
     /**

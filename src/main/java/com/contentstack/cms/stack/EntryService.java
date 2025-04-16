@@ -16,9 +16,23 @@ public interface EntryService {
             @Path("content_type_uid") String contentTypeUid,
             @QueryMap(encoded = true) Map<String, Object> queryParameter);      
 
+    @GET("content_types/{content_type_uid}/entries")
+    Call<EntryListResponse> fetchPojo(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @QueryMap(encoded = true) Map<String, Object> queryParameter);
+
     @Headers("Content-Type: application/json")
     @GET("content_types/{content_type_uid}/entries/{entry_uid}")
     Call<ResponseBody> single(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Path("entry_uid") String entryUid,
+            @QueryMap(encoded = true) Map<String, Object> queryParameter);
+
+    @Headers("Content-Type: application/json")
+    @GET("content_types/{content_type_uid}/entries/{entry_uid}")
+    Call<EntryResponse> singlePojo(
             @HeaderMap Map<String, Object> headers,
             @Path("content_type_uid") String contentTypeUid,
             @Path("entry_uid") String entryUid,

@@ -195,6 +195,10 @@ public class ContentType implements BaseImplementation<ContentType> {
     public Call<ResponseBody> find() {
         return service.fetch(this.headers, this.params);
     }
+    
+    public Call<ContentTypesResponse> findAsPojo() {
+        return service.fetchPojo(this.headers, this.params);
+    }
 
     /**
      * <b>Get Single Content Type</b>
@@ -246,6 +250,11 @@ public class ContentType implements BaseImplementation<ContentType> {
     public Call<ResponseBody> fetch() {
         Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
         return service.single(this.headers, this.contentTypeUid, this.params);
+    }
+
+    public Call<ContentTypeResponse> fetchAsPojo() {
+        Objects.requireNonNull(this.contentTypeUid, "Content Type Uid Is Required");
+        return service.singlePojo(this.headers, this.contentTypeUid, this.params);
     }
 
     /**

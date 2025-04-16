@@ -13,6 +13,7 @@ import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
@@ -549,6 +550,44 @@ class EntryFieldsAPITest {
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().toString().contains("/workflow"));
         Assertions.assertTrue(request.headers().names().contains("authorization"));
+    }
+
+    @Test
+    void testEntryPojo() throws IOException {
+        Request request = contentType.entry(API_KEY).fetchAsPojo().request();
+        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertEquals("test", request.url().pathSegments().get(2));
+        Assertions.assertEquals("entries", request.url().pathSegments().get(3));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals(
+                String.format("https://api.contentstack.io/v3/content_types/test/entries/"+ TestClient.API_KEY),
+                request.url().toString());
+    }
+    @Test
+    void testEntryPojoList() throws IOException {
+        entry.addParam("include_count", true);
+        entry.addParam("limit", 10);
+        Request request = entry.findAsPojo().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertEquals("test", request.url().pathSegments().get(2));
+        Assertions.assertEquals("entries", request.url().pathSegments().get(3));
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("limit=10&include_count=true", request.url().query().toString());
+        Assertions.assertEquals(
+                String.format("https://api.contentstack.io/v3/content_types/test/entries?limit=10&include_count=true"),
+                request.url().toString());
     }
 
 }

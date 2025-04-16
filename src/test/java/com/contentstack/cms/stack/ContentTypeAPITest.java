@@ -1,11 +1,19 @@
 package com.contentstack.cms.stack;
 
+import java.io.IOException;
+import java.util.List;
+
+import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
 import com.contentstack.cms.Utils;
 import com.contentstack.cms.core.Util;
+
 import okhttp3.Request;
+
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
+
+import retrofit2.Response;
 
 @Tag("unit")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -270,6 +278,44 @@ class ContentTypeAPITest {
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNull(request.url().encodedQuery());
         Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType", request.url().toString());
+    }
+
+    @Test
+    void testcontentPojo() throws IOException {
+        contentType = stack.contentType(contentTypeUid);
+        Request request = contentType.fetchAsPojo().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNull(request.url().encodedQuery());
+        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType", request.url().toString());
+    }
+
+    @Test
+    void testcontentPojoList() throws IOException {
+        contentType = stack.contentType(contentTypeUid);
+        contentType.addParam("include_count", true);
+        contentType.addParam("include_global_field_schema", true);
+
+        Request request = contentType.findAsPojo().request();
+        Assertions.assertEquals(_COUNT, request.headers().names().size());
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
+        Assertions.assertNotNull(request.url().encodedQuery());
+        Assertions.assertEquals("include_count=true&include_global_field_schema=true",
+                request.url().query().toString());
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
+                request.url().toString());
+
     }
 
 }
