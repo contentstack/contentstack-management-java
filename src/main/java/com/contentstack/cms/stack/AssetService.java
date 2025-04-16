@@ -15,6 +15,11 @@ public interface AssetService {
     Call<ResponseBody> fetch(
             @HeaderMap Map<String, Object> headers,
             @QueryMap(encoded = true) Map<String, Object> query);
+     
+    @GET("assets")
+    Call<AssetListResponse> fetchPojo(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap(encoded = true) Map<String, Object> query);
 
     @GET("assets/{asset_uid}")
     Call<ResponseBody> single(
@@ -22,13 +27,29 @@ public interface AssetService {
             @Path("asset_uid") String uid,
             @QueryMap(encoded = true) Map<String, Object> query);
 
+    @GET("assets/{asset_uid}")
+    Call<AssetResponse> singlePojo(
+                @HeaderMap Map<String, Object> headers,
+                @Path("asset_uid") String assetUid,
+                @QueryMap(encoded = true) Map<String, Object> params);
+
     @GET("assets")
     Call<ResponseBody> specificFolder(
             @HeaderMap Map<String, Object> headers,
             @QueryMap(encoded = true) Map<String, Object> query);
 
     @GET("assets")
+    Call<AssetListResponse> specificFolderPojo(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap(encoded = true) Map<String, Object> query);
+
+    @GET("assets")
     Call<ResponseBody> subfolder(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap(encoded = true) Map<String, Object> query);
+
+    @GET("assets")
+    Call<AssetListResponse> subfolderPojo(
             @HeaderMap Map<String, Object> headers,
             @QueryMap(encoded = true) Map<String, Object> query);
 
@@ -88,7 +109,7 @@ public interface AssetService {
             @HeaderMap Map<String, Object> headers,
             @Path("asset_uid") String assetUid,
             @Path("version_number") int versionNumber);
-
+// check this if possible to support
     @GET("assets/{asset_uid}/references")
     Call<ResponseBody> getReferences(
             @HeaderMap Map<String, Object> headers,
@@ -124,13 +145,29 @@ public interface AssetService {
             @Path("folder_uid") String folderUid,
             @QueryMap Map<String, Object> query);
 
+    @GET("assets/folders/{folder_uid}")
+    Call<AssetResponse> singleFolderPojo(
+            @HeaderMap Map<String, Object> headers,
+            @Path("folder_uid") String folderUid,
+            @QueryMap Map<String, Object> query);
+
     @GET("assets")
     Call<ResponseBody> singleFolderByName(
             @HeaderMap Map<String, Object> headers,
             @QueryMap(encoded = true) Map<String, Object> query);
 
     @GET("assets")
+    Call<AssetListResponse> singleFolderByNamePojo(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap(encoded = true) Map<String, Object> query);
+
+    @GET("assets")
     Call<ResponseBody> getSubfolder(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap(encoded = true) Map<String, Object> query);
+
+    @GET("assets")
+    Call<AssetListResponse> getSubfolderPojo(
             @HeaderMap Map<String, Object> headers,
             @QueryMap(encoded = true) Map<String, Object> query);
 
