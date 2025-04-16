@@ -57,6 +57,7 @@ class AssetAPITest {
     @Order(2)
     @Test
     void testFetch() {
+        asset = client.stack().asset(_uid);
         asset.clearParams();
         asset.addParam("include_path", false);
         asset.addParam("version", 1);
@@ -263,6 +264,98 @@ class AssetAPITest {
                 uploadAsset(filePath, "parent_uid", "Fake Image", "Something as description", tags).execute();
         Assertions.assertFalse(uploadMultiple.isSuccessful());
         Assertions.assertFalse(upload.isSuccessful());
+    }
+
+    @Test
+    void testFetchSingleAssetPojo() throws IOException {
+        asset = client.stack().asset(_uid)
+                .addParam("include_count", true);
+        Request request = asset.fetchAsPojo().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals("https", request.url().scheme());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertTrue(request.url().pathSegments().contains("v3"));
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
+        Assertions.assertEquals(
+                "https://api.contentstack.io/v3/assets/auth999999999?include_count=true",
+                request.url().toString());
+    }
+
+    @Test
+    void testFetchAllAssetsPojo() throws IOException {
+        asset = client.stack().asset();
+        Request request = asset.findAsPojo().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals("https", request.url().scheme());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertTrue(request.url().pathSegments().contains("v3"));
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
+        Assertions.assertEquals("https://api.contentstack.io/v3/assets", request.url().toString());
+    }
+
+    @Test
+    void testFetchAssetsByFolderUidPojo() throws IOException {
+        asset = client.stack().asset();
+        Request request = asset.byFolderUidAsPojo("folder_uid").request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals("https", request.url().scheme());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertTrue(request.url().pathSegments().contains("v3"));
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
+        Assertions.assertEquals("https://api.contentstack.io/v3/assets?folder=folder_uid", request.url().toString());
+    }
+
+    @Test
+    void testFetchAssetsBySubFolderUidPojo() throws IOException {
+        asset = client.stack().asset();
+        Request request = asset.subfolderAsPojo("subfolder_uid", true).request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals("https", request.url().scheme());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertTrue(request.url().pathSegments().contains("v3"));
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
+        Assertions.assertEquals("https://api.contentstack.io/v3/assets?folder=subfolder_uid&include_folders=true", request.url().toString());
+    }
+
+    @Test
+    void testFetchSingleFolderByNamePojo() {
+        asset = client.stack().asset();
+        HashMap<String, Object> queryContent = new HashMap<>();
+        queryContent.put("is_dir", true);
+        queryContent.put("name", "sub_folder_test");
+        asset.addParam("query", queryContent);
+        Request request = asset.getSingleFolderByNameAsPojo().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals("https", request.url().scheme());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertTrue(request.url().pathSegments().contains("v3"));
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
+        Assertions.assertEquals("https://api.contentstack.io/v3/assets?query={is_dir%3Dtrue,%20name%3Dsub_folder_test}", request.url().toString());
+    }
+
+    @Test
+    void testFetchSubfoldersByParentFolderPojo() {
+        asset = client.stack().asset();
+        HashMap<String, Object> queryContent = new HashMap<>();
+        queryContent.put("is_dir", true);  
+        asset.addParam("folder", "test_folder");
+        asset.addParam("include_folders", true);    
+        asset.addParam("query", queryContent);
+        queryContent.put("parent_uid", "parent_uid");
+        asset.addParam("query", queryContent);
+        Request request = asset.getSubfolderAsPojo().request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertEquals("https", request.url().scheme());
+        Assertions.assertEquals("api.contentstack.io", request.url().host());
+        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertTrue(request.url().pathSegments().contains("v3"));
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
+        Assertions.assertEquals("https://api.contentstack.io/v3/assets?folder=test_folder&query={parent_uid%3Dparent_uid,%20is_dir%3Dtrue}&include_folders=true", request.url().toString());
     }
 
 }
