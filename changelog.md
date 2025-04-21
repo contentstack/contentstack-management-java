@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.5.3
+
+### Apr 21, 2025
+
+- POJO feature added for ContentType, Assets and Entries
+- snyk fixes
+
 ## v1.5.2
 
 ### Feb 03, 2025
