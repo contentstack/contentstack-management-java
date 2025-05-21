@@ -1,0 +1,40 @@
+{
+  "title": "Nested Global Field3",
+  "uid": "nested_global_field3",
+  "description": "",
+  "schema": [
+    {
+      "data_type": "text",
+      "display_name": "Single Line Textbox",
+      "uid": "single_line",
+      "field_metadata": {
+        "description": "",
+        "default_value": "",
+        "version": 3
+      },
+      "format": "",
+      "error_messages": { "format": "" },
+      "mandatory": false,
+      "multiple": false,
+      "non_localizable": false,
+      "unique": false
+    },
+    {
+      "data_type": "global_field",
+      "display_name": "Global",
+      "reference_to": "global_field_1",
+      "field_metadata": { "description": "" },
+      "uid": "global_field",
+      "mandatory": false,
+      "multiple": false,
+      "non_localizable": false,
+      "unique": false
+    }
+  ],
+  "created_at": "2025-05-21T07:41:43.448Z",
+  "updated_at": "2025-05-21T07:41:43.448Z",
+  "_version": 1,
+  "inbuilt_class": false,
+  "last_activity": {},
+  "maintain_revisions": true
+}
