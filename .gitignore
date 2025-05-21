@@ -271,3 +271,4 @@ src/main/resources/
 .vscode/settings.json
 .vscode/
 /.vscode/
+.env
