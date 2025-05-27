@@ -24,8 +24,8 @@ import java.util.Map;
  * @author ***REMOVED***
  * @version v1.0.0
  * @see <a href=
- * "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-publish-operation">
- * Bulk Operations Queue </a>
+ *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-publish-operation">
+ *      Bulk Operations Queue </a>
  * @since 2023 -08-23
  */
 public class BulkOperation implements BaseImplementation<BulkOperation> {
@@ -49,7 +49,7 @@ public class BulkOperation implements BaseImplementation<BulkOperation> {
      *
      * @param retrofit the retrofit
      */
-    protected BulkOperation(Retrofit retrofit,Map<String, Object> headers) {
+    protected BulkOperation(Retrofit retrofit, Map<String, Object> headers) {
         this.headers = new HashMap<>();
         this.headers.putAll(headers);
         this.params = new HashMap<>();
@@ -88,9 +88,9 @@ public class BulkOperation implements BaseImplementation<BulkOperation> {
      * @param body The JSON object containing the data to be published.
      * @return Call object for the API request.
      * @see <a
-     * href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-entries-and-assets-in-bulk">
-     * Publish entries and assets in bulk </a>
+     *      href=
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-entries-and-assets-in-bulk">
+     *      Publish entries and assets in bulk </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers in
      * @see #addParam(String, Object) #addParam(String, Object)to add query
      * @since 1.0.0
@@ -130,11 +130,11 @@ public class BulkOperation implements BaseImplementation<BulkOperation> {
      * @param body the body
      * @return Call call
      * @see <a href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-unpublish-operation">Bulk
-     * Unpublish Operation </a>
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#bulk-unpublish-operation">Bulk
+     *      Unpublish Operation </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     * parameters
+     *      parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> unpublish(@NotNull JSONObject body) {
@@ -159,11 +159,11 @@ public class BulkOperation implements BaseImplementation<BulkOperation> {
      * @param body the body
      * @return Call call
      * @see <a href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
-     * Delete Operation </a>
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
+     *      Delete Operation </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     * parameters
+     *      parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> delete(JSONObject body) {
@@ -190,15 +190,60 @@ public class BulkOperation implements BaseImplementation<BulkOperation> {
      * @param body the body
      * @return Call
      * @see <a href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
-     * Delete Operation </a>
+     *      "https://www.contentstack.com/docs/developers/apis/content-management-api/#delete-entries-and-assets-in-bulk">Bulk
+     *      Delete Operation </a>
      * @see #addHeader(String, String) #addHeader(String, String)to add headers
      * @see #addParam(String, Object) #addParam(String, Object)to add query
-     * parameters
+     *      parameters
      * @since 0.1.0
      */
     public Call<ResponseBody> updateWorkflow(@NotNull JSONObject body) {
         return this.service.updateWorkflowDetails(this.headers, this.params, body);
+    }
+    /**
+     * The Add Release items request allows you to add multiple items (entries and
+     * assets) to a Release.
+     * <p>
+     * When executing the API request, you need to provide the Release UID. In the
+     * 'Body' section, you need to provide
+     * the details of the items
+     *
+     * @param jsonBody requestBody for create/add single Item
+     * @return Call
+     */
+    public Call<ResponseBody> addReleaseItems(@NotNull JSONObject jsonBody) {
+        Call<ResponseBody> addItemsCall;
+        this.headers.put("bulk_version", "2.0");
+        addItemsCall = this.service.addBulkItems(this.headers, this.params, jsonBody);
+        this.headers.remove("bulk_version");
+        return addItemsCall;
+    }
+
+    /**
+     * The Update Release items request to Update release items to latest version
+     */
+    public Call<ResponseBody> updateReleaseItems(@NotNull JSONObject jsonBody) {
+        Call<ResponseBody> updateItemsCall;
+        this.headers.put("bulk_version", "2.0");
+        updateItemsCall = this.service.updateBulkItems(this.headers, this.params, jsonBody);
+        this.headers.remove("bulk_version");
+        return updateItemsCall;
+    }
+
+    /**
+     * The Get Job Status request allows you to get the status of a job.
+     * <p>
+     * When executing the API request, you need to provide the job UID.
+     *
+     * @param jobUid the job UID
+     * @return Call
+     */
+    public Call<ResponseBody> jobStatus(@NotNull String jobUid) {
+        Call<ResponseBody> jobStatusCall;
+        this.headers.put("bulk_version", "2.0");
+        jobStatusCall = this.service.getJobStatus(this.headers, this.params, jobUid);
+        this.headers.remove("bulk_version");
+        return jobStatusCall;
     }
 
     /**
@@ -236,7 +281,8 @@ public class BulkOperation implements BaseImplementation<BulkOperation> {
      * location.
      *
      * @param params a {@link HashMap} containing the parameters to be added
-     * @return a new {@link BulkOperation} object with the specified parameters added
+     * @return a new {@link BulkOperation} object with the specified parameters
+     *         added
      * @throws NullPointerException if the params argument is null
      */
     @Override

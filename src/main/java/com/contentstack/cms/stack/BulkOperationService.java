@@ -4,8 +4,11 @@ import okhttp3.ResponseBody;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 import java.util.HashMap;
@@ -36,5 +39,23 @@ public interface BulkOperationService {
             @HeaderMap Map<String, Object> headers,
             @QueryMap HashMap<String, Object> params,
             @Body JSONObject body);
+
+        @POST("bulk/release/items")
+    Call<ResponseBody> addBulkItems(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> params,
+            @Body JSONObject body); //required
+
+    @PUT("bulk/release/update_items")
+    Call<ResponseBody> updateBulkItems(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> params,
+            @Body JSONObject body); //required
+
+    @GET("bulk/jobs/{job_id}")
+    Call<ResponseBody> getJobStatus(
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> params,
+            @Path("job_id") String jobUid); //required
 
 }

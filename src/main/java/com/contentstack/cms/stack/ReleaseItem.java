@@ -244,4 +244,41 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
         return this.service.removeItem(this.headers, this.releaseUid);
     }
 
+    /**
+     * The Deletes a multiple items request deteles multiple items from a Release
+     *
+     * @param jsonBody requestBody for delete Items
+     * @return Call
+     */
+    public Call<ResponseBody> deleteReleaseItems(@NotNull JSONObject jsonBody) {
+        validate();
+        return this.service.deleteItems(this.headers, this.releaseUid, this.params, jsonBody);
+    }
+
+    /**
+     * The Delete a single item request delete single item from a Release
+     *
+     * @param jsonBody requestBody for delete single Item
+     * @return Call
+     */
+    public Call<ResponseBody> deleteReleaseItem(@NotNull JSONObject jsonBody) {
+        validate();
+        return this.service.deleteItem(this.headers, this.releaseUid, this.params, jsonBody);
+    }
+
+    /**
+     * The Move items in a Release request allows you to move one or more items
+     * (entries and/or assets) from one
+     * Release to another.
+     *
+     * @param jsonBody requestBody for move items
+     * @return Call
+     */
+    public Call<ResponseBody> move(@NotNull JSONObject jsonBody) {
+        validate();
+        this.headers.put("release_version", "2.0");
+        Call<ResponseBody> moveCall = this.service.moveItems(this.headers, this.releaseUid, this.params, jsonBody);
+        this.headers.remove("release_version", "2.0");
+        return moveCall;
+    }
 }
