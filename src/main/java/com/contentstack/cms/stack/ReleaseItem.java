@@ -251,11 +251,7 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
      */
     public Call<ResponseBody> deleteReleaseItems(@NotNull JSONObject jsonBody) {
         validate();
-        Call<ResponseBody> deleteCall = this.service.deleteItems(this.headers, this.releaseUid, this.params, jsonBody);
-        if (this.headers.containsKey("release_version")) {
-            this.headers.remove("release_version");
-        }
-        return deleteCall;
+        return this.service.deleteItems(this.headers, this.releaseUid, this.params, jsonBody);
     }
 
     /**
@@ -266,11 +262,7 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
      */
     public Call<ResponseBody> deleteReleaseItem(@NotNull JSONObject jsonBody) {
         validate();
-        Call<ResponseBody> deleteCall = this.service.deleteItem(this.headers, this.releaseUid, this.params, jsonBody);
-        if (this.headers.containsKey("release_version")) {
-            this.headers.remove("release_version");
-        }
-        return deleteCall;
+        return this.service.deleteItem(this.headers, this.releaseUid, this.params, jsonBody);
     }
 
     /**
@@ -283,10 +275,6 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
      */
     public Call<ResponseBody> move(@NotNull JSONObject jsonBody) {
         validate();
-        Call<ResponseBody> moveCall = this.service.moveItems(this.headers, this.releaseUid, this.params, jsonBody);
-        if (this.headers.containsKey("release_version")) {
-            this.headers.remove("release_version");
-        }
-        return moveCall;
+        return this.service.moveItems(this.headers, this.releaseUid, this.params, jsonBody);
     }
 }
