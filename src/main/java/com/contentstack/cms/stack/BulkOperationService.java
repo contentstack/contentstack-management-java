@@ -44,18 +44,18 @@ public interface BulkOperationService {
     Call<ResponseBody> addBulkItems(
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params,
-            @Body JSONObject body); //required
+            @Body JSONObject body);
 
     @PUT("bulk/release/update_items")
     Call<ResponseBody> updateBulkItems(
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params,
-            @Body JSONObject body); //required
+            @Body JSONObject body);
 
     @GET("bulk/jobs/{job_id}")
     Call<ResponseBody> getJobStatus(
             @HeaderMap Map<String, Object> headers,
-            @QueryMap Map<String, Object> params,
-            @Path("job_id") String jobUid); //required
+            @Path("job_id") String jobUid,
+            @QueryMap Map<String, Object> params);
 
 }

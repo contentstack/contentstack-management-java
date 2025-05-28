@@ -241,7 +241,7 @@ public class BulkOperation implements BaseImplementation<BulkOperation> {
     public Call<ResponseBody> jobStatus(@NotNull String jobUid) {
         Call<ResponseBody> jobStatusCall;
         this.headers.put("bulk_version", "2.0");
-        jobStatusCall = this.service.getJobStatus(this.headers, this.params, jobUid);
+        jobStatusCall = this.service.getJobStatus(this.headers, jobUid, this.params);
         this.headers.remove("bulk_version");
         return jobStatusCall;
     }

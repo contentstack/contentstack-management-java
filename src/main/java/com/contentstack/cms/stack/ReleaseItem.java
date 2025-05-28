@@ -30,7 +30,7 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
     protected HashMap<String, Object> params;
     private final String releaseUid;
 
-    protected ReleaseItem(Retrofit retrofit,Map<String, Object> headers, String releaseUid) {
+    protected ReleaseItem(Retrofit retrofit, Map<String, Object> headers, String releaseUid) {
         this.headers = new HashMap<>();
         this.headers.putAll(headers);
         this.params = new HashMap<>();
@@ -42,7 +42,6 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
         if (this.releaseUid == null || this.releaseUid.isEmpty())
             throw new IllegalAccessError("Release Uid can not be null or empty");
     }
-
 
     /**
      * @param key   A string representing the key of the parameter. It cannot be
@@ -252,7 +251,11 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
      */
     public Call<ResponseBody> deleteReleaseItems(@NotNull JSONObject jsonBody) {
         validate();
-        return this.service.deleteItems(this.headers, this.releaseUid, this.params, jsonBody);
+        Call<ResponseBody> deleteCall = this.service.deleteItems(this.headers, this.releaseUid, this.params, jsonBody);
+        if (this.headers.containsKey("release_version")) {
+            this.headers.remove("release_version");
+        }
+        return deleteCall;
     }
 
     /**
@@ -263,7 +266,11 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
      */
     public Call<ResponseBody> deleteReleaseItem(@NotNull JSONObject jsonBody) {
         validate();
-        return this.service.deleteItem(this.headers, this.releaseUid, this.params, jsonBody);
+        Call<ResponseBody> deleteCall = this.service.deleteItem(this.headers, this.releaseUid, this.params, jsonBody);
+        if (this.headers.containsKey("release_version")) {
+            this.headers.remove("release_version");
+        }
+        return deleteCall;
     }
 
     /**
@@ -276,9 +283,10 @@ public class ReleaseItem implements BaseImplementation<ReleaseItem> {
      */
     public Call<ResponseBody> move(@NotNull JSONObject jsonBody) {
         validate();
-        this.headers.put("release_version", "2.0");
         Call<ResponseBody> moveCall = this.service.moveItems(this.headers, this.releaseUid, this.params, jsonBody);
-        this.headers.remove("release_version", "2.0");
+        if (this.headers.containsKey("release_version")) {
+            this.headers.remove("release_version");
+        }
         return moveCall;
     }
 }
