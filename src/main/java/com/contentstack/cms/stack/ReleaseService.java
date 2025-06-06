@@ -79,4 +79,24 @@ public interface ReleaseService {
             @QueryMap Map<String, Object> params,
             @Body JSONObject body);
 
+    @POST("/releases/{source_releaseUid}/items/move")
+    Call<ResponseBody> moveItems(
+            @HeaderMap Map<String, Object> headers,
+            @Path("source_releaseUid") String releaseUid,
+            @QueryMap Map<String, Object> params,
+            @Body JSONObject body);
+
+    @HTTP(method = "DELETE", path = "releases/{release_uid}/items", hasBody = true)
+    Call<ResponseBody> deleteItems(
+            @HeaderMap Map<String, Object> headers,
+            @Path("release_uid") String releaseUid,
+            @QueryMap Map<String, Object> params,
+            @Body JSONObject body);
+
+    @HTTP(method = "DELETE", path = "releases/{release_uid}/item", hasBody = true)
+    Call<ResponseBody> deleteItem(
+            @HeaderMap Map<String, Object> headers,
+            @Path("release_uid") String releaseUid,
+            @QueryMap Map<String, Object> params,
+            @Body JSONObject body);
 }
