@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.6.0
+
+### Jun 09, 2025
+
+- Release 2.0 feature implementation
+
 ## v1.5.3
 
 ### Apr 21, 2025

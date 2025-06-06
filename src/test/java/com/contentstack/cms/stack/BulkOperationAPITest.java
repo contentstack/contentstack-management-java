@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class BulkOperationTest {
+class BulkOperationAPITest {
 
     protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
     protected static String API_KEY = TestClient.API_KEY;
@@ -128,6 +128,39 @@ class BulkOperationTest {
         Assertions.assertEquals(
                 "https://api.contentstack.io/v3/bulk/workflow?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
                 request.url().toString());
+    }
+
+    @Test
+    @Order(8)
+    void testAddBulkItems() {
+        Request request = bulkOperation.addReleaseItems(new JSONObject()).request();
+        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+    }
+
+    @Test
+    @Order(9)
+    void testUpdateBulkItems() {
+        Request request = bulkOperation.updateReleaseItems(new JSONObject()).request();
+        Assertions.assertEquals(3, request.headers().names().size());
+        Assertions.assertEquals("PUT", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+    }
+
+    @Test
+    @Order(10)
+    void testGetJobStatus() {
+        Request request = bulkOperation.jobStatus("jobId").request();
+        Assertions.assertEquals("GET", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("jobs", request.url().pathSegments().get(2));
     }
 
 }
