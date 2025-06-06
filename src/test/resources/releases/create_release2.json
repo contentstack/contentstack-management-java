@@ -1,0 +1,8 @@
+{
+  "release": {
+    "name": "Second release",
+    "description": "Adding release date",
+    "locked": false,
+    "archived": false
+  }
+}
