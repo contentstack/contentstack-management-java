@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.6.1
+
+### Jun 23, 2025
+
+- Snyk fixes
+
 ## v1.6.0
 
 ### Jun 09, 2025
