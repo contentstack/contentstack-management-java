@@ -90,6 +90,18 @@ public class GlobalField implements BaseImplementation<GlobalField> {
     }
 
     /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @return instance of the GlobalField object
+     */
+    public GlobalField removeHeader(@NotNull String key) {
+        this.headers.remove(key);
+        return this;
+    }
+
+    /**
      * @param params The "params" parameter is a HashMap that maps String keys to
      *               Object values. It is
      *               annotated with @NotNull, indicating that it cannot be null.
@@ -155,6 +167,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * </a>
      * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
+     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {
@@ -184,6 +197,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * </a>
      * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
+     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
@@ -216,6 +230,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
+     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
@@ -245,6 +260,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
+     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
@@ -270,6 +286,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * field
      * </a>
      * @see #addHeader(String, String) to add headers
+     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
@@ -298,6 +315,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
+     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> imports(@NotNull JSONObject body) {
@@ -318,10 +336,42 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
+     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> export() {
         validate();
         return this.service.export(this.headers, this.globalFiledUid);
+    }
+
+     /**
+     * <b>Restore a global field </b>
+     * <p>
+     * The <b>Restore a global field</b> request allows you to restore the schema of
+     * a deleted global field.
+     * <p>
+     * When executing the API call, in the <b>URI Parameters</b> section, provide
+     * the unique ID of your global field.
+     *
+     * <b>Note:</b> You need to use either the stack's Management Token or the user
+     * Authtoken (any one is mandatory), along with the stack API key, to make a
+     * valid Content Management API request.
+     * Read more about authentication.
+     *
+     * @param requestBody the request body
+     * @return Call
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#restore-a-global-field">Restore
+     * a global
+     * field
+     *
+     * </a>
+     * @see #addHeader(String, String) to add headers
+     * @see #removeHeader(String) to remove header
+     * @since 0.1.0
+     */
+    public Call<ResponseBody> restore(@NotNull JSONObject requestBody) {
+        validate();
+        return this.service.restore(this.headers, this.globalFiledUid, requestBody);
     }
 }
