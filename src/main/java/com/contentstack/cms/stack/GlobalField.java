@@ -37,7 +37,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
     protected String globalFiledUid;
-
+    protected String apiVersion;
     protected GlobalField(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
         this.headers.putAll(headers);
@@ -85,7 +85,11 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     @Override
     public GlobalField addHeader(@NotNull String key, @NotNull String value) {
-        this.headers.put(key, value);
+        if ("api_version".equalsIgnoreCase(key)) {
+            this.apiVersion = value;
+        } else {
+            this.headers.put(key, value);
+        }
         return this;
     }
 
@@ -122,6 +126,10 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     @Override
     public GlobalField addHeaders(@NotNull HashMap<String, String> headers) {
+        if (headers.containsKey("api_version")) {
+            this.apiVersion = headers.get("api_version");
+            headers.remove("api_version");
+        }
         this.headers.putAll(headers);
         return this;
     }
@@ -146,6 +154,21 @@ public class GlobalField implements BaseImplementation<GlobalField> {
         this.params.clear();
         return this;
     }
+    /*
+     * For Nested Global Fields the api_version is set to 3.2 which needs 
+     * to removed from the headers inorder for other modules to function correctly
+     */
+
+    /**
+     * Returns a copy of the headers with api_version set if needed.
+     */
+    private Map<String, Object> getRequestHeaders() {
+        Map<String, Object> requestHeaders = new HashMap<>(this.headers);
+        if (this.apiVersion != null) {
+            requestHeaders.put("api_version", this.apiVersion);
+        }
+        return requestHeaders;
+    }
 
     /**
      * <b>Get All Global Fields</b>
@@ -167,11 +190,10 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * </a>
      * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
-     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {
-        return this.service.fetch(this.headers, this.params);
+        return this.service.fetch(getRequestHeaders(), this.params);
     }
 
     /**
@@ -197,12 +219,11 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * </a>
      * @see #addHeader(String, String) to add headers
      * @see #addParam(String, Object) to add query parameters
-     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> fetch() {
         validate();
-        return this.service.single(this.headers, this.globalFiledUid, this.params);
+        return this.service.single(getRequestHeaders(), this.globalFiledUid, this.params);
     }
 
     /**
@@ -230,11 +251,10 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
-     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
-        return this.service.create(this.headers, requestBody);
+        return this.service.create(getRequestHeaders(), requestBody);
     }
 
     /**
@@ -260,12 +280,11 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
-     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
         validate();
-        return this.service.update(this.headers, this.globalFiledUid, requestBody);
+        return this.service.update(getRequestHeaders(), this.globalFiledUid, requestBody);
     }
 
     /**
@@ -286,12 +305,11 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * field
      * </a>
      * @see #addHeader(String, String) to add headers
-     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
         validate();
-        return this.service.delete(this.headers, this.globalFiledUid);
+        return this.service.delete(getRequestHeaders(), this.globalFiledUid);
     }
 
     /**
@@ -315,11 +333,10 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
-     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> imports(@NotNull JSONObject body) {
-        return this.service.imports(this.headers, body);
+        return this.service.imports(getRequestHeaders(), body);
     }
 
     /**
@@ -336,15 +353,14 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
-     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> export() {
         validate();
-        return this.service.export(this.headers, this.globalFiledUid);
+        return this.service.export(getRequestHeaders(), this.globalFiledUid);
     }
 
-     /**
+    /**
      * <b>Restore a global field </b>
      * <p>
      * The <b>Restore a global field</b> request allows you to restore the schema of
@@ -367,11 +383,10 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      *
      * </a>
      * @see #addHeader(String, String) to add headers
-     * @see #removeHeader(String) to remove header
      * @since 0.1.0
      */
     public Call<ResponseBody> restore(@NotNull JSONObject requestBody) {
         validate();
-        return this.service.restore(this.headers, this.globalFiledUid, requestBody);
+        return this.service.restore(getRequestHeaders(), this.globalFiledUid, requestBody);
     }
 }
