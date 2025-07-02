@@ -187,7 +187,7 @@ class GlobalFieldAPITest {
         globalField = stack.globalField().addHeader("api_version", "3.2");
         Request request = globalField.create(requestBody).request();
         globalField.removeHeader("api_version");
-        
+
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(2, request.url().pathSegments().size());
@@ -201,7 +201,7 @@ class GlobalFieldAPITest {
     void testFetchSingleNestedGlobalField() {
         globalField = stack.globalField(globalFieldUid).addHeader("api_version", "3.2");
         Request request = globalField.fetch().request();
-        
+
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(3, request.url().pathSegments().size());
@@ -217,7 +217,7 @@ class GlobalFieldAPITest {
         globalField = stack.globalField(globalFieldUid).addHeader("api_version", "3.2");
         globalField.addParam("include_schema", true);
         Request request = globalField.fetch().request();
-        
+
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(3, request.url().pathSegments().size());
@@ -234,7 +234,7 @@ class GlobalFieldAPITest {
         globalField = stack.globalField(globalFieldUid).addHeader("api_version", "3.2");
         JSONObject requestBody = Utils.readJson("globalfield/nested_global_field_update.json");
         Request request = globalField.update(requestBody).request();
-        
+
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(3, request.url().pathSegments().size());
@@ -249,7 +249,7 @@ class GlobalFieldAPITest {
     void testFindAllNestedGlobalField() {
         globalField = stack.globalField().addHeader("api_version", "3.2");
         Request request = globalField.find().request();
-        
+
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(2, request.url().pathSegments().size());
@@ -266,7 +266,7 @@ class GlobalFieldAPITest {
         globalField.addParam("include_global_field_schema", true);
 
         Request request = globalField.find().request();
-        
+
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(2, request.url().pathSegments().size());
@@ -280,7 +280,7 @@ class GlobalFieldAPITest {
     void testDeleteNestedGlobalField() {
         globalField = stack.globalField(globalFieldUid).addHeader("api_version", "3.2");
         Request request = globalField.delete().request();
-        
+
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(3, request.url().pathSegments().size());
@@ -297,7 +297,7 @@ class GlobalFieldAPITest {
         globalField = stack.globalField().addHeader("api_version", "3.2");
         JSONObject requestBody = Utils.readJson("globalfield/nested_global_field_import.json");
         Request request = globalField.imports(requestBody).request();
-        
+
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(3, request.url().pathSegments().size());
@@ -312,7 +312,7 @@ class GlobalFieldAPITest {
     void testExportNestedGlobalField() {
         globalField = stack.globalField(globalFieldUid).addHeader("api_version", "3.2");
         Request request = globalField.export().request();
-        
+
         Assertions.assertEquals("GET", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(4, request.url().pathSegments().size());
@@ -322,7 +322,7 @@ class GlobalFieldAPITest {
         Assertions.assertEquals("export", request.url().pathSegments().get(3));
         Assertions.assertNull(request.url().encodedQuery());
     }
-    
+
     // @Order(19)
     // @Test
     // void testRestoreNestedGlobalField() {
@@ -338,8 +338,6 @@ class GlobalFieldAPITest {
     //     Assertions.assertEquals("restore", request.url().pathSegments().get(3));
     //     Assertions.assertNull(request.url().encodedQuery());
     // }
-
-
     @Test
     void testApiVersionHeaderIsSet() {
         HashMap<String, Object> headers = new HashMap<>();
@@ -357,6 +355,7 @@ class GlobalFieldAPITest {
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NestedGlobalFieldTests {
+
         GlobalField nestedGlobalField;
         String nestedUid = "nested_global_field";
         String apiVersion = "3.2";
@@ -387,7 +386,7 @@ class GlobalFieldAPITest {
 
         @Test
         @Order(2)
-        void testGetNestedGlobalField() throws IOException{ 
+        void testGetNestedGlobalField() throws IOException {
             nestedGlobalField.addParam("include_global_fields", true);
             nestedGlobalField.addParam("include_validation_keys", true);
             Request request = nestedGlobalField.fetch().request();
@@ -419,7 +418,7 @@ class GlobalFieldAPITest {
             JsonObject responseBody = Utils.toJson(response).getAsJsonObject();
             JsonObject globalField = responseBody.getAsJsonObject("global_field");
             Assertions.assertEquals("Nested Global Field", globalField.get("title").getAsString());
-            
+
         }
 
         @Test
@@ -435,7 +434,38 @@ class GlobalFieldAPITest {
             JsonObject responseBody = Utils.toJson(response).getAsJsonObject();
             Assertions.assertEquals("Global Field deleted successfully.", responseBody.get("notice").getAsString());
         }
-    }
 
+        @Test
+        void testApiVersionHeaderIsolation() throws IOException {
+            // Set api_version via addHeader (should not pollute shared headers)
+            GlobalField gfWithApiVersion = new GlobalField(stack.client, stack.headers, "feature");
+            gfWithApiVersion.addHeader("api_version", apiVersion);
+            // Before request, shared headers should NOT have api_version
+            Assertions.assertFalse(stack.headers.containsKey("api_version"),
+                    "api_version should not be present in shared headers before GlobalField request");
+            // Make a request (should use a copy of headers internally)
+            Request rq1 = gfWithApiVersion.find().request();
+
+            // After request, shared headers should STILL NOT have api_version
+            Assertions.assertFalse(stack.headers.containsKey("api_version"),
+                    "api_version should not be present in shared headers after GlobalField request");
+            // Now, create a ContentType and make a request
+            ContentType ct = stack.contentType("author");
+            Request rq2 = ct.fetch().request();
+            JSONObject requestBody = Utils.readJson("mockcontenttype/create.json");
+            Response<ResponseBody> resp1 = stack.contentType().create(requestBody).execute();
+            if (resp1.isSuccessful()) {
+                System.out.println(resp1.body().string());
+            } else {
+                System.out.println(resp1.errorBody().string());
+            }
+            // Again, shared headers should not have api_version
+            Assertions.assertFalse(stack.headers.containsKey("api_version"),
+                    "api_version should not be present in shared headers after ContentType request");
+            // Also, ContentType's request should not have api_version header
+            Assertions.assertNull(rq2.header("api_version"),
+                    "api_version should not be present in ContentType request headers");
+        }
+    }
 
 }
