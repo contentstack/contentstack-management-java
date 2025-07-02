@@ -453,17 +453,14 @@ class GlobalFieldAPITest {
             ContentType ct = stack.contentType("author");
             Request rq2 = ct.fetch().request();
             JSONObject requestBody = Utils.readJson("mockcontenttype/create.json");
-            Response<ResponseBody> resp1 = stack.contentType().create(requestBody).execute();
-            if (resp1.isSuccessful()) {
-                System.out.println(resp1.body().string());
-            } else {
-                System.out.println(resp1.errorBody().string());
-            }
+            Request rq3 = ct.create(requestBody).request();
             // Again, shared headers should not have api_version
             Assertions.assertFalse(stack.headers.containsKey("api_version"),
                     "api_version should not be present in shared headers after ContentType request");
             // Also, ContentType's request should not have api_version header
             Assertions.assertNull(rq2.header("api_version"),
+                    "api_version should not be present in ContentType request headers");
+            Assertions.assertNull(rq3.header("api_version"),
                     "api_version should not be present in ContentType request headers");
         }
     }
