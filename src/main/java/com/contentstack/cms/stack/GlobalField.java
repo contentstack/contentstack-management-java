@@ -85,7 +85,11 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     @Override
     public GlobalField addHeader(@NotNull String key, @NotNull String value) {
-        this.headers.put(key, value);
+        if ("api_version".equalsIgnoreCase(key)) {
+            this.apiVersion = value;
+        } else {
+            this.headers.put(key, value);
+        }
         return this;
     }
 
@@ -122,6 +126,10 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     @Override
     public GlobalField addHeaders(@NotNull HashMap<String, String> headers) {
+        if (headers.containsKey("api_version")) {
+            this.apiVersion = headers.get("api_version");
+            headers.remove("api_version");
+        }
         this.headers.putAll(headers);
         return this;
     }
