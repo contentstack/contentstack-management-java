@@ -1,0 +1,25 @@
+{
+  "title": "global_field_1",
+  "uid": "global_field_1",
+  "description": "",
+  "schema": [
+    {
+      "data_type": "text",
+      "display_name": "Single Line Textbox line",
+      "uid": "single_line",
+      "field_metadata": { "description": "", "default_value": "" },
+      "format": "",
+      "error_messages": { "format": "" },
+      "mandatory": false,
+      "multiple": false,
+      "non_localizable": false,
+      "unique": false
+    }
+  ],
+  "created_at": "",
+  "updated_at": "",
+  "_version": 1,
+  "inbuilt_class": false,
+  "last_activity": {},
+  "maintain_revisions": true
+}

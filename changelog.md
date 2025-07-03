@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.0
+
+### Jul 07, 2025
+
+- Nested Global Field Support added
+- Snyk fixes
+
 ## v1.6.1
 
 ### Jun 23, 2025

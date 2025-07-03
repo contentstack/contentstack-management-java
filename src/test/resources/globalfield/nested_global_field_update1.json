@@ -1,0 +1,59 @@
+{
+    "global_field": {
+        "title": "Nested Global Field",
+        "uid": "nested_global_field",
+        "description": "",
+        "schema": [
+            {
+                "data_type": "text",
+                "display_name": "Single Line Textbox",
+                "uid": "single_line",
+                "field_metadata": {
+                    "description": "",
+                    "default_value": "",
+                    "version": 3
+                },
+                "format": "",
+                "error_messages": {
+                    "format": ""
+                },
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+            },
+            {
+                "data_type": "global_field",
+                "display_name": "SEO",
+                "reference_to": "seo",
+                "field_metadata": {
+                    "description": ""
+                },
+                "uid": "seo",
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+            },
+            {
+                "data_type": "global_field",
+                "display_name": "feature",
+                "reference_to": "feature",
+                "field_metadata": {
+                    "description": ""
+                },
+                "uid": "feature",
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+            }
+        ]
+    }
+}

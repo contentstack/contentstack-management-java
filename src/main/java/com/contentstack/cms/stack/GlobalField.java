@@ -37,7 +37,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
     protected String globalFiledUid;
-
+    protected String apiVersion;
     protected GlobalField(Retrofit retrofit,Map<String, Object> headers) {
         this.headers = new HashMap<>();
         this.headers.putAll(headers);
@@ -85,7 +85,23 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     @Override
     public GlobalField addHeader(@NotNull String key, @NotNull String value) {
-        this.headers.put(key, value);
+        if ("api_version".equalsIgnoreCase(key)) {
+            this.apiVersion = value;
+        } else {
+            this.headers.put(key, value);
+        }
+        return this;
+    }
+
+    /**
+     * @param key   The key parameter is a string that represents the name or
+     *              identifier of the header.
+     *              It is used to specify the type of information being sent in the
+     *              header.
+     * @return instance of the GlobalField object
+     */
+    public GlobalField removeHeader(@NotNull String key) {
+        this.headers.remove(key);
         return this;
     }
 
@@ -110,6 +126,10 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     @Override
     public GlobalField addHeaders(@NotNull HashMap<String, String> headers) {
+        if (headers.containsKey("api_version")) {
+            this.apiVersion = headers.get("api_version");
+            headers.remove("api_version");
+        }
         this.headers.putAll(headers);
         return this;
     }
@@ -133,6 +153,21 @@ public class GlobalField implements BaseImplementation<GlobalField> {
     protected GlobalField clearParams() {
         this.params.clear();
         return this;
+    }
+    /*
+     * For Nested Global Fields the api_version is set to 3.2 which needs 
+     * to removed from the headers inorder for other modules to function correctly
+     */
+
+    /**
+     * Returns a copy of the headers with api_version set if needed.
+     */
+    private Map<String, Object> getRequestHeaders() {
+        Map<String, Object> requestHeaders = new HashMap<>(this.headers);
+        if (this.apiVersion != null) {
+            requestHeaders.put("api_version", this.apiVersion);
+        }
+        return requestHeaders;
     }
 
     /**
@@ -158,7 +193,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * @since 0.1.0
      */
     public Call<ResponseBody> find() {
-        return this.service.fetch(this.headers, this.params);
+        return this.service.fetch(getRequestHeaders(), this.params);
     }
 
     /**
@@ -188,7 +223,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     public Call<ResponseBody> fetch() {
         validate();
-        return this.service.single(this.headers, this.globalFiledUid, this.params);
+        return this.service.single(getRequestHeaders(), this.globalFiledUid, this.params);
     }
 
     /**
@@ -219,7 +254,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * @since 0.1.0
      */
     public Call<ResponseBody> create(@NotNull JSONObject requestBody) {
-        return this.service.create(this.headers, requestBody);
+        return this.service.create(getRequestHeaders(), requestBody);
     }
 
     /**
@@ -249,7 +284,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     public Call<ResponseBody> update(@NotNull JSONObject requestBody) {
         validate();
-        return this.service.update(this.headers, this.globalFiledUid, requestBody);
+        return this.service.update(getRequestHeaders(), this.globalFiledUid, requestBody);
     }
 
     /**
@@ -274,7 +309,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     public Call<ResponseBody> delete() {
         validate();
-        return this.service.delete(this.headers, this.globalFiledUid);
+        return this.service.delete(getRequestHeaders(), this.globalFiledUid);
     }
 
     /**
@@ -301,7 +336,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      * @since 0.1.0
      */
     public Call<ResponseBody> imports(@NotNull JSONObject body) {
-        return this.service.imports(this.headers, body);
+        return this.service.imports(getRequestHeaders(), body);
     }
 
     /**
@@ -322,6 +357,36 @@ public class GlobalField implements BaseImplementation<GlobalField> {
      */
     public Call<ResponseBody> export() {
         validate();
-        return this.service.export(this.headers, this.globalFiledUid);
+        return this.service.export(getRequestHeaders(), this.globalFiledUid);
+    }
+
+    /**
+     * <b>Restore a global field </b>
+     * <p>
+     * The <b>Restore a global field</b> request allows you to restore the schema of
+     * a deleted global field.
+     * <p>
+     * When executing the API call, in the <b>URI Parameters</b> section, provide
+     * the unique ID of your global field.
+     *
+     * <b>Note:</b> You need to use either the stack's Management Token or the user
+     * Authtoken (any one is mandatory), along with the stack API key, to make a
+     * valid Content Management API request.
+     * Read more about authentication.
+     *
+     * @param requestBody the request body
+     * @return Call
+     * @see <a href=
+     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#restore-a-global-field">Restore
+     * a global
+     * field
+     *
+     * </a>
+     * @see #addHeader(String, String) to add headers
+     * @since 0.1.0
+     */
+    public Call<ResponseBody> restore(@NotNull JSONObject requestBody) {
+        validate();
+        return this.service.restore(getRequestHeaders(), this.globalFiledUid, requestBody);
     }
 }
