@@ -46,4 +46,10 @@ public interface GlobalFieldService {
     Call<ResponseBody> export(
             @HeaderMap Map<String, Object> headers,
             @Path("global_field_uid") String globalFieldUid);
+
+    @PUT("global_fields/{global_field_uid}/restore")
+    Call<ResponseBody> restore(
+            @HeaderMap Map<String, Object> headers,
+            @Path("global_field_uid") String globalFieldUid,
+            @Body JSONObject body);
 }
