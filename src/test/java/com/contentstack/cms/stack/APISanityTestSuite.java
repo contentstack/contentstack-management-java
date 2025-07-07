@@ -18,7 +18,8 @@ package com.contentstack.cms.stack;
          RoleAPITest.class,
          StackAPITest.class,
          TokenAPITest.class,
-         OrgApiTests.class
+         OrgApiTests.class,
+         GlobalFieldAPITest.class
 
  })
  public class APISanityTestSuite {
