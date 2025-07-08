@@ -227,10 +227,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-                     <!-- <includes>
+                     <includes>
                          <include>**/*TestSuite.java</include>
                      </includes>
-                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory> -->
+                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory> 
                      <skipTests>true</skipTests>
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
