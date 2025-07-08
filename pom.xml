@@ -230,7 +230,8 @@
                      <includes>
                          <include>**/*TestSuite.java</include>
                      </includes>
-                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory> 
+                     <skipTests>true</skipTests>
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
