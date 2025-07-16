@@ -1,12 +1,9 @@
 name: Publish package to the Maven Central Repository
 
 on:
-  push:
-    branches:
-      - fix/DX-3251-release-workflow-fix
-  # release:
-  #   types:
-  #     - created
+  release:
+    types:
+      - created
 jobs:
   publish-maven:
     runs-on: ubuntu-latest
