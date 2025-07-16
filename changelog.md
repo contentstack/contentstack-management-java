@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.1
+
+### Jul 21, 2025
+
+- FileUpload method fix
+
 ## v1.7.0
 
 ### Jul 07, 2025
