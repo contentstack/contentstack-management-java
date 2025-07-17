@@ -11,6 +11,12 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
+import com.contentstack.cms.stack.FileUploader;
+import org.junit.jupiter.api.Test;
+import java.io.File;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("API")
 class AssetAPITest {
@@ -358,4 +364,19 @@ class AssetAPITest {
         Assertions.assertEquals("https://api.contentstack.io/v3/assets?folder=test_folder&query={parent_uid%3Dparent_uid,%20is_dir%3Dtrue}&include_folders=true", request.url().toString());
     }
 
+    @Test
+    @Disabled("disabled to avoid unnecessary asset creation, Tested working fine")
+    void uploadFile() throws Exception {
+        Contentstack contentstack = new Contentstack.Builder().build();
+        Stack stack = contentstack.stack(API_KEY, MANAGEMENT_TOKEN);
+        Asset asset = stack.asset();
+        String fileName = "/Users/reeshika.hosmani/Downloads/surf-svgrepo-com.svg", parentFolder = "bltd1150f1f7d9411e5", title = "Vacation icon";
+        String[] tags = {"icon"};
+        Response<ResponseBody> response = asset.uploadAsset(fileName,parentFolder,title,"",tags).execute();
+        if(response.isSuccessful()){
+            System.out.println("uploaded asset successfully:" + response.body().string());
+        } else {
+            System.out.println("Error in uploading" + response.errorBody().string());
+        }
+    }
 }
