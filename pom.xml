@@ -7,7 +7,7 @@
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
@@ -61,23 +61,23 @@
         </developer>
     </developers>
 
-    <distributionManagement>
+    <!-- <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
             <name>Apache Maven Packages Snapshot</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-        <!--        <snapshotRepository>-->
-        <!--            <id>github</id>-->
-        <!--            <name>GitHub Apache Maven Packages</name>-->
-        <!--            <url>https://maven.pkg.github.com/contentstack/contentstack-management-java</url>-->
-        <!--        </snapshotRepository> -->
+               <snapshotRepository>
+                   <id>github</id>
+                   <name>GitHub Apache Maven Packages</name>
+                  <url>https://maven.pkg.github.com/contentstack/contentstack-management-java</url>
+               </snapshotRepository> 
         <repository>
             <id>ossrh</id>
             <name>Apache Maven Packages Release</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement> -->
 
     <properties>
         <sdk.version>1.0.0</sdk.version>
@@ -100,7 +100,6 @@
         <maven-site-plugin.version>3.3</maven-site-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     </properties>
 
@@ -338,14 +337,14 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${nexus-staging-maven-plugin.version}</version>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.8.0</version> <!-- or latest -->
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                    <waitUntil>published</waitUntil>
                 </configuration>
             </plugin>
             <plugin>
