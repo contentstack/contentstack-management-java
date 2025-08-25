@@ -132,7 +132,7 @@ public class TaxonomyAPITest {
     @Test
     void createTerm() throws IOException {
         terms.clearParams();
-        JSONObject term = Utils.readJson("mockTaxonomy/createTerm.json");
+        JSONObject term = Utils.readJson("mocktaxonomy/createTerm.json");
         Request request = terms.create(term).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
@@ -188,7 +188,7 @@ public class TaxonomyAPITest {
 
     @Test
     void updateTerm(){
-        JSONObject Newterm = Utils.readJson("mockTaxonomy/updateTerm.json");
+        JSONObject Newterm = Utils.readJson("mocktaxonomy/updateTerm.json");
         Request request = terms.update(_uid,Newterm).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
