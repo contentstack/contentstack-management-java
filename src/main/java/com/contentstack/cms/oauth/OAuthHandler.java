@@ -51,6 +51,7 @@ public class OAuthHandler {
 
         // Validate config before proceeding
         config.validate();
+        this.state = generateCodeVerifier();
         
         // Generate PKCE parameters if needed
         if (config.isPkceEnabled()) {
@@ -104,7 +105,7 @@ public class OAuthHandler {
     private void generatePkceParameters() {
         this.codeVerifier = generateCodeVerifier();
         this.codeChallenge = generateCodeChallenge(this.codeVerifier);
-        this.state = generateCodeVerifier(); // Use same method for state
+     
     }
 
     /**
