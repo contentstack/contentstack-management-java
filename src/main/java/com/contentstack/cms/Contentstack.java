@@ -1,32 +1,42 @@
 package com.contentstack.cms;
 
-import com.contentstack.cms.core.AuthInterceptor;
-import com.contentstack.cms.core.Util;
-import com.contentstack.cms.models.Error;
-import com.contentstack.cms.models.LoginDetails;
-import com.contentstack.cms.organization.Organization;
-import com.contentstack.cms.stack.Stack;
-import com.contentstack.cms.user.User;
-import com.google.gson.Gson;
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
-import org.jetbrains.annotations.NotNull;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 import java.io.IOException;
 import java.net.Proxy;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import static com.contentstack.cms.core.Util.*;
+import org.jetbrains.annotations.NotNull;
+
+import com.contentstack.cms.core.AuthInterceptor;
+import com.contentstack.cms.core.Util;
+import static com.contentstack.cms.core.Util.API_KEY;
+import static com.contentstack.cms.core.Util.AUTHORIZATION;
+import static com.contentstack.cms.core.Util.BRANCH;
+import static com.contentstack.cms.core.Util.ILLEGAL_USER;
+import static com.contentstack.cms.core.Util.PLEASE_LOGIN;
+import com.contentstack.cms.models.Error;
+import com.contentstack.cms.models.LoginDetails;
+import com.contentstack.cms.models.OAuthConfig;
+import com.contentstack.cms.models.OAuthTokens;
+import com.contentstack.cms.oauth.OAuthHandler;
+import com.contentstack.cms.oauth.OAuthInterceptor;
+import com.contentstack.cms.organization.Organization;
+import com.contentstack.cms.stack.Stack;
+import com.contentstack.cms.user.User;
+import com.google.gson.Gson;
+
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * <b>Contentstack Java Management SDK</b>
@@ -41,7 +51,7 @@ import static com.contentstack.cms.core.Util.*;
  */
 public class Contentstack {
 
-    public final Logger logger = Logger.getLogger(Contentstack.class.getName());
+    public static final Logger logger = Logger.getLogger(Contentstack.class.getName());
     protected final String host;
     protected final String port;
     protected final String version;
@@ -51,6 +61,8 @@ public class Contentstack {
     protected final Boolean retryOnFailure;
     protected final Proxy proxy;
     protected AuthInterceptor interceptor;
+    protected OAuthInterceptor oauthInterceptor;
+    protected OAuthHandler oauthHandler;
     protected String[] earlyAccess;
     protected User user;
 
@@ -201,15 +213,20 @@ public class Contentstack {
 
     private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
         if (loginResponse.isSuccessful()) {
-            assert loginResponse.body() != null;
-            // logger.info(loginResponse.body().getNotice());
-            this.authtoken = loginResponse.body().getUser().getAuthtoken();
-            this.interceptor.setAuthtoken(this.authtoken);
+            LoginDetails loginDetails = loginResponse.body();
+            if (loginDetails != null && loginDetails.getUser() != null) {
+                this.authtoken = loginDetails.getUser().getAuthtoken();
+                if (this.interceptor != null) {
+                    this.interceptor.setAuthtoken(this.authtoken);
+                }
+            }
         } else {
-            assert loginResponse.errorBody() != null;
-            String errorJsonString = loginResponse.errorBody().string();
-            logger.info(errorJsonString);
-            new Gson().fromJson(errorJsonString, Error.class);
+            ResponseBody errorBody = loginResponse.errorBody();
+            if (errorBody != null) {
+                String errorJsonString = errorBody.string();
+                logger.info(errorJsonString);
+                new Gson().fromJson(errorJsonString, Error.class);
+            }
         }
     }
 
@@ -435,10 +452,94 @@ public class Contentstack {
     }
 
     /**
-     * Instantiates a new Contentstack.
-     *
-     * @param builder the builder
+     * Get the OAuth authorization URL for the user to visit
+     * @return Authorization URL string
+     * @throws IllegalStateException if OAuth is not configured
      */
+    public String getOAuthAuthorizationUrl() {
+        if (!isOAuthConfigured()) {
+            throw new IllegalStateException("OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()");
+        }
+        return oauthHandler.authorize();
+    }
+
+    /**
+     * Exchange OAuth authorization code for tokens
+     * @param code Authorization code from OAuth callback
+     * @return CompletableFuture containing OAuth tokens
+     * @throws IllegalStateException if OAuth is not configured
+     */
+    public CompletableFuture<OAuthTokens> exchangeOAuthCode(String code) {
+        if (!isOAuthConfigured()) {
+            throw new IllegalStateException("OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()");
+        }
+        return oauthHandler.exchangeCodeForToken(code);
+    }
+
+    /**
+     * Refresh the OAuth access token
+     * @return CompletableFuture containing new OAuth tokens
+     * @throws IllegalStateException if OAuth is not configured or no refresh token available
+     */
+    public CompletableFuture<OAuthTokens> refreshOAuthToken() {
+        if (!isOAuthConfigured()) {
+            throw new IllegalStateException("OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()");
+        }
+        return oauthHandler.refreshAccessToken();
+    }
+
+    /**
+     * Get the current OAuth tokens
+     * @return Current OAuth tokens or null if not available
+     */
+    public OAuthTokens getOAuthTokens() {
+        return oauthHandler != null ? oauthHandler.getTokens() : null;
+    }
+
+    /**
+     * Check if we have valid OAuth tokens
+     * @return true if we have valid tokens
+     */
+    public boolean hasValidOAuthTokens() {
+        return oauthInterceptor != null && oauthInterceptor.hasValidTokens();
+    }
+
+    /**
+     * Check if OAuth is configured
+     * @return true if OAuth is configured
+     */
+    public boolean isOAuthConfigured() {
+        return oauthInterceptor != null && oauthInterceptor.isOAuthConfigured();
+    }
+
+    /**
+     * Get the OAuth handler instance
+     * @return OAuth handler or null if not configured
+     */
+    public OAuthHandler getOAuthHandler() {
+        return oauthHandler;
+    }
+
+    /**
+     * Logout from OAuth session and optionally revoke authorization
+     * @param revokeAuthorization If true, revokes the OAuth authorization
+     * @return CompletableFuture that completes when logout is done
+     */
+    public CompletableFuture<Void> oauthLogout(boolean revokeAuthorization) {
+        if (!isOAuthConfigured()) {
+            throw new IllegalStateException("OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()");
+        }
+        return oauthHandler.logout(revokeAuthorization);
+    }
+
+    /**
+     * Logout from OAuth session without revoking authorization
+     * @return CompletableFuture that completes when logout is done
+     */
+    public CompletableFuture<Void> oauthLogout() {
+        return oauthLogout(false);
+    }
+
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
         this.port = builder.port;
@@ -449,6 +550,8 @@ public class Contentstack {
         this.retryOnFailure = builder.retry;
         this.proxy = builder.proxy;
         this.interceptor = builder.authInterceptor;
+        this.oauthInterceptor = builder.oauthInterceptor;
+        this.oauthHandler = builder.oauthHandler;
         this.earlyAccess = builder.earlyAccess;
     }
 
@@ -462,6 +565,9 @@ public class Contentstack {
          */
         protected Proxy proxy;
         private AuthInterceptor authInterceptor;
+        private OAuthInterceptor oauthInterceptor;
+        private OAuthConfig oauthConfig;
+        private OAuthHandler oauthHandler;
 
         private String authtoken; // authtoken for client
         private String[] earlyAccess;
@@ -608,6 +714,49 @@ public class Contentstack {
             return this;
         }
 
+        /**
+         * Sets OAuth configuration for the client
+         * @param config OAuth configuration
+         * @return Builder instance
+         */
+        public Builder setOAuthConfig(OAuthConfig config) {
+            this.oauthConfig = config;
+            return this;
+        }
+
+        /**
+         * Configures OAuth with client credentials (traditional flow)
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param clientSecret Client secret
+         * @param redirectUri Redirect URI
+         * @return Builder instance
+         */
+        public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri) {
+            this.oauthConfig = OAuthConfig.builder()
+                .appId(appId)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .redirectUri(redirectUri)
+                .build();
+            return this;
+        }
+
+        /**
+         * Configures OAuth with PKCE (no client secret)
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param redirectUri Redirect URI
+         * @return Builder instance
+         */
+        public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri) {
+            this.oauthConfig = OAuthConfig.builder()
+                .appId(appId)
+                .clientId(clientId)
+                .redirectUri(redirectUri)
+                .build();
+            return this;
+        }
 
         public Builder earlyAccess(String[] earlyAccess) {
             this.earlyAccess = earlyAccess;
@@ -631,18 +780,41 @@ public class Contentstack {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient(contentstack, this.retry)).build();
             contentstack.instance = this.instance;
+            
+            // Initialize OAuth if configured
+            if (this.oauthConfig != null) {
+                this.oauthHandler = contentstack.oauthHandler = new OAuthHandler(httpClient(contentstack, this.retry), this.oauthConfig);
+                this.oauthInterceptor = contentstack.oauthInterceptor = new OAuthInterceptor(this.oauthHandler);
+                if (this.earlyAccess != null) {
+                    this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
+                }
+            }
         }
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
-            this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
-            return new OkHttpClient.Builder()
+            OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .connectionPool(this.connectionPool)
-                    .addInterceptor(this.authInterceptor)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
                     .connectTimeout(Duration.ofSeconds(this.timeout))
-                    .retryOnConnectionFailure(retryOnFailure)
-                    .build();
+                    .retryOnConnectionFailure(retryOnFailure);
+
+            // Add either OAuth or traditional auth interceptor
+            if (this.oauthConfig != null) {
+                if (this.oauthInterceptor == null) {
+                    this.oauthHandler = new OAuthHandler(builder.build(), this.oauthConfig);
+                    this.oauthInterceptor = new OAuthInterceptor(this.oauthHandler);
+                    if (this.earlyAccess != null) {
+                        this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
+                    }
+                }
+                builder.addInterceptor(this.oauthInterceptor);
+            } else {
+                this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
+                builder.addInterceptor(this.authInterceptor);
+            }
+
+            return builder.build();
         }
 
         private HttpLoggingInterceptor logger() {
