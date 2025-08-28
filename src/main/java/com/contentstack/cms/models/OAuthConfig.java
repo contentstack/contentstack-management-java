@@ -74,7 +74,7 @@ public class OAuthConfig {
             hostname = hostname.replace("api", "app");
         }
         
-        return "https://" + hostname + "/#!/apps/oauth/authorize";
+        return "https://" + hostname + "/apps/oauth/authorize";
     }
 
     /**
