@@ -51,11 +51,12 @@ public class OAuthHandler {
 
         // Validate config before proceeding
         config.validate();
-        this.state = generateCodeVerifier();
         
-        // Generate PKCE parameters if needed
-        if (config.isPkceEnabled()) {
-            generatePkceParameters();
+        // Only generate PKCE codeVerifier if clientSecret is not provided
+        if (config.getClientSecret() == null || config.getClientSecret().trim().isEmpty()) {
+            this.codeVerifier = generateCodeVerifier();
+            // codeChallenge will be generated during authorize()
+            this.codeChallenge = null;
         }
     }
 
@@ -72,13 +73,13 @@ public class OAuthHandler {
      * @return A random URL-safe string between 43-128 characters
      */
     private String generateCodeVerifier() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] randomBytes = new byte[32];
-        secureRandom.nextBytes(randomBytes);
-        
-        return Base64.getUrlEncoder()
-                .withoutPadding()
-                .encodeToString(randomBytes);
+        final String charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+        SecureRandom random = new SecureRandom();
+        StringBuilder verifier = new StringBuilder();
+        for (int i = 0; i < 128; i++) {
+            verifier.append(charset.charAt(random.nextInt(charset.length())));
+        }
+        return verifier.toString();
     }
 
     /**
@@ -91,9 +92,11 @@ public class OAuthHandler {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(verifier.getBytes(StandardCharsets.UTF_8));
             
-            return Base64.getUrlEncoder()
-                    .withoutPadding()
-                    .encodeToString(hash);
+            String base64String = Base64.getEncoder().encodeToString(hash);
+            return base64String
+                    .replace('+', '-')
+                    .replace('/', '_')
+                    .replaceAll("=+$", "");
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-256 algorithm not available", e);
         }
@@ -114,32 +117,23 @@ public class OAuthHandler {
      */
     public String authorize() {
         try {
-            StringBuilder urlBuilder = new StringBuilder();
-            
-            // Build the authorization URL with parameters in correct order
-            urlBuilder.append(config.getFormattedAuthorizationEndpoint())
-                     .append("?app_id=").append(URLEncoder.encode(config.getAppId(), "UTF-8"))
-                     .append("&response_type=").append(config.getResponseType())
-                     .append("&client_id=").append(URLEncoder.encode(config.getClientId(), "UTF-8"))
-                     .append("&redirect_uri=").append(URLEncoder.encode(config.getRedirectUri(), "UTF-8"));
+            String baseUrl = String.format("%s/#!/apps/%s/authorize", 
+                config.getFormattedAuthorizationEndpoint(), 
+                config.getAppId());
 
-            // Add state for CSRF protection (always needed)
-            if (this.state != null) {
-                urlBuilder.append("&state=").append(URLEncoder.encode(this.state, "UTF-8"));
-            }
-            
-            // Add PKCE parameters if enabled
-            if (config.isPkceEnabled()) {
+            StringBuilder urlBuilder = new StringBuilder(baseUrl);
+            urlBuilder.append("?response_type=").append(config.getResponseType())
+                     .append("&client_id=").append(URLEncoder.encode(config.getClientId(), "UTF-8"));
+
+            if (config.getClientSecret() != null && !config.getClientSecret().trim().isEmpty()) {
+                return urlBuilder.toString();
+            } else {
+                // PKCE flow: add code_challenge
+                this.codeChallenge = generateCodeChallenge(this.codeVerifier);
                 urlBuilder.append("&code_challenge=").append(URLEncoder.encode(this.codeChallenge, "UTF-8"))
                          .append("&code_challenge_method=S256");
+                return urlBuilder.toString();
             }
-            
-            // Add scope if present
-            if (config.getScope() != null && !config.getScope().trim().isEmpty()) {
-                urlBuilder.append("&scope=").append(URLEncoder.encode(config.getScope(), "UTF-8"));
-            }
-            
-            return urlBuilder.toString();
         } catch (IOException e) {
             throw new RuntimeException("Failed to encode URL parameters", e);
         }
@@ -154,16 +148,16 @@ public class OAuthHandler {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 FormBody.Builder formBuilder = new FormBody.Builder()
-                    .add("app_id", config.getAppId())
                     .add("grant_type", "authorization_code")
                     .add("code", code)
-                    .add("client_id", config.getClientId())
-                    .add("redirect_uri", config.getRedirectUri());
+                    .add("redirect_uri", config.getRedirectUri())
+                    .add("client_id", config.getClientId());
 
-                if (config.isPkceEnabled()) {
-                    formBuilder.add("code_verifier", this.codeVerifier);
-                } else {
+                // Choose between client_secret and code_verifier like JS SDK
+                if (config.getClientSecret() != null) {
                     formBuilder.add("client_secret", config.getClientSecret());
+                } else {
+                    formBuilder.add("code_verifier", this.codeVerifier);
                 }
 
                 Request request = _getHeaders()
