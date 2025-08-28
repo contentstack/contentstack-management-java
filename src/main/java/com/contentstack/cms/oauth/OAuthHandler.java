@@ -117,9 +117,7 @@ public class OAuthHandler {
      */
     public String authorize() {
         try {
-            String baseUrl = String.format("%s/#!/apps/%s/authorize", 
-                config.getFormattedAuthorizationEndpoint(), 
-                config.getAppId());
+            String baseUrl = config.getFormattedAuthorizationEndpoint();
 
             StringBuilder urlBuilder = new StringBuilder(baseUrl);
             urlBuilder.append("?response_type=").append(config.getResponseType())
