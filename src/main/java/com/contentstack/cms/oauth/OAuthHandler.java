@@ -121,7 +121,8 @@ public class OAuthHandler {
 
             StringBuilder urlBuilder = new StringBuilder(baseUrl);
             urlBuilder.append("?response_type=").append(config.getResponseType())
-                     .append("&client_id=").append(URLEncoder.encode(config.getClientId(), "UTF-8"));
+                     .append("&client_id=").append(URLEncoder.encode(config.getClientId(), "UTF-8"))
+                     .append("&redirect_uri=").append(URLEncoder.encode(config.getRedirectUri(), "UTF-8"));
 
             if (config.getClientSecret() != null && !config.getClientSecret().trim().isEmpty()) {
                 return urlBuilder.toString();
@@ -216,18 +217,30 @@ public class OAuthHandler {
      * Executes a token request and processes the response
      */
     private OAuthTokens executeTokenRequest(Request request) throws IOException {
+        System.out.println("\nToken Request Details:");
+        System.out.println("URL: " + request.url());
+        System.out.println("Method: " + request.method());
+        System.out.println("Headers: " + request.headers());
+
         Response response = null;
         ResponseBody responseBody = null;
         try {
             response = httpClient.newCall(request).execute();
             responseBody = response.body();
 
+            System.out.println("\nToken Response Details:");
+            System.out.println("Status Code: " + response.code());
+            System.out.println("Headers: " + response.headers());
+
             if (!response.isSuccessful()) {
                 String error = responseBody != null ? responseBody.string() : "Unknown error";
-                throw new RuntimeException("Token request failed: " + error);
+                System.err.println("Error Response Body: " + error);
+                throw new RuntimeException("Token request failed with status " + response.code() + ": " + error);
             }
 
             String body = responseBody != null ? responseBody.string() : "{}";
+            System.out.println("Success Response Body: " + body);
+            
             OAuthTokens newTokens = gson.fromJson(body, OAuthTokens.class);
             
             // Keep old refresh token if new one not provided

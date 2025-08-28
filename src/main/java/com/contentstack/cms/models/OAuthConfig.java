@@ -94,7 +94,7 @@ public class OAuthConfig {
             .replaceAll("^dev\\d+", "dev")  // Replace dev1, dev2, etc. with dev
             .replace("io", "com");
         
-        return "https://" + hostname;
+        return "https://" + hostname + "/apps/oauth/token";
     }
 
     /**
