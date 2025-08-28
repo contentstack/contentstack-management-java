@@ -65,7 +65,8 @@ public class OAuthHandler {
      */
     private Request.Builder _getHeaders() {
         return new Request.Builder()
-            .header("Content-Type", "application/x-www-form-urlencoded");
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .header("authorization", "Bearer " + (tokens != null ? tokens.getAccessToken() : ""));
     }
 
     /**
@@ -150,7 +151,8 @@ public class OAuthHandler {
                     .add("grant_type", "authorization_code")
                     .add("code", code)
                     .add("redirect_uri", config.getRedirectUri())
-                    .add("client_id", config.getClientId());
+                    .add("client_id", config.getClientId())
+                    .add("app_id", config.getAppId());
 
                 // Choose between client_secret and code_verifier like JS SDK
                 if (config.getClientSecret() != null) {
