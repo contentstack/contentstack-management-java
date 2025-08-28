@@ -59,7 +59,22 @@ public class OAuthConfig {
      * @return The authorization endpoint URL
      */
     public String getFormattedAuthorizationEndpoint() {
-        return authEndpoint != null ? authEndpoint : "https://app.contentstack.com/#!/apps/oauth/authorize";
+        if (authEndpoint != null) {
+            return authEndpoint;
+        }
+
+        // Transform hostname similar to JS SDK
+        String hostname = "app.contentstack.com";
+        
+        // Handle environment-specific transformations
+        if (hostname.endsWith("io")) {
+            hostname = hostname.replace("io", "com");
+        }
+        if (hostname.startsWith("api")) {
+            hostname = hostname.replace("api", "app");
+        }
+        
+        return "https://" + hostname + "/#!/apps/oauth/authorize";
     }
 
     /**
@@ -67,7 +82,19 @@ public class OAuthConfig {
      * @return The token endpoint URL
      */
     public String getTokenEndpoint() {
-        return tokenEndpoint != null ? tokenEndpoint : "https://app.contentstack.com/apps/oauth/token";
+        if (tokenEndpoint != null) {
+            return tokenEndpoint;
+        }
+
+        // Transform for developer hub
+        String hostname = "developerhub-api.contentstack.com";
+        
+        // Handle environment-specific transformations
+        hostname = hostname
+            .replaceAll("^dev\\d+", "dev")  // Replace dev1, dev2, etc. with dev
+            .replace("io", "com");
+        
+        return "https://" + hostname + "/apps/oauth/token";
     }
 
     /**

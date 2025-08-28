@@ -121,8 +121,12 @@ public class OAuthHandler {
                      .append("?app_id=").append(URLEncoder.encode(config.getAppId(), "UTF-8"))
                      .append("&response_type=").append(config.getResponseType())
                      .append("&client_id=").append(URLEncoder.encode(config.getClientId(), "UTF-8"))
-                     .append("&redirect_uri=").append(URLEncoder.encode(config.getRedirectUri(), "UTF-8"))
-                     .append("&state=").append(URLEncoder.encode(this.state, "UTF-8"));
+                     .append("&redirect_uri=").append(URLEncoder.encode(config.getRedirectUri(), "UTF-8"));
+
+            // Add state for CSRF protection (always needed)
+            if (this.state != null) {
+                urlBuilder.append("&state=").append(URLEncoder.encode(this.state, "UTF-8"));
+            }
             
             // Add PKCE parameters if enabled
             if (config.isPkceEnabled()) {
