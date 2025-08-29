@@ -98,8 +98,9 @@ public class Contentstack {
      * @since 2022-05-19
      */
     public User user() {
-        if (this.authtoken == null)
-            throw new NullPointerException(Util.LOGIN_FLAG);
+        if (!isOAuthConfigured() && this.authtoken == null) {
+            throw new IllegalStateException("Please login or configure OAuth to access user");
+        }
         user = new User(this.instance);
         return user;
     }
@@ -291,7 +292,9 @@ public class Contentstack {
      * @return the organization
      */
     public Organization organization() {
-        Objects.requireNonNull(this.authtoken, "Please Login to access user instance");
+        if (!isOAuthConfigured() && this.authtoken == null) {
+            throw new IllegalStateException("Please login or configure OAuth to access organization");
+        }
         return new Organization(this.instance);
     }
 
@@ -315,9 +318,12 @@ public class Contentstack {
      *         </pre>
      */
     public Organization organization(@NotNull String organizationUid) {
-        Objects.requireNonNull(this.authtoken, "Please Login to access user instance");
-        if (organizationUid.isEmpty())
+        if (!isOAuthConfigured() && this.authtoken == null) {
+            throw new IllegalStateException("Please login or configure OAuth to access organization");
+        }
+        if (organizationUid.isEmpty()) {
             throw new IllegalStateException("organizationUid can not be empty");
+        }
         return new Organization(this.instance, organizationUid);
     }
 
@@ -339,7 +345,9 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack() {
-        Objects.requireNonNull(this.authtoken, ILLEGAL_USER);
+        if (!isOAuthConfigured() && this.authtoken == null) {
+            throw new IllegalStateException("Please login or configure OAuth to access stack");
+        }
         return new Stack(this.instance);
     }
 
@@ -362,8 +370,9 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack(@NotNull Map<String, Object> header) {
-        if (this.authtoken == null && !header.containsKey(AUTHORIZATION) && header.get(AUTHORIZATION) == null)
-            throw new IllegalStateException(PLEASE_LOGIN);
+        if (!isOAuthConfigured() && this.authtoken == null && !header.containsKey(AUTHORIZATION)) {
+            throw new IllegalStateException("Please login or configure OAuth to access stack");
+        }
         return new Stack(this.instance, header);
     }
 
