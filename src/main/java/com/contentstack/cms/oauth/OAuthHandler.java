@@ -28,7 +28,7 @@ import okhttp3.ResponseBody;
  */
 @Getter
 public class OAuthHandler {
-    private final OkHttpClient httpClient;
+    private OkHttpClient httpClient;
     private final OAuthConfig config;
     private final Gson gson;
 
@@ -55,14 +55,11 @@ public class OAuthHandler {
         // Only generate PKCE codeVerifier if clientSecret is not provided
         if (config.getClientSecret() == null || config.getClientSecret().trim().isEmpty()) {
             this.codeVerifier = generateCodeVerifier();
-            // codeChallenge will be generated during authorize()
             this.codeChallenge = null;
         }
     }
 
-    /**
-     * Returns common headers for OAuth requests
-     */
+
     private Request.Builder _getHeaders() {
         return new Request.Builder()
             .header("Content-Type", "application/x-www-form-urlencoded")
@@ -74,10 +71,11 @@ public class OAuthHandler {
      * @return A random URL-safe string between 43-128 characters
      */
     private String generateCodeVerifier() {
+        final int CODE_VERIFIER_LENGTH = 96;  
         final String charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
         SecureRandom random = new SecureRandom();
         StringBuilder verifier = new StringBuilder();
-        for (int i = 0; i < 128; i++) {
+        for (int i = 0; i < CODE_VERIFIER_LENGTH; i++) {
             verifier.append(charset.charAt(random.nextInt(charset.length())));
         }
         return verifier.toString();
@@ -103,14 +101,6 @@ public class OAuthHandler {
         }
     }
 
-    /**
-     * Generates PKCE parameters (code verifier and challenge)
-     */
-    private void generatePkceParameters() {
-        this.codeVerifier = generateCodeVerifier();
-        this.codeChallenge = generateCodeChallenge(this.codeVerifier);
-     
-    }
 
     /**
      * Starts the OAuth authorization flow
@@ -124,6 +114,11 @@ public class OAuthHandler {
             urlBuilder.append("?response_type=").append(config.getResponseType())
                      .append("&client_id=").append(URLEncoder.encode(config.getClientId(), "UTF-8"))
                      .append("&redirect_uri=").append(URLEncoder.encode(config.getRedirectUri(), "UTF-8"));
+            
+            // Add scope if provided
+            if (config.getScope() != null && !config.getScope().trim().isEmpty()) {
+                urlBuilder.append("&scope=").append(URLEncoder.encode(config.getScope(), "UTF-8"));
+            }
 
             if (config.getClientSecret() != null && !config.getClientSecret().trim().isEmpty()) {
                 return urlBuilder.toString();
@@ -179,17 +174,6 @@ public class OAuthHandler {
      */
     private void _saveTokens(OAuthTokens tokens) {
         this.tokens = tokens;
-        // Update the client's auth state
-        if (tokens != null && tokens.hasAccessToken()) {
-            this.httpClient = this.httpClient.newBuilder()
-                .addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder()
-                        .header("Authorization", "Bearer " + tokens.getAccessToken())
-                        .build();
-                    return chain.proceed(request);
-                })
-                .build();
-        }
     }
 
     /**
@@ -248,7 +232,14 @@ public class OAuthHandler {
             if (!response.isSuccessful()) {
                 String error = responseBody != null ? responseBody.string() : "Unknown error";
                 System.err.println("Error Response Body: " + error);
-                throw new RuntimeException("Token request failed with status " + response.code() + ": " + error);
+                
+                // Parse error response if possible
+                try {
+                    throw new RuntimeException("Token request failed: " + error);
+                } catch (JsonParseException e) {
+                    throw new RuntimeException("Token request failed with status " + 
+                        response.code() + ": " + error);
+                }
             }
 
             String body = responseBody != null ? responseBody.string() : "{}";
