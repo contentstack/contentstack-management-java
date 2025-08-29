@@ -61,9 +61,14 @@ public class OAuthHandler {
 
 
     private Request.Builder _getHeaders() {
-        return new Request.Builder()
-            .header("Content-Type", "application/x-www-form-urlencoded")
-            .header("authorization", "Bearer " + (tokens != null ? tokens.getAccessToken() : ""));
+        Request.Builder builder = new Request.Builder()
+            .header("Content-Type", "application/x-www-form-urlencoded");
+            
+        // Only add authorization header for non-token endpoints
+        if (tokens != null && tokens.getAccessToken() != null) {
+            builder.header("authorization", "Bearer " + tokens.getAccessToken());
+        }
+        return builder;
     }
 
     /**
@@ -194,8 +199,11 @@ public class OAuthHandler {
                     .add("refresh_token", tokens.getRefreshToken())
                     .add("client_id", config.getClientId());
 
-                if (!config.isPkceEnabled()) {
+                // Add client_secret if available, otherwise add code_verifier
+                if (config.getClientSecret() != null && !config.getClientSecret().trim().isEmpty()) {
                     formBuilder.add("client_secret", config.getClientSecret());
+                } else if (this.codeVerifier != null) {
+                    formBuilder.add("code_verifier", this.codeVerifier);
                 }
 
                 Request request = _getHeaders()
@@ -233,10 +241,13 @@ public class OAuthHandler {
                 String error = responseBody != null ? responseBody.string() : "Unknown error";
                 System.err.println("Error Response Body: " + error);
                 
-                // Parse error response if possible
+                // Try to parse error as JSON for better error message
                 try {
-                    throw new RuntimeException("Token request failed: " + error);
+                    com.contentstack.cms.models.Error errorObj = gson.fromJson(error, com.contentstack.cms.models.Error.class);
+                    throw new RuntimeException("Token request failed: " + 
+                        (errorObj != null ? errorObj.getErrorMessage() : error));
                 } catch (JsonParseException e) {
+                    // If not JSON, use raw error string
                     throw new RuntimeException("Token request failed with status " + 
                         response.code() + ": " + error);
                 }
@@ -364,4 +375,12 @@ public class OAuthHandler {
     public String getOrganizationUID() { return tokens != null ? tokens.getOrganizationUid() : null; }
     public String getUserUID() { return tokens != null ? tokens.getUserUid() : null; }
     public Long getTokenExpiryTime() { return tokens != null ? tokens.getExpiresIn() : null; }
+    
+    /**
+     * Checks if we have a valid access token
+     * @return true if we have a non-expired access token
+     */
+    public boolean hasValidAccessToken() {
+        return tokens != null && tokens.hasAccessToken() && !tokens.isExpired();
+    }
 }

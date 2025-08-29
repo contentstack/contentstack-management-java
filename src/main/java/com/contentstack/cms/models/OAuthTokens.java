@@ -35,6 +35,9 @@ public class OAuthTokens {
     @SerializedName("user_uid")
     private String userUid;
 
+    @SerializedName("stack_api_key")
+    private String stackApiKey;
+
     private Date issuedAt;
     private Date expiresAt;
 
@@ -147,9 +150,18 @@ public class OAuthTokens {
         copy.scope = this.scope;
         copy.organizationUid = this.organizationUid;
         copy.userUid = this.userUid;
+        copy.stackApiKey = this.stackApiKey;
         copy.issuedAt = this.issuedAt != null ? new Date(this.issuedAt.getTime()) : null;
         copy.expiresAt = this.expiresAt != null ? new Date(this.expiresAt.getTime()) : null;
         return copy;
+    }
+
+    /**
+     * Gets the stack API key if available
+     * @return The stack API key or null if not available
+     */
+    public String getStackApiKey() {
+        return stackApiKey != null && !stackApiKey.trim().isEmpty() ? stackApiKey : null;
     }
 
     @Override
@@ -162,6 +174,7 @@ public class OAuthTokens {
                 ", scope='" + scope + '\'' +
                 ", organizationUid='" + organizationUid + '\'' +
                 ", userUid='" + userUid + '\'' +
+                ", stackApiKey='" + stackApiKey + '\'' +
                 ", issuedAt=" + issuedAt +
                 ", expiresAt=" + expiresAt +
                 '}';
