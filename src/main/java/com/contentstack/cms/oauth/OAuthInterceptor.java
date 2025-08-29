@@ -41,21 +41,35 @@ public class OAuthInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request originalRequest = chain.request();
+        
+        System.out.println("\nOAuth Interceptor - Request Details:");
+        System.out.println("URL: " + originalRequest.url());
+        System.out.println("Method: " + originalRequest.method());
+        System.out.println("Has Tokens: " + (oauthHandler.getTokens() != null));
+        if (oauthHandler.getTokens() != null) {
+            System.out.println("Access Token: " + oauthHandler.getTokens().getAccessToken());
+            System.out.println("Token Expired: " + oauthHandler.getTokens().isExpired());
+        }
+        
         Request.Builder requestBuilder = originalRequest.newBuilder()
             .header("X-User-Agent", Util.defaultUserAgent())
             .header("User-Agent", Util.defaultUserAgent())
             .header("Content-Type", originalRequest.url().toString().contains("/token") ? "application/x-www-form-urlencoded" : "application/json")
             .header("X-Header-EA", earlyAccess != null ? String.join(",", earlyAccess) : "true");
-        if (oauthHandler.getTokens() != null) {
-            if (oauthHandler.getTokens().isExpired() && oauthHandler.getTokens().hasRefreshToken()) {
-                try {
-                    oauthHandler.refreshAccessToken().get(30, TimeUnit.SECONDS);
-                } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    throw new IOException("Failed to refresh access token", e);
+        // Skip auth header for token endpoints
+        if (!originalRequest.url().toString().contains("/token")) {
+            if (oauthHandler.getTokens() != null) {
+                if (oauthHandler.getTokens().isExpired() && oauthHandler.getTokens().hasRefreshToken()) {
+                    try {
+                        oauthHandler.refreshAccessToken().get(30, TimeUnit.SECONDS);
+                    } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                        throw new IOException("Failed to refresh access token", e);
+                    }
                 }
-            }
-            if (oauthHandler.getTokens().hasAccessToken()) {
-                requestBuilder.header("Authorization", "Bearer " + oauthHandler.getAccessToken());
+                if (oauthHandler.getTokens().hasAccessToken()) {
+                    requestBuilder.header("Authorization", "Bearer " + oauthHandler.getAccessToken());
+                    System.out.println("Added Authorization header: Bearer " + oauthHandler.getAccessToken());
+                }
             }
         }
 

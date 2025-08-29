@@ -295,6 +295,15 @@ public class Contentstack {
         if (!isOAuthConfigured() && this.authtoken == null) {
             throw new IllegalStateException("Please login or configure OAuth to access organization");
         }
+        
+        // If using OAuth, get organization from tokens
+        if (isOAuthConfigured() && oauthHandler.getTokens() != null) {
+            String orgUid = oauthHandler.getTokens().getOrganizationUid();
+            if (orgUid != null && !orgUid.isEmpty()) {
+                return organization(orgUid);
+            }
+        }
+        
         return new Organization(this.instance);
     }
 
@@ -810,13 +819,15 @@ public class Contentstack {
 
             // Add either OAuth or traditional auth interceptor
             if (this.oauthConfig != null) {
-                if (this.oauthInterceptor == null) {
-                    this.oauthHandler = new OAuthHandler(builder.build(), this.oauthConfig);
-                    this.oauthInterceptor = new OAuthInterceptor(this.oauthHandler);
-                    if (this.earlyAccess != null) {
-                        this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
-                    }
+                // Create OAuth handler and interceptor first
+                OkHttpClient tempClient = builder.build();
+                this.oauthHandler = new OAuthHandler(tempClient, this.oauthConfig);
+                this.oauthInterceptor = new OAuthInterceptor(this.oauthHandler);
+                if (this.earlyAccess != null) {
+                    this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
                 }
+                
+                // Add interceptor to final client
                 builder.addInterceptor(this.oauthInterceptor);
             } else {
                 this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
