@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 import com.contentstack.cms.models.OAuthConfig;
@@ -31,6 +32,7 @@ public class OAuthHandler {
     private OkHttpClient httpClient;
     private final OAuthConfig config;
     private final Gson gson;
+    private final Object tokenLock = new Object();
 
     private String codeVerifier;
     private String codeChallenge;
@@ -118,7 +120,8 @@ public class OAuthHandler {
             StringBuilder urlBuilder = new StringBuilder(baseUrl);
             urlBuilder.append("?response_type=").append(config.getResponseType())
                      .append("&client_id=").append(URLEncoder.encode(config.getClientId(), "UTF-8"))
-                     .append("&redirect_uri=").append(URLEncoder.encode(config.getRedirectUri(), "UTF-8"));
+                     .append("&redirect_uri=").append(URLEncoder.encode(config.getRedirectUri(), "UTF-8"))
+                     .append("&app_id=").append(URLEncoder.encode(config.getAppId(), "UTF-8"));
             
             // Add scope if provided
             if (config.getScope() != null && !config.getScope().trim().isEmpty()) {
@@ -145,11 +148,16 @@ public class OAuthHandler {
      * @return Future containing the tokens
      */
     public CompletableFuture<OAuthTokens> exchangeCodeForToken(String code) {
+        if (code == null || code.trim().isEmpty()) {
+            return CompletableFuture.failedFuture(new IllegalArgumentException("Authorization code cannot be null or empty"));
+        }
+
+        System.out.println("\nExchanging authorization code for tokens...");
         return CompletableFuture.supplyAsync(() -> {
             try {
                 FormBody.Builder formBuilder = new FormBody.Builder()
                     .add("grant_type", "authorization_code")
-                    .add("code", code)
+                    .add("code", code.trim())
                     .add("redirect_uri", config.getRedirectUri())
                     .add("client_id", config.getClientId())
                     .add("app_id", config.getAppId());
@@ -178,7 +186,15 @@ public class OAuthHandler {
      * @param tokens The tokens to save
      */
     private void _saveTokens(OAuthTokens tokens) {
-        this.tokens = tokens;
+        synchronized (tokenLock) {
+            this.tokens = tokens;
+        }
+    }
+
+    private OAuthTokens _getTokens() {
+        synchronized (tokenLock) {
+            return this.tokens;
+        }
     }
 
     /**
@@ -186,18 +202,33 @@ public class OAuthHandler {
      * @return Future containing the new tokens
      */
     public CompletableFuture<OAuthTokens> refreshAccessToken() {
-        if (tokens == null || !tokens.hasRefreshToken()) {
+        // Check if we have tokens and refresh token
+        if (tokens == null) {
+            return CompletableFuture.failedFuture(
+                new IllegalStateException("No tokens available"));
+        }
+        if (!tokens.hasRefreshToken()) {
             return CompletableFuture.failedFuture(
                 new IllegalStateException("No refresh token available"));
+        }
+        
+        // Check if token is actually expired
+        if (!tokens.isExpired()) {
+            return CompletableFuture.completedFuture(tokens);
         }
 
         return CompletableFuture.supplyAsync(() -> {
             try {
+                System.out.println("\nRefreshing access token...");
+                System.out.println("Current token expired: " + tokens.isExpired());
+                System.out.println("Has refresh token: " + tokens.hasRefreshToken());
+                System.out.println("Time until expiry: " + tokens.getTimeUntilExpiration() + "ms");
+
                 FormBody.Builder formBuilder = new FormBody.Builder()
-                    .add("app_id", config.getAppId())
                     .add("grant_type", "refresh_token")
                     .add("refresh_token", tokens.getRefreshToken())
-                    .add("client_id", config.getClientId());
+                    .add("client_id", config.getClientId())
+                    .add("app_id", config.getAppId());
 
                 // Add client_secret if available, otherwise add code_verifier
                 if (config.getClientSecret() != null && !config.getClientSecret().trim().isEmpty()) {
@@ -206,13 +237,18 @@ public class OAuthHandler {
                     formBuilder.add("code_verifier", this.codeVerifier);
                 }
 
-                Request request = _getHeaders()
+                Request request = new Request.Builder()
                     .url(config.getTokenEndpoint())
+                    .header("Content-Type", "application/x-www-form-urlencoded")
                     .post(formBuilder.build())
                     .build();
 
-                return executeTokenRequest(request);
+                OAuthTokens newTokens = executeTokenRequest(request);
+                System.out.println("Token refresh successful!");
+                System.out.println("New token expires in: " + newTokens.getExpiresIn() + " seconds");
+                return newTokens;
             } catch (IOException | RuntimeException e) {
+                System.err.println("Token refresh failed: " + e.getMessage());
                 throw new RuntimeException("Failed to refresh tokens", e);
             }
         });
@@ -258,8 +294,13 @@ public class OAuthHandler {
             
             OAuthTokens newTokens = gson.fromJson(body, OAuthTokens.class);
             
-            // Keep old refresh token if new one not provided
-            if (this.tokens != null && newTokens.getRefreshToken() == null) {
+            // Set token expiry time
+            if (newTokens.getExpiresIn() != null) {
+                newTokens.setExpiresAt(new Date(System.currentTimeMillis() + (newTokens.getExpiresIn() * 1000)));
+            }
+            
+            // Keep refresh token if new one not provided
+            if (newTokens.getRefreshToken() == null && this.tokens != null && this.tokens.hasRefreshToken()) {
                 newTokens.setRefreshToken(this.tokens.getRefreshToken());
             }
             
@@ -370,17 +411,37 @@ public class OAuthHandler {
     }
 
     // Convenience methods for token access
-    public String getAccessToken() { return tokens != null ? tokens.getAccessToken() : null; }
-    public String getRefreshToken() { return tokens != null ? tokens.getRefreshToken() : null; }
-    public String getOrganizationUID() { return tokens != null ? tokens.getOrganizationUid() : null; }
-    public String getUserUID() { return tokens != null ? tokens.getUserUid() : null; }
-    public Long getTokenExpiryTime() { return tokens != null ? tokens.getExpiresIn() : null; }
+    public String getAccessToken() { 
+        OAuthTokens t = _getTokens();
+        return t != null ? t.getAccessToken() : null; 
+    }
+    
+    public String getRefreshToken() { 
+        OAuthTokens t = _getTokens();
+        return t != null ? t.getRefreshToken() : null; 
+    }
+    
+    public String getOrganizationUID() { 
+        OAuthTokens t = _getTokens();
+        return t != null ? t.getOrganizationUid() : null; 
+    }
+    
+    public String getUserUID() { 
+        OAuthTokens t = _getTokens();
+        return t != null ? t.getUserUid() : null; 
+    }
+    
+    public Long getTokenExpiryTime() { 
+        OAuthTokens t = _getTokens();
+        return t != null ? t.getExpiresIn() : null; 
+    }
     
     /**
      * Checks if we have a valid access token
      * @return true if we have a non-expired access token
      */
     public boolean hasValidAccessToken() {
-        return tokens != null && tokens.hasAccessToken() && !tokens.isExpired();
+        OAuthTokens t = _getTokens();
+        return t != null && t.hasAccessToken() && !t.isExpired();
     }
 }

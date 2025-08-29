@@ -801,11 +801,9 @@ public class Contentstack {
             
             // Initialize OAuth if configured
             if (this.oauthConfig != null) {
-                this.oauthHandler = contentstack.oauthHandler = new OAuthHandler(httpClient(contentstack, this.retry), this.oauthConfig);
-                this.oauthInterceptor = contentstack.oauthInterceptor = new OAuthInterceptor(this.oauthHandler);
-                if (this.earlyAccess != null) {
-                    this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
-                }
+                // OAuth handler and interceptor are created in httpClient
+                contentstack.oauthHandler = this.oauthHandler;
+                contentstack.oauthInterceptor = this.oauthInterceptor;
             }
         }
 
@@ -823,11 +821,13 @@ public class Contentstack {
                 OkHttpClient tempClient = builder.build();
                 this.oauthHandler = new OAuthHandler(tempClient, this.oauthConfig);
                 this.oauthInterceptor = new OAuthInterceptor(this.oauthHandler);
+                
+                // Configure early access if needed
                 if (this.earlyAccess != null) {
                     this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
                 }
                 
-                // Add interceptor to final client
+                // Add interceptor to handle OAuth, token refresh, and retries
                 builder.addInterceptor(this.oauthInterceptor);
             } else {
                 this.authInterceptor = contentstack.interceptor = new AuthInterceptor();

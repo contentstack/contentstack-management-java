@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class OAuthTokens {
+    private static final String BEARER_TOKEN_TYPE = "Bearer";
     @SerializedName("access_token")
     private String accessToken;
 
@@ -54,8 +55,23 @@ public class OAuthTokens {
     public void setExpiresIn(Long expiresIn) {
         this.expiresIn = expiresIn;
         if (expiresIn != null) {
-            this.expiresAt = new Date(issuedAt.getTime() + (expiresIn * 1000));
+            setExpiresAt(new Date(System.currentTimeMillis() + (expiresIn * 1000)));
         }
+    }
+
+    public synchronized void setExpiresAt(Date expiresAt) {
+        this.expiresAt = expiresAt != null ? new Date(expiresAt.getTime()) : null;
+        if (expiresAt != null) {
+            this.expiresIn = (expiresAt.getTime() - System.currentTimeMillis()) / 1000;
+        }
+    }
+
+    public synchronized Date getExpiresAt() {
+        return expiresAt != null ? new Date(expiresAt.getTime()) : null;
+    }
+
+    public synchronized Date getIssuedAt() {
+        return issuedAt != null ? new Date(issuedAt.getTime()) : null;
     }
 
     /**
@@ -95,18 +111,32 @@ public class OAuthTokens {
      * @return true if token is expired or will expire soon
      */
     public boolean isExpired() {
+        // No expiry time means token is considered expired
         if (expiresAt == null) {
             return true;
         }
-        return System.currentTimeMillis() + EXPIRY_BUFFER_MS > expiresAt.getTime();
+        
+        // No access token means token is considered expired
+        if (!hasAccessToken()) {
+            return true;
+        }
+        
+        // Check if current time + buffer is past expiry
+        long currentTime = System.currentTimeMillis();
+        long expiryTime = expiresAt.getTime();
+        long timeUntilExpiry = expiryTime - currentTime;
+        
+        // Consider expired if within buffer window
+        return timeUntilExpiry <= EXPIRY_BUFFER_MS;
     }
 
     /**
      * Checks if the token is valid (has access token and not expired)
      * @return true if token is valid
      */
-    public boolean isValid() {
-        return hasAccessToken() && !isExpired();
+    public synchronized boolean isValid() {
+        return hasAccessToken() && !isExpired() && 
+               BEARER_TOKEN_TYPE.equalsIgnoreCase(tokenType);
     }
 
     /**
