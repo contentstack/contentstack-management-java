@@ -38,7 +38,6 @@ public class OAuthConfig {
             throw new IllegalArgumentException("redirectUri is required");
         }
 
-        // Validate redirectUri is a valid URL
         try {
             new URL(redirectUri);
         } catch (MalformedURLException e) {
@@ -63,10 +62,8 @@ public class OAuthConfig {
             return authEndpoint;
         }
 
-        // Transform hostname similar to JS SDK
         String hostname = "app.contentstack.com";
         
-        // Handle environment-specific transformations
         if (hostname.endsWith("io")) {
             hostname = hostname.replace("io", "com");
         }
@@ -86,12 +83,9 @@ public class OAuthConfig {
             return tokenEndpoint;
         }
 
-        // Transform for developer hub
         String hostname = "developerhub-api.contentstack.com";
-        
-        // Handle environment-specific transformations
         hostname = hostname
-            .replaceAll("^dev\\d+", "dev")  // Replace dev1, dev2, etc. with dev
+            .replaceAll("^dev\\d+", "dev")
             .replace("io", "com");
         
         return "https://" + hostname + "/token";
