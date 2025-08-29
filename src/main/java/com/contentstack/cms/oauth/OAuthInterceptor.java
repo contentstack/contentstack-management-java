@@ -57,7 +57,7 @@ public class OAuthInterceptor implements Interceptor {
         Request.Builder requestBuilder = originalRequest.newBuilder()
             .header("X-User-Agent", Util.defaultUserAgent())
             .header("User-Agent", Util.defaultUserAgent())
-            .header("Content-Type", "application/json")
+            .header("Content-Type", originalRequest.url().toString().contains("/token") ? "application/x-www-form-urlencoded" : "application/json")
             .header("X-Header-EA", earlyAccess != null ? String.join(",", earlyAccess) : "true");
 
         // Get current tokens

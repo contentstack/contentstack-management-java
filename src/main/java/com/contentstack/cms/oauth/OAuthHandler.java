@@ -179,6 +179,17 @@ public class OAuthHandler {
      */
     private void _saveTokens(OAuthTokens tokens) {
         this.tokens = tokens;
+        // Update the client's auth state
+        if (tokens != null && tokens.hasAccessToken()) {
+            this.httpClient = this.httpClient.newBuilder()
+                .addInterceptor(chain -> {
+                    Request request = chain.request().newBuilder()
+                        .header("Authorization", "Bearer " + tokens.getAccessToken())
+                        .build();
+                    return chain.proceed(request);
+                })
+                .build();
+        }
     }
 
     /**
