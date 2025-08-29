@@ -64,11 +64,11 @@ public class OAuthConfig {
 
         String hostname = "app.contentstack.com";
         
-        if (hostname.endsWith("io")) {
-            hostname = hostname.replace("io", "com");
-        }
-        if (hostname.startsWith("api")) {
-            hostname = hostname.replace("api", "app");
+        // Transform hostname if needed
+        if (hostname.contains("contentstack")) {
+            hostname = hostname
+                .replaceAll("^api\\.", "app.")  // api.contentstack -> app.contentstack
+                .replaceAll("\\.io$", ".com");  // *.io -> *.com
         }
         
         return "https://" + hostname + "/#!/apps/" + appId + "/authorize";
@@ -84,9 +84,13 @@ public class OAuthConfig {
         }
 
         String hostname = "developerhub-api.contentstack.com";
-        hostname = hostname
-            .replaceAll("^dev\\d+", "dev")
-            .replace("io", "com");
+        
+        // Transform hostname if needed
+        if (hostname.contains("contentstack")) {
+            hostname = hostname
+                .replaceAll("^dev\\d+\\.", "dev.")  // dev1.* -> dev.*
+                .replaceAll("\\.io$", ".com");      // *.io -> *.com
+        }
         
         return "https://" + hostname + "/token";
     }
