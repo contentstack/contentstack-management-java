@@ -10,6 +10,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
+import com.contentstack.cms.core.Util;
 import com.contentstack.cms.models.OAuthConfig;
 import com.contentstack.cms.models.OAuthTokens;
 import com.google.gson.Gson;
@@ -154,7 +155,7 @@ public class OAuthHandler {
      */
     public CompletableFuture<OAuthTokens> exchangeCodeForToken(String code) {
         if (code == null || code.trim().isEmpty()) {
-            return CompletableFuture.failedFuture(new IllegalArgumentException("Authorization code cannot be null or empty"));
+            return CompletableFuture.failedFuture(new IllegalArgumentException(Util.OAUTH_EMPTY_CODE));
         }
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -210,11 +211,11 @@ public class OAuthHandler {
         // Check if we have tokens and refresh token
         if (tokens == null) {
             return CompletableFuture.failedFuture(
-                    new IllegalStateException("No tokens available"));
+                    new IllegalStateException(Util.OAUTH_NO_TOKENS));
         }
         if (!tokens.hasRefreshToken()) {
             return CompletableFuture.failedFuture(
-                    new IllegalStateException("No refresh token available"));
+                    new IllegalStateException(Util.OAUTH_NO_REFRESH_TOKEN));
         }
 
         // Check if token is actually expired
@@ -249,7 +250,7 @@ public class OAuthHandler {
                 return newTokens;
             } catch (IOException | RuntimeException e) {
 
-                throw new RuntimeException("Failed to refresh tokens", e);
+                throw new RuntimeException(Util.OAUTH_REFRESH_FAILED, e);
             }
         });
     }
@@ -343,7 +344,7 @@ public class OAuthHandler {
 
                     if (!response.isSuccessful()) {
                         String error = responseBody != null ? responseBody.string() : "Unknown error";
-                        throw new RuntimeException("Failed to get authorization status: " + error);
+                        throw new RuntimeException(Util.OAUTH_STATUS_FAILED + ": " + error);
                     }
 
                     String body = responseBody != null ? responseBody.string() : "{}";
@@ -386,7 +387,7 @@ public class OAuthHandler {
 
                     if (!response.isSuccessful()) {
                         String error = responseBody != null ? responseBody.string() : "Unknown error";
-                        throw new RuntimeException("Failed to revoke authorization: " + error);
+                        throw new RuntimeException(Util.OAUTH_REVOKE_FAILED + ": " + error);
                     }
                 } finally {
                     if (responseBody != null) {
