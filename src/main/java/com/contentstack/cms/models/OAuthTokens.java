@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class OAuthTokens {
+
     private static final String BEARER_TOKEN_TYPE = "Bearer";
     @SerializedName("access_token")
     private String accessToken;
@@ -50,6 +51,7 @@ public class OAuthTokens {
 
     /**
      * Sets the expiration time in seconds and calculates the expiry date
+     *
      * @param expiresIn Expiration time in seconds
      */
     public void setExpiresIn(Long expiresIn) {
@@ -76,6 +78,7 @@ public class OAuthTokens {
 
     /**
      * Gets the scopes as a list
+     *
      * @return List of scope strings or empty list if no scopes
      */
     public List<String> getScopesList() {
@@ -87,6 +90,7 @@ public class OAuthTokens {
 
     /**
      * Sets scopes from a list
+     *
      * @param scopes List of scope strings
      */
     public void setScopesList(List<String> scopes) {
@@ -99,6 +103,7 @@ public class OAuthTokens {
 
     /**
      * Checks if the token has a specific scope
+     *
      * @param scopeToCheck The scope to check for
      * @return true if the token has the scope
      */
@@ -108,6 +113,7 @@ public class OAuthTokens {
 
     /**
      * Checks if the token is expired, including a buffer time
+     *
      * @return true if token is expired or will expire soon
      */
     public boolean isExpired() {
@@ -115,32 +121,34 @@ public class OAuthTokens {
         if (expiresAt == null) {
             return true;
         }
-        
+
         // No access token means token is considered expired
         if (!hasAccessToken()) {
             return true;
         }
-        
+
         // Check if current time + buffer is past expiry
         long currentTime = System.currentTimeMillis();
         long expiryTime = expiresAt.getTime();
         long timeUntilExpiry = expiryTime - currentTime;
-        
+
         // Consider expired if within buffer window
         return timeUntilExpiry <= EXPIRY_BUFFER_MS;
     }
 
     /**
      * Checks if the token is valid (has access token and not expired)
+     *
      * @return true if token is valid
      */
     public synchronized boolean isValid() {
-        return hasAccessToken() && !isExpired() && 
-               BEARER_TOKEN_TYPE.equalsIgnoreCase(tokenType);
+        return hasAccessToken() && !isExpired()
+                && BEARER_TOKEN_TYPE.equalsIgnoreCase(tokenType);
     }
 
     /**
      * Checks if access token is present
+     *
      * @return true if access token exists
      */
     public boolean hasAccessToken() {
@@ -149,6 +157,7 @@ public class OAuthTokens {
 
     /**
      * Checks if refresh token is present
+     *
      * @return true if refresh token exists
      */
     public boolean hasRefreshToken() {
@@ -157,6 +166,7 @@ public class OAuthTokens {
 
     /**
      * Gets time until token expiration in milliseconds
+     *
      * @return milliseconds until expiration or 0 if expired/invalid
      */
     public long getTimeUntilExpiration() {
@@ -167,46 +177,20 @@ public class OAuthTokens {
         return Math.max(0, timeLeft);
     }
 
-    /**
-     * Creates a copy of this token object
-     * @return A new OAuthTokens instance with copied values
-     */
-    public OAuthTokens copy() {
-        OAuthTokens copy = new OAuthTokens();
-        copy.accessToken = this.accessToken;
-        copy.refreshToken = this.refreshToken;
-        copy.tokenType = this.tokenType;
-        copy.expiresIn = this.expiresIn;
-        copy.scope = this.scope;
-        copy.organizationUid = this.organizationUid;
-        copy.userUid = this.userUid;
-        copy.stackApiKey = this.stackApiKey;
-        copy.issuedAt = this.issuedAt != null ? new Date(this.issuedAt.getTime()) : null;
-        copy.expiresAt = this.expiresAt != null ? new Date(this.expiresAt.getTime()) : null;
-        return copy;
-    }
-
-    /**
-     * Gets the stack API key if available
-     * @return The stack API key or null if not available
-     */
-    public String getStackApiKey() {
-        return stackApiKey != null && !stackApiKey.trim().isEmpty() ? stackApiKey : null;
-    }
 
     @Override
     public String toString() {
-        return "OAuthTokens{" +
-                "accessToken='" + (accessToken != null ? "[REDACTED]" : "null") + '\'' +
-                ", refreshToken='" + (refreshToken != null ? "[REDACTED]" : "null") + '\'' +
-                ", tokenType='" + tokenType + '\'' +
-                ", expiresIn=" + expiresIn +
-                ", scope='" + scope + '\'' +
-                ", organizationUid='" + organizationUid + '\'' +
-                ", userUid='" + userUid + '\'' +
-                ", stackApiKey='" + stackApiKey + '\'' +
-                ", issuedAt=" + issuedAt +
-                ", expiresAt=" + expiresAt +
-                '}';
+        return "OAuthTokens{"
+                + "accessToken='" + (accessToken != null ? "[REDACTED]" : "null") + '\''
+                + ", refreshToken='" + (refreshToken != null ? "[REDACTED]" : "null") + '\''
+                + ", tokenType='" + tokenType + '\''
+                + ", expiresIn=" + expiresIn
+                + ", scope='" + scope + '\''
+                + ", organizationUid='" + organizationUid + '\''
+                + ", userUid='" + userUid + '\''
+                + ", stackApiKey='" + stackApiKey + '\''
+                + ", issuedAt=" + issuedAt
+                + ", expiresAt=" + expiresAt
+                + '}';
     }
 }
