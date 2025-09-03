@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import com.contentstack.cms.core.Util;
+
 /**
  * Configuration class for OAuth 2.0 authentication
  */
@@ -67,7 +69,7 @@ public class OAuthConfig {
             return authEndpoint;
         }
 
-        String hostname = "app.contentstack.com";
+        String hostname = Util.OAUTH_APP_HOST;
 
         // Transform hostname if needed
         if (hostname.contains("contentstack")) {
@@ -76,7 +78,7 @@ public class OAuthConfig {
                     .replaceAll("\\.io$", ".com");  // *.io -> *.com
         }
 
-        return "https://" + hostname + "/#!/apps/" + appId + "/authorize";
+        return "https://" + hostname + String.format(Util.OAUTH_AUTHORIZE_ENDPOINT, appId);
     }
 
     /**
@@ -89,7 +91,7 @@ public class OAuthConfig {
             return tokenEndpoint;
         }
 
-        String hostname = "developerhub-api.contentstack.com";
+        String hostname = Util.OAUTH_API_HOST;
 
         // Transform hostname if needed
         if (hostname.contains("contentstack")) {
@@ -98,7 +100,7 @@ public class OAuthConfig {
                     .replaceAll("\\.io$", ".com");      // *.io -> *.com
         }
 
-        return "https://" + hostname + "/token";
+        return "https://" + hostname + Util.OAUTH_TOKEN_ENDPOINT;
     }
 
     /**
