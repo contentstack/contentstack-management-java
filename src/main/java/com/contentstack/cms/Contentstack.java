@@ -5,7 +5,6 @@ import java.net.Proxy;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -17,8 +16,6 @@ import com.contentstack.cms.core.Util;
 import static com.contentstack.cms.core.Util.API_KEY;
 import static com.contentstack.cms.core.Util.AUTHORIZATION;
 import static com.contentstack.cms.core.Util.BRANCH;
-import static com.contentstack.cms.core.Util.ILLEGAL_USER;
-import static com.contentstack.cms.core.Util.PLEASE_LOGIN;
 import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.models.OAuthConfig;
@@ -99,7 +96,7 @@ public class Contentstack {
      */
     public User user() {
         if (!isOAuthConfigured() && this.authtoken == null) {
-            throw new IllegalStateException("Please login or configure OAuth to access user");
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " user");
         }
         user = new User(this.instance);
         return user;
@@ -293,7 +290,7 @@ public class Contentstack {
      */
     public Organization organization() {
         if (!isOAuthConfigured() && this.authtoken == null) {
-            throw new IllegalStateException("Please login or configure OAuth to access organization");
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " organization");
         }
         
         // If using OAuth, get organization from tokens
@@ -328,10 +325,10 @@ public class Contentstack {
      */
     public Organization organization(@NotNull String organizationUid) {
         if (!isOAuthConfigured() && this.authtoken == null) {
-            throw new IllegalStateException("Please login or configure OAuth to access organization");
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " organization");
         }
         if (organizationUid.isEmpty()) {
-            throw new IllegalStateException("organizationUid can not be empty");
+            throw new IllegalStateException(Util.OAUTH_ORG_EMPTY);
         }
         return new Organization(this.instance, organizationUid);
     }
@@ -355,7 +352,7 @@ public class Contentstack {
      */
     public Stack stack() {
         if (!isOAuthConfigured() && this.authtoken == null) {
-            throw new IllegalStateException("Please login or configure OAuth to access stack");
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " stack");
         }
         return new Stack(this.instance);
     }
@@ -380,7 +377,7 @@ public class Contentstack {
      */
     public Stack stack(@NotNull Map<String, Object> header) {
         if (!isOAuthConfigured() && this.authtoken == null && !header.containsKey(AUTHORIZATION)) {
-            throw new IllegalStateException("Please login or configure OAuth to access stack");
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " stack");
         }
         return new Stack(this.instance, header);
     }
@@ -476,7 +473,7 @@ public class Contentstack {
      */
     public String getOAuthAuthorizationUrl() {
         if (!isOAuthConfigured()) {
-            throw new IllegalStateException("OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()");
+            throw new IllegalStateException(Util.OAUTH_CONFIG_MISSING);
         }
         return oauthHandler.authorize();
     }
@@ -489,7 +486,7 @@ public class Contentstack {
      */
     public CompletableFuture<OAuthTokens> exchangeOAuthCode(String code) {
         if (!isOAuthConfigured()) {
-            throw new IllegalStateException("OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()");
+            throw new IllegalStateException(Util.OAUTH_CONFIG_MISSING);
         }
         return oauthHandler.exchangeCodeForToken(code);
     }
@@ -501,7 +498,7 @@ public class Contentstack {
      */
     public CompletableFuture<OAuthTokens> refreshOAuthToken() {
         if (!isOAuthConfigured()) {
-            throw new IllegalStateException("OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()");
+            throw new IllegalStateException(Util.OAUTH_CONFIG_MISSING);
         }
         return oauthHandler.refreshAccessToken();
     }
@@ -545,7 +542,7 @@ public class Contentstack {
      */
     public CompletableFuture<Void> oauthLogout(boolean revokeAuthorization) {
         if (!isOAuthConfigured()) {
-            throw new IllegalStateException("OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()");
+            throw new IllegalStateException(Util.OAUTH_CONFIG_MISSING);
         }
         return oauthHandler.logout(revokeAuthorization);
     }

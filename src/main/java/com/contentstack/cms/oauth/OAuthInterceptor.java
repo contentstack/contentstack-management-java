@@ -64,7 +64,7 @@ public class OAuthInterceptor implements Interceptor {
 
         // Ensure we have tokens
         if (oauthHandler == null || oauthHandler.getTokens() == null) {
-            throw new IOException("No OAuth tokens available. Please authenticate first.");
+            throw new IOException(Util.OAUTH_NO_TOKENS);
         }
 
         // Check if we need to refresh the token before making the request
@@ -81,7 +81,7 @@ public class OAuthInterceptor implements Interceptor {
                             .build();
                 } catch (InterruptedException | ExecutionException | TimeoutException e) {
 
-                    throw new IOException("Failed to refresh access token", e);
+                    throw new IOException(Util.OAUTH_REFRESH_FAILED, e);
                 }
             }
         }
@@ -110,7 +110,7 @@ public class OAuthInterceptor implements Interceptor {
 
                         return executeRequest(chain, request, retryCount + 1);
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                        throw new IOException("Failed to refresh access token after 401", e);
+                        throw new IOException(Util.OAUTH_REFRESH_FAILED + " after 401", e);
                     }
                 }
             }
