@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.contentstack.cms.core.Util;
+import com.contentstack.cms.oauth.TokenCallback;
 
 /**
  * Configuration class for OAuth 2.0 authentication
@@ -26,6 +27,11 @@ public class OAuthConfig {
     private final String authEndpoint;
     private final String tokenEndpoint;
     private final String host;
+
+    /**
+     * Callback for token events
+     */
+    private final TokenCallback tokenCallback;
 
     /**
      * Validates the configuration
