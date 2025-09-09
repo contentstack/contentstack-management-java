@@ -25,6 +25,7 @@ public class OAuthConfig {
     private final String scope;
     private final String authEndpoint;
     private final String tokenEndpoint;
+    private final String host;
 
     /**
      * Validates the configuration
@@ -69,13 +70,16 @@ public class OAuthConfig {
             return authEndpoint;
         }
 
-        String hostname = Util.OAUTH_APP_HOST;
+        String hostname = host != null ? host : Util.OAUTH_APP_HOST;
 
         // Transform hostname if needed
         if (hostname.contains("contentstack")) {
             hostname = hostname
-                    .replaceAll("^api\\.", "app.") // api.contentstack -> app.contentstack
-                    .replaceAll("\\.io$", ".com");  // *.io -> *.com
+                    .replaceAll("-api\\.", "-app.") // eu-api.contentstack.com -> eu-app.contentstack.com
+                    .replaceAll("^api\\.", "app.") // api.contentstack.io -> app.contentstack.io
+                    .replaceAll("\\.io$", ".com"); // *.io -> *.com
+        } else {
+            hostname = Util.OAUTH_APP_HOST;
         }
 
         return "https://" + hostname + String.format(Util.OAUTH_AUTHORIZE_ENDPOINT, appId);
@@ -91,13 +95,16 @@ public class OAuthConfig {
             return tokenEndpoint;
         }
 
-        String hostname = Util.OAUTH_API_HOST;
+        String hostname = host != null ? host : Util.OAUTH_API_HOST;
 
         // Transform hostname if needed
         if (hostname.contains("contentstack")) {
-            hostname = hostname
-                    .replaceAll("^dev\\d+\\.", "dev.") // dev1.* -> dev.*
-                    .replaceAll("\\.io$", ".com");      // *.io -> *.com
+            hostname = hostname 
+                    .replaceAll("-api\\.", "-developerhub-api.") // eu-api.contentstack.com -> eu-developerhub-api.contentstack.com
+                    .replaceAll("^api\\.", "developerhub-api.") // api.contentstack.io -> developerhub-api.contentstack.io
+                    .replaceAll("\\.io$", ".com"); // *.io -> *.com
+        } else {
+            hostname = Util.OAUTH_API_HOST;
         }
 
         return "https://" + hostname + Util.OAUTH_TOKEN_ENDPOINT;

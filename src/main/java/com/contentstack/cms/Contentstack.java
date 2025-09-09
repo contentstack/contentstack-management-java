@@ -748,11 +748,25 @@ public class Contentstack {
          * @return Builder instance
          */
         public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri) {
+            return setOAuth(appId, clientId, clientSecret, redirectUri, this.hostname);
+        }
+
+        /**
+         * Configures OAuth with client credentials and specific host
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param clientSecret Client secret
+         * @param redirectUri Redirect URI
+         * @param host API host (e.g. "api.contentstack.io", "eu-api.contentstack.com")
+         * @return Builder instance
+         */
+        public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri, String host) {
             this.oauthConfig = OAuthConfig.builder()
                 .appId(appId)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
                 .redirectUri(redirectUri)
+                .host(host)
                 .build();
             return this;
         }
@@ -765,10 +779,23 @@ public class Contentstack {
          * @return Builder instance
          */
         public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri) {
+            return setOAuthWithPKCE(appId, clientId, redirectUri, this.hostname);
+        }
+
+        /**
+         * Configures OAuth with PKCE (no client secret) and specific host
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param redirectUri Redirect URI
+         * @param host API host (e.g. "api.contentstack.io", "eu-api.contentstack.com")
+         * @return Builder instance
+         */
+        public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri, String host) {
             this.oauthConfig = OAuthConfig.builder()
                 .appId(appId)
                 .clientId(clientId)
                 .redirectUri(redirectUri)
+                .host(host)
                 .build();
             return this;
         }
