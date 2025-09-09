@@ -20,6 +20,7 @@ import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.models.OAuthConfig;
 import com.contentstack.cms.models.OAuthTokens;
+import com.contentstack.cms.oauth.TokenCallback;
 import com.contentstack.cms.oauth.OAuthHandler;
 import com.contentstack.cms.oauth.OAuthInterceptor;
 import com.contentstack.cms.organization.Organization;
@@ -747,7 +748,20 @@ public class Contentstack {
          * @param redirectUri Redirect URI
          * @return Builder instance
          */
+        private TokenCallback tokenCallback;
+
+        /**
+         * Sets the token callback for OAuth storage
+         * @param callback The callback to handle token storage
+         * @return Builder instance
+         */
+        public Builder setTokenCallback(TokenCallback callback) {
+            this.tokenCallback = callback;
+            return this;
+        }
+
         public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri) {
+            // Use the builder's hostname (which defaults to Util.HOST if not set)
             return setOAuth(appId, clientId, clientSecret, redirectUri, this.hostname);
         }
 
@@ -761,13 +775,19 @@ public class Contentstack {
          * @return Builder instance
          */
         public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri, String host) {
-            this.oauthConfig = OAuthConfig.builder()
+            OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
                 .appId(appId)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
                 .redirectUri(redirectUri)
-                .host(host)
-                .build();
+                .host(host);
+
+            // Add token callback if set
+            if (this.tokenCallback != null) {
+                builder.tokenCallback(this.tokenCallback);
+            }
+
+            this.oauthConfig = builder.build();
             return this;
         }
 
@@ -779,6 +799,7 @@ public class Contentstack {
          * @return Builder instance
          */
         public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri) {
+            // Use the builder's hostname (which defaults to Util.HOST if not set)
             return setOAuthWithPKCE(appId, clientId, redirectUri, this.hostname);
         }
 
@@ -791,12 +812,18 @@ public class Contentstack {
          * @return Builder instance
          */
         public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri, String host) {
-            this.oauthConfig = OAuthConfig.builder()
+            OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
                 .appId(appId)
                 .clientId(clientId)
                 .redirectUri(redirectUri)
-                .host(host)
-                .build();
+                .host(host);
+
+            // Add token callback if set
+            if (this.tokenCallback != null) {
+                builder.tokenCallback(this.tokenCallback);
+            }
+
+            this.oauthConfig = builder.build();
             return this;
         }
 
