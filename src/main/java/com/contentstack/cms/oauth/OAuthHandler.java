@@ -193,6 +193,13 @@ public class OAuthHandler {
     private void _saveTokens(OAuthTokens tokens) {
         synchronized (tokenLock) {
             this.tokens = tokens;
+            if (config.getTokenCallback() != null) {
+                if (tokens != null) {
+                    config.getTokenCallback().onTokensUpdated(tokens);
+                } else {
+                    config.getTokenCallback().onTokensCleared();
+                }
+            }
         }
     }
 
