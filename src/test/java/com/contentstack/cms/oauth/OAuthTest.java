@@ -14,6 +14,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.contentstack.cms.Contentstack;
+import com.contentstack.cms.core.Util;
 import com.contentstack.cms.models.OAuthConfig;
 import com.contentstack.cms.models.OAuthTokens;
 import com.google.gson.Gson;
@@ -194,6 +195,154 @@ public class OAuthTest {
 
         assertNotEquals("URLs should be different due to different PKCE challenges", url1, url2);
     }
+
+    @Test
+    public void testDefaultOAuthEndpoints() {
+        // Test with default hosts
+        OAuthConfig config = OAuthConfig.builder()
+                .appId(TEST_APP_ID)
+                .clientId(TEST_CLIENT_ID)
+                .redirectUri(TEST_REDIRECT_URI)
+                .build();
+        OAuthHandler handler = new OAuthHandler(mockHttpClient, config);
+
+        String authUrl = handler.authorize();
+        String tokenUrl = config.getTokenEndpoint();
+
+        assertTrue("Auth URL should use default app host",
+                authUrl.contains(Util.OAUTH_APP_HOST));
+        assertTrue("Token URL should use default API host",
+                tokenUrl.contains(Util.OAUTH_API_HOST));
+    }
+
+    @Test
+    public void testHostTransformations() {
+        // Test cases: {API Host, Expected App Host, Expected Token Host}
+        String[][] testCases = {
+            // Default region
+            {"api.contentstack.io", "app.contentstack.com", "developerhub-api.contentstack.com"},
+            {"api-contentstack.com", "app-contentstack.com", "developerhub-api-contentstack.com"},
+            
+            // AWS regions
+            {"eu-api.contentstack.com", "eu-app.contentstack.com", "eu-developerhub-api.contentstack.com"},
+            {"eu-api-contentstack.com", "eu-app-contentstack.com", "eu-developerhub-api-contentstack.com"},
+            {"au-api.contentstack.com", "au-app.contentstack.com", "au-developerhub-api.contentstack.com"},
+            {"au-api-contentstack.com", "au-app-contentstack.com", "au-developerhub-api-contentstack.com"},
+            
+            // Azure regions
+            {"azure-na-api.contentstack.com", "azure-na-app.contentstack.com", "azure-na-developerhub-api.contentstack.com"},
+            {"azure-na-api-contentstack.com", "azure-na-app-contentstack.com", "azure-na-developerhub-api-contentstack.com"},
+            {"azure-eu-api.contentstack.com", "azure-eu-app.contentstack.com", "azure-eu-developerhub-api.contentstack.com"},
+            {"azure-eu-api-contentstack.com", "azure-eu-app-contentstack.com", "azure-eu-developerhub-api-contentstack.com"},
+            
+            // GCP regions
+            {"gcp-na-api.contentstack.com", "gcp-na-app.contentstack.com", "gcp-na-developerhub-api.contentstack.com"},
+            {"gcp-na-api-contentstack.com", "gcp-na-app-contentstack.com", "gcp-na-developerhub-api-contentstack.com"},
+            {"gcp-eu-api.contentstack.com", "gcp-eu-app.contentstack.com", "gcp-eu-developerhub-api.contentstack.com"},
+            {"gcp-eu-api-contentstack.com", "gcp-eu-app-contentstack.com", "gcp-eu-developerhub-api-contentstack.com"}
+        };
+
+        for (String[] testCase : testCases) {
+            String apiHost = testCase[0];
+            String expectedAppHost = testCase[1];
+            String expectedTokenHost = testCase[2];
+
+            OAuthConfig config = OAuthConfig.builder()
+                    .appId(TEST_APP_ID)
+                    .clientId(TEST_CLIENT_ID)
+                    .redirectUri(TEST_REDIRECT_URI)
+                    .host(apiHost)
+                    .build();
+            OAuthHandler handler = new OAuthHandler(mockHttpClient, config);
+
+            String authUrl = handler.authorize();
+            String tokenUrl = config.getTokenEndpoint();
+
+            assertTrue(String.format("Auth URL for %s should contain %s", apiHost, expectedAppHost),
+                    authUrl.contains(expectedAppHost));
+            assertTrue(String.format("Token URL for %s should contain %s", apiHost, expectedTokenHost),
+                    tokenUrl.contains(expectedTokenHost));
+        }
+    }
+
+    @Test
+    public void testHostStorage() {
+        String testHost = "eu-api.contentstack.com";
+        
+        // Test host storage in OAuthConfig
+        OAuthConfig config = OAuthConfig.builder()
+                .appId(TEST_APP_ID)
+                .clientId(TEST_CLIENT_ID)
+                .redirectUri(TEST_REDIRECT_URI)
+                .host(testHost)
+                .build();
+                
+        assertEquals("Host should be stored in OAuthConfig",
+                testHost, config.getHost());
+                
+        // Test host storage via Contentstack.Builder
+        Contentstack client = new Contentstack.Builder()
+                .setOAuth(TEST_APP_ID, TEST_CLIENT_ID, TEST_CLIENT_SECRET, TEST_REDIRECT_URI, testHost)
+                .build();
+                
+        String authUrl = client.getOAuthAuthorizationUrl();
+        assertTrue("Auth URL should use stored host",
+                authUrl.contains("eu-app.contentstack.com"));
+                
+        // Test host storage via PKCE builder
+        client = new Contentstack.Builder()
+                .setOAuthWithPKCE(TEST_APP_ID, TEST_CLIENT_ID, TEST_REDIRECT_URI, testHost)
+                .build();
+                
+        authUrl = client.getOAuthAuthorizationUrl();
+        assertTrue("Auth URL should use stored host with PKCE",
+                authUrl.contains("eu-app.contentstack.com"));
+    }
+
+    @Test
+    public void testDefaultHosts() {
+        // Test with no host specified
+        OAuthConfig config = OAuthConfig.builder()
+                .appId(TEST_APP_ID)
+                .clientId(TEST_CLIENT_ID)
+                .redirectUri(TEST_REDIRECT_URI)
+                .build();
+        OAuthHandler handler = new OAuthHandler(mockHttpClient, config);
+
+        String authUrl = handler.authorize();
+        String tokenUrl = config.getTokenEndpoint();
+
+        assertTrue("Auth URL should use default app host",
+                authUrl.contains(Util.OAUTH_APP_HOST));
+        assertTrue("Token URL should use default API host",
+                tokenUrl.contains(Util.OAUTH_API_HOST));
+    }
+
+    @Test
+    public void testCustomEndpoints() {
+        // Test with custom endpoints
+        String customAuthEndpoint = "https://custom.auth.endpoint";
+        String customTokenEndpoint = "https://custom.token.endpoint";
+
+        OAuthConfig config = OAuthConfig.builder()
+                .appId(TEST_APP_ID)
+                .clientId(TEST_CLIENT_ID)
+                .redirectUri(TEST_REDIRECT_URI)
+                .authEndpoint(customAuthEndpoint)
+                .tokenEndpoint(customTokenEndpoint)
+                .build();
+        OAuthHandler handler = new OAuthHandler(mockHttpClient, config);
+
+        String authUrl = handler.authorize();
+        String tokenUrl = config.getTokenEndpoint();
+
+        assertEquals("Should use custom auth endpoint",
+                customAuthEndpoint, authUrl);
+        assertEquals("Should use custom token endpoint",
+                customTokenEndpoint, tokenUrl);
+    }
+
+
 
     // =================
     // TOKEN EXCHANGE TESTS
