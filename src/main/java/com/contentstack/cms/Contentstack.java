@@ -1,32 +1,40 @@
 package com.contentstack.cms;
 
-import com.contentstack.cms.core.AuthInterceptor;
-import com.contentstack.cms.core.Util;
-import com.contentstack.cms.models.Error;
-import com.contentstack.cms.models.LoginDetails;
-import com.contentstack.cms.organization.Organization;
-import com.contentstack.cms.stack.Stack;
-import com.contentstack.cms.user.User;
-import com.google.gson.Gson;
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
-import org.jetbrains.annotations.NotNull;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 import java.io.IOException;
 import java.net.Proxy;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import static com.contentstack.cms.core.Util.*;
+import org.jetbrains.annotations.NotNull;
+
+import com.contentstack.cms.core.AuthInterceptor;
+import com.contentstack.cms.core.Util;
+import static com.contentstack.cms.core.Util.API_KEY;
+import static com.contentstack.cms.core.Util.AUTHORIZATION;
+import static com.contentstack.cms.core.Util.BRANCH;
+import com.contentstack.cms.models.Error;
+import com.contentstack.cms.models.LoginDetails;
+import com.contentstack.cms.models.OAuthConfig;
+import com.contentstack.cms.models.OAuthTokens;
+import com.contentstack.cms.oauth.TokenCallback;
+import com.contentstack.cms.oauth.OAuthHandler;
+import com.contentstack.cms.oauth.OAuthInterceptor;
+import com.contentstack.cms.organization.Organization;
+import com.contentstack.cms.stack.Stack;
+import com.contentstack.cms.user.User;
+import com.google.gson.Gson;
+
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * <b>Contentstack Java Management SDK</b>
@@ -41,7 +49,7 @@ import static com.contentstack.cms.core.Util.*;
  */
 public class Contentstack {
 
-    public final Logger logger = Logger.getLogger(Contentstack.class.getName());
+    public static final Logger logger = Logger.getLogger(Contentstack.class.getName());
     protected final String host;
     protected final String port;
     protected final String version;
@@ -51,6 +59,8 @@ public class Contentstack {
     protected final Boolean retryOnFailure;
     protected final Proxy proxy;
     protected AuthInterceptor interceptor;
+    protected OAuthInterceptor oauthInterceptor;
+    protected OAuthHandler oauthHandler;
     protected String[] earlyAccess;
     protected User user;
 
@@ -86,8 +96,9 @@ public class Contentstack {
      * @since 2022-05-19
      */
     public User user() {
-        if (this.authtoken == null)
-            throw new NullPointerException(Util.LOGIN_FLAG);
+        if (!isOAuthConfigured() && this.authtoken == null) {
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " user");
+        }
         user = new User(this.instance);
         return user;
     }
@@ -201,15 +212,20 @@ public class Contentstack {
 
     private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
         if (loginResponse.isSuccessful()) {
-            assert loginResponse.body() != null;
-            // logger.info(loginResponse.body().getNotice());
-            this.authtoken = loginResponse.body().getUser().getAuthtoken();
-            this.interceptor.setAuthtoken(this.authtoken);
+            LoginDetails loginDetails = loginResponse.body();
+            if (loginDetails != null && loginDetails.getUser() != null) {
+                this.authtoken = loginDetails.getUser().getAuthtoken();
+                if (this.interceptor != null) {
+                    this.interceptor.setAuthtoken(this.authtoken);
+                }
+            }
         } else {
-            assert loginResponse.errorBody() != null;
-            String errorJsonString = loginResponse.errorBody().string();
-            logger.info(errorJsonString);
-            new Gson().fromJson(errorJsonString, Error.class);
+            ResponseBody errorBody = loginResponse.errorBody();
+            if (errorBody != null) {
+                String errorJsonString = errorBody.string();
+                logger.info(errorJsonString);
+                new Gson().fromJson(errorJsonString, Error.class);
+            }
         }
     }
 
@@ -274,7 +290,18 @@ public class Contentstack {
      * @return the organization
      */
     public Organization organization() {
-        Objects.requireNonNull(this.authtoken, "Please Login to access user instance");
+        if (!isOAuthConfigured() && this.authtoken == null) {
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " organization");
+        }
+        
+        // If using OAuth, get organization from tokens
+        if (isOAuthConfigured() && oauthHandler.getTokens() != null) {
+            String orgUid = oauthHandler.getTokens().getOrganizationUid();
+            if (orgUid != null && !orgUid.isEmpty()) {
+                return organization(orgUid);
+            }
+        }
+        
         return new Organization(this.instance);
     }
 
@@ -298,9 +325,12 @@ public class Contentstack {
      *         </pre>
      */
     public Organization organization(@NotNull String organizationUid) {
-        Objects.requireNonNull(this.authtoken, "Please Login to access user instance");
-        if (organizationUid.isEmpty())
-            throw new IllegalStateException("organizationUid can not be empty");
+        if (!isOAuthConfigured() && this.authtoken == null) {
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " organization");
+        }
+        if (organizationUid.isEmpty()) {
+            throw new IllegalStateException(Util.OAUTH_ORG_EMPTY);
+        }
         return new Organization(this.instance, organizationUid);
     }
 
@@ -322,7 +352,9 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack() {
-        Objects.requireNonNull(this.authtoken, ILLEGAL_USER);
+        if (!isOAuthConfigured() && this.authtoken == null) {
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " stack");
+        }
         return new Stack(this.instance);
     }
 
@@ -345,8 +377,9 @@ public class Contentstack {
      * @return the stack instance
      */
     public Stack stack(@NotNull Map<String, Object> header) {
-        if (this.authtoken == null && !header.containsKey(AUTHORIZATION) && header.get(AUTHORIZATION) == null)
-            throw new IllegalStateException(PLEASE_LOGIN);
+        if (!isOAuthConfigured() && this.authtoken == null && !header.containsKey(AUTHORIZATION)) {
+            throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " stack");
+        }
         return new Stack(this.instance, header);
     }
 
@@ -435,10 +468,94 @@ public class Contentstack {
     }
 
     /**
-     * Instantiates a new Contentstack.
-     *
-     * @param builder the builder
+     * Get the OAuth authorization URL for the user to visit
+     * @return Authorization URL string
+     * @throws IllegalStateException if OAuth is not configured
      */
+    public String getOAuthAuthorizationUrl() {
+        if (!isOAuthConfigured()) {
+            throw new IllegalStateException(Util.OAUTH_CONFIG_MISSING);
+        }
+        return oauthHandler.authorize();
+    }
+
+    /**
+     * Exchange OAuth authorization code for tokens
+     * @param code Authorization code from OAuth callback
+     * @return CompletableFuture containing OAuth tokens
+     * @throws IllegalStateException if OAuth is not configured
+     */
+    public CompletableFuture<OAuthTokens> exchangeOAuthCode(String code) {
+        if (!isOAuthConfigured()) {
+            throw new IllegalStateException(Util.OAUTH_CONFIG_MISSING);
+        }
+        return oauthHandler.exchangeCodeForToken(code);
+    }
+
+    /**
+     * Refresh the OAuth access token
+     * @return CompletableFuture containing new OAuth tokens
+     * @throws IllegalStateException if OAuth is not configured or no refresh token available
+     */
+    public CompletableFuture<OAuthTokens> refreshOAuthToken() {
+        if (!isOAuthConfigured()) {
+            throw new IllegalStateException(Util.OAUTH_CONFIG_MISSING);
+        }
+        return oauthHandler.refreshAccessToken();
+    }
+
+    /**
+     * Get the current OAuth tokens
+     * @return Current OAuth tokens or null if not available
+     */
+    public OAuthTokens getOAuthTokens() {
+        return oauthHandler != null ? oauthHandler.getTokens() : null;
+    }
+
+    /**
+     * Check if we have valid OAuth tokens
+     * @return true if we have valid tokens
+     */
+    public boolean hasValidOAuthTokens() {
+        return oauthInterceptor != null && oauthInterceptor.hasValidTokens();
+    }
+
+    /**
+     * Check if OAuth is configured
+     * @return true if OAuth is configured
+     */
+    public boolean isOAuthConfigured() {
+        return oauthInterceptor != null && oauthInterceptor.isOAuthConfigured();
+    }
+
+    /**
+     * Get the OAuth handler instance
+     * @return OAuth handler or null if not configured
+     */
+    public OAuthHandler getOAuthHandler() {
+        return oauthHandler;
+    }
+
+    /**
+     * Logout from OAuth session and optionally revoke authorization
+     * @param revokeAuthorization If true, revokes the OAuth authorization
+     * @return CompletableFuture that completes when logout is done
+     */
+    public CompletableFuture<Void> oauthLogout(boolean revokeAuthorization) {
+        if (!isOAuthConfigured()) {
+            throw new IllegalStateException(Util.OAUTH_CONFIG_MISSING);
+        }
+        return oauthHandler.logout(revokeAuthorization);
+    }
+
+    /**
+     * Logout from OAuth session without revoking authorization
+     * @return CompletableFuture that completes when logout is done
+     */
+    public CompletableFuture<Void> oauthLogout() {
+        return oauthLogout(false);
+    }
+
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
         this.port = builder.port;
@@ -449,6 +566,8 @@ public class Contentstack {
         this.retryOnFailure = builder.retry;
         this.proxy = builder.proxy;
         this.interceptor = builder.authInterceptor;
+        this.oauthInterceptor = builder.oauthInterceptor;
+        this.oauthHandler = builder.oauthHandler;
         this.earlyAccess = builder.earlyAccess;
     }
 
@@ -462,6 +581,9 @@ public class Contentstack {
          */
         protected Proxy proxy;
         private AuthInterceptor authInterceptor;
+        private OAuthInterceptor oauthInterceptor;
+        private OAuthConfig oauthConfig;
+        private OAuthHandler oauthHandler;
 
         private String authtoken; // authtoken for client
         private String[] earlyAccess;
@@ -608,6 +730,102 @@ public class Contentstack {
             return this;
         }
 
+        /**
+         * Sets OAuth configuration for the client
+         * @param config OAuth configuration
+         * @return Builder instance
+         */
+        public Builder setOAuthConfig(OAuthConfig config) {
+            this.oauthConfig = config;
+            return this;
+        }
+
+        /**
+         * Configures OAuth with client credentials (traditional flow)
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param clientSecret Client secret
+         * @param redirectUri Redirect URI
+         * @return Builder instance
+         */
+        private TokenCallback tokenCallback;
+
+        /**
+         * Sets the token callback for OAuth storage
+         * @param callback The callback to handle token storage
+         * @return Builder instance
+         */
+        public Builder setTokenCallback(TokenCallback callback) {
+            this.tokenCallback = callback;
+            return this;
+        }
+
+        public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri) {
+            // Use the builder's hostname (which defaults to Util.HOST if not set)
+            return setOAuth(appId, clientId, clientSecret, redirectUri, this.hostname);
+        }
+
+        /**
+         * Configures OAuth with client credentials and specific host
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param clientSecret Client secret
+         * @param redirectUri Redirect URI
+         * @param host API host (e.g. "api.contentstack.io", "eu-api.contentstack.com")
+         * @return Builder instance
+         */
+        public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri, String host) {
+            OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
+                .appId(appId)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .redirectUri(redirectUri)
+                .host(host);
+
+            // Add token callback if set
+            if (this.tokenCallback != null) {
+                builder.tokenCallback(this.tokenCallback);
+            }
+
+            this.oauthConfig = builder.build();
+            return this;
+        }
+
+        /**
+         * Configures OAuth with PKCE (no client secret)
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param redirectUri Redirect URI
+         * @return Builder instance
+         */
+        public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri) {
+            // Use the builder's hostname (which defaults to Util.HOST if not set)
+            return setOAuthWithPKCE(appId, clientId, redirectUri, this.hostname);
+        }
+
+        /**
+         * Configures OAuth with PKCE (no client secret) and specific host
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param redirectUri Redirect URI
+         * @param host API host (e.g. "api.contentstack.io", "eu-api.contentstack.com")
+         * @return Builder instance
+         */
+        public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri, String host) {
+            OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
+                .appId(appId)
+                .clientId(clientId)
+                .redirectUri(redirectUri)
+                .host(host);
+
+            // Add token callback if set
+            if (this.tokenCallback != null) {
+                builder.tokenCallback(this.tokenCallback);
+            }
+
+            this.oauthConfig = builder.build();
+            return this;
+        }
 
         public Builder earlyAccess(String[] earlyAccess) {
             this.earlyAccess = earlyAccess;
@@ -631,18 +849,43 @@ public class Contentstack {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient(contentstack, this.retry)).build();
             contentstack.instance = this.instance;
+            
+            // Initialize OAuth if configured
+            if (this.oauthConfig != null) {
+                // OAuth handler and interceptor are created in httpClient
+                contentstack.oauthHandler = this.oauthHandler;
+                contentstack.oauthInterceptor = this.oauthInterceptor;
+            }
         }
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
-            this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
-            return new OkHttpClient.Builder()
+            OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .connectionPool(this.connectionPool)
-                    .addInterceptor(this.authInterceptor)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
                     .connectTimeout(Duration.ofSeconds(this.timeout))
-                    .retryOnConnectionFailure(retryOnFailure)
-                    .build();
+                    .retryOnConnectionFailure(retryOnFailure);
+
+            // Add either OAuth or traditional auth interceptor
+            if (this.oauthConfig != null) {
+                // Create OAuth handler and interceptor first
+                OkHttpClient tempClient = builder.build();
+                this.oauthHandler = new OAuthHandler(tempClient, this.oauthConfig);
+                this.oauthInterceptor = new OAuthInterceptor(this.oauthHandler);
+                
+                // Configure early access if needed
+                if (this.earlyAccess != null) {
+                    this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
+                }
+                
+                // Add interceptor to handle OAuth, token refresh, and retries
+                builder.addInterceptor(this.oauthInterceptor);
+            } else {
+                this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
+                builder.addInterceptor(this.authInterceptor);
+            }
+
+            return builder.build();
         }
 
         private HttpLoggingInterceptor logger() {
