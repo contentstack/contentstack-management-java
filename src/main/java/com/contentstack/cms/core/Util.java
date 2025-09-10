@@ -51,6 +51,23 @@ public class Util {
     public static final String ERROR_INSTALLATION = "installation uid is required";
     public static final String MISSING_ORG_ID = "organization uid is required";
 
+    // OAuth Constants
+    public static final String OAUTH_APP_HOST = "app.contentstack.com";
+    public static final String OAUTH_API_HOST = "developerhub-api.contentstack.com";
+    public static final String OAUTH_TOKEN_ENDPOINT = "/token";
+    public static final String OAUTH_AUTHORIZE_ENDPOINT = "/#!/apps/%s/authorize";
+    
+    // OAuth Error Messages
+    public static final String OAUTH_NO_TOKENS = "No OAuth tokens available. Please authenticate first.";
+    public static final String OAUTH_NO_REFRESH_TOKEN = "No refresh token available";
+    public static final String OAUTH_EMPTY_CODE = "Authorization code cannot be null or empty";
+    public static final String OAUTH_CONFIG_MISSING = "OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()";
+    public static final String OAUTH_REFRESH_FAILED = "Failed to refresh access token";
+    public static final String OAUTH_REVOKE_FAILED = "Failed to revoke authorization";
+    public static final String OAUTH_STATUS_FAILED = "Failed to get authorization status";
+    public static final String OAUTH_LOGIN_REQUIRED = "Please login or configure OAuth to access";
+    public static final String OAUTH_ORG_EMPTY = "organizationUid can not be empty";
+
     // The code `Util() throws IllegalAccessException` is a constructor for the
     // `Util` class that throws an
     // `IllegalAccessException` when called. This constructor is marked as private,
@@ -73,7 +90,7 @@ public class Util {
      * string value "Java" concatenated
      * with the Java version and the operating system name.
      */
-    protected static String defaultUserAgent() {
+    public static String defaultUserAgent() {
         String agent = System.getProperty("http.agent");
         String operatingSystem = System.getProperty("os.name").toUpperCase();
         return agent != null ? agent : ("Java" + System.getProperty("java.version") + " OS: " + operatingSystem);
