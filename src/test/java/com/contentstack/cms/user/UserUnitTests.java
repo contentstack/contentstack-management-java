@@ -596,4 +596,115 @@ public class UserUnitTests {
         Assertions.assertEquals(0,
                 requestInfo.url().queryParameterNames().size());
     }
+
+    @Test
+    @Order(42)
+    @DisplayName("Test login with TOTP token")
+    void testLoginWithTOTPToken() {
+        // Test basic login with TOTP token
+        Request requestInfo = userInstance.login("test@example.com", "password", "123456").request();
+        
+        // Verify request format
+        Assertions.assertEquals("POST", requestInfo.method());
+        Assertions.assertEquals("/v3/user-session", requestInfo.url().encodedPath());
+        
+        // Verify request body
+        String requestBody = requestInfo.body().toString();
+        Assertions.assertTrue(requestBody.contains("\"tfa_token\":\"123456\""));
+    }
+
+    @Test
+    @Order(43)
+    @DisplayName("Test login with MFA parameters")
+    void testLoginWithMFAParameters() {
+        // Test login with both token and secret (token should be used)
+        Request requestInfo = userInstance.login("test@example.com", "password", "123456", "test-secret").request();
+        
+        // Verify request format
+        Assertions.assertEquals("POST", requestInfo.method());
+        Assertions.assertEquals("/v3/user-session", requestInfo.url().encodedPath());
+        
+        // Verify request body uses token
+        String requestBody = requestInfo.body().toString();
+        Assertions.assertTrue(requestBody.contains("\"tfa_token\":\"123456\""));
+    }
+
+    @Test
+    @Order(44)
+    @DisplayName("Test login validation")
+    void testLoginValidation() {
+        // Test with missing required parameters
+        Assertions.assertThrows(IllegalArgumentException.class, 
+            () -> userInstance.login(null, "password", "123456").request());
+            
+        Assertions.assertThrows(IllegalArgumentException.class, 
+            () -> userInstance.login("test@example.com", null, "123456").request());
+            
+        Assertions.assertThrows(IllegalArgumentException.class, 
+            () -> userInstance.login("test@example.com", "password", null).request());
+    }
+
+    @Test
+    @Order(45)
+    @DisplayName("Test TOTP generation from MFA secret")
+    void testTOTPGenerationFromSecret() {
+        // Test login with MFA secret only
+        Request requestInfo = userInstance.login("test@example.com", "password", null, "test-secret").request();
+        
+        // Verify request format
+        Assertions.assertEquals("POST", requestInfo.method());
+        Assertions.assertEquals("/v3/user-session", requestInfo.url().encodedPath());
+        
+        // Verify generated TOTP format
+        String requestBody = requestInfo.body().toString();
+        Assertions.assertTrue(requestBody.contains("\"tfa_token\":\""));
+        
+        // Extract TOTP token and verify it's 6 digits
+        String token = requestBody.split("\"tfa_token\":\"")[1].split("\"")[0];
+        Assertions.assertTrue(token.matches("\\d{6}"), "TOTP should be 6 digits");
+    }
+
+    @Test
+    @Order(46)
+    @DisplayName("Test invalid MFA secret handling")
+    void testInvalidMFASecret() {
+        // Test with invalid MFA secret
+        IllegalArgumentException exception = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> userInstance.login("test@example.com", "password", null, "invalid-secret").request()
+        );
+        
+        Assertions.assertTrue(exception.getMessage().contains("Invalid MFA secret key"));
+    }
+
+    @Test
+    @Order(47)
+    @DisplayName("Test TOTP token priority over MFA secret")
+    void testTOTPPriority() {
+        // When both token and secret are provided, token should be used
+        Request requestInfo = userInstance.login("test@example.com", "password", "123456", "test-secret").request();
+        String requestBody = requestInfo.body().toString();
+        
+        // Should use provided token, not generate from secret
+        Assertions.assertTrue(requestBody.contains("\"tfa_token\":\"123456\""));
+    }
+
+    @Test
+    @Order(48)
+    @DisplayName("Test null/empty MFA parameters")
+    void testNullEmptyMFAParams() {
+        // Test with both null
+        IllegalArgumentException exception1 = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> userInstance.login("test@example.com", "password", null, null).request()
+        );
+        Assertions.assertTrue(exception1.getMessage().contains("Either tfaToken or mfaSecret must be provided"));
+        
+        // Test with empty secret
+        IllegalArgumentException exception2 = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> userInstance.login("test@example.com", "password", null, "").request()
+        );
+        Assertions.assertTrue(exception2.getMessage().contains("Either tfaToken or mfaSecret must be provided"));
+    }
 }
