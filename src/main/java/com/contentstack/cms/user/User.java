@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import java.util.HashMap;
 
@@ -101,6 +102,23 @@ public class User implements BaseImplementation {
             credentials.put("tfa_token", arguments[2]);
         }
         return credentials;
+    }
+
+    public Call<LoginDetails> login(@NotNull String email, @NotNull String password, @NotNull String tfaToken, String mfaSecret) {
+        String finalTfaToken = tfaToken;
+        if (mfaSecret != null && !mfaSecret.isEmpty()) {
+            finalTfaToken = generateTOTP(mfaSecret);
+        }
+        return login(email, password, finalTfaToken);
+    }
+
+    private String generateTOTP(String secret) {
+        try {
+            GoogleAuthenticator gAuth = new GoogleAuthenticator();
+            return String.format("%06d", gAuth.getTotpPassword(secret));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid MFA secret key", e);
+        }
     }
 
     /**
