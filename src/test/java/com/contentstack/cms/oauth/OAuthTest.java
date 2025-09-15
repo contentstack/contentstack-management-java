@@ -80,7 +80,7 @@ public class OAuthTest {
         
         // Create Contentstack clients
         pkceClient = new Contentstack.Builder()
-                .setOAuthWithPKCE(TEST_APP_ID, TEST_CLIENT_ID, TEST_REDIRECT_URI)
+                .setOAuth(TEST_APP_ID, TEST_CLIENT_ID, null, TEST_REDIRECT_URI)
                 .build();
                 
         clientSecretClient = new Contentstack.Builder()
@@ -113,7 +113,7 @@ public class OAuthTest {
         // Test invalid app ID
         try {
             new Contentstack.Builder()
-                    .setOAuthWithPKCE("", TEST_CLIENT_ID, TEST_REDIRECT_URI)
+                    .setOAuth("", TEST_CLIENT_ID, null, TEST_REDIRECT_URI)
                     .build();
             fail("Should throw exception for empty app ID");
         } catch (IllegalArgumentException e) {
@@ -291,7 +291,7 @@ public class OAuthTest {
                 
         // Test host storage via PKCE builder
         client = new Contentstack.Builder()
-                .setOAuthWithPKCE(TEST_APP_ID, TEST_CLIENT_ID, TEST_REDIRECT_URI, testHost)
+                .setOAuth(TEST_APP_ID, TEST_CLIENT_ID, null, TEST_REDIRECT_URI, testHost)
                 .build();
                 
         authUrl = client.getOAuthAuthorizationUrl();
