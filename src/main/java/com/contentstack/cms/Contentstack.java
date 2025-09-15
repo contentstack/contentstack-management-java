@@ -156,61 +156,19 @@ public class Contentstack {
     }
 
     /**
-     * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The
-     * authtoken is returned to the 'Response' body of the Log in call and is
-     * mandatory in all the calls.
-     * <p>
-     * <b>Example:</b>
-     * <p>
-     * All accounts registered with Contentstack are known as Users. A stack can
-     * have many users with varying permissions and roles
-     * <p>
-     * To perform User operations first get User instance like below.
-     * <p>
-     * <b>Example:</b>
+     * Login with TOTP token.
      *
-     * <pre>
-     * Contentstack contentstack = new Contentstack.Builder().setAuthtoken("authtoken").build();
-     * Response login = contentstack.login();
-     *
-     * Access more other user functions from the userInstance
-     * </pre>
-     *
-     * <br>
-     * <b>OR: </b>
-     *
-     * <pre>
-     * Contentstack contentstack = new Contentstack.Builder().build();
-     * Response login = contentstack.login("emailId", "password");
-     * </pre>
-     *
-     * <br>
-     *
-     * @param emailId the email id
-     * @param password the password
-     * @param tfaToken the tfa token
-     * @return LoginDetails
-     * @throws IOException the io exception
-     * @throws IOException the IOException
-     * @author ***REMOVED
-     ***
-     * @see <a
-     * href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
-     * your account
-     * </a>
+     * @param emailId    The email ID of the user
+     * @param password   The user's password
+     * @param tfaToken   The TOTP token
+     * @return Response containing login details
+     * @throws IOException if there's a network error
+     * @throws IllegalStateException if user is already logged in
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
-        if (this.authtoken != null) {
-            throw new IllegalStateException(Util.USER_ALREADY_LOGGED_IN);
-        }
-        user = new User(this.instance);
-        Response<LoginDetails> response = user.login(emailId, password, tfaToken).execute();
-        setupLoginCredentials(response);
-        user = new User(this.instance);
-        return response;
+        return login(emailId, password, tfaToken, null);
     }
+
     /**
      * Login with TOTP/MFA support.
      *
@@ -224,30 +182,40 @@ public class Contentstack {
      * @throws IllegalStateException if user is already logged in
      */
     public Response<LoginDetails> login(String emailId, String password, String tfaToken, String mfaSecret) throws IOException {
-        String finalTfaToken = tfaToken;
-        if (mfaSecret != null && !mfaSecret.isEmpty()) {
-            finalTfaToken = generateTOTP(mfaSecret);
-        }
+        // Check if already logged in
         if (this.authtoken != null) {
             throw new IllegalStateException(Util.USER_ALREADY_LOGGED_IN);
         }
-        if (finalTfaToken == null) {
+
+        // Validate inputs
+        if (emailId == null || emailId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+        if ((tfaToken == null || tfaToken.trim().isEmpty()) && (mfaSecret == null || mfaSecret.trim().isEmpty())) {
             throw new IllegalArgumentException("Either tfaToken or mfaSecret must be provided");
         }
+
+        // Generate TOTP if needed
+        String finalTfaToken = tfaToken;
+        if ((tfaToken == null || tfaToken.trim().isEmpty()) && mfaSecret != null && !mfaSecret.trim().isEmpty()) {
+            try {
+                GoogleAuthenticator gAuth = new GoogleAuthenticator();
+                finalTfaToken = String.format("%06d", gAuth.getTotpPassword(mfaSecret));
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Failed to generate TOTP token: " + e.getMessage(), e);
+            }
+        }
+
+        // Perform login
         user = new User(this.instance);
         Response<LoginDetails> response = user.login(emailId, password, finalTfaToken).execute();
         setupLoginCredentials(response);
         return response;
     }
 
-    private String generateTOTP(String secret) {
-        try {
-            GoogleAuthenticator gAuth = new GoogleAuthenticator();
-            return String.format("%06d", gAuth.getTotpPassword(secret));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid MFA secret key", e);
-        }
-    }
 
     private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
         if (loginResponse.isSuccessful()) {

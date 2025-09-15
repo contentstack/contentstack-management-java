@@ -24,7 +24,7 @@ import java.util.HashMap;
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class User implements BaseImplementation {
+public class User implements BaseImplementation<User> {
 
     protected final UserService userService;
     protected HashMap<String, String> headers;
@@ -80,14 +80,18 @@ public class User implements BaseImplementation {
     }
 
     /**
-     * Login call.
+     * Login with TOTP token for two-factor authentication.
      *
      * @param email    email for user to login
      * @param password password for user to login
-     * @param tfaToken the tfa token
-     * @return Call
+     * @param tfaToken the TOTP token for two-factor authentication
+     * @return Call containing login details
+     * @throws IllegalArgumentException if email, password, or tfaToken is null or empty
      */
-    public Call<LoginDetails> login(@NotNull String email, @NotNull String password, @NotNull String tfaToken) {
+    public Call<LoginDetails> login(@NotNull String email, @NotNull String password, String tfaToken) {
+        if (tfaToken == null || tfaToken.trim().isEmpty()) {
+            throw new IllegalArgumentException("TOTP token cannot be null or empty");
+        }
         HashMap<String, HashMap<String, String>> userSession = new HashMap<>();
         userSession.put("user", setCredentials(email, password, tfaToken));
         JSONObject userDetail = new JSONObject(userSession);
@@ -95,29 +99,66 @@ public class User implements BaseImplementation {
     }
 
     private HashMap<String, String> setCredentials(@NotNull String... arguments) {
+        if (arguments == null || arguments.length < 2) {
+            throw new IllegalArgumentException("Email and password are required");
+        }
+        if (arguments[0] == null || arguments[0].trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+        if (arguments[1] == null || arguments[1].trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        
         HashMap<String, String> credentials = new HashMap<>();
         credentials.put("email", arguments[0]);
         credentials.put("password", arguments[1]);
-        if (arguments.length > 2) {
+        
+        if (arguments.length > 2 && arguments[2] != null && !arguments[2].trim().isEmpty()) {
             credentials.put("tfa_token", arguments[2]);
         }
         return credentials;
     }
 
-    public Call<LoginDetails> login(@NotNull String email, @NotNull String password, @NotNull String tfaToken, String mfaSecret) {
+    public Call<LoginDetails> login(@NotNull String email, @NotNull String password, String tfaToken, String mfaSecret) {
+        if (email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be empty");
+        }
+        if (password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
+        if ((tfaToken == null || tfaToken.trim().isEmpty()) && (mfaSecret == null || mfaSecret.trim().isEmpty())) {
+            throw new IllegalArgumentException("Either tfaToken or mfaSecret must be provided");
+        }
+
         String finalTfaToken = tfaToken;
-        if (mfaSecret != null && !mfaSecret.isEmpty()) {
-            finalTfaToken = generateTOTP(mfaSecret);
+        if ((tfaToken == null || tfaToken.trim().isEmpty()) && mfaSecret != null && !mfaSecret.trim().isEmpty()) {
+            try {
+                finalTfaToken = generateTOTP(mfaSecret);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Failed to generate TOTP token: " + e.getMessage(), e);
+            }
+        }
+        if (finalTfaToken == null || finalTfaToken.trim().isEmpty()) {
+            throw new IllegalArgumentException("Failed to generate valid TOTP token");
         }
         return login(email, password, finalTfaToken);
     }
 
     private String generateTOTP(String secret) {
+        if (secret == null || secret.trim().isEmpty()) {
+            throw new IllegalArgumentException("MFA secret cannot be null or empty");
+        }
         try {
             GoogleAuthenticator gAuth = new GoogleAuthenticator();
-            return String.format("%06d", gAuth.getTotpPassword(secret));
+            String totp = String.format("%06d", gAuth.getTotpPassword(secret));
+            if (!totp.matches("\\d{6}")) {
+                throw new IllegalArgumentException("Generated TOTP token is invalid");
+            }
+            return totp;
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid MFA secret key", e);
+            throw new IllegalArgumentException("Invalid MFA secret key: " + e.getMessage(), e);
         }
     }
 
@@ -146,8 +187,7 @@ public class User implements BaseImplementation {
      * @return Call
      */
     public Call<ResponseBody> update(JSONObject body) {
-        HashMap<String, String> headers = new HashMap<>();
-        return userService.update(headers, body);
+        return userService.update(new HashMap<>(), body);
     }
 
     /**
