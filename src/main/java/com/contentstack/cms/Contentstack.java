@@ -740,14 +740,6 @@ public class Contentstack {
             return this;
         }
 
-        /**
-         * Configures OAuth with client credentials (traditional flow)
-         * @param appId Application ID
-         * @param clientId Client ID
-         * @param clientSecret Client secret
-         * @param redirectUri Redirect URI
-         * @return Builder instance
-         */
         private TokenCallback tokenCallback;
 
         /**
@@ -760,63 +752,50 @@ public class Contentstack {
             return this;
         }
 
-        public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri) {
+        /**
+         * Configures OAuth authentication with PKCE flow (no client secret)
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param redirectUri Redirect URI
+         * @return Builder instance
+         */
+        public Builder setOAuth(String appId, String clientId, String redirectUri) {
             // Use the builder's hostname (which defaults to Util.HOST if not set)
-            return setOAuth(appId, clientId, clientSecret, redirectUri, this.hostname);
+            return setOAuth(appId, clientId, redirectUri, this.hostname);
         }
 
         /**
-         * Configures OAuth with client credentials and specific host
+         * Configures OAuth authentication with PKCE flow (no client secret) and specific host
          * @param appId Application ID
          * @param clientId Client ID
-         * @param clientSecret Client secret
          * @param redirectUri Redirect URI
          * @param host API host (e.g. "api.contentstack.io", "eu-api.contentstack.com")
          * @return Builder instance
          */
-        public Builder setOAuth(String appId, String clientId, String clientSecret, String redirectUri, String host) {
+        public Builder setOAuth(String appId, String clientId, String redirectUri, String host) {
+            return setOAuth(appId, clientId, redirectUri, host, null);
+        }
+
+        /**
+         * Configures OAuth authentication with optional client secret. PKCE flow is used when clientSecret is not provided.
+         * @param appId Application ID
+         * @param clientId Client ID
+         * @param redirectUri Redirect URI
+         * @param host API host (e.g. "api.contentstack.io", "eu-api.contentstack.com")
+         * @param clientSecret Optional client secret. If not provided, PKCE flow will be used
+         * @return Builder instance
+         */
+        public Builder setOAuth(String appId, String clientId, String redirectUri, String host, String clientSecret) {
             OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
                 .appId(appId)
                 .clientId(clientId)
-                .clientSecret(clientSecret)
                 .redirectUri(redirectUri)
                 .host(host);
 
-            // Add token callback if set
-            if (this.tokenCallback != null) {
-                builder.tokenCallback(this.tokenCallback);
+            // Only set clientSecret if provided (otherwise PKCE flow will be used)
+            if (clientSecret != null && !clientSecret.trim().isEmpty()) {
+                builder.clientSecret(clientSecret);
             }
-
-            this.oauthConfig = builder.build();
-            return this;
-        }
-
-        /**
-         * Configures OAuth with PKCE (no client secret)
-         * @param appId Application ID
-         * @param clientId Client ID
-         * @param redirectUri Redirect URI
-         * @return Builder instance
-         */
-        public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri) {
-            // Use the builder's hostname (which defaults to Util.HOST if not set)
-            return setOAuthWithPKCE(appId, clientId, redirectUri, this.hostname);
-        }
-
-        /**
-         * Configures OAuth with PKCE (no client secret) and specific host
-         * @param appId Application ID
-         * @param clientId Client ID
-         * @param redirectUri Redirect URI
-         * @param host API host (e.g. "api.contentstack.io", "eu-api.contentstack.com")
-         * @return Builder instance
-         */
-        public Builder setOAuthWithPKCE(String appId, String clientId, String redirectUri, String host) {
-            OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
-                .appId(appId)
-                .clientId(clientId)
-                .redirectUri(redirectUri)
-                .host(host);
 
             // Add token callback if set
             if (this.tokenCallback != null) {
