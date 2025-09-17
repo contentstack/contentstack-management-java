@@ -61,7 +61,7 @@ public class Util {
     public static final String OAUTH_NO_TOKENS = "No OAuth tokens available. Please authenticate first.";
     public static final String OAUTH_NO_REFRESH_TOKEN = "No refresh token available";
     public static final String OAUTH_EMPTY_CODE = "Authorization code cannot be null or empty";
-    public static final String OAUTH_CONFIG_MISSING = "OAuth is not configured. Use Builder.setOAuth() or Builder.setOAuthWithPKCE()";
+    public static final String OAUTH_CONFIG_MISSING = "OAuth is not configured. Use Builder.setOAuth() with or without clientSecret for PKCE flow";
     public static final String OAUTH_REFRESH_FAILED = "Failed to refresh access token";
     public static final String OAUTH_REVOKE_FAILED = "Failed to revoke authorization";
     public static final String OAUTH_STATUS_FAILED = "Failed to get authorization status";
