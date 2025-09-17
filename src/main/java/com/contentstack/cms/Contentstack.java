@@ -156,62 +156,53 @@ public class Contentstack {
     }
 
     /**
-     * Login with TOTP token.
+     * Login with two-factor authentication. This method provides flexibility to use either:
+     * 1. A direct 2FA token using params.put("tfaToken", "123456"), OR
+     * 2. An MFA secret to generate TOTP using params.put("mfaSecret", "YOUR_SECRET")
+     * 
+     * Note: Do not provide both tfaToken and mfaSecret. Choose one authentication method.
      *
      * @param emailId    The email ID of the user
      * @param password   The user's password
-     * @param tfaToken   The TOTP token
+     * @param params     Map containing either tfaToken or mfaSecret
      * @return Response containing login details
      * @throws IOException if there's a network error
+     * @throws IllegalArgumentException if validation fails or if both tfaToken and mfaSecret are provided
      * @throws IllegalStateException if user is already logged in
+     * 
+     * Example:
+     * <pre>
+     * // Login with direct token
+     * Map<String, String> params = new HashMap<>();
+     * params.put("tfaToken", "123456");
+     * Response<LoginDetails> response = contentstack.login(email, password, params);
+     * 
+     * // OR login with MFA secret
+     * Map<String, String> params = new HashMap<>();
+     * params.put("mfaSecret", "YOUR_SECRET");
+     * Response<LoginDetails> response = contentstack.login(email, password, params);
+     * </pre>
      */
-    public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
-        return login(emailId, password, tfaToken, null);
-    }
-
-    /**
-     * Login with TOTP/MFA support.
-     *
-     * @param emailId    The email ID of the user
-     * @param password   The user's password
-     * @param tfaToken   The TOTP token (can be null if mfaSecret is provided)
-     * @param mfaSecret  The MFA secret key to generate TOTP (optional if tfaToken is provided)
-     * @return Response containing login details
-     * @throws IOException if there's a network error
-     * @throws IllegalArgumentException if both tfaToken and mfaSecret are null or if secret is invalid
-     * @throws IllegalStateException if user is already logged in
-     */
-    public Response<LoginDetails> login(String emailId, String password, String tfaToken, String mfaSecret) throws IOException {
+    public Response<LoginDetails> login(String emailId, String password, Map<String, String> params) throws IOException {
         // Check if already logged in
         if (this.authtoken != null) {
             throw new IllegalStateException(Util.USER_ALREADY_LOGGED_IN);
         }
 
-        // Validate inputs
-        if (emailId == null || emailId.trim().isEmpty()) {
+        // Validate basic inputs
+        if (emailId.trim().isEmpty()) {
             throw new IllegalArgumentException("Email is required");
         }
-        if (password == null || password.trim().isEmpty()) {
+        if (password.trim().isEmpty()) {
             throw new IllegalArgumentException("Password is required");
         }
-        if ((tfaToken == null || tfaToken.trim().isEmpty()) && (mfaSecret == null || mfaSecret.trim().isEmpty())) {
-            throw new IllegalArgumentException("Either tfaToken or mfaSecret must be provided");
-        }
-
-        // Generate TOTP if needed
-        String finalTfaToken = tfaToken;
-        if ((tfaToken == null || tfaToken.trim().isEmpty()) && mfaSecret != null && !mfaSecret.trim().isEmpty()) {
-            try {
-                GoogleAuthenticator gAuth = new GoogleAuthenticator();
-                finalTfaToken = String.format("%06d", gAuth.getTotpPassword(mfaSecret));
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Failed to generate TOTP token: " + e.getMessage(), e);
-            }
+        if (params.isEmpty()) {
+            throw new IllegalArgumentException("Authentication parameters are required");
         }
 
         // Perform login
         user = new User(this.instance);
-        Response<LoginDetails> response = user.login(emailId, password, finalTfaToken).execute();
+        Response<LoginDetails> response = user.login(emailId, password, params).execute();
         setupLoginCredentials(response);
         return response;
     }
