@@ -97,14 +97,14 @@ public class User implements BaseImplementation<User> {
      * Example:
      * <pre>
      * // Login with direct token
-     * Map<String, String> params = new HashMap<>();
-     * params.put("tfaToken", "123456");
-     * Call<LoginDetails> call = user.login(email, password, params);
+     * {@code Map<String, String> params = new HashMap<>();}
+     * {@code params.put("tfaToken", "123456");}
+     * {@code Call<LoginDetails> call = user.login(email, password, params);}
      * 
      * // OR login with MFA secret
-     * Map<String, String> params = new HashMap<>();
-     * params.put("mfaSecret", "YOUR_SECRET");
-     * Call<LoginDetails> call = user.login(email, password, params);
+     * {@code Map<String, String> params = new HashMap<>();}
+     * {@code params.put("mfaSecret", "YOUR_SECRET");}
+     * {@code Call<LoginDetails> call = user.login(email, password, params);}
      * </pre>
      */
     public Call<LoginDetails> login(@NotNull String email, @NotNull String password, @NotNull Map<String, String> params) {

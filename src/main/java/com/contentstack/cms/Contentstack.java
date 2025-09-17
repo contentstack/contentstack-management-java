@@ -173,14 +173,14 @@ public class Contentstack {
      * Example:
      * <pre>
      * // Login with direct token
-     * Map<String, String> params = new HashMap<>();
-     * params.put("tfaToken", "123456");
-     * Response<LoginDetails> response = contentstack.login(email, password, params);
+     * {@code Map<String, String> params = new HashMap<>();}
+     * {@code params.put("tfaToken", "123456");}
+     * {@code Response<LoginDetails> response = contentstack.login(email, password, params);}
      * 
      * // OR login with MFA secret
-     * Map<String, String> params = new HashMap<>();
-     * params.put("mfaSecret", "YOUR_SECRET");
-     * Response<LoginDetails> response = contentstack.login(email, password, params);
+     * {@code Map<String, String> params = new HashMap<>();}
+     * {@code params.put("mfaSecret", "YOUR_SECRET");}
+     * {@code Response<LoginDetails> response = contentstack.login(email, password, params);}
      * </pre>
      */
     public Response<LoginDetails> login(String emailId, String password, Map<String, String> params) throws IOException {
@@ -691,8 +691,7 @@ public class Contentstack {
          * single-user application. The tuning parameters in this pool are
          * subject to change in future OkHttp releases. Currently, this pool
          * holds up to 5 idle connections which will be evicted after 5 minutes
-         * of inactivity.
-         * <p>
+         * of inactivity
          * <p>
          * public ConnectionPool() { this(5, 5, TimeUnit.MINUTES); }
          *
