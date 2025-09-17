@@ -17,6 +17,8 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ContentstackUnitTest {
 
@@ -210,7 +212,9 @@ public class ContentstackUnitTest {
     void testSetAuthtokenLoginWithTfa() {
         Contentstack client = new Contentstack.Builder().setAuthtoken("fake@authtoken").build();
         try {
-            client.login("fake@email.com", "fake@password", "fake@tfa");
+            Map<String, String> params = new HashMap<>();
+            params.put("tfaToken", "fake@tfa");
+            client.login("fake@email.com", "fake@password", params);
         } catch (Exception e) {
             Assertions.assertEquals("User is already loggedIn, Please logout then try to login again", e.getMessage());
         }
