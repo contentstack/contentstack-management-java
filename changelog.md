@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.8.0
+
+### Sep 15, 2025
+
+- Feature : OAuth 2.0 support with PKCE flow
+- Improved code organization and removed redundant methods
+
 ## v1.7.1
 
 ### Jul 21, 2025
