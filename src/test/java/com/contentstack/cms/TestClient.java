@@ -23,6 +23,8 @@ public class TestClient {
 
     public final static String DEV_HOST = "api.contentstack.io";
     // (env.get("dev_host") != null) ? env.get("dev_host") : "api.contentstack.io";
+    public final static String VARIANT_GROUP_UID = (env.get("variantGroupUid") != null) ? env.get("variantGroupUid")
+            : "variantGroupUid99999999";
     private static Contentstack instance;
     private static Stack stackInstance;
 
