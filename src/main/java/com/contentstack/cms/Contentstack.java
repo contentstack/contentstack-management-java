@@ -27,6 +27,7 @@ import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
 import com.contentstack.cms.user.User;
 import com.google.gson.Gson;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -40,9 +41,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * <b>Contentstack Java Management SDK</b>
  * <br>
  * <b>Java Management SDK</b> Interact with the Content Management APIs and
- * allow you to create, update,
- * delete, and fetch content from your Contentstack account. (They are
- * read-write in nature.)
+ * allow you to create, update, delete, and fetch content from your Contentstack
+ * account. (They are read-write in nature.)
  * <br>
  * You can use them to build your own apps and manage your content from
  * Contentstack.
@@ -66,8 +66,7 @@ public class Contentstack {
 
     /**
      * All accounts registered with Contentstack are known as Users. A stack can
-     * have many users with varying
-     * permissions and roles
+     * have many users with varying permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
      * <p>
@@ -89,7 +88,8 @@ public class Contentstack {
      * <br>
      *
      * @return User
-     * @author ***REMOVED***
+     * @author ***REMOVED
+     ***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
      * </a>
@@ -105,15 +105,14 @@ public class Contentstack {
 
     /**
      * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The authtoken is
-     * returned to the 'Response' body of
-     * the Log in call and is mandatory in all the calls.
+     * authenticating yourself via the Log in call of User Session. The
+     * authtoken is returned to the 'Response' body of the Log in call and is
+     * mandatory in all the calls.
      * <p>
      * <b>Example:</b>
      * <p>
      * All accounts registered with Contentstack are known as Users. A stack can
-     * have many users with varying
-     * permissions and roles
+     * have many users with varying permissions and roles
      * <p>
      * To perform User operations first get User instance like below.
      * <p>
@@ -136,18 +135,20 @@ public class Contentstack {
      *
      * <br>
      *
-     * @param emailId  the email id of the user
+     * @param emailId the email id of the user
      * @param password the password of the user
      * @return LoginDetails
      * @throws IOException the IOException
-     * @author ***REMOVED***
+     * @author ***REMOVED
+     ***
      * @see <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#users">User
      * </a>
      */
     public Response<LoginDetails> login(String emailId, String password) throws IOException {
-        if (this.authtoken != null)
+        if (this.authtoken != null) {
             throw new IllegalStateException(Util.USER_ALREADY_LOGGED_IN);
+        }
         user = new User(this.instance);
         Response<LoginDetails> response = user.login(emailId, password).execute();
         setupLoginCredentials(response);
@@ -155,60 +156,57 @@ public class Contentstack {
     }
 
     /**
-     * <b>[Note]:</b> Before executing any calls, retrieve the authtoken by
-     * authenticating yourself via the Log in call of User Session. The authtoken is
-     * returned to the 'Response' body of
-     * the Log in call and is mandatory in all the calls.
-     * <p>
-     * <b>Example:</b>
-     * <p>
-     * All accounts registered with Contentstack are known as Users. A stack can
-     * have many users with varying
-     * permissions and roles
-     * <p>
-     * To perform User operations first get User instance like below.
-     * <p>
-     * <b>Example:</b>
+     * Login with two-factor authentication. This method provides flexibility to use either:
+     * 1. A direct 2FA token using params.put("tfaToken", "123456"), OR
+     * 2. An MFA secret to generate TOTP using params.put("mfaSecret", "YOUR_SECRET")
+     * 
+     * Note: Do not provide both tfaToken and mfaSecret. Choose one authentication method.
      *
+     * @param emailId    The email ID of the user
+     * @param password   The user's password
+     * @param params     Map containing either tfaToken or mfaSecret
+     * @return Response containing login details
+     * @throws IOException if there's a network error
+     * @throws IllegalArgumentException if validation fails or if both tfaToken and mfaSecret are provided
+     * @throws IllegalStateException if user is already logged in
+     * 
+     * Example:
      * <pre>
-     * Contentstack contentstack = new Contentstack.Builder().setAuthtoken("authtoken").build();
-     * Response login = contentstack.login();
-     *
-     * Access more other user functions from the userInstance
+     * // Login with direct token
+     * {@code Map<String, String> params = new HashMap<>();}
+     * {@code params.put("tfaToken", "123456");}
+     * {@code Response<LoginDetails> response = contentstack.login(email, password, params);}
+     * 
+     * // OR login with MFA secret
+     * {@code Map<String, String> params = new HashMap<>();}
+     * {@code params.put("mfaSecret", "YOUR_SECRET");}
+     * {@code Response<LoginDetails> response = contentstack.login(email, password, params);}
      * </pre>
-     *
-     * <br>
-     * <b>OR: </b>
-     *
-     * <pre>
-     * Contentstack contentstack = new Contentstack.Builder().build();
-     * Response login = contentstack.login("emailId", "password");
-     * </pre>
-     *
-     * <br>
-     *
-     * @param emailId  the email id
-     * @param password the password
-     * @param tfaToken the tfa token
-     * @return LoginDetails
-     * @throws IOException the io exception
-     * @throws IOException the IOException
-     * @author ***REMOVED***
-     * @see <a
-     * href=
-     * "https://www.contentstack.com/docs/developers/apis/content-management-api/#log-in-to-your-account">Login
-     * your account
-     * </a>
      */
-    public Response<LoginDetails> login(String emailId, String password, String tfaToken) throws IOException {
-        if (this.authtoken != null)
+    public Response<LoginDetails> login(String emailId, String password, Map<String, String> params) throws IOException {
+        // Check if already logged in
+        if (this.authtoken != null) {
             throw new IllegalStateException(Util.USER_ALREADY_LOGGED_IN);
+        }
+
+        // Validate basic inputs
+        if (emailId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+        if (password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+        if (params.isEmpty()) {
+            throw new IllegalArgumentException("Authentication parameters are required");
+        }
+
+        // Perform login
         user = new User(this.instance);
-        Response<LoginDetails> response = user.login(emailId, password, tfaToken).execute();
+        Response<LoginDetails> response = user.login(emailId, password, params).execute();
         setupLoginCredentials(response);
-        user = new User(this.instance);
         return response;
     }
+
 
     private void setupLoginCredentials(Response<LoginDetails> loginResponse) throws IOException {
         if (loginResponse.isSuccessful()) {
@@ -230,8 +228,8 @@ public class Contentstack {
     }
 
     /**
-     * The Log out of your account call is used to sign out the user of Contentstack
-     * account
+     * The Log out of your account call is used to sign out the user of
+     * Contentstack account
      * <p>
      * <b> Example </b>
      *
@@ -250,8 +248,8 @@ public class Contentstack {
     }
 
     /**
-     * The Log out of your account using authtoken is used to sign out the user of
-     * Contentstack account
+     * The Log out of your account using authtoken is used to sign out the user
+     * of Contentstack account
      * <p>
      * <b> Example </b>
      *
@@ -276,9 +274,8 @@ public class Contentstack {
 
     /**
      * Organization is the top-level entity in the hierarchy of Contentstack,
-     * consisting of stacks and stack resources,
-     * and users. Organization allows easy management of projects as well as users
-     * within the Organization.
+     * consisting of stacks and stack resources, and users. Organization allows
+     * easy management of projects as well as users within the Organization.
      * <p>
      * <b> Example </b>
      *
@@ -293,7 +290,7 @@ public class Contentstack {
         if (!isOAuthConfigured() && this.authtoken == null) {
             throw new IllegalStateException(Util.OAUTH_LOGIN_REQUIRED + " organization");
         }
-        
+
         // If using OAuth, get organization from tokens
         if (isOAuthConfigured() && oauthHandler.getTokens() != null) {
             String orgUid = oauthHandler.getTokens().getOrganizationUid();
@@ -301,19 +298,19 @@ public class Contentstack {
                 return organization(orgUid);
             }
         }
-        
+
         return new Organization(this.instance);
     }
 
     /**
      * Organization is the top-level entity in the hierarchy of Contentstack,
-     * consisting of stacks and stack resources,
-     * and users. Organization allows easy management of projects as well as users
-     * within the Organization.
+     * consisting of stacks and stack resources, and users. Organization allows
+     * easy management of projects as well as users within the Organization.
      * <p>
      * <b> Example </b>
      *
-     * @param organizationUid The UID of the organization that you want to retrieve
+     * @param organizationUid The UID of the organization that you want to
+     * retrieve
      * @return the organization
      * <br>
      * <b>Example</b>
@@ -322,7 +319,7 @@ public class Contentstack {
      *         Contentstack contentstack = new Contentstack.Builder().build();
      *         <br>
      *         Organization org = contentstack.organization();
-     *         </pre>
+     * </pre>
      */
     public Organization organization(@NotNull String organizationUid) {
         if (!isOAuthConfigured() && this.authtoken == null) {
@@ -337,10 +334,9 @@ public class Contentstack {
     /**
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
-     * A stack is
-     * a space that stores the content of a project (a web or mobile property).
-     * Within a stack, you can create content
-     * structures, content entries, users, etc. related to the project
+     * A stack is a space that stores the content of a project (a web or mobile
+     * property). Within a stack, you can create content structures, content
+     * entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
      *
@@ -361,10 +357,9 @@ public class Contentstack {
     /**
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
-     * A stack is
-     * a space that stores the content of a project (a web or mobile property).
-     * Within a stack, you can create content
-     * structures, content entries, users, etc. related to the project
+     * A stack is a space that stores the content of a project (a web or mobile
+     * property). Within a stack, you can create content structures, content
+     * entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
      *
@@ -386,10 +381,9 @@ public class Contentstack {
     /**
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
-     * A stack is
-     * a space that stores the content of a project (a web or mobile property).
-     * Within a stack, you can create content
-     * structures, content entries, users, etc. related to the project
+     * A stack is a space that stores the content of a project (a web or mobile
+     * property). Within a stack, you can create content structures, content
+     * entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
      *
@@ -399,7 +393,7 @@ public class Contentstack {
      * </pre>
      *
      * @param managementToken the authorization for the stack
-     * @param apiKey          the apiKey for the stack
+     * @param apiKey the apiKey for the stack
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken) {
@@ -412,10 +406,9 @@ public class Contentstack {
     /**
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
-     * A stack is
-     * a space that stores the content of a project (a web or mobile property).
-     * Within a stack, you can create content
-     * structures, content entries, users, etc. related to the project
+     * A stack is a space that stores the content of a project (a web or mobile
+     * property). Within a stack, you can create content structures, content
+     * entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
      *
@@ -442,10 +435,9 @@ public class Contentstack {
     /**
      * <a href=
      * "https://www.contentstack.com/docs/developers/apis/content-management-api/#stacks">stack</a>
-     * A stack is
-     * a space that stores the content of a project (a web or mobile property).
-     * Within a stack, you can create content
-     * structures, content entries, users, etc. related to the project
+     * A stack is a space that stores the content of a project (a web or mobile
+     * property). Within a stack, you can create content structures, content
+     * entries, users, etc. related to the project
      * <p>
      * <b> Example </b>
      *
@@ -455,8 +447,8 @@ public class Contentstack {
      * </pre>
      *
      * @param managementToken the authorization for the stack
-     * @param apiKey          the apiKey for the stack
-     * @param branch          the branch that include branching in the response
+     * @param apiKey the apiKey for the stack
+     * @param branch the branch that include branching in the response
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken, @NotNull String branch) {
@@ -469,6 +461,7 @@ public class Contentstack {
 
     /**
      * Get the OAuth authorization URL for the user to visit
+     *
      * @return Authorization URL string
      * @throws IllegalStateException if OAuth is not configured
      */
@@ -481,6 +474,7 @@ public class Contentstack {
 
     /**
      * Exchange OAuth authorization code for tokens
+     *
      * @param code Authorization code from OAuth callback
      * @return CompletableFuture containing OAuth tokens
      * @throws IllegalStateException if OAuth is not configured
@@ -494,8 +488,10 @@ public class Contentstack {
 
     /**
      * Refresh the OAuth access token
+     *
      * @return CompletableFuture containing new OAuth tokens
-     * @throws IllegalStateException if OAuth is not configured or no refresh token available
+     * @throws IllegalStateException if OAuth is not configured or no refresh
+     * token available
      */
     public CompletableFuture<OAuthTokens> refreshOAuthToken() {
         if (!isOAuthConfigured()) {
@@ -506,6 +502,7 @@ public class Contentstack {
 
     /**
      * Get the current OAuth tokens
+     *
      * @return Current OAuth tokens or null if not available
      */
     public OAuthTokens getOAuthTokens() {
@@ -514,6 +511,7 @@ public class Contentstack {
 
     /**
      * Check if we have valid OAuth tokens
+     *
      * @return true if we have valid tokens
      */
     public boolean hasValidOAuthTokens() {
@@ -522,6 +520,7 @@ public class Contentstack {
 
     /**
      * Check if OAuth is configured
+     *
      * @return true if OAuth is configured
      */
     public boolean isOAuthConfigured() {
@@ -530,6 +529,7 @@ public class Contentstack {
 
     /**
      * Get the OAuth handler instance
+     *
      * @return OAuth handler or null if not configured
      */
     public OAuthHandler getOAuthHandler() {
@@ -538,6 +538,7 @@ public class Contentstack {
 
     /**
      * Logout from OAuth session and optionally revoke authorization
+     *
      * @param revokeAuthorization If true, revokes the OAuth authorization
      * @return CompletableFuture that completes when logout is done
      */
@@ -550,6 +551,7 @@ public class Contentstack {
 
     /**
      * Logout from OAuth session without revoking authorization
+     *
      * @return CompletableFuture that completes when logout is done
      */
     public CompletableFuture<Void> oauthLogout() {
@@ -595,8 +597,8 @@ public class Contentstack {
         private Boolean retry = Util.RETRY_ON_FAILURE;// Default base url for contentstack
 
         /**
-         * Default ConnectionPool holds up to 5 idle connections which
-         * will be evicted after 5 minutes of inactivity.
+         * Default ConnectionPool holds up to 5 idle connections which will be
+         * evicted after 5 minutes of inactivity.
          */
         private ConnectionPool connectionPool = new ConnectionPool(); // Connection
 
@@ -609,8 +611,7 @@ public class Contentstack {
 
         /**
          * Sets proxy. (Setting proxy to the OkHttpClient) Proxy = new
-         * Proxy(Proxy.Type.HTTP, new
-         * InetSocketAddress(proxyHost, proxyPort));
+         * Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
          * <br>
          * <p>
          * {@code
@@ -687,26 +688,20 @@ public class Contentstack {
 
         /**
          * Create a new connection pool with tuning parameters appropriate for a
-         * single-user application.
-         * The tuning parameters in this pool are subject to change in future OkHttp
-         * releases. Currently,
-         * this pool holds up to 5 idle connections which will be evicted after 5
-         * minutes of inactivity.
+         * single-user application. The tuning parameters in this pool are
+         * subject to change in future OkHttp releases. Currently, this pool
+         * holds up to 5 idle connections which will be evicted after 5 minutes
+         * of inactivity
          * <p>
-         * <p>
-         * public ConnectionPool() {
-         * this(5, 5, TimeUnit.MINUTES);
-         * }
+         * public ConnectionPool() { this(5, 5, TimeUnit.MINUTES); }
          *
          * @param maxIdleConnections Maximum number of idle connections
-         * @param keepAliveDuration  The Keep Alive Duration
-         * @param timeUnit           A TimeUnit represents time durations at a given
-         *                           unit of granularity and provides utility methods to
-         *                           convert across units
+         * @param keepAliveDuration The Keep Alive Duration
+         * @param timeUnit A TimeUnit represents time durations at a given unit
+         * of granularity and provides utility methods to convert across units
          * @return instance of Builder
          * <p>
-         * Example:
-         * {@code
+         * Example:          {@code
          * Contentstack cs = new Contentstack.Builder()
          * .setAuthtoken(AUTHTOKEN)
          * .setConnectionPool(5, 400, TimeUnit.MILLISECONDS)
@@ -732,6 +727,7 @@ public class Contentstack {
 
         /**
          * Sets OAuth configuration for the client
+         *
          * @param config OAuth configuration
          * @return Builder instance
          */
@@ -744,6 +740,7 @@ public class Contentstack {
 
         /**
          * Sets the token callback for OAuth storage
+         *
          * @param callback The callback to handle token storage
          * @return Builder instance
          */
@@ -751,7 +748,7 @@ public class Contentstack {
             this.tokenCallback = callback;
             return this;
         }
-
+      
         /**
          * Configures OAuth authentication with PKCE flow (no client secret)
          * @param appId Application ID
@@ -787,10 +784,10 @@ public class Contentstack {
          */
         public Builder setOAuth(String appId, String clientId, String redirectUri, String host, String clientSecret) {
             OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
-                .appId(appId)
-                .clientId(clientId)
-                .redirectUri(redirectUri)
-                .host(host);
+                    .appId(appId)
+                    .clientId(clientId)
+                    .redirectUri(redirectUri)
+                    .host(host);
 
             // Only set clientSecret if provided (otherwise PKCE flow will be used)
             if (clientSecret != null && !clientSecret.trim().isEmpty()) {
@@ -828,7 +825,7 @@ public class Contentstack {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient(contentstack, this.retry)).build();
             contentstack.instance = this.instance;
-            
+
             // Initialize OAuth if configured
             if (this.oauthConfig != null) {
                 // OAuth handler and interceptor are created in httpClient
@@ -851,12 +848,12 @@ public class Contentstack {
                 OkHttpClient tempClient = builder.build();
                 this.oauthHandler = new OAuthHandler(tempClient, this.oauthConfig);
                 this.oauthInterceptor = new OAuthInterceptor(this.oauthHandler);
-                
+
                 // Configure early access if needed
                 if (this.earlyAccess != null) {
                     this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
                 }
-                
+
                 // Add interceptor to handle OAuth, token refresh, and retries
                 builder.addInterceptor(this.oauthInterceptor);
             } else {

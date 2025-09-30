@@ -102,6 +102,7 @@ public class LoginDetailTest {
     @Test
     void getterSetterUserModelUsername() {
         UserModel userModel = new UserModel();
+        // deepcode ignore NoHardcodedCredentials/test: <please specify a reason of ignoring this>
         userModel.setUsername("***REMOVED***");
         Assertions.assertEquals("***REMOVED***",
                 userModel.getUsername());

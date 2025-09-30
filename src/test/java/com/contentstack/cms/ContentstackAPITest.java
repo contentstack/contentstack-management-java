@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  @author  ***REMOVED***@gmail.com
@@ -69,8 +71,9 @@ public class ContentstackAPITest {
         Contentstack contentstack = new Contentstack.Builder()
                 .setAuthtoken(null)
                 .build();
-        Response<LoginDetails> response = contentstack.login("invalid@credentials.com", "invalid@password",
-                "invalid_tfa_token");
+        Map<String, String> params = new HashMap<>();
+        params.put("tfaToken", "invalid_tfa_token");
+        Response<LoginDetails> response = contentstack.login("invalid@credentials.com", "invalid@password", params);
         Assertions.assertEquals(422, response.code());
     }
 
