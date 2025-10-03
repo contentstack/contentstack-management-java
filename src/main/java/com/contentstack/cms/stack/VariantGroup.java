@@ -104,7 +104,7 @@ public class VariantGroup implements BaseImplementation<VariantGroup> {
      * @param value The "value" parameter is of type Object, which means it can
      *              accept any type of
      *              object as its value.
-     * @return instance of Asset
+     * @return instance of VariantGroup
      */
     @Override
     public VariantGroup addParam(@NotNull String key, @NotNull Object value) {
@@ -119,7 +119,7 @@ public class VariantGroup implements BaseImplementation<VariantGroup> {
      *              header.
      * @param value The value parameter is a string that represents the value of the
      *              header.
-     * @return instance of Asset
+     * @return instance of VariantGroup
      */
     @Override
     public VariantGroup addHeader(@NotNull String key, @NotNull String value) {
@@ -132,7 +132,7 @@ public class VariantGroup implements BaseImplementation<VariantGroup> {
      *                is a String
      *                representing the header name and the value is a String
      *                representing the header value.
-     * @return instance of Asset
+     * @return instance of VariantGroup
      */
     @Override
     public VariantGroup addHeaders(@NotNull HashMap<String, String> headers) {
@@ -145,7 +145,7 @@ public class VariantGroup implements BaseImplementation<VariantGroup> {
      * @param headers The "params" parameter is a HashMap that maps String keys to
      *                Object values. It is
      *                annotated with @NotNull, indicating that it cannot be null.
-     * @return instance of Asset
+     * @return instance of VariantGroup
      */
     @Override
     public VariantGroup addParams(@NotNull HashMap<String, Object> headers) {
