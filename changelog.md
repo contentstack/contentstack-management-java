@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.9.0
+
+### Oct 13, 2025
+
+- Feature : Variant Group support
+
 ## v1.8.0
 
 ### Sep 15, 2025
