@@ -17,12 +17,15 @@ public class TestClient {
     public final static String USER_ID = (env.get("userId") != null) ? env.get("userId") : "c11e668e0295477f";
     public final static String OWNERSHIP = (env.get("ownershipToken") != null) ? env.get("ownershipToken")
             : "ownershipTokenId";
+    // file deepcode ignore NonCryptoHardcodedSecret/test: <please specify a reason of ignoring this>
     public final static String API_KEY = (env.get("apiKey") != null) ? env.get("apiKey") : "apiKey99999999";
     public final static String MANAGEMENT_TOKEN = (env.get("managementToken") != null) ? env.get("managementToken")
             : "managementToken99999999";
 
     public final static String DEV_HOST = "api.contentstack.io";
     // (env.get("dev_host") != null) ? env.get("dev_host") : "api.contentstack.io";
+    public final static String VARIANT_GROUP_UID = (env.get("variantGroupUid") != null) ? env.get("variantGroupUid")
+            : "variantGroupUid99999999";
     private static Contentstack instance;
     private static Stack stackInstance;
 
