@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.10.0
+
+### Oct 27, 2025
+
+- Feature : TOTP support
+
 ## v1.9.0
 
 ### Oct 13, 2025
