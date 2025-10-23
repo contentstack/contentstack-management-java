@@ -2,9 +2,9 @@
 
 ## v1.9.0
 
-### Oct 06, 2025
+### Oct 13, 2025
 
-- Enhancement : TOTP login added
+- Feature : Variant Group support
 
 ## v1.8.0
 
