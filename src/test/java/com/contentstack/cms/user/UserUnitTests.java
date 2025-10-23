@@ -10,6 +10,7 @@ import org.junit.jupiter.api.*;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -587,13 +588,143 @@ public class UserUnitTests {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("header", "something");
         Request requestInfo = userInstance.
-                addParams(headers).
-                addParam("param", "value")
+                addParam("param", (Object)"value")
                 .addHeader("key", "value")
                 .addHeaders(headers)
                 .logoutWithAuthtoken("authtoken")
                 .request();
         Assertions.assertEquals(0,
                 requestInfo.url().queryParameterNames().size());
+    }
+
+    @Test
+    @Order(42)
+    @DisplayName("Test login with TOTP token")
+    void testLoginWithTOTPToken() {
+        // Test basic login with TOTP token
+        Map<String, String> params = new HashMap<>();
+        params.put("tfaToken", "123456");
+        Request requestInfo = userInstance.login("test@example.com", "password", params).request();
+        
+        // Verify request format
+        Assertions.assertEquals("POST", requestInfo.method());
+        Assertions.assertEquals("/v3/user-session", requestInfo.url().encodedPath());
+        
+        // Verify request body
+        String requestBody = requestInfo.body() != null ? requestInfo.body().toString() : "";
+        Assertions.assertTrue(requestBody.contains("\"tfa_token\":\"123456\""));
+    }
+
+    @Test
+    @Order(43)
+    @DisplayName("Test login with MFA parameters")
+    void testLoginWithMFAParameters() {
+        // Test login with both token and secret (should throw exception)
+        Map<String, String> params = new HashMap<>();
+        params.put("tfaToken", "123456");
+        params.put("mfaSecret", "test-secret");
+        
+        IllegalArgumentException exception = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> userInstance.login("test@example.com", "password", params).request()
+        );
+        
+        Assertions.assertTrue(exception.getMessage().contains("Cannot provide both tfaToken and mfaSecret"));
+    }
+
+    @Test
+    @Order(44)
+    @DisplayName("Test login validation")
+    void testLoginValidation() {
+        Map<String, String> params = new HashMap<>();
+        params.put("tfaToken", "123456");
+        
+        // Test with missing required parameters
+        Assertions.assertThrows(IllegalArgumentException.class, 
+            () -> userInstance.login("", "password", params).request());
+            
+        Assertions.assertThrows(IllegalArgumentException.class, 
+            () -> userInstance.login("test@example.com", "", params).request());
+            
+        Assertions.assertThrows(IllegalArgumentException.class, 
+            () -> userInstance.login("test@example.com", "password", new HashMap<>()).request());
+    }
+
+    @Test
+    @Order(45)
+    @DisplayName("Test TOTP generation from MFA secret")
+    void testTOTPGenerationFromSecret() {
+        // Test login with MFA secret only
+        Map<String, String> params = new HashMap<>();
+        params.put("mfaSecret", "test-secret");
+        Request requestInfo = userInstance.login("test@example.com", "password", params).request();
+        
+        // Verify request format
+        Assertions.assertEquals("POST", requestInfo.method());
+        Assertions.assertEquals("/v3/user-session", requestInfo.url().encodedPath());
+        
+        // Verify generated TOTP format
+        String requestBody = requestInfo.body() != null ? requestInfo.body().toString() : "";
+        Assertions.assertTrue(requestBody.contains("\"tfa_token\":\""));
+        
+        // Extract TOTP token and verify it's 6 digits
+        String token = requestBody.split("\"tfa_token\":\"")[1].split("\"")[0];
+        Assertions.assertTrue(token.matches("\\d{6}"), "TOTP should be 6 digits");
+    }
+
+    @Test
+    @Order(46)
+    @DisplayName("Test invalid MFA secret handling")
+    void testInvalidMFASecret() {
+        // Test with invalid MFA secret
+        Map<String, String> params = new HashMap<>();
+        params.put("mfaSecret", "invalid-secret");
+        
+        IllegalArgumentException exception = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> userInstance.login("test@example.com", "password", params).request()
+        );
+        
+        Assertions.assertTrue(exception.getMessage().contains("Invalid MFA secret key"));
+    }
+
+    @Test
+    @Order(47)
+    @DisplayName("Test empty parameters")
+    void testEmptyParameters() {
+        // Test with empty parameters map
+        Map<String, String> params = new HashMap<>();
+        
+        IllegalArgumentException exception = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> userInstance.login("test@example.com", "password", params).request()
+        );
+        
+        Assertions.assertTrue(exception.getMessage().contains("Must provide either tfaToken or mfaSecret"));
+    }
+
+    @Test
+    @Order(48)
+    @DisplayName("Test empty values in parameters")
+    void testEmptyValues() {
+        // Test with empty tfaToken
+        Map<String, String> params1 = new HashMap<>();
+        params1.put("tfaToken", "");
+        
+        IllegalArgumentException exception1 = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> userInstance.login("test@example.com", "password", params1).request()
+        );
+        Assertions.assertTrue(exception1.getMessage().contains("Must provide either tfaToken or mfaSecret"));
+        
+        // Test with empty mfaSecret
+        Map<String, String> params2 = new HashMap<>();
+        params2.put("mfaSecret", "");
+        
+        IllegalArgumentException exception2 = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> userInstance.login("test@example.com", "password", params2).request()
+        );
+        Assertions.assertTrue(exception2.getMessage().contains("Must provide either tfaToken or mfaSecret"));
     }
 }

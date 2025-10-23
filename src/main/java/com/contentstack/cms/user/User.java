@@ -8,26 +8,24 @@ import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
- * All accounts registered with Contentstack are known as <a href=
- * "https://www.contentstack.com/docs/developers/invite-users-and-assign-roles/about-stack-users">Users</a>.
- * A <a href=
- * "https://www.contentstack.com/docs/developers/set-up-stack/about-stack">Stack</a>
- * can have many users with varying
- * permissions and roles.
+ * All accounts registered with Contentstack are known as Users.
+ * A stack can have many users with varying permissions and roles.
  *
  * @author ***REMOVED***
  * @version v0.1.0
  * @since 2022-10-22
  */
-public class User implements BaseImplementation {
+public class User implements BaseImplementation<User> {
 
     protected final UserService userService;
-    protected HashMap<String, String> headers;
-    protected HashMap<String, Object> params;
+    protected final HashMap<String, String> headers;
+    protected final HashMap<String, Object> params;
 
     /**
      * @param client Retrofit adapts a Java interface to HTTP calls by using
@@ -66,8 +64,13 @@ public class User implements BaseImplementation {
      * @return Call
      */
     public Call<LoginDetails> login(@NotNull String email, @NotNull String password) {
+        HashMap<String, String> credentials = new HashMap<>();
+        credentials.put("email", email);
+        credentials.put("password", password);
+
         HashMap<String, HashMap<String, String>> userSession = new HashMap<>();
-        userSession.put("user", setCredentials(email, password));
+        userSession.put("user", credentials);
+        
         JSONObject userDetail = new JSONObject(userSession);
         return this.userService.login(loginHeader(), userDetail);
     }
@@ -79,28 +82,96 @@ public class User implements BaseImplementation {
     }
 
     /**
-     * Login call.
+     * Login with two-factor authentication. This method provides flexibility to use either:
+     * 1. A direct 2FA token using params.put("tfaToken", "123456"), OR
+     * 2. An MFA secret to generate TOTP using params.put("mfaSecret", "YOUR_SECRET")
+     * 
+     * Note: Do not provide both tfaToken and mfaSecret. Choose one authentication method.
      *
-     * @param email    email for user to login
-     * @param password password for user to login
-     * @param tfaToken the tfa token
-     * @return Call
+     * @param email     email for user to login
+     * @param password  password for user to login
+     * @param params    Map containing either tfaToken or mfaSecret
+     * @return Call containing login details
+     * @throws IllegalArgumentException if validation fails or if both tfaToken and mfaSecret are provided
+     * 
+     * Example:
+     * <pre>
+     * // Login with direct token
+     * {@code Map<String, String> params = new HashMap<>();}
+     * {@code params.put("tfaToken", "123456");}
+     * {@code Call<LoginDetails> call = user.login(email, password, params);}
+     * 
+     * // OR login with MFA secret
+     * {@code Map<String, String> params = new HashMap<>();}
+     * {@code params.put("mfaSecret", "YOUR_SECRET");}
+     * {@code Call<LoginDetails> call = user.login(email, password, params);}
+     * </pre>
      */
-    public Call<LoginDetails> login(@NotNull String email, @NotNull String password, @NotNull String tfaToken) {
+    public Call<LoginDetails> login(@NotNull String email, @NotNull String password, @NotNull Map<String, String> params) {
+        // Validate basic inputs
+        if (email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+        if (password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+        if (params.isEmpty()) {
+            throw new IllegalArgumentException("Authentication parameters are required");
+        }
+
+        String tfaToken = params.get("tfaToken");
+        String mfaSecret = params.get("mfaSecret");
+        
+        // Check for mutual exclusivity
+        boolean hasTfaToken = tfaToken != null && !tfaToken.trim().isEmpty();
+        boolean hasMfaSecret = mfaSecret != null && !mfaSecret.trim().isEmpty();
+        
+        if (hasTfaToken && hasMfaSecret) {
+            throw new IllegalArgumentException("Cannot provide both tfaToken and mfaSecret. Use either one.");
+        }
+        if (!hasTfaToken && !hasMfaSecret) {
+            throw new IllegalArgumentException("Must provide either tfaToken or mfaSecret");
+        }
+
+        // Generate TOTP if needed
+        String finalTfaToken = tfaToken;
+        if (!hasTfaToken && hasMfaSecret) {
+            finalTfaToken = generateTOTP(mfaSecret);
+        }
+
+        // Perform login
+        HashMap<String, String> credentials = new HashMap<>();
+        credentials.put("email", email);
+        credentials.put("password", password);
+        credentials.put("tfa_token", finalTfaToken);
+
         HashMap<String, HashMap<String, String>> userSession = new HashMap<>();
-        userSession.put("user", setCredentials(email, password, tfaToken));
+        userSession.put("user", credentials);
+        
         JSONObject userDetail = new JSONObject(userSession);
         return this.userService.login(loginHeader(), userDetail);
     }
 
-    private HashMap<String, String> setCredentials(@NotNull String... arguments) {
-        HashMap<String, String> credentials = new HashMap<>();
-        credentials.put("email", arguments[0]);
-        credentials.put("password", arguments[1]);
-        if (arguments.length > 2) {
-            credentials.put("tfa_token", arguments[2]);
+    private String generateTOTP(String secret) {
+        if (secret == null || secret.trim().isEmpty()) {
+            throw new IllegalArgumentException("MFA secret cannot be null or empty");
         }
-        return credentials;
+
+        try {
+            GoogleAuthenticator gAuth = new GoogleAuthenticator();
+            String totp = String.format("%06d", gAuth.getTotpPassword(secret));
+
+            // Validate the generated token
+            if (!totp.matches("\\d{6}")) {
+                throw new IllegalArgumentException("Generated TOTP token is invalid (not 6 digits)");
+            }
+
+            return totp;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to generate TOTP token: " + e.getMessage(), e);
+        }
     }
 
     /**
@@ -128,8 +199,7 @@ public class User implements BaseImplementation {
      * @return Call
      */
     public Call<ResponseBody> update(JSONObject body) {
-        HashMap<String, String> headers = new HashMap<>();
-        return userService.update(headers, body);
+        return userService.update(new HashMap<>(), body);
     }
 
     /**
