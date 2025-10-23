@@ -378,6 +378,29 @@ public class Stack implements BaseImplementation<Stack> {
     }
 
     /**
+     * Creates a new instance of VariantGroup for managing variant groups.
+     * This method is used when you want to create a new variant group.
+     *
+     * @return A new VariantGroup instanceroup variantGroup() {
+        return new VariantGroup(this.client,this.headers);
+    }
+    */
+    public VariantGroup variantGroup() {
+        return new VariantGroup(this.client,this.headers);
+    }
+
+    /**
+     * Creates a new instance of VariantGroup for managing a specific variant group.
+     * This method is used when you want to work with an existing variant group.
+     *
+     * @param variantGroupUid The UID of the variant group to manage
+     * @return A new VariantGroup instance configured for the specified variant group
+     */
+    public VariantGroup variantGroup(@NotNull String variantGroupUid) {
+        return new VariantGroup(this.client,this.headers,variantGroupUid);
+    }
+
+    /**
      * Contentstack has a sophisticated multilingual capability. It allows you to
      * create and publish entries in any
      * language. This feature allows you to set up multilingual websites and cater
