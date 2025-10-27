@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.10.0
+
+### Oct 27, 2025
+
+- Feature : TOTP support
+
 ## v1.9.0
 
 ### Oct 13, 2025
@@ -8,7 +14,7 @@
 
 ## v1.8.0
 
-### Sep 15, 2025
+### Sep 29, 2025
 
 - Feature : OAuth 2.0 support with PKCE flow
 - Improved code organization and removed redundant methods
