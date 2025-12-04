@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +57,7 @@ public class GlobalField implements BaseImplementation<GlobalField> {
 
     void validate() {
         if (this.globalFiledUid == null)
-            throw new IllegalAccessError("Global Field Uid can not be null or empty");
+            throw new IllegalAccessError(ErrorMessages.GLOBAL_FIELD_UID_REQUIRED);
     }
 
 
