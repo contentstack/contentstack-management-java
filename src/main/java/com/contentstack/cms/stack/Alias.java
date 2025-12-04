@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -160,7 +162,7 @@ public class Alias implements BaseImplementation<Alias> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> fetch() {
-        Objects.requireNonNull(this.uid, "Global Field Uid can not be null or empty");
+        Objects.requireNonNull(this.uid, "ErrorMessages.GLOBAL_FIELD_UID_REQUIRED");
         return this.service.single(this.headers, this.uid);
     }
 
@@ -206,7 +208,7 @@ public class Alias implements BaseImplementation<Alias> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> delete() {
-        Objects.requireNonNull(this.uid, "Global Field Uid can not be null or empty");
+        Objects.requireNonNull(this.uid, "ErrorMessages.GLOBAL_FIELD_UID_REQUIRED");
         return this.service.delete(this.headers, this.uid, this.params);
     }
 

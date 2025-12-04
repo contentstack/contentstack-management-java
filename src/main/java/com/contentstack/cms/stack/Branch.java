@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +55,7 @@ public class Branch implements BaseImplementation<Branch> {
     }
 
     void validate() {
-        final String ERROR_MESSAGE = "The Branch UID Can Not Be Null ORr Empty";
+        final String ERROR_MESSAGE = ErrorMessages.BRANCH_UID_REQUIRED;
         Objects.requireNonNull(this.baseBranchId, ERROR_MESSAGE);
         if (this.baseBranchId.isEmpty())
             throw new IllegalStateException(ERROR_MESSAGE);

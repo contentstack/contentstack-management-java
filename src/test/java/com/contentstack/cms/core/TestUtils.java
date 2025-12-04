@@ -1,5 +1,7 @@
 package com.contentstack.cms.core;
 
+import static com.contentstack.cms.core.ErrorMessages.PRIVATE_CONSTRUCTOR;
+
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -61,7 +63,7 @@ public class TestUtils {
             Util.assertionError();
         } catch (AssertionError e) {
             Assertions.assertEquals(
-                    "private constructor can't be accessed outside the class",
+                    PRIVATE_CONSTRUCTOR,
                     e.getMessage());
         }
     }

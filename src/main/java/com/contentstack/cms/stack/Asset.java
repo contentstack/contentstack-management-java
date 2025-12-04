@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -225,12 +227,12 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> fetch() {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.single(this.headers, this.assetUid, this.params);
     }
 
     public Call<AssetResponse> fetchAsPojo() { // New method for POJO conversion
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.singlePojo(this.headers, this.assetUid, this.params);
     }
 
@@ -390,7 +392,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> replace(@NotNull String filePath, @NotNull String description) {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         MultipartBody.Part assetPath = uploadFile(filePath);
         RequestBody body = RequestBody.create(Objects.requireNonNull(MediaType.parse(String.valueOf(MultipartBody.FORM))), description);
         return this.service.replace(this.headers, this.assetUid, assetPath, body, this.params);
@@ -443,7 +445,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> generatePermanentUrl(JSONObject body) {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.generatePermanentUrl(this.headers, this.assetUid, body);
     }
 
@@ -473,7 +475,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> getPermanentUrl(String slugUrl) {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.downloadPermanentUrl(this.headers, this.assetUid, slugUrl, this.params);
     }
 
@@ -490,7 +492,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 0.1.0
      */
     public Call<ResponseBody> delete() {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.delete(this.headers, this.assetUid);
     }
 
@@ -580,7 +582,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 0.1.0
      */
     public Call<ResponseBody> getVersionNameDetails() {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.getVersionNameDetails(this.headers, this.assetUid, this.params);
     }
 
@@ -601,7 +603,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 0.1.0
      */
     public Call<ResponseBody> deleteVersionName(int versionNumber) {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.deleteVersionName(this.headers, this.assetUid, versionNumber);
     }
 
@@ -618,7 +620,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 0.1.0
      */
     public Call<ResponseBody> getReferences() {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.getReferences(this.headers, this.assetUid);
     }
 
@@ -676,7 +678,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 0.1.0
      */
     public Call<ResponseBody> updateDetails(JSONObject requestBody) {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.updateDetails(this.headers, this.assetUid, this.params, requestBody);
     }
 
@@ -702,7 +704,7 @@ public class Asset implements BaseImplementation<Asset> {
      * @since 0.1.0
      */
     public Call<ResponseBody> publish(@NotNull JSONObject requestBody) {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.publish(this.headers, this.assetUid, requestBody);
     }
 
@@ -728,7 +730,7 @@ public class Asset implements BaseImplementation<Asset> {
      */
     public Call<ResponseBody> unpublish(
             @NotNull JSONObject requestBody) {
-        Objects.requireNonNull(this.assetUid, "Asset Uid Can Not Be Null OR Empty");
+        Objects.requireNonNull(this.assetUid, "ErrorMessages.ASSET_UID_REQUIRED");
         return this.service.unpublish(this.headers, this.assetUid, requestBody);
     }
 
