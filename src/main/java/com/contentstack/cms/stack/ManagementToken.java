@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +44,7 @@ public class ManagementToken implements BaseImplementation<ManagementToken> {
 
     void validate() {
         if (this.tokenUid == null || this.tokenUid.isEmpty())
-            throw new IllegalAccessError("Token uid Can Not Be Null OR Empty");
+            throw new IllegalAccessError(ErrorMessages.MANAGEMENT_TOKEN_UID_REQUIRED);
     }
 
 

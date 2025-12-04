@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +32,7 @@ public class DeliveryToken implements BaseImplementation<DeliveryToken> {
     protected HashMap<String, Object> headers;
     protected HashMap<String, Object> params;
     private String tokenUid;
-    String ERROR = "Token UID Can Not Be Null OR Empty";
+    String ERROR = ErrorMessages.DELIVERY_TOKEN_UID_REQUIRED;
 
     protected DeliveryToken(TokenService service, Map<String, Object> headers) {
         this.headers = new HashMap<>();

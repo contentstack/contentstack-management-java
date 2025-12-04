@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -112,7 +114,7 @@ public class AuditLog implements BaseImplementation<AuditLog> {
      * @return Call
      */
     public Call<ResponseBody> fetch() {
-        Objects.requireNonNull(this.logItemUid, "Log Item uid can not be null or empty");
+        Objects.requireNonNull(this.logItemUid, "ErrorMessages.LOG_ITEM_UID_REQUIRED");
         return this.service.fetch(this.headers, this.logItemUid);
     }
 
