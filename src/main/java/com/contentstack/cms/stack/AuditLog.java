@@ -114,7 +114,7 @@ public class AuditLog implements BaseImplementation<AuditLog> {
      * @return Call
      */
     public Call<ResponseBody> fetch() {
-        Objects.requireNonNull(this.logItemUid, "ErrorMessages.LOG_ITEM_UID_REQUIRED");
+        Objects.requireNonNull(this.logItemUid, ErrorMessages.LOG_ITEM_UID_REQUIRED);
         return this.service.fetch(this.headers, this.logItemUid);
     }
 

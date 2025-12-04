@@ -75,7 +75,7 @@ public class Util {
     // `IllegalAccessException` is to prevent
     // the instantiation of the `Util` class from outside the class itself.
     Util() throws IllegalAccessException {
-        throw new IllegalAccessException(ErrorMessages.PRIVATE_CONSTRUCTOR_DETAILED);
+        throw new IllegalAccessException(ErrorMessages.PRIVATE_CONSTRUCTOR);
     }
 
     /**

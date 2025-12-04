@@ -30,7 +30,7 @@ public class TestUtils {
         try {
             new Util();
         } catch (IllegalAccessException e) {
-            Assertions.assertEquals("private=modifier", e.getMessage());
+            Assertions.assertEquals(PRIVATE_CONSTRUCTOR, e.getMessage());
         }
     }
 
