@@ -19,8 +19,8 @@ public final class ErrorMessages {
     public static final String OAUTH_ORG_EMPTY = "organizationUid can not be empty";
 
     public static final String PRIVATE_CONSTRUCTOR = "This class cannot be instantiated. Use the static methods to continue.";
-    public static final String PRIVATE_CONSTRUCTOR_DETAILED = "This private constructor cannot be accessed outside the class. Use the public methods instead.";
 
+    public static final String ALIAS_UID_REQUIRED = "Alias UID is required. Provide a valid Alias UID and try again.";
     public static final String ASSET_UID_REQUIRED = "Asset UID is required. Provide a valid Asset UID and try again.";
     public static final String LOG_ITEM_UID_REQUIRED = "Log Item UID is required. Provide a valid Log Item UID and try again.";
     public static final String BRANCH_UID_REQUIRED = "Branch UID is required. Provide a valid Branch UID and try again.";
