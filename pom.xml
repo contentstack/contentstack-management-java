@@ -186,6 +186,13 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
             <scope>compile</scope>
+            <exclusions>
+                <!-- Exclude vulnerable junit 4.10 - not needed at runtime -->
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax.activation</groupId>
@@ -241,7 +248,7 @@
                          <include>**/*TestSuite.java</include>
                      </includes>
                      <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory> 
-                     <skipTests>true</skipTests>
+                     <!-- <skipTests>true</skipTests> -->
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
