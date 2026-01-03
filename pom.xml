@@ -89,7 +89,7 @@
         <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <dotenv-source.version>5.2.2</dotenv-source.version>
         <rxjava-source.version>3.1.10</rxjava-source.version>
-        <retrofit-source.version>2.12.0</retrofit-source.version>
+        <retrofit-source.version>3.0.0</retrofit-source.version>
         <converter-gson-version>2.12.0</converter-gson-version>
         <okhttp.version>4.12.0</okhttp.version>
         <jococo-plugin.version>0.8.13</jococo-plugin.version>
