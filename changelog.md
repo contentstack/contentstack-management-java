@@ -4,7 +4,7 @@
 
 ### Jan 12, 2026
 
-- 
+- Improved error messages
 
 ## v1.10.1
 
