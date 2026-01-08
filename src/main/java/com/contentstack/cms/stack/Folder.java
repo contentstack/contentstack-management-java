@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +37,7 @@ public class Folder implements BaseImplementation<Folder> {
 
     void validate() {
         if (this.folderUid == null || this.folderUid.isEmpty())
-            throw new IllegalAccessError("Folder uid uid can not be null or empty");
+            throw new IllegalAccessError(ErrorMessages.FOLDER_UID_REQUIRED);
     }
 
     /**
