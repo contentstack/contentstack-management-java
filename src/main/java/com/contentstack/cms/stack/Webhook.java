@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import com.contentstack.cms.core.Util;
 import okhttp3.MediaType;
@@ -56,7 +58,7 @@ public class Webhook implements BaseImplementation<Webhook> {
 
     void validate() {
         if (this.webhookUid == null || this.webhookUid.isEmpty())
-            throw new IllegalAccessError("Webhook uid can not be null or empty");
+            throw new IllegalAccessError(ErrorMessages.WEBHOOK_UID_REQUIRED);
     }
 
 
