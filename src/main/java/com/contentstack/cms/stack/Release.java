@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +60,7 @@ public class Release implements BaseImplementation<Release> {
 
     void validate() {
         if (this.releaseUid == null || this.releaseUid.isEmpty())
-            throw new IllegalAccessError("Release Uid Can Not Be Null OR Empty");
+            throw new IllegalAccessError(ErrorMessages.RELEASE_UID_REQUIRED);
     }
 
 
