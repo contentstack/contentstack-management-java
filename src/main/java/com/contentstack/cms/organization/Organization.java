@@ -1,5 +1,7 @@
 package com.contentstack.cms.organization;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +28,7 @@ public class Organization implements BaseImplementation<Organization> {
     protected HashMap<String, String> headers;
     protected HashMap<String, Object> params;
     private String organizationUid;
-    final String ERROR_MSG = "OrganizationUid Can Not Be Null OR Empty";
+    final String ERROR_MSG = ErrorMessages.ORGANIZATION_UID_REQUIRED;
 
 
     /**
