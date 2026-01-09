@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +51,7 @@ public class Workflow implements BaseImplementation<Workflow> {
 
     void validate() {
         if (this.workflowUid == null || this.workflowUid.isEmpty())
-            throw new IllegalAccessError("Workflow uid can not be null or empty");
+            throw new IllegalAccessError(ErrorMessages.WORKFLOW_UID_REQUIRED);
     }
 
 
@@ -375,7 +377,7 @@ public class Workflow implements BaseImplementation<Workflow> {
      */
     public Call<ResponseBody> fetchPublishRuleContentType(@NotNull String contentTypeUid) {
         if (contentTypeUid.isEmpty()) {
-            throw new IllegalArgumentException("Content Type can not be empty");
+            throw new IllegalArgumentException(ErrorMessages.CONTENT_TYPE_REQUIRED);
         }
         return this.service.fetchPublishRuleContentType(this.headers, contentTypeUid, this.params);
     }

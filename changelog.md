@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.10.2
+
+### Jan 12, 2026
+
+- Improved error messages
+
 ## v1.10.1
 
 ### Jan 05, 2026

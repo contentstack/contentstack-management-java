@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import com.contentstack.cms.core.Util;
 import okhttp3.RequestBody;
@@ -53,7 +55,7 @@ public class Extensions implements BaseImplementation<Extensions> {
 
     void validate() {
         if (this.customFieldUid == null || this.customFieldUid.isEmpty())
-            throw new IllegalAccessError("Custom Field UID Can Not Be Null OR Empty");
+            throw new IllegalAccessError(ErrorMessages.CUSTOM_FIELD_UID_REQUIRED);
     }
 
 

@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -43,10 +45,10 @@ public class Environment implements BaseImplementation<Environment> {
     }
 
     void validate() {
-        String ERROR = "Environment Can Not Be Null OR Empty";
+        String ERROR = ErrorMessages.ENVIRONMENT_REQUIRED;
         Objects.requireNonNull(this.environment, ERROR);
         if (this.environment.isEmpty())
-            throw new IllegalStateException("Environment can not be null or empty");
+            throw new IllegalStateException(ErrorMessages.ENVIRONMENT_REQUIRED);
     }
 
     /**

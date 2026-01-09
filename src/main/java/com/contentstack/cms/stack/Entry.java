@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -145,7 +147,7 @@ public class Entry implements BaseImplementation<Entry> {
         if (referenceField instanceof String || referenceField instanceof String[]) {
             addToParams("include[]", referenceField);
         } else {
-            throw new IllegalArgumentException("Reference fields must be a String or an array of Strings");
+            throw new IllegalArgumentException(ErrorMessages.REFERENCE_FIELDS_INVALID);
         }
         validateCT();
         return this.service.fetch(this.headers, this.contentTypeUid, this.params);

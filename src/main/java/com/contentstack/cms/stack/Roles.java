@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +47,7 @@ public class Roles implements BaseImplementation<Roles> {
 
     void validate() {
         if (this.roleUid == null || this.roleUid.isEmpty())
-            throw new IllegalAccessError("Role uid can not be null or empty");
+            throw new IllegalAccessError(ErrorMessages.ROLE_UID_REQUIRED);
     }
 
 

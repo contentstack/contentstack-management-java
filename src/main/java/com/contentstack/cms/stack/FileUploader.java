@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -81,7 +83,7 @@ public class FileUploader {
             javax.activation.MimetypesFileTypeMap m = new javax.activation.MimetypesFileTypeMap(source.toString());
             return m.getContentType(file);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to determine content type of file", e);
+            throw new RuntimeException(ErrorMessages.FILE_CONTENT_TYPE_UNKNOWN, e);
         }
     }
 

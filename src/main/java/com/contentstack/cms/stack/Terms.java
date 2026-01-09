@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -289,7 +291,7 @@ public class Terms implements BaseImplementation<Terms> {
      */
     public Call<ResponseBody> search(@NotNull String termString) {
         if (termString.isEmpty()) {
-            throw new IllegalArgumentException("termString must not be empty");
+            throw new IllegalArgumentException(ErrorMessages.TERM_STRING_REQUIRED);
         }
         return this.taxonomyService.searchTerm(this.headers, termString);
     }

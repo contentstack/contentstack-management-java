@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +56,7 @@ public class Locale implements BaseImplementation<Locale> {
     }
 
     void validate() {
-        if (this.code == null) throw new IllegalAccessError("The Locale Code Can Not Be Null OR Empty");
+        if (this.code == null) throw new IllegalAccessError(ErrorMessages.LOCALE_CODE_REQUIRED);
     }
 
     /**

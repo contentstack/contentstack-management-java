@@ -20,7 +20,7 @@ public class Util {
     // "1.2.0".
     public static final String SDK_VERSION = "1.3.1";
 
-    static final String PRIVATE_CONSTRUCTOR = "private constructor can't be accessed outside the class";
+    static final String PRIVATE_CONSTRUCTOR = ErrorMessages.PRIVATE_CONSTRUCTOR;
     public static final Boolean RETRY_ON_FAILURE = true;
     public static final String PROTOCOL = "https";
     public static final String HOST = "api.contentstack.io";
@@ -28,11 +28,10 @@ public class Util {
     public static final String VERSION = "v3";
     public static final int TIMEOUT = 30;
     public static final String SDK_NAME = "contentstack-management-java";
-    public static final String ILLEGAL_USER = "Please Login to access stack instance";
-    public static final String USER_ALREADY_LOGGED_IN = "User is already loggedIn, "
-            + "Please logout then try to login again";
-    public static final String LOGIN_FLAG = "Please login to access user instance";
-    public static final String PLEASE_LOGIN = "Please Login to access stack instance";
+    public static final String ILLEGAL_USER = ErrorMessages.NOT_LOGGED_IN;
+    public static final String USER_ALREADY_LOGGED_IN = ErrorMessages.ALREADY_LOGGED_IN;
+    public static final String LOGIN_FLAG = ErrorMessages.NOT_LOGGED_IN;
+    public static final String PLEASE_LOGIN = ErrorMessages.NOT_LOGGED_IN;
 
     // CONSTANT KEYS
     public static final String API_KEY = "api_key";
@@ -47,9 +46,9 @@ public class Util {
     public static final String CONTENT_TYPE_VALUE = "application/json";
 
     // Error Messages
-    public static final String MISSING_INSTALLATION_ID = "installation uid is required";
-    public static final String ERROR_INSTALLATION = "installation uid is required";
-    public static final String MISSING_ORG_ID = "organization uid is required";
+    public static final String MISSING_INSTALLATION_ID = ErrorMessages.MISSING_INSTALLATION_ID;
+    public static final String ERROR_INSTALLATION = ErrorMessages.MISSING_INSTALLATION_ID;
+    public static final String MISSING_ORG_ID = ErrorMessages.MISSING_ORG_ID;
 
     // OAuth Constants
     public static final String OAUTH_APP_HOST = "app.contentstack.com";
@@ -58,15 +57,15 @@ public class Util {
     public static final String OAUTH_AUTHORIZE_ENDPOINT = "/#!/apps/%s/authorize";
     
     // OAuth Error Messages
-    public static final String OAUTH_NO_TOKENS = "No OAuth tokens available. Please authenticate first.";
-    public static final String OAUTH_NO_REFRESH_TOKEN = "No refresh token available";
-    public static final String OAUTH_EMPTY_CODE = "Authorization code cannot be null or empty";
-    public static final String OAUTH_CONFIG_MISSING = "OAuth is not configured. Use Builder.setOAuth() with or without clientSecret for PKCE flow";
-    public static final String OAUTH_REFRESH_FAILED = "Failed to refresh access token";
-    public static final String OAUTH_REVOKE_FAILED = "Failed to revoke authorization";
-    public static final String OAUTH_STATUS_FAILED = "Failed to get authorization status";
-    public static final String OAUTH_LOGIN_REQUIRED = "Please login or configure OAuth to access";
-    public static final String OAUTH_ORG_EMPTY = "organizationUid can not be empty";
+    public static final String OAUTH_NO_TOKENS = ErrorMessages.OAUTH_NO_TOKENS;
+    public static final String OAUTH_NO_REFRESH_TOKEN = ErrorMessages.OAUTH_NO_REFRESH_TOKEN;
+    public static final String OAUTH_EMPTY_CODE = ErrorMessages.OAUTH_EMPTY_CODE;
+    public static final String OAUTH_CONFIG_MISSING = ErrorMessages.OAUTH_CONFIG_MISSING;
+    public static final String OAUTH_REFRESH_FAILED = ErrorMessages.OAUTH_REFRESH_FAILED;
+    public static final String OAUTH_REVOKE_FAILED = ErrorMessages.OAUTH_REVOKE_FAILED;
+    public static final String OAUTH_STATUS_FAILED = ErrorMessages.OAUTH_STATUS_FAILED;
+    public static final String OAUTH_LOGIN_REQUIRED = ErrorMessages.OAUTH_LOGIN_REQUIRED;
+    public static final String OAUTH_ORG_EMPTY = ErrorMessages.OAUTH_ORG_EMPTY;
 
     // The code `Util() throws IllegalAccessException` is a constructor for the
     // `Util` class that throws an
@@ -76,7 +75,7 @@ public class Util {
     // `IllegalAccessException` is to prevent
     // the instantiation of the `Util` class from outside the class itself.
     Util() throws IllegalAccessException {
-        throw new IllegalAccessException("private=modifier");
+        throw new IllegalAccessException(ErrorMessages.PRIVATE_CONSTRUCTOR);
     }
 
     /**
@@ -109,7 +108,7 @@ public class Util {
         try {
             throw new CMARuntimeException(field + " cannot take in an empty String or null value");
         } catch (CMARuntimeException e) {
-            System.out.println("Exception: " + e.getLocalizedMessage());
+            System.out.println("An error occurred due to " + e.getLocalizedMessage() + ".");
         }
     }
 
