@@ -1,4 +1,6 @@
 package com.contentstack.cms.stack;
+
+import com.contentstack.cms.core.ErrorMessages;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +71,7 @@ public class VariantGroup implements BaseImplementation<VariantGroup> {
      */
     void validate() {
         if (this.variantGroupUid == null || this.variantGroupUid.isEmpty())
-            throw new IllegalAccessError("Variant group uid can not be null or empty");
+            throw new IllegalAccessError(ErrorMessages.VARIANT_GROUP_UID_REQUIRED);
     }
 
     /**

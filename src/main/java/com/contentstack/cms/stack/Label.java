@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +52,7 @@ public class Label implements BaseImplementation<Label> {
 
     void validate() {
         if (this.labelUid == null || this.labelUid.isEmpty())
-            throw new IllegalAccessError("Label Uid can not be null or empty");
+            throw new IllegalAccessError(ErrorMessages.LABEL_UID_REQUIRED);
     }
 
     @Override
