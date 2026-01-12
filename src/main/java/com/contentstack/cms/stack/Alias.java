@@ -1,15 +1,18 @@
 package com.contentstack.cms.stack;
 
-import com.contentstack.cms.BaseImplementation;
-import okhttp3.ResponseBody;
-import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONObject;
-import retrofit2.Call;
-import retrofit2.Retrofit;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONObject;
+
+import com.contentstack.cms.BaseImplementation;
+import com.contentstack.cms.core.ErrorMessages;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Retrofit;
 
 /**
  * An alias acts as a pointer to a particular branch. You can specify the alias
@@ -160,7 +163,7 @@ public class Alias implements BaseImplementation<Alias> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> fetch() {
-        Objects.requireNonNull(this.uid, "Global Field Uid can not be null or empty");
+        Objects.requireNonNull(this.uid, ErrorMessages.ALIAS_UID_REQUIRED);
         return this.service.single(this.headers, this.uid);
     }
 
@@ -206,7 +209,7 @@ public class Alias implements BaseImplementation<Alias> {
      * @since 2022-10-20
      */
     public Call<ResponseBody> delete() {
-        Objects.requireNonNull(this.uid, "Global Field Uid can not be null or empty");
+        Objects.requireNonNull(this.uid, ErrorMessages.ALIAS_UID_REQUIRED);
         return this.service.delete(this.headers, this.uid, this.params);
     }
 
