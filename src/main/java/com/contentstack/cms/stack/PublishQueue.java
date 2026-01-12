@@ -1,5 +1,7 @@
 package com.contentstack.cms.stack;
 
+import com.contentstack.cms.core.ErrorMessages;
+
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +66,7 @@ public class PublishQueue implements BaseImplementation<PublishQueue> {
 
     void validate() {
         if (this.publishQueueUid == null || this.publishQueueUid.isEmpty())
-            throw new IllegalAccessError("Publish Queue Uid can not be null or empty");
+            throw new IllegalAccessError(ErrorMessages.PUBLISH_QUEUE_UID_REQUIRED);
     }
 
 
