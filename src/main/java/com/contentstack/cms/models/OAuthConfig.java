@@ -82,7 +82,9 @@ public class OAuthConfig {
         if (hostname.contains("contentstack")) {
             hostname = hostname
                     .replaceAll("-api\\.", "-app.") // eu-api.contentstack.com -> eu-app.contentstack.com
+                    .replaceAll("-api-", "-app-") // eu-api-contentstack.com -> eu-app-contentstack.com
                     .replaceAll("^api\\.", "app.") // api.contentstack.io -> app.contentstack.io
+                    .replaceAll("^api-", "app-") // api-contentstack.com -> app-contentstack.com
                     .replaceAll("\\.io$", ".com"); // *.io -> *.com
         } else {
             hostname = Util.OAUTH_APP_HOST;
@@ -107,7 +109,9 @@ public class OAuthConfig {
         if (hostname.contains("contentstack")) {
             hostname = hostname 
                     .replaceAll("-api\\.", "-developerhub-api.") // eu-api.contentstack.com -> eu-developerhub-api.contentstack.com
+                    .replaceAll("-api-", "-developerhub-api-") // eu-api-contentstack.com -> eu-developerhub-api-contentstack.com
                     .replaceAll("^api\\.", "developerhub-api.") // api.contentstack.io -> developerhub-api.contentstack.io
+                    .replaceAll("^api-", "developerhub-api-") // api-contentstack.com -> developerhub-api-contentstack.com
                     .replaceAll("\\.io$", ".com"); // *.io -> *.com
         } else {
             hostname = Util.OAUTH_API_HOST;
