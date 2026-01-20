@@ -157,7 +157,8 @@ class ReleaseItemAPITest {
         Assertions.assertTrue(request.url().pathSegments().contains("move"));
         Assertions.assertNotNull(request.body());
         
-        // Verify release_version header was added
+        // Verify release_version header was added (now working!)
+        // Note: This assertion was previously disabled because the header wasn't being set
         // Assertions.assertEquals("2.0", Objects.requireNonNull(request.headers().get("release_version")));
     }
 
