@@ -375,8 +375,7 @@ class GlobalFieldAPITest {
         // void testCreateNestedGlobalField() throws IOException {
         //     JSONObject requestBody = Utils.readJson("globalfield/nested_global_field.json");
         //     Request request = nestedGlobalField.create(requestBody).request();
-        //     Assertions.assertEquals("https://api.contentstack.io/v3/global_fields", request.url().toString());
-        //     Assertions.assertEquals("/v3/global_fields", request.url().encodedPath());
+        //        //     Assertions.assertEquals("/v3/global_fields", request.url().encodedPath());
         //     Assertions.assertEquals("https", request.url().scheme());
         //     Assertions.assertEquals("POST", request.method());
         //     Assertions.assertEquals(apiVersion, request.header("api_version"));
@@ -390,8 +389,7 @@ class GlobalFieldAPITest {
         //     nestedGlobalField.addParam("include_global_fields", true);
         //     nestedGlobalField.addParam("include_validation_keys", true);
         //     Request request = nestedGlobalField.fetch().request();
-        //     Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + nestedUid + "?include_global_fields=true&include_validation_keys=true", request.url().toString());
-        //     Assertions.assertEquals("https", request.url().scheme());
+        //        //     Assertions.assertEquals("https", request.url().scheme());
         //     Assertions.assertEquals("GET", request.method());
         //     Assertions.assertEquals(apiVersion, request.header("api_version"));
         //     Response<ResponseBody> response = nestedGlobalField.fetch().execute();
@@ -408,8 +406,7 @@ class GlobalFieldAPITest {
         // void testUpdateNestedGlobalField() throws IOException {
         //     JSONObject requestBody = Utils.readJson("globalfield/nested_global_field_update1.json");
         //     Request request = nestedGlobalField.update(requestBody).request();
-        //     Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + nestedUid, request.url().toString());
-        //     Assertions.assertEquals("/v3/global_fields/" + nestedUid, request.url().encodedPath());
+        //        //     Assertions.assertEquals("/v3/global_fields/" + nestedUid, request.url().encodedPath());
         //     Assertions.assertEquals("https", request.url().scheme());
         //     Assertions.assertEquals("PUT", request.method());
         //     Assertions.assertEquals(apiVersion, request.header("api_version"));
@@ -425,8 +422,7 @@ class GlobalFieldAPITest {
         // @Order(4)
         // void testDeleteNestedGlobalField() throws IOException {
         //     Request request = nestedGlobalField.delete().request();
-        //     Assertions.assertEquals("https://api.contentstack.io/v3/global_fields/" + nestedUid + "?force=true", request.url().toString());
-        //     Assertions.assertEquals("https", request.url().scheme());
+        //        //     Assertions.assertEquals("https", request.url().scheme());
         //     Assertions.assertEquals("DELETE", request.method());
         //     Assertions.assertEquals(apiVersion, request.header("api_version"));
         //     Response<ResponseBody> response = nestedGlobalField.delete().execute();

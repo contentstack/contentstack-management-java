@@ -43,11 +43,11 @@ public class ReleaseAPITest {
         JSONObject requestBody = Utils.readJson("releases/create_release1.json");
         Response<ResponseBody> response = stack.releases().create(requestBody).execute();
 
-        // Skip test if Releases V2 is not enabled for this stack
+        // Skip test if Releases V2 is not enabled
         if (!response.isSuccessful() && response.code() == 403) {
             String errorBody = response.errorBody() != null ? response.errorBody().string() : "";
             if (errorBody.contains("Releases V2 is not included in your plan")) {
-                Assumptions.assumeTrue(false, "Skipping: Releases V2 not enabled for test credentials");
+                assumeTrue(false, "Skipping: Releases V2 not enabled for test credentials");
             }
         }
         
@@ -70,7 +70,7 @@ public class ReleaseAPITest {
     void testFindReleases() throws IOException, ParseException {
         Response<ResponseBody> response = stack.releases().find().execute();
 
-        // Skip test if Releases V2 is not enabled for this stack
+        // Skip test if Releases V2 is not enabled
         if (!response.isSuccessful() && response.code() == 403) {
             String errorBody = response.errorBody() != null ? response.errorBody().string() : "";
             if (errorBody.contains("Releases V2 is not included in your plan")) {

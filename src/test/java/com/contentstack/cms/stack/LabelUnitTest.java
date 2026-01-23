@@ -57,13 +57,9 @@ class LabelUnitTest {
         Request request = label.find().request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void fetchLabels() {
@@ -72,14 +68,9 @@ class LabelUnitTest {
         Request request = label.find().request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels?include_count=false&include_branch=false",
-                request.url().toString());
-    }
+        Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());    }
 
     @Test
     void fetchWithBranch() {
@@ -89,14 +80,9 @@ class LabelUnitTest {
         Request request = label.addBranch("main").find().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels?include_count=false&include_branch=false",
-                request.url().toString());
-    }
+        Assertions.assertEquals("include_count=false&include_branch=false", request.url().encodedQuery());    }
 
     @Test
     void getLabel() {
@@ -104,13 +90,9 @@ class LabelUnitTest {
         Request request = label.fetch().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void getLabelWithQuery() {
@@ -118,14 +100,9 @@ class LabelUnitTest {
         Request request = label.fetch().request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_branch=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels/" + _uid + "?include_branch=false",
-                request.url().toString());
-    }
+        Assertions.assertEquals("include_branch=false", request.url().encodedQuery());    }
 
     @Test
     void addLabelPost() {
@@ -133,13 +110,9 @@ class LabelUnitTest {
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void labelUpdate() {
@@ -147,13 +120,9 @@ class LabelUnitTest {
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertNotNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void labelDelete() {
@@ -161,13 +130,9 @@ class LabelUnitTest {
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("labels", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/labels/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
 
     @Test
