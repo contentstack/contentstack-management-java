@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ReleaseUnitTest {
+public class ReleaseUnitTest {
 
     protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
     protected static String API_KEY = TestClient.API_KEY;
@@ -48,7 +48,7 @@ class ReleaseUnitTest {
     @Order(1)
     void allReleaseHeaders() {
         release.addHeader("Content-Type", "application/json");
-        Assertions.assertEquals(3, release.headers.size());
+        Assertions.assertEquals(3, release.headers.size()); // authtoken, authorization, Content-Type (release_version added only on API calls)
     }
 
     @Test
