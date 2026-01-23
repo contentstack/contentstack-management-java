@@ -21,7 +21,8 @@ package com.contentstack.cms.stack;
          OrgApiTests.class,
          GlobalFieldAPITest.class,
          VariantGroupAPITest.class,
-         VariantGroupTest.class
+         VariantGroupTest.class,
+         ReleaseAPITest.class
 
 })
  public class APISanityTestSuite {
