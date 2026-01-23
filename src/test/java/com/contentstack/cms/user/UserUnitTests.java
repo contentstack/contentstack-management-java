@@ -230,9 +230,7 @@ public class UserUnitTests {
         Request requestInfo = userInstance
                 .activateAccount(ACTIVATION_TOKEN, body)
                 .request();
-        Assertions
-                .        Assertions
-                .assertEquals("/v3/user/activate/" + ACTIVATION_TOKEN,
+        Assertions.assertEquals("/v3/user/activate/" + ACTIVATION_TOKEN,
                         requestInfo.url().encodedPath());
 
     }
@@ -320,9 +318,7 @@ public class UserUnitTests {
         Request requestInfo = userInstance
                 .requestPassword(body)
                 .request();
-        Assertions
-                .        Assertions
-                .assertEquals("/v3/user/forgot_password",
+        Assertions.assertEquals("/v3/user/forgot_password",
                         requestInfo.url().encodedPath());
     }
 
@@ -401,9 +397,7 @@ public class UserUnitTests {
                 "}";
         JSONObject body = strToJson(requestBody);
         Request requestInfo = userInstance.resetPassword(body).request();
-        Assertions
-                .        Assertions
-                .assertEquals("/v3/user/reset_password",
+        Assertions.assertEquals("/v3/user/reset_password",
                         requestInfo.url().encodedPath());
     }
 
@@ -528,9 +522,7 @@ public class UserUnitTests {
         Request requestInfo = userInstance
                 .logoutWithAuthtoken("authtoken")
                 .request();
-        Assertions
-                .        Assertions
-                .assertEquals("/v3/user-session",
+        Assertions.assertEquals("/v3/user-session",
                         requestInfo.url().encodedPath());
     }
 
