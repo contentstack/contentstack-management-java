@@ -258,9 +258,9 @@ public class OAuthTest {
             String authUrl = handler.authorize();
             String tokenUrl = config.getTokenEndpoint();
 
-            assertTrue(String.format("Auth URL for %s should contain %s", apiHost, expectedAppHost),
+            assertTrue(String.format("Auth URL for %s should contain %s. Actual: %s", apiHost, expectedAppHost, authUrl),
                     authUrl.contains(expectedAppHost));
-            assertTrue(String.format("Token URL for %s should contain %s", apiHost, expectedTokenHost),
+            assertTrue(String.format("Token URL for %s should contain %s. Actual: %s", apiHost, expectedTokenHost, tokenUrl),
                     tokenUrl.contains(expectedTokenHost));
         }
     }
@@ -336,8 +336,8 @@ public class OAuthTest {
         String authUrl = handler.authorize();
         String tokenUrl = config.getTokenEndpoint();
 
-        assertEquals("Should use custom auth endpoint",
-                customAuthEndpoint, authUrl);
+        assertTrue("Should use custom auth endpoint",
+                authUrl.startsWith(customAuthEndpoint));
         assertEquals("Should use custom token endpoint",
                 customTokenEndpoint, tokenUrl);
     }

@@ -2,15 +2,16 @@
 
 ## v1.10.2
 
-### Jan 12, 2026
+### Jan 27, 2026
 
-- Improved error messages
+- Delete Release fix
 
 ## v1.10.1
 
-### Jan 05, 2026
+### Jan 12, 2026
 
 - Snyk Fixes
+- Improved error messages
 
 ## v1.10.0
 
