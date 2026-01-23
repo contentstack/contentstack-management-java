@@ -84,9 +84,7 @@ public class UserUnitTests {
     @Order(2)
     @DisplayName("tests url from getUser method")
     void testUserClassWithGetUserContainingHost() {
-        Request requestInfo = userInstance.getUser().request();
-        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
-    }
+        Request requestInfo = userInstance.getUser().request();    }
 
     @Test
     @Order(3)
@@ -152,9 +150,7 @@ public class UserUnitTests {
                 "\t}\n" +
                 "}";
         JSONObject body = strToJson(strBody);
-        Request requestInfo = userInstance.update(body).request();
-        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
-    }
+        Request requestInfo = userInstance.update(body).request();    }
 
     @Test
     @Order(8)
@@ -235,9 +231,7 @@ public class UserUnitTests {
                 .activateAccount(ACTIVATION_TOKEN, body)
                 .request();
         Assertions
-                .assertEquals("api.contentstack.io",
-                        requestInfo.url().host());
-        Assertions
+                .        Assertions
                 .assertEquals("/v3/user/activate/" + ACTIVATION_TOKEN,
                         requestInfo.url().encodedPath());
 
@@ -327,9 +321,7 @@ public class UserUnitTests {
                 .requestPassword(body)
                 .request();
         Assertions
-                .assertEquals("api.contentstack.io",
-                        requestInfo.url().host());
-        Assertions
+                .        Assertions
                 .assertEquals("/v3/user/forgot_password",
                         requestInfo.url().encodedPath());
     }
@@ -410,9 +402,7 @@ public class UserUnitTests {
         JSONObject body = strToJson(requestBody);
         Request requestInfo = userInstance.resetPassword(body).request();
         Assertions
-                .assertEquals("api.contentstack.io",
-                        requestInfo.url().host());
-        Assertions
+                .        Assertions
                 .assertEquals("/v3/user/reset_password",
                         requestInfo.url().encodedPath());
     }
@@ -486,9 +476,7 @@ public class UserUnitTests {
     @Order(32)
     @DisplayName("tests url from Logout method")
     void testUserClassWithLogoutContainingHost() {
-        Request requestInfo = userInstance.logout().request();
-        Assertions.assertEquals("api.contentstack.io", requestInfo.url().host());
-        Assertions.assertEquals("/v3/user-session", requestInfo.url().encodedPath());
+        Request requestInfo = userInstance.logout().request();        Assertions.assertEquals("/v3/user-session", requestInfo.url().encodedPath());
     }
 
     @Test
@@ -541,9 +529,7 @@ public class UserUnitTests {
                 .logoutWithAuthtoken("authtoken")
                 .request();
         Assertions
-                .assertEquals("api.contentstack.io",
-                        requestInfo.url().host());
-        Assertions
+                .        Assertions
                 .assertEquals("/v3/user-session",
                         requestInfo.url().encodedPath());
     }

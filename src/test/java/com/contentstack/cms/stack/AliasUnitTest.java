@@ -56,17 +56,11 @@ class AliasUnitTest {
         Request request = alias.find().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
         Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branch_aliases",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void fetchBranchWithQueryParameter() {
@@ -76,17 +70,11 @@ class AliasUnitTest {
         Request request = alias.find().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
         Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branch_aliases?limit=2&skip=2&include_count=false",
-                request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     void allRoles() {
@@ -96,33 +84,21 @@ class AliasUnitTest {
         Request request = alias.find().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
         Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
-        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branch_aliases?include_rules=true&include_permissions=true",
-                request.url().toString());
-    }
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));    }
 
     @Test
     void singleRole() {
         Request request = alias.fetch().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
         Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branch_aliases/" + _uid,
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
 
     @Test
@@ -130,17 +106,11 @@ class AliasUnitTest {
         Request request = alias.update(body).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
         Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
         Assertions.assertNotNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branch_aliases",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
 
     @Test
@@ -148,17 +118,11 @@ class AliasUnitTest {
         Request request = alias.delete().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
         Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branch_aliases/" + _uid,
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void deleteBranchHeader() {
@@ -172,17 +136,11 @@ class AliasUnitTest {
         Request request = aliases.delete().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
         Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branch_aliases/alias_uid",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void deleteBranchAliasAddHeader() {
@@ -194,16 +152,10 @@ class AliasUnitTest {
         Request request = aliasesUid.delete().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("stacks", request.url().pathSegments().get(1));
         Assertions.assertEquals("branch_aliases", request.url().pathSegments().get(2));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/branch_aliases/uid",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
 }

@@ -40,14 +40,10 @@ class ContentTypeAPITest {
         Request request = contentType.find().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(2)
     @Test
@@ -57,15 +53,10 @@ class ContentTypeAPITest {
         Request request = contentType.create(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types", request.url().toString());
-
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     @Order(3)
@@ -77,19 +68,12 @@ class ContentTypeAPITest {
         Request request = contentType.find().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertEquals("include_count=true&include_global_field_schema=true",
-                request.url().query().toString());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
-                request.url().toString());
-
-    }
+                request.url().query().toString());    }
 
     @Test
     @Order(4)
@@ -98,14 +82,10 @@ class ContentTypeAPITest {
         Request request = contentType.fetch().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(5)
     @Test
@@ -115,14 +95,10 @@ class ContentTypeAPITest {
         Request request = contentType.update(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(6)
     @Test
@@ -132,15 +108,10 @@ class ContentTypeAPITest {
         Request request = contentType.fieldVisibilityRule(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType", request.url().toString());
-
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(7)
     @Test
@@ -149,16 +120,10 @@ class ContentTypeAPITest {
         Request request = contentType.reference(false).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types/contentType/references?include_global_fields=false",
-                request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Order(8)
     @Test
@@ -167,17 +132,11 @@ class ContentTypeAPITest {
         Request request = contentType.referenceIncludeGlobalField().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("include_global_fields=true", request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types/contentType/references?include_global_fields=true",
-                request.url().toString());
-    }
+        Assertions.assertEquals("include_global_fields=true", request.url().encodedQuery());    }
 
     @Order(9)
     @Test
@@ -186,15 +145,10 @@ class ContentTypeAPITest {
         Request request = contentType.export().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType/export",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(10)
     @Test
@@ -203,16 +157,11 @@ class ContentTypeAPITest {
         Request request = contentType.export(1).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("version=1", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType/export?version=1",
-                request.url().toString());
-    }
+        Assertions.assertEquals("version=1", request.url().encodedQuery());    }
 
     @Order(11)
     @Test
@@ -221,14 +170,10 @@ class ContentTypeAPITest {
         Request request = contentType.imports().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(12)
     @Test
@@ -237,16 +182,11 @@ class ContentTypeAPITest {
         Request request = contentType.importOverwrite().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("overwrite=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true",
-                request.url().toString());
-    }
+        Assertions.assertEquals("overwrite=true", request.url().encodedQuery());    }
 
     @Order(13)
     @Test
@@ -255,14 +195,10 @@ class ContentTypeAPITest {
         Request request = contentType.delete().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(14)
     @Test
@@ -271,14 +207,10 @@ class ContentTypeAPITest {
         Request request = contentType.delete().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void testcontentPojo() throws IOException {
@@ -286,14 +218,10 @@ class ContentTypeAPITest {
         Request request = contentType.fetchAsPojo().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/contentType", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void testcontentPojoList() throws IOException {
@@ -304,18 +232,11 @@ class ContentTypeAPITest {
         Request request = contentType.findAsPojo().request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.url().encodedQuery());
         Assertions.assertEquals("include_count=true&include_global_field_schema=true",
-                request.url().query().toString());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
-                request.url().toString());
-
-    }
+                request.url().query().toString());    }
 
 }

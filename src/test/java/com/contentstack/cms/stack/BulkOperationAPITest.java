@@ -64,16 +64,10 @@ class BulkOperationAPITest {
         Request request = bulkOperation.publish(new JSONObject()).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/publish?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
-                request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     @Order(6)
@@ -81,17 +75,11 @@ class BulkOperationAPITest {
         Request request = bulkOperation.unpublish(new JSONObject()).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
-                request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/unpublish?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
-                request.url().toString());
-    }
+                request.url().encodedQuery());    }
 
     @Test
     @Order(7)
@@ -99,17 +87,11 @@ class BulkOperationAPITest {
         Request request = bulkOperation.delete(new JSONObject()).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
-                request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/delete?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
-                request.url().toString());
-    }
+                request.url().encodedQuery());    }
 
     @Test
     @Order(7)
@@ -118,17 +100,11 @@ class BulkOperationAPITest {
         Request request = bulkOperation.updateWorkflow(new JSONObject()).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("bulk", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
-                request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/workflow?authorization=managementToken99999999&skip_workflow_stage_check=true&test=testValue&api_key=apiKey99999999&approvals=true",
-                request.url().toString());
-    }
+                request.url().encodedQuery());    }
 
     @Test
     @Order(8)

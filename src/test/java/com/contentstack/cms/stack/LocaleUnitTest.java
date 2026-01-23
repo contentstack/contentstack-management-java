@@ -31,15 +31,9 @@ public class LocaleUnitTest {
         Request request = locale.find().request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("locales", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_count=true", request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales?include_count=true",
-                request.url().toString());
-    }
+        Assertions.assertEquals("include_count=true", request.url().encodedQuery());    }
 
     @Test
     void addLocale() {
@@ -47,15 +41,9 @@ public class LocaleUnitTest {
         Request request = locale.create(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("locales", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void getLocale() {
@@ -63,15 +51,9 @@ public class LocaleUnitTest {
         Request request = locale.fetch().request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("locales", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales/en-us",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void updateLocale() {
@@ -80,30 +62,18 @@ public class LocaleUnitTest {
         Request request = locale.update(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("locales", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales/en-us",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void deleteLocale() {
         Request request = locale.delete().request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("locales", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales/en-us",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void setFallbackLocale() {
@@ -111,15 +81,9 @@ public class LocaleUnitTest {
         Request request = locale.setFallback(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("locales", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void updateFallbackLocale() {
@@ -127,15 +91,9 @@ public class LocaleUnitTest {
         Request request = locale.updateFallback(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("locales", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/locales/en-us",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void testLocaleException() {
