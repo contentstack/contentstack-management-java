@@ -191,7 +191,7 @@ public class ContentstackUnitTest {
             client.organization();
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            Assertions.assertEquals("Please Login to access user instance", e.getLocalizedMessage());
+            Assertions.assertEquals("Login or configure OAuth to continue. organization", e.getLocalizedMessage());
         }
     }
 
@@ -203,7 +203,7 @@ public class ContentstackUnitTest {
         try {
             client.login("fake@email.com", "fake@password");
         } catch (Exception e) {
-            Assertions.assertEquals("User is already loggedIn, Please logout then try to login again", e.getMessage());
+            Assertions.assertEquals("Operation not allowed. You are already logged in.", e.getMessage());
         }
         Assertions.assertEquals("fake@authtoken", client.authtoken);
     }
@@ -216,7 +216,7 @@ public class ContentstackUnitTest {
             params.put("tfaToken", "fake@tfa");
             client.login("fake@email.com", "fake@password", params);
         } catch (Exception e) {
-            Assertions.assertEquals("User is already loggedIn, Please logout then try to login again", e.getMessage());
+            Assertions.assertEquals("Operation not allowed. You are already logged in.", e.getMessage());
         }
         Assertions.assertEquals("fake@authtoken", client.authtoken);
     }

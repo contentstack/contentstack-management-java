@@ -42,18 +42,42 @@ public class OAuthInterceptor implements Interceptor {
         Request.Builder requestBuilder = originalRequest.newBuilder()
                 .header("X-User-Agent", Util.defaultUserAgent())
                 .header("User-Agent", Util.defaultUserAgent())
-                .header("Content-Type", originalRequest.url().toString().contains("/token") ? "application/x-www-form-urlencoded" : "application/json")
                 .header("x-header-ea", earlyAccess != null ? String.join(",", earlyAccess) : "true");
+
+        // Skip Content-Type header for DELETE /releases/{release_uid} request
+        // to avoid "Body cannot be empty when content-type is set to 'application/json'" error
+        if (!isDeleteReleaseRequest(originalRequest)) {
+            String contentType = originalRequest.url().toString().contains("/token")
+                    ? "application/x-www-form-urlencoded"
+                    : "application/json";
+            requestBuilder.header("Content-Type", contentType);
+        }
+
         // Skip auth header for token endpoints
         if (!originalRequest.url().toString().contains("/token")) {
             if (oauthHandler.getTokens() != null && oauthHandler.getTokens().hasAccessToken()) {
                 requestBuilder.header("Authorization", "Bearer " + oauthHandler.getAccessToken());
-
             }
         }
 
         // Execute request with retry and refresh handling
         return executeRequest(chain, requestBuilder.build(), 0);
+    }
+
+    /**
+     * Checks if the request is a DELETE request to /releases/{release_uid} endpoint.
+     * This endpoint should not have Content-Type header as it doesn't accept a body.
+     *
+     * @param request The HTTP request to check
+     * @return true if this is a DELETE /releases/{release_uid} request
+     */
+    private boolean isDeleteReleaseRequest(Request request) {
+        if (!"DELETE".equals(request.method())) {
+            return false;
+        }
+        String path = request.url().encodedPath();
+        // Match pattern: /v3/releases/{release_uid} (no trailing path segments)
+        return path.matches(".*/releases/[^/]+$");
     }
 
     private Response executeRequest(Chain chain, Request request, int retryCount) throws IOException {
