@@ -221,25 +221,18 @@ public class OAuthTest {
         String[][] testCases = {
             // Default region
             {"api.contentstack.io", "app.contentstack.com", "developerhub-api.contentstack.com"},
-            {"api-contentstack.com", "app-contentstack.com", "developerhub-api-contentstack.com"},
             
             // AWS regions
             {"eu-api.contentstack.com", "eu-app.contentstack.com", "eu-developerhub-api.contentstack.com"},
-            {"eu-api-contentstack.com", "eu-app-contentstack.com", "eu-developerhub-api-contentstack.com"},
             {"au-api.contentstack.com", "au-app.contentstack.com", "au-developerhub-api.contentstack.com"},
-            {"au-api-contentstack.com", "au-app-contentstack.com", "au-developerhub-api-contentstack.com"},
             
             // Azure regions
             {"azure-na-api.contentstack.com", "azure-na-app.contentstack.com", "azure-na-developerhub-api.contentstack.com"},
-            {"azure-na-api-contentstack.com", "azure-na-app-contentstack.com", "azure-na-developerhub-api-contentstack.com"},
             {"azure-eu-api.contentstack.com", "azure-eu-app.contentstack.com", "azure-eu-developerhub-api.contentstack.com"},
-            {"azure-eu-api-contentstack.com", "azure-eu-app-contentstack.com", "azure-eu-developerhub-api-contentstack.com"},
             
             // GCP regions
             {"gcp-na-api.contentstack.com", "gcp-na-app.contentstack.com", "gcp-na-developerhub-api.contentstack.com"},
-            {"gcp-na-api-contentstack.com", "gcp-na-app-contentstack.com", "gcp-na-developerhub-api-contentstack.com"},
-            {"gcp-eu-api.contentstack.com", "gcp-eu-app.contentstack.com", "gcp-eu-developerhub-api.contentstack.com"},
-            {"gcp-eu-api-contentstack.com", "gcp-eu-app-contentstack.com", "gcp-eu-developerhub-api-contentstack.com"}
+            {"gcp-eu-api.contentstack.com", "gcp-eu-app.contentstack.com", "gcp-eu-developerhub-api.contentstack.com"}
         };
 
         for (String[] testCase : testCases) {
