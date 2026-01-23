@@ -1,11 +1,12 @@
 package com.contentstack.cms.core;
 
+import java.io.IOException;
+
+import org.jetbrains.annotations.NotNull;
+
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 /**
  * <b>The type Header interceptor that extends Interceptor</b>
@@ -73,16 +74,42 @@ public class AuthInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         final String xUserAgent = Util.SDK_NAME + "/v" + Util.SDK_VERSION;
-        Request.Builder request = chain.request().newBuilder().header(Util.X_USER_AGENT, xUserAgent).header(Util.USER_AGENT, Util.defaultUserAgent()).header(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
+        Request originalRequest = chain.request();
+        Request.Builder request = originalRequest.newBuilder()
+                .header(Util.X_USER_AGENT, xUserAgent)
+                .header(Util.USER_AGENT, Util.defaultUserAgent());
+
+        // Skip Content-Type header for DELETE /releases/{release_uid} request
+        // to avoid "Body cannot be empty when content-type is set to 'application/json'" error
+        if (!isDeleteReleaseRequest(originalRequest)) {
+            request.header(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
+        }
 
         if (this.authtoken != null) {
             request.addHeader(Util.AUTHTOKEN, this.authtoken);
         }
-        if (this.earlyAccess!=null && this.earlyAccess.length > 0) {
+        
+        if (this.earlyAccess != null && this.earlyAccess.length > 0) {
             String commaSeparated = String.join(", ", earlyAccess);
             request.addHeader(Util.EARLY_ACCESS_HEADER, commaSeparated);
         }
         return chain.proceed(request.build());
+    }
+
+    /**
+     * Checks if the request is a DELETE request to /releases/{release_uid} endpoint.
+     * This endpoint should not have Content-Type header as it doesn't accept a body.
+     *
+     * @param request The HTTP request to check
+     * @return true if this is a DELETE /releases/{release_uid} request
+     */
+    private boolean isDeleteReleaseRequest(Request request) {
+        if (!"DELETE".equals(request.method())) {
+            return false;
+        }
+        String path = request.url().encodedPath();
+        // Match pattern: /v3/releases/{release_uid} (no trailing path segments)
+        return path.matches(".*/releases/[^/]+$");
     }
 
 }

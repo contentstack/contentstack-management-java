@@ -245,6 +245,11 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                      <includes>
+                         <!-- Run all test files following Maven naming conventions -->
+                         <include>**/Test*.java</include>
+                         <include>**/*Test.java</include>
+                         <include>**/*Tests.java</include>
+                         <include>**/*TestCase.java</include>
                          <include>**/*TestSuite.java</include>
                      </includes>
                      <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory> 
