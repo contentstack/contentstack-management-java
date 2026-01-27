@@ -43,7 +43,11 @@ public class TestStackSetup {
             HashMap<String, Object> headers = new HashMap<>();
             headers.put(Util.API_KEY, API_KEY);
             headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-            stackInstance = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
+            stackInstance = new Contentstack.Builder()
+                    .setAuthtoken(AUTHTOKEN)
+                    .setHost(TestClient.DEV_HOST)
+                    .build()
+                    .stack(headers);
         }
         return stackInstance;
     }
@@ -57,6 +61,11 @@ public class TestStackSetup {
         
         // First, try to find existing global field
         Response<ResponseBody> findResponse = stack.globalField().find().execute();
+        if (!findResponse.isSuccessful()) {
+            String error = findResponse.errorBody() != null ? findResponse.errorBody().string() : "Unknown error";
+            System.err.println("[TestStackSetup] Find global fields failed (HTTP " + findResponse.code() + "): " + error);
+            // Continue to try creating - might be empty stack
+        }
         if (findResponse.isSuccessful()) {
             String findBody = findResponse.body().string();
             JSONObject result = (JSONObject) parser.parse(findBody);
@@ -105,6 +114,10 @@ public class TestStackSetup {
             globalField.put("title", "Test Global Field Setup");
         }
         
+        System.out.println("[TestStackSetup] Attempting to create global field with UID: " + uniqueUid);
+        System.out.println("[TestStackSetup] Using HOST: " + TestClient.DEV_HOST);
+        System.out.println("[TestStackSetup] Using API_KEY: " + API_KEY.substring(0, Math.min(8, API_KEY.length())) + "...");
+        
         Response<ResponseBody> createResponse = stack.globalField().create(requestBody).execute();
         
         if (createResponse.isSuccessful()) {
@@ -112,10 +125,11 @@ public class TestStackSetup {
             JSONObject result = (JSONObject) parser.parse(createBody);
             JSONObject created = (JSONObject) result.get("global_field");
             testGlobalFieldUid = (String) created.get("uid");
-            System.out.println("[TestStackSetup] Created global field: " + testGlobalFieldUid);
+            System.out.println("[TestStackSetup] ✅ Created global field: " + testGlobalFieldUid);
             return testGlobalFieldUid;
         } else {
             String error = createResponse.errorBody() != null ? createResponse.errorBody().string() : "Unknown error";
+            System.err.println("[TestStackSetup] ❌ Failed to create global field (HTTP " + createResponse.code() + "): " + error);
             throw new IOException("Failed to create global field: " + error);
         }
     }
@@ -129,6 +143,11 @@ public class TestStackSetup {
         
         // First, try to find existing content type
         Response<ResponseBody> findResponse = stack.contentType().find().execute();
+        if (!findResponse.isSuccessful()) {
+            String error = findResponse.errorBody() != null ? findResponse.errorBody().string() : "Unknown error";
+            System.err.println("[TestStackSetup] Find content types failed (HTTP " + findResponse.code() + "): " + error);
+            // Continue to try creating - might be empty stack
+        }
         if (findResponse.isSuccessful()) {
             String findBody = findResponse.body().string();
             JSONObject result = (JSONObject) parser.parse(findBody);
@@ -177,6 +196,10 @@ public class TestStackSetup {
             contentType.put("title", "Test Content Type Setup");
         }
         
+        System.out.println("[TestStackSetup] Attempting to create content type with UID: " + uniqueUid);
+        System.out.println("[TestStackSetup] Using HOST: " + TestClient.DEV_HOST);
+        System.out.println("[TestStackSetup] Using API_KEY: " + API_KEY.substring(0, Math.min(8, API_KEY.length())) + "...");
+        
         Response<ResponseBody> createResponse = stack.contentType().create(requestBody).execute();
         
         if (createResponse.isSuccessful()) {
@@ -184,10 +207,11 @@ public class TestStackSetup {
             JSONObject result = (JSONObject) parser.parse(createBody);
             JSONObject created = (JSONObject) result.get("content_type");
             testContentTypeUid = (String) created.get("uid");
-            System.out.println("[TestStackSetup] Created content type: " + testContentTypeUid);
+            System.out.println("[TestStackSetup] ✅ Created content type: " + testContentTypeUid);
             return testContentTypeUid;
         } else {
             String error = createResponse.errorBody() != null ? createResponse.errorBody().string() : "Unknown error";
+            System.err.println("[TestStackSetup] ❌ Failed to create content type (HTTP " + createResponse.code() + "): " + error);
             throw new IOException("Failed to create content type: " + error);
         }
     }
@@ -227,6 +251,9 @@ public class TestStackSetup {
         entry.put("title", "Test Entry Setup " + System.currentTimeMillis());
         requestBody.put("entry", entry);
         
+        System.out.println("[TestStackSetup] Attempting to create entry for content type: " + contentTypeUid);
+        System.out.println("[TestStackSetup] Using HOST: " + TestClient.DEV_HOST);
+        
         Response<ResponseBody> createResponse = stack.contentType(contentTypeUid).entry().create(requestBody).execute();
         
         if (createResponse.isSuccessful()) {
@@ -234,10 +261,11 @@ public class TestStackSetup {
             JSONObject result = (JSONObject) parser.parse(createBody);
             JSONObject created = (JSONObject) result.get("entry");
             testEntryUid = (String) created.get("uid");
-            System.out.println("[TestStackSetup] Created entry: " + testEntryUid);
+            System.out.println("[TestStackSetup] ✅ Created entry: " + testEntryUid);
             return testEntryUid;
         } else {
             String error = createResponse.errorBody() != null ? createResponse.errorBody().string() : "Unknown error";
+            System.err.println("[TestStackSetup] ❌ Failed to create entry (HTTP " + createResponse.code() + "): " + error);
             throw new IOException("Failed to create entry: " + error);
         }
     }

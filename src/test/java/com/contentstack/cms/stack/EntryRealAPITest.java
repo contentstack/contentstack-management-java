@@ -44,7 +44,11 @@ public class EntryRealAPITest {
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(Util.API_KEY, API_KEY);
         headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
-        stackInstance = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
+        stackInstance = new Contentstack.Builder()
+                .setAuthtoken(AUTHTOKEN)
+                .setHost(TestClient.DEV_HOST)
+                .build()
+                .stack(headers);
     }
 
     @AfterAll

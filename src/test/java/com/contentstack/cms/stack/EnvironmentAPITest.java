@@ -95,10 +95,22 @@ public class EnvironmentAPITest {
         String uniqueName = "test_env_" + UUID.randomUUID().toString().substring(0, 8);
         
         JSONObject requestBody = Utils.readJson("environment/development.json");
-        // Override name to make it unique
-        JSONObject envData = (JSONObject) requestBody.get("environment");
-        if (envData != null) {
+        if (requestBody == null) {
+            // Create minimal request body if JSON file is missing
+            requestBody = new JSONObject();
+            JSONObject envData = new JSONObject();
             envData.put("name", uniqueName);
+            requestBody.put("environment", envData);
+        } else {
+            // Override name to make it unique
+            JSONObject envData = (JSONObject) requestBody.get("environment");
+            if (envData != null) {
+                envData.put("name", uniqueName);
+            } else {
+                envData = new JSONObject();
+                envData.put("name", uniqueName);
+                requestBody.put("environment", envData);
+            }
         }
         
         Response<ResponseBody> response = stackInstance.environment().create(requestBody).execute();

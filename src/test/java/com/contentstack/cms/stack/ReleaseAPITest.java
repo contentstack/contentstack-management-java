@@ -73,6 +73,16 @@ public class ReleaseAPITest {
     @Test
     void testCreateRelease() throws IOException, ParseException {
         JSONObject requestBody = Utils.readJson("release/create.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject releaseData = new JSONObject();
+            releaseData.put("name", "First release");
+            releaseData.put("description", "Adding release date");
+            requestBody.put("release", releaseData);
+        }
+        
         Response<ResponseBody> response = stack.releases().create(requestBody).execute();
 
         // Skip test if Releases V2 is not enabled
