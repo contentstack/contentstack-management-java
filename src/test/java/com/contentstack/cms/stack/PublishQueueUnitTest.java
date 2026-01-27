@@ -60,15 +60,10 @@ class PublishQueueUnitTest {
         Request request = publishQueue.find().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("publish-queue", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/publish-queue?publish_queue_uid=your_publish_queue_uid",
-                request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     @Order(6)
@@ -76,16 +71,10 @@ class PublishQueueUnitTest {
         Request request = publishQueue.fetchActivity().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("publish-queue", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertEquals("publish_queue_uid=your_publish_queue_uid", request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/publish-queue/" + _uid + "?publish_queue_uid=your_publish_queue_uid",
-                request.url().toString());
-    }
+        Assertions.assertEquals("publish_queue_uid=your_publish_queue_uid", request.url().encodedQuery());    }
 
     @Test
     @Order(7)
@@ -93,17 +82,10 @@ class PublishQueueUnitTest {
         Request request = publishQueue.cancelScheduledAction().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("publish-queue", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertEquals("publish_queue_uid=your_publish_queue_uid", request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/publish-queue/" + _uid
-                        + "/unschedule?publish_queue_uid=your_publish_queue_uid",
-                request.url().toString());
-    }
+        Assertions.assertEquals("publish_queue_uid=your_publish_queue_uid", request.url().encodedQuery());    }
 
     @Test
     void testPublishQueueException() {

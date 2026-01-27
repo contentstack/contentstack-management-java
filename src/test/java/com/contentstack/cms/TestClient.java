@@ -22,8 +22,7 @@ public class TestClient {
     public final static String MANAGEMENT_TOKEN = (env.get("managementToken") != null) ? env.get("managementToken")
             : "managementToken99999999";
 
-    public final static String DEV_HOST = "api.contentstack.io";
-    // (env.get("dev_host") != null) ? env.get("dev_host") : "api.contentstack.io";
+    public final static String DEV_HOST = (env.get("dev_host") != null) ? env.get("dev_host").trim() : "api.contentstack.io";
     public final static String VARIANT_GROUP_UID = (env.get("variantGroupUid") != null) ? env.get("variantGroupUid")
             : "variantGroupUid99999999";
     private static Contentstack instance;
@@ -37,7 +36,10 @@ public class TestClient {
         if (instance == null) {
             synchronized (Contentstack.class) {
                 if (instance == null) {
-                    instance = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build();
+                    instance = new Contentstack.Builder()
+                            .setAuthtoken(AUTHTOKEN)
+                            .setHost(DEV_HOST)
+                            .build();
                 }
             }
         }
@@ -69,7 +71,11 @@ public class TestClient {
         if (stackInstance == null) {
             synchronized (Stack.class) {
                 if (stackInstance == null) {
-                    stackInstance = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
+                    stackInstance = new Contentstack.Builder()
+                            .setAuthtoken(AUTHTOKEN)
+                            .setHost(DEV_HOST)
+                            .build()
+                            .stack(headers);
                 }
             }
         }

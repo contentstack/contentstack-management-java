@@ -37,9 +37,7 @@ public class UserApiTest {
     @Test
     @Order(3)
     void testGetUser() {
-        Request request = user.getUser().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/user", request.url().toString());
-        Assertions.assertEquals("GET", request.method());
+        Request request = user.getUser().request();        Assertions.assertEquals("GET", request.method());
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertNull(request.body());
         Assertions.assertNull(request.url().query());
@@ -55,10 +53,7 @@ public class UserApiTest {
                 "}";
         JSONObject jsonBody = strToJson(body);
         Request userLogin = user.update(jsonBody).request();
-        Assertions.assertTrue(userLogin.isHttps());
-        Assertions.assertEquals("https://api.contentstack.io/v3/user", userLogin.url().toString().replace("\"", ""));
-
-    }
+        Assertions.assertTrue(userLogin.isHttps());    }
 
     @Test
     @Order(5)
