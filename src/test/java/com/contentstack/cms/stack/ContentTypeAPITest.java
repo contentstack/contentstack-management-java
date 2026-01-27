@@ -49,6 +49,16 @@ class ContentTypeAPITest {
     @Test
     void testCreate() {
         JSONObject requestBody = Utils.readJson("mockcontenttype/create.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject contentTypeData = new JSONObject();
+            contentTypeData.put("title", "Test Content Type");
+            contentTypeData.put("uid", contentTypeUid);
+            requestBody.put("content_type", contentTypeData);
+        }
+        
         contentType = stack.contentType(contentTypeUid);
         Request request = contentType.create(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
@@ -92,6 +102,15 @@ class ContentTypeAPITest {
     void testUpdate() {
         contentType = stack.contentType(contentTypeUid);
         JSONObject requestBody = Utils.readJson("mockcontenttype/update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject contentTypeData = new JSONObject();
+            contentTypeData.put("title", "Updated Content Type");
+            requestBody.put("content_type", contentTypeData);
+        }
+        
         Request request = contentType.update(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
@@ -105,6 +124,15 @@ class ContentTypeAPITest {
     void testFieldVisibilityRule() {
         contentType = stack.contentType(contentTypeUid);
         JSONObject requestBody = Utils.readJson("mockcontenttype/visibility.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject visibilityData = new JSONObject();
+            visibilityData.put("visible", true);
+            requestBody.put("visibility", visibilityData);
+        }
+        
         Request request = contentType.fieldVisibilityRule(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());

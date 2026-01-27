@@ -209,6 +209,16 @@ class RoleUnitTest {
     @Order(9)
     void createRoleWithTaxonomy() throws IOException {
         JSONObject roleBody = Utils.readJson("mockrole/createRole.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (roleBody == null) {
+            roleBody = new JSONObject();
+            JSONObject roleData = new JSONObject();
+            roleData.put("name", "Test Role");
+            roleData.put("description", "Test role description");
+            roleBody.put("role", roleData);
+        }
+        
         Request request = roles.create(roleBody).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());

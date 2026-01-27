@@ -1,0 +1,7 @@
+{
+  "taxonomy": {
+    "name": "Categories",
+    "uid": "categories",
+    "description": "Content categories for articles and pages"
+  }
+}

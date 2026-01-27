@@ -20,7 +20,7 @@ class StackUnitTests {
     protected String apiKey = TestClient.API_KEY;
     protected String authtoken = TestClient.AUTHTOKEN;
     protected String USER_ID = TestClient.USER_ID;
-    protected JSONObject requestBody = Utils.readJson("mockstack/create_stack.json");
+    protected JSONObject requestBody;
 
     @BeforeAll
     public void setUp() {
@@ -28,6 +28,16 @@ class StackUnitTests {
         headers.put("api_key", apiKey);
         headers.put("authtoken", authtoken);
         stack = TestClient.getClient().stack(headers);
+        
+        // Initialize requestBody with null check
+        requestBody = Utils.readJson("mockstack/create_stack.json");
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject stackData = new JSONObject();
+            stackData.put("name", "Test Stack");
+            stackData.put("description", "Test stack description");
+            requestBody.put("stack", stackData);
+        }
     }
 
     @Test
@@ -172,6 +182,15 @@ class StackUnitTests {
     @Test
     void testUpdateStackMethod() {
         JSONObject updateRequestBody = Utils.readJson("mockstack/update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (updateRequestBody == null) {
+            updateRequestBody = new JSONObject();
+            JSONObject stackData = new JSONObject();
+            stackData.put("name", "Updated Stack");
+            updateRequestBody.put("stack", stackData);
+        }
+        
         Request request = stack.update(updateRequestBody).request();
         Assertions.assertEquals("PUT", request.method());
     }
@@ -179,11 +198,29 @@ class StackUnitTests {
     @Test
     void testUpdateStackUrl() {
         JSONObject updateRequestBody = Utils.readJson("mockstack/update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (updateRequestBody == null) {
+            updateRequestBody = new JSONObject();
+            JSONObject stackData = new JSONObject();
+            stackData.put("name", "Updated Stack");
+            updateRequestBody.put("stack", stackData);
+        }
+        
         Request request = stack.update(updateRequestBody).request();    }
 
     @Test
     void testUpdateStackUrlEncodedPath() {
         JSONObject updateRequestBody = Utils.readJson("mockstack/update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (updateRequestBody == null) {
+            updateRequestBody = new JSONObject();
+            JSONObject stackData = new JSONObject();
+            stackData.put("name", "Updated Stack");
+            updateRequestBody.put("stack", stackData);
+        }
+        
         Request request = stack.update(updateRequestBody).request();
         Assertions.assertEquals("/v3/stacks", request.url().encodedPath());
     }

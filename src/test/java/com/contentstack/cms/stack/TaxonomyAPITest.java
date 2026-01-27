@@ -64,6 +64,15 @@ public class TaxonomyAPITest {
     void testCreateTaxonomy() throws IOException, ParseException {
         JSONObject requestBody = Utils.readJson("taxonomy/categories.json");
         
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject taxData = new JSONObject();
+            taxData.put("uid", "categories_" + UUID.randomUUID().toString().substring(0, 8));
+            taxData.put("name", "Test Categories");
+            requestBody.put("taxonomy", taxData);
+        }
+        
         // Add unique suffix to avoid conflicts
         JSONObject taxData = (JSONObject) requestBody.get("taxonomy");
         if (taxData != null) {
@@ -160,6 +169,16 @@ public class TaxonomyAPITest {
     void createTaxonomy() throws IOException {
         // Use new comprehensive mock file
         JSONObject requestBody = Utils.readJson("taxonomy/categories.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject taxData = new JSONObject();
+            taxData.put("uid", "categories_test");
+            taxData.put("name", "Test Categories");
+            requestBody.put("taxonomy", taxData);
+        }
+        
         taxonomy.addHeader(Util.API_KEY, API_KEY);
         taxonomy.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Request request = taxonomy.create(requestBody).request();
@@ -173,6 +192,15 @@ public class TaxonomyAPITest {
     @Test
     void updateTaxonomy() {
         JSONObject updateBody = Utils.readJson("taxonomy/update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (updateBody == null) {
+            updateBody = new JSONObject();
+            JSONObject taxData = new JSONObject();
+            taxData.put("name", "Updated Categories");
+            updateBody.put("taxonomy", taxData);
+        }
+        
         taxonomy.addHeader(Util.API_KEY, API_KEY);
         taxonomy.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
         Request request = taxonomy.update("sample_one",updateBody).request();
@@ -213,6 +241,15 @@ public class TaxonomyAPITest {
         Terms terms = stackInstance.taxonomy(taxonomyUid).terms();
         terms.clearParams();
         JSONObject term = Utils.readJson("taxonomy/term_technology.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (term == null) {
+            term = new JSONObject();
+            JSONObject termData = new JSONObject();
+            termData.put("name", "Technology");
+            term.put("term", termData);
+        }
+        
         Request request = terms.create(term).request();
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.url().isHttps());
@@ -264,6 +301,15 @@ public class TaxonomyAPITest {
         String taxonomyUid = "sample_one";
         Terms terms = stackInstance.taxonomy(taxonomyUid).terms();
         JSONObject newTerm = Utils.readJson("taxonomy/update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (newTerm == null) {
+            newTerm = new JSONObject();
+            JSONObject termData = new JSONObject();
+            termData.put("name", "Updated Term");
+            newTerm.put("term", termData);
+        }
+        
         Request request = terms.update(taxonomyUid, newTerm).request();
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());

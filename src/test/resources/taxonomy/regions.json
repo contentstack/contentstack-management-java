@@ -1,0 +1,7 @@
+{
+  "taxonomy": {
+    "name": "Regions",
+    "uid": "regions",
+    "description": "Geographic regions for content targeting"
+  }
+}
