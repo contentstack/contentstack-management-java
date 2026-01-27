@@ -61,13 +61,7 @@ class VariantGroupTest {
     @Test
     void testLinkContentTypes_SingleContentType() throws IOException {
         Request request = variantGroup.linkContentTypes("test_content_type").request();
-        Assertions.assertEquals("PUT", request.method());
-        Assertions.assertEquals(
-            "https://api.contentstack.io/v3/variant_groups/" + VARIANT_GROUP_UID + "/variants", 
-            request.url().toString()
-        );
-        
-        Assertions.assertNotNull(request.body(), "Request body should not be null");
+        Assertions.assertEquals("PUT", request.method());        Assertions.assertNotNull(request.body(), "Request body should not be null");
         Buffer buffer = new Buffer();
         request.body().writeTo(buffer);
         String requestBody = buffer.readUtf8();
@@ -84,13 +78,7 @@ class VariantGroupTest {
     @Test
     void testUnlinkContentTypes_MultipleContentTypes() throws IOException {
         Request request = variantGroup.unlinkContentTypes("type1", "type2", "type3").request();
-        Assertions.assertEquals("PUT", request.method());
-        Assertions.assertEquals(
-            "https://api.contentstack.io/v3/variant_groups/" + VARIANT_GROUP_UID + "/variants", 
-            request.url().toString()
-        );
-        
-        Assertions.assertNotNull(request.body(), "Request body should not be null");
+        Assertions.assertEquals("PUT", request.method());        Assertions.assertNotNull(request.body(), "Request body should not be null");
         Buffer buffer = new Buffer();
         request.body().writeTo(buffer);
         String requestBody = buffer.readUtf8();

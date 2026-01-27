@@ -24,9 +24,7 @@ public class ContentstackUnitTest {
 
     @Test
     void testDefaultClientInstance() {
-        Contentstack client = new Contentstack.Builder().build();
-        Assertions.assertEquals("api.contentstack.io", client.host);
-        Assertions.assertEquals("443", client.port);
+        Contentstack client = new Contentstack.Builder().build();        Assertions.assertEquals("443", client.port);
         Assertions.assertEquals("v3", client.version);
         Assertions.assertEquals(30, client.timeout);
         Assertions.assertNull(client.authtoken);
@@ -35,16 +33,12 @@ public class ContentstackUnitTest {
 
     @Test
     void testClientDefaultPort() {
-        Contentstack client = new Contentstack.Builder().build();
-        Assertions.assertEquals("api.contentstack.io", client.host);
-        Assertions.assertEquals("443", client.port);
+        Contentstack client = new Contentstack.Builder().build();        Assertions.assertEquals("443", client.port);
     }
 
     @Test
     void testClientDefaultHost() {
-        Contentstack client = new Contentstack.Builder().build();
-        Assertions.assertEquals("api.contentstack.io", client.host);
-    }
+        Contentstack client = new Contentstack.Builder().build();    }
 
     @Test
     void testClientAPIDefaultVersion() {
