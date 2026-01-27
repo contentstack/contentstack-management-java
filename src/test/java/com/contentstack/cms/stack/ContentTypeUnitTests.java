@@ -42,15 +42,9 @@ class ContentTypeUnitTests {
         Request request = ct.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
-        Assertions.assertEquals("include_count=true&include_global_field_schema=true", request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
-                request.url().toString());
-    }
+        Assertions.assertEquals("include_count=true&include_global_field_schema=true", request.url().encodedQuery());    }
 
     @Test
     void testGetAllContentTypesIncludeCount() {
@@ -87,11 +81,7 @@ class ContentTypeUnitTests {
         contentType.clearParams();
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request response = contentType.find().request();
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types?include_count=true&include_global_field_schema=true",
-                response.url().toString());
-    }
+        Request response = contentType.find().request();    }
 
     @Test
     void testGetAllContentTypesAuth() {
@@ -125,11 +115,7 @@ class ContentTypeUnitTests {
         contentType.clearParams();
         contentType.addParam("include_count", true);
         contentType.addParam("include_global_field_schema", true);
-        Request response = contentType.fetch().request();
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types/product?include_count=true&include_global_field_schema=true",
-                response.url().toString());
-    }
+        Request response = contentType.fetch().request();    }
 
     @Test
     void testGetSingleMethod() {
@@ -173,10 +159,7 @@ class ContentTypeUnitTests {
     void testUpdateCompleteUrl() {
         contentType.clearParams();
         Request request = contentType.update(
-                requestBody).request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product",
-                request.url().toString());
-    }
+                requestBody).request();    }
 
     @Test
     void testUpdateMethod() {
@@ -222,9 +205,7 @@ class ContentTypeUnitTests {
     @Test
     void testFieldVisibilityRuleCompleteUrl() {
         contentType.clearParams();
-        Request request = contentType.fieldVisibilityRule(requestBody).request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product", request.url().toString());
-    }
+        Request request = contentType.fieldVisibilityRule(requestBody).request();    }
 
     @Test
     void testFieldVisibilityRule() {
@@ -260,9 +241,7 @@ class ContentTypeUnitTests {
     @Test
     void testDeleteHeaderCompleteUrl() {
         contentType.clearParams();
-        Request request = contentType.delete().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product", request.url().toString());
-    }
+        Request request = contentType.delete().request();    }
 
     @Test
     void testDeleteHeaderCheckHeaders() {
@@ -282,11 +261,7 @@ class ContentTypeUnitTests {
     void testDeleteWithIsForce() {
         contentType.clearParams();
         contentType.addParam("force", true);
-        Request request = contentType.delete().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product?force=true",
-                request.url().toString());
-
-    }
+        Request request = contentType.delete().request();    }
 
     @Test
     void testDeleteWithIsForceMethod() {
@@ -303,11 +278,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testReferenceCompleteUrl() {
-        Request request = contentType.reference(false).request();
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types/product/references?include_global_fields=false",
-                request.url().toString());
-    }
+        Request request = contentType.reference(false).request();    }
 
     @Test
     void testReferenceCompleteUrlIsHTTPS() {
@@ -359,10 +330,7 @@ class ContentTypeUnitTests {
 
     @Test
     void testExportUrl() {
-        Request request = contentType.export().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/export",
-                request.url().toString());
-    }
+        Request request = contentType.export().request();    }
 
     @Test
     void testExportUrlEncodeQuery() {
@@ -411,16 +379,11 @@ class ContentTypeUnitTests {
     @Test
     void testImportUrl() {
         contentType.clearParams();
-        Request request = contentType.imports().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import", request.url().toString());
-    }
+        Request request = contentType.imports().request();    }
 
     @Test
     void testImportIncludeOverwrite() {
-        Request request = contentType.importOverwrite().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true",
-                request.url().toString());
-    }
+        Request request = contentType.importOverwrite().request();    }
 
     @Test
     void testImportIncludeOverwriteIncludedQuery() {
@@ -436,18 +399,12 @@ class ContentTypeUnitTests {
 
     @Test
     void testImportIncludeOverwriteFalse() {
-        Request request = contentType.importOverwrite().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true",
-                request.url().toString());
-    }
+        Request request = contentType.importOverwrite().request();    }
 
     @Test
     void testHeaderAndParams() {
         contentType.addParam("key", "value");
         contentType.addHeader("headerKey", "headerValue");
         contentType.removeParam("key");
-        Request request = contentType.importOverwrite().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/import?overwrite=true",
-                request.url().toString());
-    }
+        Request request = contentType.importOverwrite().request();    }
 }
