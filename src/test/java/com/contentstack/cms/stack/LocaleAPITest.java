@@ -112,6 +112,15 @@ public class LocaleAPITest {
     void testCreateLocale() throws IOException, ParseException {
         JSONObject requestBody = Utils.readJson("locale/french.json");
         
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject localeData = new JSONObject();
+            localeData.put("code", "fr-fr");
+            localeData.put("name", "French - France");
+            requestBody.put("locale", localeData);
+        }
+        
         // Try valid but less common locale codes to avoid conflicts
         // Reference: https://www.contentstack.com/docs/developers/multilingual-content/list-of-supported-languages
         String[] fallbackCodes = {"fr-mc", "fr-lu", "lb-lu", "fo-fo", "mt"};
