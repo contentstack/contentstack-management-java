@@ -14,6 +14,8 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.HashMap;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TaxonomyTest {
@@ -283,10 +285,10 @@ class TaxonomyTest {
                 .setAuthtoken(TestClient.AUTHTOKEN)
                 .setHost("api.contentstack.io")
                 .build()
-                .stack("blt12c1ba95c1b11e88", "")
+                .stack(TestClient.API_KEY, TestClient.MANAGEMENT_TOKEN)
                 .taxonomy();
-        Response<ResponseBody> response = taxonomy.addHeader("authtoken", "blt67b95aeb964f5262").find().execute();
-        System.out.println(response);
+        Response<ResponseBody> response = taxonomy.find().execute();
+        assertTrue(response != null, "Response should not be null");
     }
 
     @Test

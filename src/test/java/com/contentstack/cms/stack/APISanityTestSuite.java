@@ -7,22 +7,25 @@ package com.contentstack.cms.stack;
 
  @SuppressWarnings("deprecation")
  @RunWith(JUnitPlatform.class)
- @SelectClasses({
-         TaxonomyAPITest.class,
-         AssetAPITest.class,
-         ContentTypeAPITest.class,
-         EntryFieldsAPITest.class,
-         EnvironmentAPITest.class,
-         ExtensionAPITest.class,
-         LocaleAPITest.class,
-         RoleAPITest.class,
-         StackAPITest.class,
-         TokenAPITest.class,
-         OrgApiTests.class,
-         GlobalFieldAPITest.class,
-         VariantGroupAPITest.class,
-         VariantGroupTest.class,
-         ReleaseAPITest.class
+@SelectClasses({
+        TaxonomyAPITest.class,
+        AssetAPITest.class,
+        ContentTypeAPITest.class,
+        ContentTypeRealAPITest.class,  // Real API tests with actual CRUD operations
+        EntryFieldsAPITest.class,
+        EntryRealAPITest.class,  // Real API tests with actual CRUD operations
+        EnvironmentAPITest.class,
+        ExtensionAPITest.class,
+        LocaleAPITest.class,
+        RoleAPITest.class,
+        StackAPITest.class,
+        TokenAPITest.class,
+        OrgApiTests.class,
+        GlobalFieldAPITest.class,
+        GlobalFieldRealAPITest.class,  // Real API tests with actual CRUD operations
+        VariantGroupAPITest.class,
+        VariantGroupTest.class,
+        ReleaseAPITest.class
 
 })
  public class APISanityTestSuite {
