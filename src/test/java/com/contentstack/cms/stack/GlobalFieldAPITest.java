@@ -42,6 +42,16 @@ class GlobalFieldAPITest {
     @Test
     void testCreateGlobalField() {
         JSONObject requestBody = Utils.readJson("globalfield/global_field_create.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject globalFieldData = new JSONObject();
+            globalFieldData.put("title", "Test Global Field");
+            globalFieldData.put("uid", "test_gf_" + System.currentTimeMillis());
+            requestBody.put("global_field", globalFieldData);
+        }
+        
         globalField = stack.globalField();
         Request request = globalField.create(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
@@ -90,6 +100,15 @@ class GlobalFieldAPITest {
     void testUpdateGlobalField() {
         globalField = stack.globalField(globalFieldUid);
         JSONObject requestBody = Utils.readJson("globalfield/global_field_update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject globalFieldData = new JSONObject();
+            globalFieldData.put("title", "Updated Global Field");
+            requestBody.put("global_field", globalFieldData);
+        }
+        
         Request request = globalField.update(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
@@ -153,6 +172,15 @@ class GlobalFieldAPITest {
     void testImportGlobalField() {
         globalField = stack.globalField();
         JSONObject requestBody = Utils.readJson("globalfield/global_field_import.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject globalFieldData = new JSONObject();
+            globalFieldData.put("title", "Imported Global Field");
+            requestBody.put("global_field", globalFieldData);
+        }
+        
         Request request = globalField.imports(requestBody).request();
         Assertions.assertEquals(_COUNT, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
@@ -184,6 +212,16 @@ class GlobalFieldAPITest {
     @Test
     void testCreateNestedGlobalField() {
         JSONObject requestBody = Utils.readJson("globalfield/nested_global_field_create.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject globalFieldData = new JSONObject();
+            globalFieldData.put("title", "Nested Global Field");
+            globalFieldData.put("uid", "nested_gf_" + System.currentTimeMillis());
+            requestBody.put("global_field", globalFieldData);
+        }
+        
         globalField = stack.globalField().addHeader("api_version", "3.2");
         Request request = globalField.create(requestBody).request();
         globalField.removeHeader("api_version");
@@ -233,6 +271,15 @@ class GlobalFieldAPITest {
     void testUpdateNestedGlobalField() {
         globalField = stack.globalField(globalFieldUid).addHeader("api_version", "3.2");
         JSONObject requestBody = Utils.readJson("globalfield/nested_global_field_update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject globalFieldData = new JSONObject();
+            globalFieldData.put("title", "Updated Nested Global Field");
+            requestBody.put("global_field", globalFieldData);
+        }
+        
         Request request = globalField.update(requestBody).request();
 
         Assertions.assertEquals("PUT", request.method());
@@ -296,6 +343,15 @@ class GlobalFieldAPITest {
     void testImportNestedGlobalField() {
         globalField = stack.globalField().addHeader("api_version", "3.2");
         JSONObject requestBody = Utils.readJson("globalfield/nested_global_field_import.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject globalFieldData = new JSONObject();
+            globalFieldData.put("title", "Imported Nested Global Field");
+            requestBody.put("global_field", globalFieldData);
+        }
+        
         Request request = globalField.imports(requestBody).request();
 
         Assertions.assertEquals("POST", request.method());
@@ -449,6 +505,16 @@ class GlobalFieldAPITest {
             ContentType ct = stack.contentType("author");
             Request rq2 = ct.fetch().request();
             JSONObject requestBody = Utils.readJson("mockcontenttype/create.json");
+            
+            // Create minimal request body if JSON file is missing
+            if (requestBody == null) {
+                requestBody = new JSONObject();
+                JSONObject contentTypeData = new JSONObject();
+                contentTypeData.put("title", "Test Content Type");
+                contentTypeData.put("uid", "test_ct_" + System.currentTimeMillis());
+                requestBody.put("content_type", contentTypeData);
+            }
+            
             Request rq3 = ct.create(requestBody).request();
             // Again, shared headers should not have api_version
             Assertions.assertFalse(stack.headers.containsKey("api_version"),

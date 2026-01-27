@@ -38,6 +38,16 @@ public class LocaleUnitTest {
     @Test
     void addLocale() {
         JSONObject requestBody = Utils.readJson("locales/add_locale.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject localeData = new JSONObject();
+            localeData.put("code", "fr-fr");
+            localeData.put("name", "French - France");
+            requestBody.put("locale", localeData);
+        }
+        
         Request request = locale.create(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("POST", request.method());
@@ -58,6 +68,15 @@ public class LocaleUnitTest {
     @Test
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("locales/update_locale.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject localeData = new JSONObject();
+            localeData.put("name", "Updated Locale");
+            requestBody.put("locale", localeData);
+        }
+        
         locale.clearParams();
         Request request = locale.update(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
@@ -78,6 +97,15 @@ public class LocaleUnitTest {
     @Test
     void setFallbackLocale() {
         JSONObject requestBody = Utils.readJson("locales/set_fallback_lang.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject localeData = new JSONObject();
+            localeData.put("code", "en-us");
+            requestBody.put("locale", localeData);
+        }
+        
         Request request = locale.setFallback(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("POST", request.method());
@@ -88,6 +116,15 @@ public class LocaleUnitTest {
     @Test
     void updateFallbackLocale() {
         JSONObject requestBody = Utils.readJson("locales/update_fallback.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject localeData = new JSONObject();
+            localeData.put("code", "en-us");
+            requestBody.put("locale", localeData);
+        }
+        
         Request request = locale.updateFallback(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("PUT", request.method());

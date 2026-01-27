@@ -116,6 +116,13 @@ public class StackAPITest {
     void testStackTransferOwnership() {
         try {
             JSONObject requestBody = Utils.readJson("mockstack/ownership.json");
+            
+            // Create minimal request body if JSON file is missing
+            if (requestBody == null) {
+                requestBody = new JSONObject();
+                requestBody.put("transfer_to", "manager@example.com");
+            }
+            
             assert apiKey != null;
             Response<ResponseBody> response = stack.transferOwnership(requestBody).execute();
             if (response.isSuccessful()) {
@@ -191,6 +198,14 @@ public class StackAPITest {
     @Test
     void testStackUpdateSetting() {
         JSONObject requestBody = Utils.readJson("mockstack/setting.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject stackSettings = new JSONObject();
+            requestBody.put("stack_settings", stackSettings);
+        }
+        
         try {
             assert apiKey != null;
             assert userId != null;
@@ -209,6 +224,14 @@ public class StackAPITest {
     @Test
     void testStackResetSetting() {
         JSONObject requestBody = Utils.readJson("mockstack/setting.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject stackSettings = new JSONObject();
+            requestBody.put("stack_settings", stackSettings);
+        }
+        
         try {
             assert apiKey != null;
             assert userId != null;
@@ -227,6 +250,15 @@ public class StackAPITest {
     @Test
     void testStackShare() {
         JSONObject requestBody = Utils.readJson("mockstack/share_stack.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject emails = new JSONObject();
+            emails.put("emails", new String[]{"user@example.com"});
+            requestBody.put("emails", emails);
+        }
+        
         try {
             assert apiKey != null;
             assert userId != null;
@@ -249,6 +281,15 @@ public class StackAPITest {
     @Test
     void testStackUnshare() {
         JSONObject requestBody = Utils.readJson("mockstack/unshare.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject emails = new JSONObject();
+            emails.put("emails", new String[]{"user@example.com"});
+            requestBody.put("emails", emails);
+        }
+        
         try {
             assert apiKey != null;
             assert userId != null;
@@ -289,6 +330,14 @@ public class StackAPITest {
     @Test
     void testStackRole() {
         JSONObject requestBody = Utils.readJson("mockstack/update_user_role.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            requestBody.put("users", new String[]{"user@example.com"});
+            requestBody.put("roles", new String[]{"blt1234567890"});
+        }
+        
         try {
             assert apiKey != null;
             assert userId != null;

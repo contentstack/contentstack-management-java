@@ -149,6 +149,15 @@ public class ReleaseAPITest {
         assertNotNull(releaseUid1, "Release UID should be available for updating");
 
         JSONObject requestBody = Utils.readJson("release/update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject releaseData = new JSONObject();
+            releaseData.put("name", "First release update");
+            releaseData.put("description", "Adding release date");
+            requestBody.put("release", releaseData);
+        }
 
         Response<ResponseBody> response = stack.releases(releaseUid1).update(requestBody).execute();
         assertTrue(response.isSuccessful(), "Release update should be successful");
@@ -188,6 +197,15 @@ public class ReleaseAPITest {
     void testCloneRelease() throws IOException, ParseException {
         assumeTrue(releaseUid1 != null, "Skipping: Release UID not available (previous test may have failed)");
         JSONObject requestBody = Utils.readJson("release/create.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject releaseData = new JSONObject();
+            releaseData.put("name", "Cloned Release");
+            requestBody.put("release", releaseData);
+        }
+        
         Response<ResponseBody> response = stack.releases(releaseUid1).clone(requestBody).execute();
 
         assertTrue(response.isSuccessful(), "Clone release should be successful");
@@ -209,6 +227,14 @@ public class ReleaseAPITest {
     void testDeployRelease() throws IOException, ParseException {
         assumeTrue(releaseUid1 != null, "Skipping: Release UID not available (previous test may have failed)");
         JSONObject requestBody = Utils.readJson("release/create.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject releaseData = new JSONObject();
+            releaseData.put("name", "Deployment Release");
+            requestBody.put("release", releaseData);
+        }
 
         assertNotNull(releaseUid2, "Release UID should be available for deployment");
         Request request = stack.releases(releaseUid1).deploy(requestBody).request();

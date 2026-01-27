@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 class ContentTypeUnitTests {
 
     private final Logger logger = Logger.getLogger(ContentTypeUnitTests.class.getName());
-    JSONObject requestBody = Utils.readJson("mockcontenttype/update.json");
+    JSONObject requestBody;
     ContentType contentType;
 
     String API_KEY = TestClient.API_KEY;
@@ -32,6 +32,15 @@ class ContentTypeUnitTests {
         headers.put(Util.AUTHORIZATION, managementToken);
         stack = new Contentstack.Builder().setAuthtoken(AUTHTOKEN).build().stack(headers);
         contentType = stack.contentType("product");
+        
+        // Initialize requestBody with null check
+        requestBody = Utils.readJson("mockcontenttype/update.json");
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject contentTypeData = new JSONObject();
+            contentTypeData.put("title", "Updated Content Type");
+            requestBody.put("content_type", contentTypeData);
+        }
     }
 
     @Test

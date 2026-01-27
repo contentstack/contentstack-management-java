@@ -189,6 +189,14 @@ public class LocaleAPITest {
 
         JSONObject requestBody = Utils.readJson("locale/update.json");
         
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject localeData = new JSONObject();
+            localeData.put("name", "French - France Updated");
+            requestBody.put("locale", localeData);
+        }
+        
         Response<ResponseBody> response = stackInstance.locale(createdLocaleCode).update(requestBody).execute();
 
         assertTrue(response.isSuccessful(), 

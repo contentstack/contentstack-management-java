@@ -68,6 +68,15 @@ public class EnvironmentUnitTest {
     @Test
     void getLocale() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject envData = new JSONObject();
+            envData.put("name", "test_env");
+            requestBody.put("environment", envData);
+        }
+        
         Request request = environment.create(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("POST", request.method());
@@ -78,6 +87,15 @@ public class EnvironmentUnitTest {
     @Test
     void updateLocale() {
         JSONObject requestBody = Utils.readJson("environment/add_env.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject envData = new JSONObject();
+            envData.put("name", "updated_env");
+            requestBody.put("environment", envData);
+        }
+        
         Request request = environment.update(requestBody).request();
         Assertions.assertEquals(2, request.headers().names().size()); // X-User-Agent + User-Agent
         Assertions.assertEquals("PUT", request.method());

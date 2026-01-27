@@ -246,6 +246,15 @@ public class EnvironmentAPITest {
         assumeTrue(createdEnvName != null, "Skipping: No environment created to update");
 
         JSONObject requestBody = Utils.readJson("environment/update.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject envData = new JSONObject();
+            envData.put("name", createdEnvName + "_updated");
+            requestBody.put("environment", envData);
+        }
+        
         JSONObject envData = (JSONObject) requestBody.get("environment");
         if (envData != null) {
             envData.put("name", createdEnvName + "_updated");

@@ -172,6 +172,16 @@ public class RoleAPITest {
     @Tag("unit")
     void testCreateRoleWithTaxonomyRequest() throws IOException {
         JSONObject requestBody = Utils.readJson("mockrole/createRole.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject roleData = new JSONObject();
+            roleData.put("name", "Test Role");
+            roleData.put("description", "Test role description");
+            requestBody.put("role", roleData);
+        }
+        
         Roles roles = stack.roles();
         roles.addHeader(Util.API_KEY, API_KEY);
         roles.addHeader(Util.AUTHORIZATION, MANAGEMENT_TOKEN);

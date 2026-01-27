@@ -151,6 +151,23 @@ public class ContentTypeRealAPITest {
         
         // Use new comprehensive mock file
         JSONObject requestBody = Utils.readJson("contenttype/simple_create.json");
+        
+        // Create minimal request body if JSON file is missing
+        if (requestBody == null) {
+            requestBody = new JSONObject();
+            JSONObject contentType = new JSONObject();
+            contentType.put("title", "Test Content Type");
+            contentType.put("uid", uniqueUid);
+            JSONArray schema = new JSONArray();
+            JSONObject titleField = new JSONObject();
+            titleField.put("display_name", "Title");
+            titleField.put("uid", "title");
+            titleField.put("data_type", "text");
+            schema.add(titleField);
+            contentType.put("schema", schema);
+            requestBody.put("content_type", contentType);
+        }
+        
         JSONObject contentType = (JSONObject) requestBody.get("content_type");
         
         // Override with unique values

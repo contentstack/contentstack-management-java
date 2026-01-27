@@ -1,0 +1,11 @@
+{
+  "environment": {
+    "name": "development-updated",
+    "urls": [
+      {
+        "locale": "en-us",
+        "url": "https://dev-updated.example.com"
+      }
+    ]
+  }
+}
