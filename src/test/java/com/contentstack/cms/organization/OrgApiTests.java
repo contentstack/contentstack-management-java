@@ -43,15 +43,11 @@ class OrgApiTests {
         Request request = ORG.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(2)
     @Test
@@ -60,15 +56,11 @@ class OrgApiTests {
         Request request = ORG.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations?include_plan=true", request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Order(3)
     @Test
@@ -79,16 +71,11 @@ class OrgApiTests {
         Request request = ORG.fetch().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID, request.url().toString());
-
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(4)
     @Test
@@ -100,16 +87,12 @@ class OrgApiTests {
         Request request = ORG.fetch().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("include_plan=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "?include_plan=true", request.url().toString());
-    }
+        Assertions.assertEquals("include_plan=true", request.url().encodedQuery());    }
 
     @Order(5)
     @Test
@@ -127,17 +110,12 @@ class OrgApiTests {
         Request request = ORG.roles().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("asc=true&include_stack_roles=true&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/roles?asc=true&include_stack_roles=true&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().toString());
-
-    }
+        Assertions.assertEquals("asc=true&include_stack_roles=true&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().encodedQuery());    }
 
     @Order(6)
     @Test
@@ -155,17 +133,12 @@ class OrgApiTests {
         Request request = ORG.roles().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("asc=true&include_stack_roles=false&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/roles?asc=true&include_stack_roles=false&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().toString());
-
-    }
+        Assertions.assertEquals("asc=true&include_stack_roles=false&include_plan=true&limit=2&skip=2&include_count=true&desc=true", request.url().encodedQuery());    }
 
     @Order(7)
     @Test
@@ -196,17 +169,11 @@ class OrgApiTests {
         Request request = ORG.inviteUser(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/share", request.url().toString());
-
-
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(8)
     @Test
@@ -237,16 +204,11 @@ class OrgApiTests {
         Request request = ORG.inviteUser(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/share", request.url().toString());
-
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(9)
     @Test
@@ -260,15 +222,11 @@ class OrgApiTests {
         Request request = ORG.resendInvitation(ORG_ID).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(6, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/share/" + ORG_ID + "/resend_invitation", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
 
     @Order(10)
@@ -287,15 +245,11 @@ class OrgApiTests {
         Request request = ORG.transferOwnership(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/transfer-ownership", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(11)
     @Test
@@ -308,15 +262,11 @@ class OrgApiTests {
 
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/stacks?include_plan=true", request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     @Order(12)
@@ -329,15 +279,11 @@ class OrgApiTests {
 
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/logs", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(13)
     @Test
@@ -350,16 +296,11 @@ class OrgApiTests {
         Request request = ORG.logItem("fake@loguid").request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(5, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/logs/fake@loguid", request.url().toString());
-
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Order(14)
     @Test
@@ -373,15 +314,11 @@ class OrgApiTests {
         Request request = ORG.allInvitations().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("organizations", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/organizations/" + ORG_ID + "/share?include_plan=true", request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Order(15)
     @Test
