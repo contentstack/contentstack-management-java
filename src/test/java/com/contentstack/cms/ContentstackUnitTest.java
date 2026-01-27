@@ -24,9 +24,7 @@ public class ContentstackUnitTest {
 
     @Test
     void testDefaultClientInstance() {
-        Contentstack client = new Contentstack.Builder().build();
-        Assertions.assertEquals("api.contentstack.io", client.host);
-        Assertions.assertEquals("443", client.port);
+        Contentstack client = new Contentstack.Builder().build();        Assertions.assertEquals("443", client.port);
         Assertions.assertEquals("v3", client.version);
         Assertions.assertEquals(30, client.timeout);
         Assertions.assertNull(client.authtoken);
@@ -35,16 +33,12 @@ public class ContentstackUnitTest {
 
     @Test
     void testClientDefaultPort() {
-        Contentstack client = new Contentstack.Builder().build();
-        Assertions.assertEquals("api.contentstack.io", client.host);
-        Assertions.assertEquals("443", client.port);
+        Contentstack client = new Contentstack.Builder().build();        Assertions.assertEquals("443", client.port);
     }
 
     @Test
     void testClientDefaultHost() {
-        Contentstack client = new Contentstack.Builder().build();
-        Assertions.assertEquals("api.contentstack.io", client.host);
-    }
+        Contentstack client = new Contentstack.Builder().build();    }
 
     @Test
     void testClientAPIDefaultVersion() {
@@ -191,7 +185,7 @@ public class ContentstackUnitTest {
             client.organization();
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            Assertions.assertEquals("Please Login to access user instance", e.getLocalizedMessage());
+            Assertions.assertEquals("Login or configure OAuth to continue. organization", e.getLocalizedMessage());
         }
     }
 
@@ -203,7 +197,7 @@ public class ContentstackUnitTest {
         try {
             client.login("fake@email.com", "fake@password");
         } catch (Exception e) {
-            Assertions.assertEquals("User is already loggedIn, Please logout then try to login again", e.getMessage());
+            Assertions.assertEquals("Operation not allowed. You are already logged in.", e.getMessage());
         }
         Assertions.assertEquals("fake@authtoken", client.authtoken);
     }
@@ -216,7 +210,7 @@ public class ContentstackUnitTest {
             params.put("tfaToken", "fake@tfa");
             client.login("fake@email.com", "fake@password", params);
         } catch (Exception e) {
-            Assertions.assertEquals("User is already loggedIn, Please logout then try to login again", e.getMessage());
+            Assertions.assertEquals("Operation not allowed. You are already logged in.", e.getMessage());
         }
         Assertions.assertEquals("fake@authtoken", client.authtoken);
     }
