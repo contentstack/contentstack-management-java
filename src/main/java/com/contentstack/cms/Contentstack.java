@@ -858,6 +858,12 @@ public class Contentstack {
                 builder.addInterceptor(this.oauthInterceptor);
             } else {
                 this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
+                
+                // Configure early access if needed
+                if (this.earlyAccess != null) {
+                    this.authInterceptor.setEarlyAccess(this.earlyAccess);
+                }
+                
                 builder.addInterceptor(this.authInterceptor);
             }
 

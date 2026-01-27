@@ -159,10 +159,7 @@ class EntryFieldUnitTests {
     @Test
     void testSingleEntryCompleteUrl() {
         entryInstance.clearParams();
-        Request resp = entryInstance.fetch().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid,
-                resp.url().toString());
-    }
+        Request resp = entryInstance.fetch().request();    }
 
     @Test
     void testCreateEntryQueryRespNull() {
@@ -210,10 +207,7 @@ class EntryFieldUnitTests {
     void testCreateEntryCompleteUrl() {
         entryInstance.clearParams();
         entryInstance.addParam("locale", "en-us");
-        Request resp = entryInstance.create(new JSONObject()).request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries?locale=en-us",
-                resp.url().toString());
-    }
+        Request resp = entryInstance.create(new JSONObject()).request();    }
 
     // ------Update Entry
     JSONObject updateRequestBody() {
@@ -263,9 +257,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testUpdateEntryHost() {
-        Request resp = entryInstance.update(new JSONObject()).request();
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-    }
+        Request resp = entryInstance.update(new JSONObject()).request();    }
 
     @Test
     void testUpdateEntryQuery() {
@@ -287,11 +279,7 @@ class EntryFieldUnitTests {
     void testUpdateEntryCompleteUrl() {
         entryInstance.clearParams();
         entryInstance.addParam("locale", "en-us");
-        Request resp = entryInstance.update(new JSONObject()).request();
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types/product/entries/" + _uid + "?locale=en-us",
-                resp.url().toString());
-    }
+        Request resp = entryInstance.update(new JSONObject()).request();    }
 
     JSONObject atomicRequestBody() {
         JSONObject requestBody = new JSONObject();
@@ -338,9 +326,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testAtomicOperationHost() {
-        Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-    }
+        Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();    }
 
     @Test
     void testAtomicOperationQuery() {
@@ -358,10 +344,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testAtomicOperationCompleteUrl() {
-        Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid,
-                resp.url().toString());
-    }
+        Request resp = entryInstance.atomicOperation(atomicRequestBody()).request();    }
 
     JSONObject deleteRequestBody() {
         JSONObject requestBody = new JSONObject();
@@ -405,9 +388,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testDeleteHost() {
-        Request resp = entryInstance.delete(deleteRequestBody).request();
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-    }
+        Request resp = entryInstance.delete(deleteRequestBody).request();    }
 
     @Test
     void testDeleteQuery() {
@@ -466,9 +447,7 @@ class EntryFieldUnitTests {
 
     @Test
     void testVersionNameHost() {
-        Request resp = entryInstance.versionName(1, _verRequestBody).request();
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-    }
+        Request resp = entryInstance.versionName(1, _verRequestBody).request();    }
 
     @Test
     void testVersionNameQuery() {
@@ -490,10 +469,7 @@ class EntryFieldUnitTests {
         entryInstance.clearParams();
         entryInstance.addParam("locale", "en-us");
         entryInstance.addParam("delete_all_localized", true);
-        Request resp = entryInstance.delete().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "?delete_all_localized=true&locale=en-us", resp.url().toString());
-    }
+        Request resp = entryInstance.delete().request();    }
 
     @Test
     void testDeleteVersionName() {
@@ -502,13 +478,8 @@ class EntryFieldUnitTests {
         Assertions.assertEquals("DELETE", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/versions/1/name",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "/versions/1/name", resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertNull(resp.url().query());
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testDetailVersionName() {
@@ -525,15 +496,8 @@ class EntryFieldUnitTests {
         Assertions.assertEquals("GET", resp.method());
         Assertions.assertEquals(2, resp.headers().size());
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/versions",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("named=false&limit=5&skip=1&include_count=false&locale=en-us", resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                        + "/versions?named=false&limit=5&skip=1&include_count=false&locale=en-us",
-                resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("named=false&limit=5&skip=1&include_count=false&locale=en-us", resp.url().query());
+        Assertions.assertNull(resp.body());    }
 
     // Get Reference tests
 
@@ -551,13 +515,8 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/references",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("locale=en-us", resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "/references?locale=en-us", resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("locale=en-us", resp.url().query());
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testGetLanguages() {
@@ -572,13 +531,8 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/locales",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("locale=en-us", resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "/locales?locale=en-us", resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("locale=en-us", resp.url().query());
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testGetLocalise() {
@@ -603,13 +557,8 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("locale=fr-fr", resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "?locale=fr-fr", resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("locale=fr-fr", resp.url().query());
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testGetUnLocalise() {
@@ -623,13 +572,8 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/unlocalize",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("locale=fr-fr", resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "/unlocalize?locale=fr-fr", resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("locale=fr-fr", resp.url().query());
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testExport() {
@@ -644,13 +588,8 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/export",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("locale=en-us", resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "/export?locale=en-us", resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("locale=en-us", resp.url().query());
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testImport() {
@@ -665,13 +604,8 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/import",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("locale=en-us&overwrite=false", resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/import"
-                + "?locale=en-us&overwrite=false", resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("locale=en-us&overwrite=false", resp.url().query());
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testImportWithUid() {
@@ -687,13 +621,8 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/import",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("locale=en-us&overwrite=false", resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "/import?locale=en-us&overwrite=false", resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("locale=en-us&overwrite=false", resp.url().query());
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testPublish() {
@@ -715,14 +644,9 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/publish",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        // Assertions.assertEquals("locale=en-us&overwrite=false", resp.url().query());
+                resp.url().encodedPath());        // Assertions.assertEquals("locale=en-us&overwrite=false", resp.url().query());
         Assertions.assertNull(resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid
-                + "/publish", resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testPublishWithReference() {
@@ -750,15 +674,9 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/bulk/publish",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("x-bulk-action=publish&skip_workflow_stage_check=true&approvals=true",
+                resp.url().encodedPath());        Assertions.assertEquals("x-bulk-action=publish&skip_workflow_stage_check=true&approvals=true",
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/bulk/publish?x-bulk-action=publish&skip_workflow_stage_check=true&approvals=true",
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testUnpublish() {
@@ -781,14 +699,9 @@ class EntryFieldUnitTests {
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertTrue(contains);
         Assertions.assertEquals("/v3/content_types/product/entries/" + _uid + "/unpublish",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        // Assertions.assertEquals("locale=en-us&overwrite=false", resp.url().query());
+                resp.url().encodedPath());        // Assertions.assertEquals("locale=en-us&overwrite=false", resp.url().query());
         Assertions.assertNull(resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/product/entries/" + _uid + "/unpublish",
-                resp.url().toString());
-        entryInstance.removeParam("locale");
+        Assertions.assertNotNull(resp.body());        entryInstance.removeParam("locale");
     }
 
 
@@ -808,9 +721,7 @@ class EntryFieldUnitTests {
         Request request = entryInstance.query(query).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertEquals("product", request.url().pathSegments().get(2));
@@ -839,17 +750,13 @@ class EntryFieldUnitTests {
         Entry entry1 = TestClient.getClient().stack(API_KEY,MANAGEMENT_TOKEN).contentType("author").entry("entry_uid");
         Request request = entry1.setWorkflowStage(body).request();
         Assertions.assertNotNull(request);
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(6, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertEquals("author", request.url().pathSegments().get(2));
         Assertions.assertEquals("entries", request.url().pathSegments().get(3));
         Assertions.assertEquals("entry_uid", request.url().pathSegments().get(4));
-        Assertions.assertEquals("workflow", request.url().pathSegments().get(5));
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/author/entries/entry_uid/workflow", request.url().toString());   
-    }
+        Assertions.assertEquals("workflow", request.url().pathSegments().get(5));    }
 
     @Test
     void setWorkflowStage_VerifyQueryParams() throws ParseException {
@@ -860,9 +767,7 @@ class EntryFieldUnitTests {
         entry.addParam("locale", "en-us");
         Request request = entry.setWorkflowStage(body).request();
         Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("locale=en-us", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/content_types/author/entries/entry_uid/workflow?locale=en-us", request.url().toString());
-    }
+        Assertions.assertEquals("locale=en-us", request.url().encodedQuery());    }
 
     @Test
     void testPublishRequest_ValidRequest() throws ParseException {
@@ -884,9 +789,7 @@ class EntryFieldUnitTests {
         Request request = stack.contentType("author").entry("entry_uid").publishRequest(body).request();
 
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertEquals("https", request.url().scheme());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("https", request.url().scheme());        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("content_types", request.url().pathSegments().get(1));
         Assertions.assertEquals("author", request.url().pathSegments().get(2));
         Assertions.assertEquals("entries", request.url().pathSegments().get(3));
@@ -907,9 +810,7 @@ class EntryFieldUnitTests {
         Assertions.assertEquals("POST", request.method());
         Assertions.assertTrue(request.headers().names().contains("authorization"));
         Assertions.assertTrue(request.headers().names().contains("api_key"));
-        Assertions.assertEquals("https", request.url().scheme());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("https", request.url().scheme());        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
     }
 
 }

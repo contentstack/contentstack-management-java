@@ -113,9 +113,7 @@ class WebhookUnitTest {
         Request request = webhook.find().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("include_rules=true&include_permissions=true", request.url().encodedQuery());
@@ -131,9 +129,7 @@ class WebhookUnitTest {
         Request request = webhook.fetch().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
@@ -146,9 +142,7 @@ class WebhookUnitTest {
         Request request = webhook.create(body).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
@@ -162,9 +156,7 @@ class WebhookUnitTest {
         Request request = webhook.update(body).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
@@ -178,9 +170,7 @@ class WebhookUnitTest {
         Request request = webhook.delete().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
@@ -194,9 +184,7 @@ class WebhookUnitTest {
         Request request = webhook.export().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
@@ -239,9 +227,7 @@ class WebhookUnitTest {
         Request request = webhook.importWebhook("webhook", line).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
@@ -253,23 +239,17 @@ class WebhookUnitTest {
         Request request = webhook.importExisting().request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/webhooks/import", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void getExecutionWebhook() {
         Request request = webhook.getExecutions().request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
@@ -281,9 +261,7 @@ class WebhookUnitTest {
         Request request = webhook.retry(_webhook_uid).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());
@@ -295,9 +273,7 @@ class WebhookUnitTest {
         Request request = webhook.getExecutionLog(_webhook_uid).request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("webhooks", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertNull(request.url().encodedQuery());

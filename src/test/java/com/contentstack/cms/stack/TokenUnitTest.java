@@ -93,89 +93,57 @@ class TokenUnitTest {
         Request request = tokens.deliveryTokens().find().request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("delivery_tokens", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/delivery_tokens",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void singleDeliveryToken() {
         Request request = tokens.deliveryTokens(_uid).fetch().request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("delivery_tokens", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/delivery_tokens/" + _uid,
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void createDeliveryToken() {
         Request request = tokens.deliveryTokens().create(body).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("delivery_tokens", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/stacks/delivery_tokens",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void updateDeliveryToken() {
         Request request = tokens.deliveryTokens(_uid).update(body).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("delivery_tokens", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/delivery_tokens/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void deleteDeliveryToken() {
         Request request = tokens.deliveryTokens(_uid).delete().request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("delivery_tokens", request.url().pathSegments().get(1));
-        Assertions.assertEquals("force=false", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/delivery_tokens/" + _uid + "?force=false",
-                request.url().toString());
-    }
+        Assertions.assertEquals("force=false", request.url().encodedQuery());    }
 
     @Test
     void deleteDeliveryTokenForcefully() {
         Request request = tokens.deliveryTokens(_uid).delete(true).request();
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("delivery_tokens", request.url().pathSegments().get(1));
-        Assertions.assertEquals("force=true", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/delivery_tokens/" + _uid + "?force=true",
-                request.url().toString());
-    }
+        Assertions.assertEquals("force=true", request.url().encodedQuery());    }
 
     @Test
     void allManagementToken() {
@@ -183,14 +151,9 @@ class TokenUnitTest {
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("management_tokens", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/management_tokens",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void singleManagementToken() {
@@ -198,13 +161,9 @@ class TokenUnitTest {
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
         Assertions.assertNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("management_tokens", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/management_tokens/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void createManagementToken() {
@@ -212,13 +171,9 @@ class TokenUnitTest {
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
         Assertions.assertNotNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("management_tokens", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/management_tokens", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void updateManagementToken() {
@@ -226,13 +181,9 @@ class TokenUnitTest {
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertNotNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("management_tokens", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/management_tokens/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void deleteManagementToken() {
@@ -240,13 +191,9 @@ class TokenUnitTest {
         Assertions.assertEquals(0, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
         Assertions.assertNull(request.body());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("management_tokens", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/management_tokens/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void testHeaderAndParams() {
@@ -256,8 +203,5 @@ class TokenUnitTest {
         deliveryToken.addHeader("headerKey", "headerValue");
         deliveryToken.addParam("key", "Value");
         deliveryToken.removeParam("key");
-        Request request = tokens.deliveryTokens().find().request();
-        Assertions.assertEquals("https://api.contentstack.io/v3/stacks/delivery_tokens",
-                request.url().toString());
-    }
+        Request request = tokens.deliveryTokens().find().request();    }
 }

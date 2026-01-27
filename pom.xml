@@ -7,7 +7,7 @@
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>1.10.1</version>
+    <version>1.10.2</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
@@ -245,6 +245,11 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                      <includes>
+                         <!-- Run all test files following Maven naming conventions -->
+                         <include>**/Test*.java</include>
+                         <include>**/*Test.java</include>
+                         <include>**/*Tests.java</include>
+                         <include>**/*TestCase.java</include>
                          <include>**/*TestSuite.java</include>
                      </includes>
                      <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory> 

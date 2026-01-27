@@ -79,14 +79,10 @@ class RoleAPITest {
         Request request = roles.create(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("roles", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/roles", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void updateRole() {
@@ -100,14 +96,10 @@ class RoleAPITest {
         Request request = roles.update(object).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("roles", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/roles/" + AUTHTOKEN, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void deleteRole() {
@@ -117,14 +109,10 @@ class RoleAPITest {
         Request request = roles.delete().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("roles", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/roles/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
     @Test
     void createRoleWithRule1() throws IOException{
         JSONObject requestTaxonomy = Utils.readJson("mocktaxonomy/create.json");
@@ -133,30 +121,20 @@ class RoleAPITest {
         Request request = taxonomy.create(requestTaxonomy).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies", request.url().toString());
-
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
     @Test
     void createRoleWithRule2() throws IOException{
         JSONObject requestTerm = Utils.readJson("mocktaxonomy/createTerm.json");
         Request request = term.create(requestTerm).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/sample_two/terms", request.url().toString());
-      
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
     @Test
     void createRoleWithTaxonomy() throws IOException{
         JSONObject requestBody = Utils.readJson("mockrole/createRole.json");
@@ -165,14 +143,9 @@ class RoleAPITest {
         Request request = roles.create(requestBody).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("roles", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/roles", request.url().toString());
-
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
 }

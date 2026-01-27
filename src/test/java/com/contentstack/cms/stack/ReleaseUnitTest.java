@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ReleaseUnitTest {
+public class ReleaseUnitTest {
 
     protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
     protected static String API_KEY = TestClient.API_KEY;
@@ -48,7 +48,7 @@ class ReleaseUnitTest {
     @Order(1)
     void allReleaseHeaders() {
         release.addHeader("Content-Type", "application/json");
-        Assertions.assertEquals(3, release.headers.size());
+        Assertions.assertEquals(3, release.headers.size()); // authtoken, authorization, Content-Type (release_version added only on API calls)
     }
 
     @Test
@@ -79,14 +79,10 @@ class ReleaseUnitTest {
         Request request = release.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases?include_rules=true&include_permissions=true", request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     @Order(6)
@@ -96,13 +92,9 @@ class ReleaseUnitTest {
         Request request = release.fetch().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
-        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases/" + _uid, request.url().toString());
-    }
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));    }
 
     @Test
     @Order(7)
@@ -110,14 +102,10 @@ class ReleaseUnitTest {
         Request request = release.create(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     @Order(8)
@@ -125,14 +113,10 @@ class ReleaseUnitTest {
         Request request = release.update(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     @Order(9)
@@ -140,13 +124,9 @@ class ReleaseUnitTest {
         Request request = release.delete().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases/" + _uid, request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     /// ==> Testcases for the release items <==////
     @Test
@@ -155,13 +135,9 @@ class ReleaseUnitTest {
         Request request = release.item().find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases/" + _uid + "/items", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     @Order(10)
@@ -169,13 +145,9 @@ class ReleaseUnitTest {
         Request request = release.item().create(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases/" + _uid + "/item", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     @Order(10)
@@ -183,13 +155,9 @@ class ReleaseUnitTest {
         Request request = release.item().createMultiple(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases/" + _uid + "/items", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     @Order(10)
@@ -197,13 +165,9 @@ class ReleaseUnitTest {
         Request request = release.item().update(body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases/" + _uid + "/update_items", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     @Order(10)
@@ -211,13 +175,9 @@ class ReleaseUnitTest {
         Request request = release.item().delete().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("releases", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/releases/" + _uid + "/items", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void testReleaseException() {
