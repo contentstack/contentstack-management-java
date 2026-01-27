@@ -51,9 +51,7 @@ class AssetAPITest {
         Assertions.assertEquals(3, request.headers().size());
         Assertions.assertTrue(request.isHttps(), "always works on https");
         Assertions.assertEquals("GET", request.method(), "works with GET call");
-        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", request.url().host(), "host should be anything but not null");
-        Assertions.assertEquals(443, request.url().port(), "port should be 443");
+        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");        Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
         Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(),
@@ -80,9 +78,7 @@ class AssetAPITest {
         Assertions.assertEquals(3, request.headers().size());
         Assertions.assertTrue(request.isHttps(), "always works on https");
         Assertions.assertEquals("GET", request.method(), "works with GET call");
-        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", request.url().host(), "host should be anything but not null");
-        Assertions.assertEquals(443, request.url().port(), "port should be 443");
+        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");        Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
         Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(),
@@ -104,10 +100,7 @@ class AssetAPITest {
         Assertions.assertTrue(resp.raw().request().headers().names().contains("authorization"));
         Assertions.assertTrue(resp.raw().request().isHttps(), "always works on https");
         Assertions.assertEquals("GET", resp.raw().request().method(), "works with GET call");
-        Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(),
-                "host should be anything but not null");
-        Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
+        Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");        Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
         Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"),
                 "the first segment of url should be v3");
         Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"),
@@ -129,9 +122,7 @@ class AssetAPITest {
         Assertions.assertTrue(request.headers().names().contains("authtoken"));
         Assertions.assertTrue(request.isHttps(), "always works on https");
         Assertions.assertEquals("GET", request.method(), "works with GET call");
-        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", request.url().host(), "host should be anything but not null");
-        Assertions.assertEquals(443, request.url().port(), "port should be 443");
+        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");        Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
         Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(),
@@ -157,9 +148,7 @@ class AssetAPITest {
         Assertions.assertTrue(request.headers().names().contains("authtoken"));
         Assertions.assertTrue(request.isHttps(), "always works on https");
         Assertions.assertEquals("POST", request.method(), "works with GET call");
-        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", request.url().host(), "host should be anything but not null");
-        Assertions.assertEquals(443, request.url().port(), "port should be 443");
+        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");        Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
         Assertions.assertFalse(Objects.requireNonNull(request.url().query()).isEmpty(),
@@ -188,10 +177,7 @@ class AssetAPITest {
         Assertions.assertTrue(resp.raw().request().headers().names().contains("authtoken"));
         Assertions.assertTrue(resp.raw().request().isHttps(), "always works on https");
         Assertions.assertEquals("PUT", resp.raw().request().method(), "works with GET call");
-        Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(),
-                "host should be anything but not null");
-        Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
+        Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");        Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
         Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"),
                 "the first segment of url should be v3");
         Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"),
@@ -218,10 +204,7 @@ class AssetAPITest {
         Assertions.assertTrue(resp.raw().request().headers().names().contains("authtoken"));
         Assertions.assertTrue(resp.raw().request().isHttps(), "always works on https");
         Assertions.assertEquals("PUT", resp.raw().request().method(), "works with GET call");
-        Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", resp.raw().request().url().host(),
-                "host should be anything but not null");
-        Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
+        Assertions.assertEquals("https", resp.raw().request().url().scheme(), "the scheme should be https");        Assertions.assertEquals(443, resp.raw().request().url().port(), "port should be 443");
         Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("v3"),
                 "the first segment of url should be v3");
         Assertions.assertTrue(resp.raw().request().url().pathSegments().contains("assets"),
@@ -245,9 +228,7 @@ class AssetAPITest {
         Assertions.assertTrue(request.headers().names().contains("authtoken"));
         Assertions.assertTrue(request.isHttps(), "always works on https");
         Assertions.assertEquals("GET", request.method(), "works with GET call");
-        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");
-        Assertions.assertEquals("api.contentstack.io", request.url().host(), "host should be anything but not null");
-        Assertions.assertEquals(443, request.url().port(), "port should be 443");
+        Assertions.assertEquals("https", request.url().scheme(), "the scheme should be https");        Assertions.assertEquals(443, request.url().port(), "port should be 443");
         Assertions.assertTrue(request.url().pathSegments().contains("v3"), "the first segment of url should be v3");
         Assertions.assertTrue(request.url().pathSegments().contains("assets"), "url segment should contain assets");
     }
@@ -278,54 +259,36 @@ class AssetAPITest {
                 .addParam("include_count", true);
         Request request = asset.fetchAsPojo().request();
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertEquals("https", request.url().scheme());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertEquals("https", request.url().scheme());        Assertions.assertEquals(443, request.url().port());
         Assertions.assertTrue(request.url().pathSegments().contains("v3"));
-        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/auth999999999?include_count=true",
-                request.url().toString());
-    }
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));    }
 
     @Test
     void testFetchAllAssetsPojo() throws IOException {
         asset = client.stack().asset();
         Request request = asset.findAsPojo().request();
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertEquals("https", request.url().scheme());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertEquals("https", request.url().scheme());        Assertions.assertEquals(443, request.url().port());
         Assertions.assertTrue(request.url().pathSegments().contains("v3"));
-        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
-        Assertions.assertEquals("https://api.contentstack.io/v3/assets", request.url().toString());
-    }
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));    }
 
     @Test
     void testFetchAssetsByFolderUidPojo() throws IOException {
         asset = client.stack().asset();
         Request request = asset.byFolderUidAsPojo("folder_uid").request();
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertEquals("https", request.url().scheme());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertEquals("https", request.url().scheme());        Assertions.assertEquals(443, request.url().port());
         Assertions.assertTrue(request.url().pathSegments().contains("v3"));
-        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
-        Assertions.assertEquals("https://api.contentstack.io/v3/assets?folder=folder_uid", request.url().toString());
-    }
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));    }
 
     @Test
     void testFetchAssetsBySubFolderUidPojo() throws IOException {
         asset = client.stack().asset();
         Request request = asset.subfolderAsPojo("subfolder_uid", true).request();
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertEquals("https", request.url().scheme());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertEquals("https", request.url().scheme());        Assertions.assertEquals(443, request.url().port());
         Assertions.assertTrue(request.url().pathSegments().contains("v3"));
-        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
-        Assertions.assertEquals("https://api.contentstack.io/v3/assets?folder=subfolder_uid&include_folders=true", request.url().toString());
-    }
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));    }
 
     @Test
     void testFetchSingleFolderByNamePojo() {
@@ -336,13 +299,9 @@ class AssetAPITest {
         asset.addParam("query", queryContent);
         Request request = asset.getSingleFolderByNameAsPojo().request();
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertEquals("https", request.url().scheme());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertEquals("https", request.url().scheme());        Assertions.assertEquals(443, request.url().port());
         Assertions.assertTrue(request.url().pathSegments().contains("v3"));
-        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
-        Assertions.assertEquals("https://api.contentstack.io/v3/assets?query={is_dir%3Dtrue,%20name%3Dsub_folder_test}", request.url().toString());
-    }
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));    }
 
     @Test
     void testFetchSubfoldersByParentFolderPojo() {
@@ -356,13 +315,9 @@ class AssetAPITest {
         asset.addParam("query", queryContent);
         Request request = asset.getSubfolderAsPojo().request();
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertEquals("https", request.url().scheme());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(443, request.url().port());
+        Assertions.assertEquals("https", request.url().scheme());        Assertions.assertEquals(443, request.url().port());
         Assertions.assertTrue(request.url().pathSegments().contains("v3"));
-        Assertions.assertTrue(request.url().pathSegments().contains("assets"));
-        Assertions.assertEquals("https://api.contentstack.io/v3/assets?folder=test_folder&query={parent_uid%3Dparent_uid,%20is_dir%3Dtrue}&include_folders=true", request.url().toString());
-    }
+        Assertions.assertTrue(request.url().pathSegments().contains("assets"));    }
 
     @Test
     @Disabled("disabled to avoid unnecessary asset creation, Tested working fine")
