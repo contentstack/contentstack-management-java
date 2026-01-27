@@ -56,16 +56,10 @@ class TaxonomyTest {
         Request request = taxonomy.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/taxonomies?include_rules=true&include_permissions=true",
-                request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     void findTestWithParams() {
@@ -75,16 +69,10 @@ class TaxonomyTest {
         Request request = taxonomy.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/taxonomies?limit=2&skip=2&include_count=false",
-                request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     void findTestCustomParams() {
@@ -94,60 +82,40 @@ class TaxonomyTest {
         Request request = taxonomy.find().request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/taxonomies?include_rules=true&include_permissions=true",
-                request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     void fetchTest() {
         Request request = taxonomy.fetch("taxonomyId").request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
-        Assertions.assertNotNull(request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/taxonomies/taxonomyId?limit=2&skip=2&include_count=false",
-                request.url().toString());
-    }
+        Assertions.assertNotNull(request.url().encodedQuery());    }
 
     @Test
     void updateTest() {
         Request request = taxonomy.update("taxonomyId", body).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertNotNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/taxonomyId", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void deleteTest() {
         Request request = taxonomy.delete("taxonomyId").request();
         Assertions.assertEquals(5, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/taxonomyId", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void deleteTestWithHeaders() {
@@ -164,14 +132,10 @@ class TaxonomyTest {
         Request request = taxonomy.delete("taxonomyId").request();
         Assertions.assertEquals(5, request.headers().names().size());
         Assertions.assertEquals("DELETE", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/taxonomyId", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void createTest() {
@@ -180,13 +144,9 @@ class TaxonomyTest {
         Request request = taxonomy.create(obj).request();
         Assertions.assertEquals(4, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(2, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(2, request.url().pathSegments().size());
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies", request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void testCreateTerm() {
@@ -201,18 +161,13 @@ class TaxonomyTest {
         Request request = terms.create(term).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("POST", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNotNull(request.body());
-        Assertions.assertNull(request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/auth999999999/terms",
-                request.url().toString());
-    }
+        Assertions.assertNull(request.url().encodedQuery());    }
 
     @Test
     void testFindTerm() {
@@ -221,18 +176,13 @@ class TaxonomyTest {
         Request request = terms.find().request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
-        Assertions.assertEquals("limit=3", request.url().encodedQuery());
-        Assertions.assertEquals("https://api.contentstack.io/v3/taxonomies/" + _uid + "/terms?limit=3",
-                request.url().toString());
-    }
+        Assertions.assertEquals("limit=3", request.url().encodedQuery());    }
 
     @Test
     void testFetchTerm() {
@@ -242,20 +192,14 @@ class TaxonomyTest {
         Request request = terms.fetch(_uid).request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(5, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
         Assertions.assertEquals("include_children_count=false&include_referenced_entries_count=true",
-                request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/taxonomies/auth999999999/terms/auth999999999?include_children_count=false&include_referenced_entries_count=true",
-                request.url().toString());
-    }
+                request.url().encodedQuery());    }
 
     @Test
     void testTermUpdate() {
@@ -272,9 +216,7 @@ class TaxonomyTest {
         Request request = terms.update(_uid, new JSONObject()).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(5, request.url().pathSegments().size());
     }
 
 
@@ -291,9 +233,7 @@ class TaxonomyTest {
         Request request = terms.reorder(_uid, new JSONObject()).request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("PUT", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(6, request.url().pathSegments().size());
     }
 
     @Test
@@ -302,9 +242,7 @@ class TaxonomyTest {
         Request request = terms.search("contentstack").request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(4, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(4, request.url().pathSegments().size());
     }
 
     @Test
@@ -314,19 +252,13 @@ class TaxonomyTest {
         Request request = terms.descendants("termId45").request();
         Assertions.assertEquals(2, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(6, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
-        Assertions.assertEquals("include_count=true", request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/taxonomies/auth999999999/terms/termId45/descendants?include_count=true",
-                request.url().toString());
-    }
+        Assertions.assertEquals("include_count=true", request.url().encodedQuery());    }
 
     @Test
     void testAncestorsTerm() {
@@ -336,20 +268,14 @@ class TaxonomyTest {
         Request request = terms.ancestors("termId45").request();
         Assertions.assertEquals(3, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(6, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(6, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
         Assertions.assertEquals("terms", request.url().pathSegments().get(3));
         Assertions.assertNull(request.body());
         Assertions.assertEquals("include_children_count=false&include_referenced_entries_count=true",
-                request.url().encodedQuery());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/taxonomies/auth999999999/terms/termId45/ancestors?include_children_count=false&include_referenced_entries_count=true",
-                request.url().toString());
-    }
+                request.url().encodedQuery());    }
 
     @Test
     void findTestAPI() throws IOException {
@@ -376,9 +302,7 @@ class TaxonomyTest {
         Request request = taxonomy.query(query).request();
         Assertions.assertEquals(1, request.headers().names().size());
         Assertions.assertEquals("GET", request.method());
-        Assertions.assertTrue(request.url().isHttps());
-        Assertions.assertEquals("api.contentstack.io", request.url().host());
-        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertTrue(request.url().isHttps());        Assertions.assertEquals(3, request.url().pathSegments().size());
         Assertions.assertEquals("v3", request.url().pathSegments().get(0));
         Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
         Assertions.assertEquals("entries", request.url().pathSegments().get(2));

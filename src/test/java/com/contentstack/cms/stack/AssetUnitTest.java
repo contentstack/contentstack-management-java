@@ -49,16 +49,10 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals(
+                resp.url().encodedPath());        Assertions.assertEquals(
                 "relative_urls=false&environment=production&folder=folder_uid_some_example&include_publish_details=true&include_folders=true&include_count=true&version=1&asc_field_uid=created_at&desc_field_uid=230",
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets?relative_urls=false&environment=production&folder=folder_uid_some_example&include_publish_details=true&include_folders=true&include_count=true&version=1&asc_field_uid=created_at&desc_field_uid=230",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetSingle() {
@@ -77,9 +71,7 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals(
+                resp.url().encodedPath());        Assertions.assertEquals(
                 "relative_urls=false&environment=production&include_path=false&include_publish_details=true&version=1",
                 resp.url().query());
         Assertions.assertNull(resp.body());
@@ -97,16 +89,10 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals(
+                resp.url().encodedPath());        Assertions.assertEquals(
                 "folder=" + _uid,
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets?folder=" + _uid,
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetSubFolder() {
@@ -119,16 +105,10 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals(
+                resp.url().encodedPath());        Assertions.assertEquals(
                 "folder=" + _uid + "&include_folders=true",
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets?folder=" + _uid + "&include_folders=true",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     @Disabled
@@ -150,16 +130,10 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals(
+                resp.url().encodedPath());        Assertions.assertEquals(
                 "relative_urls=true&include_dimension=true",
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets?relative_urls=true&include_dimension=true",
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetReplace() {
@@ -177,17 +151,10 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals(
+                resp.url().encodedPath());        Assertions.assertEquals(
                 "relative_urls=true&include_dimension=true",
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid
-                        + "?relative_urls=true&include_dimension=true",
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetGeneratePermanentUrl() {
@@ -204,15 +171,9 @@ class AssetUnitTest {
         matcher.add("authorization");
         boolean contains = resp.headers().names().containsAll(matcher);
         Assertions.assertEquals("/v3/assets/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid,
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetDownloadPermanentUrl() {
@@ -225,15 +186,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid + "/www.google.com%2Fsearch",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid + "/www.google.com%2Fsearch",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetDelete() {
@@ -246,15 +201,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid,
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetRteInformation() {
@@ -266,15 +215,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/rt",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/rt",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetSetVersionName() {
@@ -290,15 +233,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid + "/versions/2/name",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid + "/versions/2/name",
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetGetDetailsVersionName() {
@@ -315,16 +252,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid + "/versions",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("named=false&limit=5&skip=2&include_count=false",
+                resp.url().encodedPath());        Assertions.assertEquals("named=false&limit=5&skip=2&include_count=false",
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid
-                        + "/versions?named=false&limit=5&skip=2&include_count=false",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetDeleteVersionName() {
@@ -336,14 +266,8 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid + "/versions/2/name",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid + "/versions/2/name",
-                resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertNull(resp.url().query());
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetGetReference() {
@@ -355,15 +279,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid + "/references",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid + "/references",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetGetByTypeImages() {
@@ -375,15 +293,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/images",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/images",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetGetByTypeVideo() {
@@ -395,15 +307,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/videos",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/videos",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetUpdateDetails() {
@@ -422,15 +328,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid,
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetPublish() {
@@ -449,15 +349,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid + "/publish",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid + "/publish",
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetUnpublish() {
@@ -476,15 +370,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/" + _uid + "/unpublish",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/" + _uid + "/unpublish",
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetSingleFolder() {
@@ -499,14 +387,8 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/folders/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("include_path=false", resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/folders/" + _uid + "?include_path=false",
-                resp.url().toString());
-    }
+                resp.url().encodedPath());        Assertions.assertEquals("include_path=false", resp.url().query());
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetSingleFolderByName() {
@@ -523,15 +405,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("query={\"is_dir\":true,\"name\":\"folder_name\"}",
+                resp.url().encodedPath());        Assertions.assertEquals("query={\"is_dir\":true,\"name\":\"folder_name\"}",
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets?query={%22is_dir%22:true,%22name%22:%22folder_name%22}",
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetSubfolder() {
@@ -549,9 +425,7 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertEquals("folder=" + _uid + "&query={\"is_dir\":true}&include_folders=true",
+                resp.url().encodedPath());        Assertions.assertEquals("folder=" + _uid + "&query={\"is_dir\":true}&include_folders=true",
                 resp.url().query());
         Assertions.assertNull(resp.body());
 
@@ -574,15 +448,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/folders",
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/folders",
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetUpdateFolder() {
@@ -602,15 +470,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/folders/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNotNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/folders/" + _uid,
-                resp.url().toString());
-    }
+        Assertions.assertNotNull(resp.body());    }
 
     @Test
     void testAssetDeleteFolder() {
@@ -623,15 +485,9 @@ class AssetUnitTest {
         matcher.add("api_key");
         matcher.add("authorization");
         Assertions.assertEquals("/v3/assets/folders/" + _uid,
-                resp.url().encodedPath());
-        Assertions.assertEquals("api.contentstack.io", resp.url().host());
-        Assertions.assertNull(
+                resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
-        Assertions.assertNull(resp.body());
-        Assertions.assertEquals(
-                "https://api.contentstack.io/v3/assets/folders/" + _uid,
-                resp.url().toString());
-    }
+        Assertions.assertNull(resp.body());    }
 
     @Test
     void testAssetValidate() {

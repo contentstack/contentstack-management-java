@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.10.2
+
+### Jan 27, 2026
+
+- Delete Release fix
+
 ## v1.10.1
 
 ### Jan 12, 2026

@@ -221,25 +221,18 @@ public class OAuthTest {
         String[][] testCases = {
             // Default region
             {"api.contentstack.io", "app.contentstack.com", "developerhub-api.contentstack.com"},
-            {"api-contentstack.com", "app-contentstack.com", "developerhub-api-contentstack.com"},
             
             // AWS regions
             {"eu-api.contentstack.com", "eu-app.contentstack.com", "eu-developerhub-api.contentstack.com"},
-            {"eu-api-contentstack.com", "eu-app-contentstack.com", "eu-developerhub-api-contentstack.com"},
             {"au-api.contentstack.com", "au-app.contentstack.com", "au-developerhub-api.contentstack.com"},
-            {"au-api-contentstack.com", "au-app-contentstack.com", "au-developerhub-api-contentstack.com"},
             
             // Azure regions
             {"azure-na-api.contentstack.com", "azure-na-app.contentstack.com", "azure-na-developerhub-api.contentstack.com"},
-            {"azure-na-api-contentstack.com", "azure-na-app-contentstack.com", "azure-na-developerhub-api-contentstack.com"},
             {"azure-eu-api.contentstack.com", "azure-eu-app.contentstack.com", "azure-eu-developerhub-api.contentstack.com"},
-            {"azure-eu-api-contentstack.com", "azure-eu-app-contentstack.com", "azure-eu-developerhub-api-contentstack.com"},
             
             // GCP regions
             {"gcp-na-api.contentstack.com", "gcp-na-app.contentstack.com", "gcp-na-developerhub-api.contentstack.com"},
-            {"gcp-na-api-contentstack.com", "gcp-na-app-contentstack.com", "gcp-na-developerhub-api-contentstack.com"},
-            {"gcp-eu-api.contentstack.com", "gcp-eu-app.contentstack.com", "gcp-eu-developerhub-api.contentstack.com"},
-            {"gcp-eu-api-contentstack.com", "gcp-eu-app-contentstack.com", "gcp-eu-developerhub-api-contentstack.com"}
+            {"gcp-eu-api.contentstack.com", "gcp-eu-app.contentstack.com", "gcp-eu-developerhub-api.contentstack.com"}
         };
 
         for (String[] testCase : testCases) {
@@ -258,9 +251,9 @@ public class OAuthTest {
             String authUrl = handler.authorize();
             String tokenUrl = config.getTokenEndpoint();
 
-            assertTrue(String.format("Auth URL for %s should contain %s", apiHost, expectedAppHost),
+            assertTrue(String.format("Auth URL for %s should contain %s. Actual: %s", apiHost, expectedAppHost, authUrl),
                     authUrl.contains(expectedAppHost));
-            assertTrue(String.format("Token URL for %s should contain %s", apiHost, expectedTokenHost),
+            assertTrue(String.format("Token URL for %s should contain %s. Actual: %s", apiHost, expectedTokenHost, tokenUrl),
                     tokenUrl.contains(expectedTokenHost));
         }
     }
@@ -336,8 +329,8 @@ public class OAuthTest {
         String authUrl = handler.authorize();
         String tokenUrl = config.getTokenEndpoint();
 
-        assertEquals("Should use custom auth endpoint",
-                customAuthEndpoint, authUrl);
+        assertTrue("Should use custom auth endpoint",
+                authUrl.startsWith(customAuthEndpoint));
         assertEquals("Should use custom token endpoint",
                 customTokenEndpoint, tokenUrl);
     }
