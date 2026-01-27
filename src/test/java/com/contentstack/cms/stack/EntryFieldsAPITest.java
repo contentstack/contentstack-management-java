@@ -59,9 +59,11 @@ class EntryFieldsAPITest {
     @Order(3)
     @Test
     void testEntryCreate() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryCreate = new JSONObject();
         entryCreate.put("entry", body);
         Request request = entry.create(entryCreate).request();
@@ -75,9 +77,11 @@ class EntryFieldsAPITest {
     @Order(4)
     @Test
     void testUpdate() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryUpdate = new JSONObject();
         entryUpdate.put("entry", body);
 
@@ -93,9 +97,11 @@ class EntryFieldsAPITest {
     @Order(5)
     @Test
     void testAtomicOperation() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -123,9 +129,11 @@ class EntryFieldsAPITest {
     @Order(7)
     @Test
     void testEntryVersionName() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -154,9 +162,11 @@ class EntryFieldsAPITest {
     @Order(9)
     @Test
     void testEntryDeleteVersionName() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -185,9 +195,11 @@ class EntryFieldsAPITest {
     @Order(11)
     @Test
     void testEntryLocalise() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -239,9 +251,11 @@ class EntryFieldsAPITest {
     @Order(15)
     @Test
     void testEntryPublish() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -257,9 +271,11 @@ class EntryFieldsAPITest {
     @Order(16)
     @Test
     void testEntryPublishWithReference() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
         Request request = entry.publishWithReference(entryBody).request();
@@ -273,9 +289,11 @@ class EntryFieldsAPITest {
     @Order(17)
     @Test
     void testPublishWithReference() {
+        @SuppressWarnings("unchecked")
         JSONObject body = new JSONObject();
         body.put("title", "The Create an entry call creates a new entry for the selected content type for testing");
         body.put("url", "www.***REMOVED***.in/stack/content_type/entry/fakeuid/code");
+        @SuppressWarnings("unchecked")
         JSONObject entryBody = new JSONObject();
         entryBody.put("entry", body);
 
@@ -291,6 +309,7 @@ class EntryFieldsAPITest {
     @Order(18)
     @Test
     public void testEntryQuery() {
+        @SuppressWarnings("unchecked")
         JSONObject query = new JSONObject();
         query.put("taxonomies.taxonomy_uid", "{ \"$in\" : [\"term_uid1\" , \"term_uid2\" ] }");
         Request request = entry.query(query).request();
