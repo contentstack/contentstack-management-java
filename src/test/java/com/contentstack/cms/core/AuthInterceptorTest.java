@@ -3,6 +3,7 @@ package com.contentstack.cms.core;
 import okhttp3.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -14,6 +15,155 @@ public class AuthInterceptorTest {
     @BeforeEach
     public void setup() {
         authInterceptor = new AuthInterceptor("test-authtoken");
+    }
+
+    // --- Retry tests (RetryConfig) ---
+
+    @Test
+    @Tag("unit")
+    public void testRetryConfig_setRetryConfig() {
+        RetryConfig config = RetryConfig.builder().retryLimit(5).build();
+        authInterceptor.setRetryConfig(config);
+        Assertions.assertNotNull(authInterceptor.retryConfig);
+        Assertions.assertEquals(5, authInterceptor.retryConfig.getRetryLimit());
+    }
+
+    @Test
+    @Tag("unit")
+    public void testRetry_on429_thenSuccess_retriesAndReturnsSuccess() throws IOException {
+        authInterceptor.setRetryConfig(RetryConfig.builder().retryLimit(3).retryDelay(10).build());
+        Request request = new Request.Builder()
+                .url("https://api.contentstack.io/v3/user")
+                .get()
+                .build();
+        RetryTestChain chain = new RetryTestChain(request, 429, 200);
+        try (Response response = authInterceptor.intercept(chain)) {
+            Assertions.assertEquals(200, response.code());
+            Assertions.assertEquals(2, chain.getProceedCount());
+        }
+    }
+
+    @Test
+    @Tag("unit")
+    public void testRetry_on503_thenSuccess_retriesAndReturnsSuccess() throws IOException {
+        authInterceptor.setRetryConfig(RetryConfig.builder().retryLimit(3).retryDelay(10).build());
+        Request request = new Request.Builder()
+                .url("https://api.contentstack.io/v3/user")
+                .get()
+                .build();
+        RetryTestChain chain = new RetryTestChain(request, 503, 200);
+        try (Response response = authInterceptor.intercept(chain)) {
+            Assertions.assertEquals(200, response.code());
+            Assertions.assertEquals(2, chain.getProceedCount());
+        }
+    }
+
+    @Test
+    @Tag("unit")
+    public void testRetry_on404_doesNotRetry() throws IOException {
+        authInterceptor.setRetryConfig(RetryConfig.builder().retryLimit(3).retryDelay(10).build());
+        Request request = new Request.Builder()
+                .url("https://api.contentstack.io/v3/user")
+                .get()
+                .build();
+        RetryTestChain chain = new RetryTestChain(request, 404, 200);
+        try (Response response = authInterceptor.intercept(chain)) {
+            Assertions.assertEquals(404, response.code());
+            Assertions.assertEquals(1, chain.getProceedCount());
+        }
+    }
+
+    @Test
+    @Tag("unit")
+    public void testRetry_on200_doesNotRetry() throws IOException {
+        authInterceptor.setRetryConfig(RetryConfig.builder().retryLimit(3).retryDelay(10).build());
+        Request request = new Request.Builder()
+                .url("https://api.contentstack.io/v3/user")
+                .get()
+                .build();
+        RetryTestChain chain = new RetryTestChain(request, 200, 200);
+        try (Response response = authInterceptor.intercept(chain)) {
+            Assertions.assertEquals(200, response.code());
+            Assertions.assertEquals(1, chain.getProceedCount());
+        }
+    }
+
+    /**
+     * Chain that returns a configurable response code on first proceed, then successCode on subsequent calls.
+     */
+    private static class RetryTestChain implements Interceptor.Chain {
+        private final Request originalRequest;
+        private final int firstResponseCode;
+        private final int successCode;
+        private int proceedCount = 0;
+
+        RetryTestChain(Request request, int firstResponseCode, int successCode) {
+            this.originalRequest = request;
+            this.firstResponseCode = firstResponseCode;
+            this.successCode = successCode;
+        }
+
+        int getProceedCount() {
+            return proceedCount;
+        }
+
+        @Override
+        public Request request() {
+            return originalRequest;
+        }
+
+        @Override
+        public Response proceed(Request request) throws IOException {
+            proceedCount++;
+            int code = proceedCount == 1 ? firstResponseCode : successCode;
+            return new Response.Builder()
+                    .request(request)
+                    .protocol(Protocol.HTTP_1_1)
+                    .code(code)
+                    .message(code == 200 ? "OK" : "Error")
+                    .body(ResponseBody.create("{}", MediaType.parse("application/json")))
+                    .build();
+        }
+
+        @Override
+        public Connection connection() {
+            return null;
+        }
+
+        @Override
+        public int connectTimeoutMillis() {
+            return 0;
+        }
+
+        @Override
+        public Interceptor.Chain withConnectTimeout(int timeout, java.util.concurrent.TimeUnit unit) {
+            return this;
+        }
+
+        @Override
+        public int readTimeoutMillis() {
+            return 0;
+        }
+
+        @Override
+        public Interceptor.Chain withReadTimeout(int timeout, java.util.concurrent.TimeUnit unit) {
+            return this;
+        }
+
+        @Override
+        public int writeTimeoutMillis() {
+            return 0;
+        }
+
+        @Override
+        public Interceptor.Chain withWriteTimeout(int timeout, java.util.concurrent.TimeUnit unit) {
+            return this;
+        }
+
+        @Override
+        public Call call() {
+            return null;
+        }
     }
 
     @Test
@@ -35,7 +185,7 @@ public class AuthInterceptorTest {
     public void testBadArgumentException() {
         BadArgumentException exception = new BadArgumentException("Invalid Argument");
         String message = exception.getLocalizedMessage();
-        Assertions.assertEquals("Invalid Argument", message.toString());
+        Assertions.assertEquals("Invalid Argument", message);
     }
 
     @Test
