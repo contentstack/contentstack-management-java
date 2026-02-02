@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * This interface allows custom logic to determine whether a failed request
  * should be retried based on the HTTP status code and/or the exception that occurred.
- * </p>
  * <p>
  * Status code conventions:
  * <ul>
@@ -15,11 +14,7 @@ import org.jetbrains.annotations.Nullable;
  *   <li>-1 = Unknown error - typically not retryable</li>
  *   <li>Other values = HTTP status codes (200-599)</li>
  * </ul>
- * </p>
  *
- * @author Contentstack
- * @version v1.0.0
- * @since 2026-01-28
  */
 @FunctionalInterface
 public interface RetryCondition {

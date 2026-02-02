@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
  *   <li>How long to wait between retries (retryDelay, retryDelayOptions)</li>
  *   <li>Which errors should be retried (retryCondition)</li>
  * </ul>
- * </p>
  * <p>
  * This configuration is used by:
  * <ul>
@@ -21,11 +20,7 @@ import org.jetbrains.annotations.Nullable;
  *   <li>OAuthInterceptor (OAuth synchronous calls)</li>
  *   <li>RetryCallback (asynchronous calls)</li>
  * </ul>
- * </p>
  *
- * @author Contentstack
- * @version v1.0.0
- * @since 2026-01-28
  */
 public class RetryConfig {
 
@@ -122,7 +117,6 @@ public class RetryConfig {
      *   <li>retryCondition: DefaultRetryCondition (retries on 408, 429, 5xx, network errors)</li>
      *   <li>retryDelayOptions: null (uses fixed retryDelay)</li>
      * </ul>
-     * </p>
      *
      * @return a default RetryConfig instance
      */
@@ -143,7 +137,7 @@ public class RetryConfig {
          * Sets the maximum number of retry attempts.
          * Default: 3 (for backward compatibility)
          *
-         * @param retryLimit the retry limit (must be >= 0)
+         * @param retryLimit the retry limit (must be &gt;= 0)
          * @return this builder instance
          * @throws IllegalArgumentException if retryLimit is negative
          */
@@ -160,7 +154,7 @@ public class RetryConfig {
          * This is used when retryDelayOptions are not configured.
          * Default: 300ms
          *
-         * @param retryDelay the delay in milliseconds (must be >= 0)
+         * @param retryDelay the delay in milliseconds (must be &gt;= 0)
          * @return this builder instance
          * @throws IllegalArgumentException if retryDelay is negative
          */

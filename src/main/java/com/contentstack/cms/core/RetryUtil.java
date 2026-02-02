@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
  * Provides helper methods for calculating retry delays based on RetryConfig.
  * </p>
  *
- * @author Contentstack
- * @version v1.0.0
- * @since 2026-01-28
  */
 public class RetryUtil {
 
@@ -24,14 +21,12 @@ public class RetryUtil {
 
     /**
      * Calculates the delay in milliseconds before the next retry attempt.
-     * <p>
      * Priority order:
      * <ol>
      *   <li>If {@code retryDelayOptions.customBackoff} is set, use it</li>
      *   <li>If {@code retryDelayOptions.base} is set, use linear backoff: base * retryCount</li>
      *   <li>Otherwise, use fixed {@code retryDelay} from RetryConfig</li>
      * </ol>
-     * </p>
      *
      * @param config     the RetryConfig containing delay settings
      * @param retryCount the current retry attempt number (1-based: 1st retry, 2nd retry, etc.)

@@ -16,7 +16,6 @@ import java.net.SocketTimeoutException;
 /**
  * The Contentstack RetryCallback
  *
- * @author ***REMOVED ** @version v0.1.0
  * @since 2022-10-20
  */
 public abstract class RetryCallback<T> implements Callback<T> {
