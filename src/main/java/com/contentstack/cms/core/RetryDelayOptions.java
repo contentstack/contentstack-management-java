@@ -11,11 +11,7 @@ import org.jetbrains.annotations.Nullable;
  *   <li><b>Linear Backoff:</b> If {@code base} is set, delay = base * retryCount</li>
  *   <li><b>Fixed Delay:</b> Falls back to {@code retryDelay} from RetryConfig</li>
  * </ol>
- * </p>
  *
- * @author Contentstack
- * @version v1.0.0
- * @since 2026-01-28
  */
 public class RetryDelayOptions {
 
