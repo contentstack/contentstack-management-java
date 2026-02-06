@@ -20,15 +20,14 @@ import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.models.OAuthConfig;
 import com.contentstack.cms.models.OAuthTokens;
-import com.contentstack.cms.oauth.TokenCallback;
 import com.contentstack.cms.oauth.OAuthHandler;
 import com.contentstack.cms.oauth.OAuthInterceptor;
+import com.contentstack.cms.oauth.TokenCallback;
 import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
 import com.contentstack.cms.user.User;
 import com.google.gson.Gson;
-import com.warrenstrange.googleauth.GoogleAuthenticator;
-
+import com.contentstack.cms.core.RetryConfig;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -63,6 +62,7 @@ public class Contentstack {
     protected OAuthHandler oauthHandler;
     protected String[] earlyAccess;
     protected User user;
+    protected RetryConfig retryConfig;
 
     /**
      * All accounts registered with Contentstack are known as Users. A stack can
@@ -571,6 +571,11 @@ public class Contentstack {
         this.oauthInterceptor = builder.oauthInterceptor;
         this.oauthHandler = builder.oauthHandler;
         this.earlyAccess = builder.earlyAccess;
+        this.retryConfig = builder.retryConfig;
+    }
+
+    public RetryConfig getRetryConfig() {
+        return retryConfig;
     }
 
     /**
@@ -595,7 +600,7 @@ public class Contentstack {
         private String version = Util.VERSION; // Default Version for Contentstack API
         private int timeout = Util.TIMEOUT; // Default timeout 30 seconds
         private Boolean retry = Util.RETRY_ON_FAILURE;// Default base url for contentstack
-
+        private RetryConfig retryConfig = RetryConfig.defaultConfig();
         /**
          * Default ConnectionPool holds up to 5 idle connections which will be
          * evicted after 5 minutes of inactivity.
@@ -853,7 +858,7 @@ public class Contentstack {
                 if (this.earlyAccess != null) {
                     this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
                 }
-
+                this.oauthInterceptor.setRetryConfig(this.retryConfig);
                 // Add interceptor to handle OAuth, token refresh, and retries
                 builder.addInterceptor(this.oauthInterceptor);
             } else {
@@ -863,7 +868,7 @@ public class Contentstack {
                 if (this.earlyAccess != null) {
                     this.authInterceptor.setEarlyAccess(this.earlyAccess);
                 }
-                
+                this.authInterceptor.setRetryConfig(this.retryConfig);
                 builder.addInterceptor(this.authInterceptor);
             }
 
@@ -873,6 +878,13 @@ public class Contentstack {
         private HttpLoggingInterceptor logger() {
             return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE);
         }
+
+
+        public Builder setRetryConfig(RetryConfig retryConfig) {
+            this.retryConfig = retryConfig;
+            return this;
+        }
+
 
     }
 }
