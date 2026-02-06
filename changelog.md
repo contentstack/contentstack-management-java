@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.11.0
+
+### Feb 09, 2026
+
+- Enhancement: Retry Mechanism
+
 ## v1.10.2
 
 ### Jan 27, 2026
