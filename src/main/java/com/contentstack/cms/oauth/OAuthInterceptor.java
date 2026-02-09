@@ -6,17 +6,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.contentstack.cms.core.Util;
-
+import com.contentstack.cms.core.RetryConfig;
+import com.contentstack.cms.core.RetryUtil;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class OAuthInterceptor implements Interceptor {
 
-    private static final int MAX_RETRIES = 3;
     private final OAuthHandler oauthHandler;
     private String[] earlyAccess;
     private final Object refreshLock = new Object();
+    private RetryConfig retryConfig = RetryConfig.defaultConfig();
 
     public OAuthInterceptor(OAuthHandler oauthHandler) {
         this.oauthHandler = oauthHandler;
@@ -114,7 +115,7 @@ public class OAuthInterceptor implements Interceptor {
         Response response = chain.proceed(request);
 
         // Handle error responses
-        if (!response.isSuccessful() && retryCount < MAX_RETRIES) {
+        if (!response.isSuccessful() && retryCount < retryConfig.getRetryLimit()) {
             int code = response.code();
             response.close();
 
@@ -140,9 +141,9 @@ public class OAuthInterceptor implements Interceptor {
             }
 
             // Handle other retryable errors (429, 5xx)
-            if ((code == 429 || code >= 500) && code != 501) {
+            if (retryConfig.getRetryCondition().shouldRetry(code, null)) {
                 try {
-                    long delay = Math.min(1000 * (1 << retryCount), 30000);
+                    long delay = RetryUtil.calculateDelay(retryConfig, retryCount+1, code);
                     Thread.sleep(delay);
                     return executeRequest(chain, request, retryCount + 1);
                 } catch (InterruptedException e) {
@@ -153,5 +154,9 @@ public class OAuthInterceptor implements Interceptor {
         }
 
         return response;
+    }
+
+    public void setRetryConfig(RetryConfig retryConfig) {
+        this.retryConfig = retryConfig != null ? retryConfig : RetryConfig.defaultConfig();
     }
 }
