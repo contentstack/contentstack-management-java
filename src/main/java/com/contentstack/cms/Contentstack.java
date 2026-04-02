@@ -599,6 +599,9 @@ public class Contentstack {
         private String port = Util.PORT; // Default PORT for Contentstack API
         private String version = Util.VERSION; // Default Version for Contentstack API
         private int timeout = Util.TIMEOUT; // Default timeout 30 seconds
+        private Integer connectTimeoutSeconds;
+        private Integer readTimeoutSeconds;
+        private Integer writeTimeoutSeconds;
         private Boolean retry = Util.RETRY_ON_FAILURE;// Default base url for contentstack
         private RetryConfig retryConfig = RetryConfig.defaultConfig();
         /**
@@ -687,9 +690,36 @@ public class Contentstack {
          * @return Client timeout
          */
         public Builder setTimeout(int timeout) {
+            validateTimeoutSeconds(timeout, "timeout");
             this.timeout = timeout;
             return this;
         }
+
+        public Builder setReadTimeout(int readTimeoutSeconds) {
+            validateTimeoutSeconds(readTimeoutSeconds, "readTimeout");
+            this.readTimeoutSeconds = readTimeoutSeconds;
+            return this;
+        }
+
+        public Builder setWriteTimeout(int writeTimeoutSeconds) {
+            validateTimeoutSeconds(writeTimeoutSeconds, "writeTimeout");
+            this.writeTimeoutSeconds = writeTimeoutSeconds;
+            return this;
+        }
+
+        public Builder setConnectTimeout(int connectTimeoutSeconds) {
+            validateTimeoutSeconds(connectTimeoutSeconds, "connectTimeout");
+            this.connectTimeoutSeconds = connectTimeoutSeconds;
+            return this;
+        }
+
+        private static void validateTimeoutSeconds(int seconds, String name) {
+            if (seconds <= 0) {
+                throw new IllegalArgumentException(name + " must be positive.");
+            }
+        }
+
+
 
         /**
          * Create a new connection pool with tuning parameters appropriate for a
@@ -840,11 +870,16 @@ public class Contentstack {
         }
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
+            int connectSec = this.connectTimeoutSeconds != null ? this.connectTimeoutSeconds : this.timeout;
+            int readSec = this.readTimeoutSeconds != null ? this.readTimeoutSeconds : this.timeout;
+            int writeSec = this.writeTimeoutSeconds != null ? this.writeTimeoutSeconds : this.timeout;
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .connectionPool(this.connectionPool)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
-                    .connectTimeout(Duration.ofSeconds(this.timeout))
+                    .connectTimeout(Duration.ofSeconds(connectSec))
+                    .readTimeout(Duration.ofSeconds(readSec))
+                    .writeTimeout(Duration.ofSeconds(writeSec))
                     .retryOnConnectionFailure(retryOnFailure);
 
             // Add either OAuth or traditional auth interceptor
