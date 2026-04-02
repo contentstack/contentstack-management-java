@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.11.1
+
+### Apr 06, 2026
+
+- Fix: `setTimeout` now applies to OkHttp connect, read, and write timeouts (previously only connect). Optional `setConnectTimeout`, `setReadTimeout`, and `setWriteTimeout` override individual phases.
+- Build: Maven Surefire updated with `surefire-junit-platform` so JUnit 5 tests run when enabled.
+
 ## v1.11.0
 
 ### Feb 09, 2026
