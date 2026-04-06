@@ -19,6 +19,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ContentstackUnitTest {
 
@@ -165,6 +166,68 @@ public class ContentstackUnitTest {
                 .setTimeout(3)
                 .build();
         Assertions.assertEquals(3, contentstack.timeout);
+    }
+
+    @Test
+    void setTimeoutZeroThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setTimeout(0));
+    }
+
+    @Test
+    void setTimeoutNegativeThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setTimeout(-1));
+    }
+
+    @Test
+    void setReadTimeoutZeroThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setReadTimeout(0));
+    }
+
+    @Test
+    void setWriteTimeoutNegativeThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setWriteTimeout(-5));
+    }
+
+    @Test
+    void setConnectTimeoutInvalidThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setConnectTimeout(-1));
+    }
+
+    @Test
+    void okHttpTimeoutsMatchSetTimeout() {
+        Contentstack client = new Contentstack.Builder().setTimeout(45).build();
+        OkHttpClient ok = (OkHttpClient) client.instance.callFactory();
+        Assertions.assertEquals(45_000, ok.connectTimeoutMillis());
+        Assertions.assertEquals(45_000, ok.readTimeoutMillis());
+        Assertions.assertEquals(45_000, ok.writeTimeoutMillis());
+    }
+
+    @Test
+    void okHttpDefaultTimeoutsUseUtilTimeout() {
+        Contentstack client = new Contentstack.Builder().build();
+        OkHttpClient ok = (OkHttpClient) client.instance.callFactory();
+        int expectedMs = (int) TimeUnit.SECONDS.toMillis(30);
+        Assertions.assertEquals(expectedMs, ok.connectTimeoutMillis());
+        Assertions.assertEquals(expectedMs, ok.readTimeoutMillis());
+        Assertions.assertEquals(expectedMs, ok.writeTimeoutMillis());
+    }
+
+    @Test
+    void okHttpPerLegOverridesFallBackToSetTimeout() {
+        Contentstack client = new Contentstack.Builder()
+                .setTimeout(10)
+                .setReadTimeout(90)
+                .build();
+        OkHttpClient ok = (OkHttpClient) client.instance.callFactory();
+        Assertions.assertEquals(10_000, ok.connectTimeoutMillis());
+        Assertions.assertEquals(90_000, ok.readTimeoutMillis());
+        Assertions.assertEquals(10_000, ok.writeTimeoutMillis());
+        Assertions.assertEquals(10, client.timeout);
     }
 
     @Test
