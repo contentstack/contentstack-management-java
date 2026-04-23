@@ -8,14 +8,15 @@ description: Use when branching, building with Maven, CI, or release/publish wor
 ## When to use
 
 - You need the canonical build/test commands or CI expectations.
-- You are opening a PR and need branch rules (`master` vs `staging`).
+- You are opening a PR and need branch rules (`development` → `master`, GitHub Release publishing).
 - You are changing `pom.xml`, plugins, or publishing configuration.
 
 ## Instructions
 
 ### Repository and branches
 
-- Default collaboration flow is documented in [.github/workflows/check-branch.yml](../../.github/workflows/check-branch.yml): PRs targeting `master` from branches other than `staging` may be blocked; prefer the documented Contentstack branching policy for your team.
+- **Flow:** work merges to **`development`**; **release PRs** go **`development` → `master`** (no `staging`). After `master` moves, [.github/workflows/back-merge-pr.yml](../../.github/workflows/back-merge-pr.yml) can open a PR **`master` → `development`** to stay aligned.
+- **Releases:** create a **GitHub Release** (triggers [.github/workflows/maven-publish.yml](../../.github/workflows/maven-publish.yml) on **`release: created`**). PRs that change `src/main` or `pom.xml` are checked by [.github/workflows/check-version-bump.yml](../../.github/workflows/check-version-bump.yml) (version + `changelog.md`).
 
 ### Maven
 
@@ -33,9 +34,3 @@ description: Use when branching, building with Maven, CI, or release/publish wor
 
 - Run tests locally with `-DskipTests=false` before pushing.
 - Update [changelog.md](../../changelog.md) or version metadata when your team’s release process requires it.
-
-## References
-
-- [AGENTS.md](../../AGENTS.md)
-- [testing/SKILL.md](../testing/SKILL.md)
-- [code-review/SKILL.md](../code-review/SKILL.md)
