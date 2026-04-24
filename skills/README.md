@@ -6,7 +6,7 @@ Source of truth for detailed guidance. Read [AGENTS.md](../AGENTS.md) first, the
 
 | Skill folder | Use when |
 | --- | --- |
-| [dev-workflow](dev-workflow/SKILL.md) | Branching against `master`/`staging`, running Maven/CI commands, release or publish touchpoints. |
+| [dev-workflow](dev-workflow/SKILL.md) | Branching (`development` → `master`, back-merge, GitHub Release publish), Maven/CI, publish touchpoints. |
 | [contentstack-java-cma-sdk](contentstack-java-cma-sdk/SKILL.md) | Changing public API, `Contentstack` / `Stack` flows, auth tokens, or SDK surface exposed to integrators. |
 | [java](java/SKILL.md) | Package structure under `com.contentstack.cms`, Java 8 compatibility, Lombok, imports, and code style in this repo. |
 | [testing](testing/SKILL.md) | Adding or fixing tests, Surefire `skipTests` behavior, MockWebServer or live API tests, env/credentials. |
