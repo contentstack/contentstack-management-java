@@ -6,6 +6,7 @@ import com.contentstack.cms.core.Util;
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -77,7 +78,22 @@ public class Entry implements BaseImplementation<Entry> {
     }
 
     /**
+     * Header map for a variant request when {@code branchUid} is supplied for this call only (does not mutate {@link #headers}).
+     * Null or blank {@code branchUid} keeps {@link #headers} as-is (stack / {@link #addBranch(String)} behavior).
+     */
+    private Map<String, Object> variantHeadersWithOptionalBranch(@Nullable String branchUid) {
+        if (branchUid == null || branchUid.isEmpty()) {
+            return this.headers;
+        }
+        HashMap<String, Object> copy = new HashMap<>(this.headers);
+        copy.put(Util.BRANCH, branchUid);
+        return copy;
+    }
+
+    /**
      * Sets the branch header for requests scoped to a stack branch (e.g. development).
+     * Overrides the branch set via {@link com.contentstack.cms.Contentstack#stack(String, String, String)} for this
+     * {@link Entry} instance only (including entry-variant CRUD, publish, and unpublish). Uses header key {@value Util#BRANCH}.
      *
      * @param branchUid branch UID or alias target branch UID
      * @return this entry instance for chaining
@@ -745,8 +761,9 @@ public class Entry implements BaseImplementation<Entry> {
     /**
      * Retrieves all entry variants for this entry.
      * <p>
-     * Use {@link #addParam(String, Object)} for optional queries such as {@code locale}, {@code include_workflow},
-     * {@link #addBranch(String)} or stack-level branch header for branch-scoped stacks.
+     * Use {@link #addParam(String, Object)} for optional queries such as {@code locale}, {@code include_workflow}.
+     * Branch scope: stack {@value Util#BRANCH} from {@link com.contentstack.cms.Contentstack#stack(String, String, String)}
+     * is forwarded; {@link #addBranch(String)} overrides for this entry only.
      *
      * @return Retrofit call for GET …/entries/{entry_uid}/variants
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-entry-variants">Get all entry variants</a>
@@ -758,20 +775,40 @@ public class Entry implements BaseImplementation<Entry> {
     }
 
     /**
-     * Retrieves a single entry variant.
+     * Retrieves a single entry variant using {@link #headers} for {@value Util#BRANCH} (stack default and/or {@link #addBranch(String)}).
      *
      * @param variantUid variant UID path segment
      * @return Retrofit call for GET …/variants/{variant_uid}
+     * @see #fetchEntryVariant(String, String)
      */
     public Call<ResponseBody> fetchEntryVariant(@NotNull String variantUid) {
+        return fetchEntryVariant(variantUid, null);
+    }
+
+    /**
+     * Retrieves a single entry variant with an optional per-call {@value Util#BRANCH} override.
+     * <p>
+     * When {@code branchUid} is non-blank, it replaces {@value Util#BRANCH} on this request only (stack and {@link #addBranch(String)}
+     * values are not mutated on the entry). When {@code branchUid} is {@code null} or blank, behavior matches {@link #fetchEntryVariant(String)}.
+     * {@link #withAppliedVariantUid(String)} ({@value Util#X_CS_VARIANT_UID}) is unrelated to branch.
+     *
+     * @param variantUid variant UID path segment
+     * @param branchUid optional branch UID or alias for this request only; {@code null} or empty to use entry headers
+     * @return Retrofit call for GET …/variants/{variant_uid}
+     */
+    public Call<ResponseBody> fetchEntryVariant(@NotNull String variantUid, @Nullable String branchUid) {
         validateCT();
         validateEntry();
         validateVariantUid(variantUid);
-        return this.service.fetchEntryVariant(this.headers, this.contentTypeUid, this.entryUid, variantUid, this.params);
+        return this.service.fetchEntryVariant(variantHeadersWithOptionalBranch(branchUid), this.contentTypeUid,
+                this.entryUid, variantUid, this.params);
     }
 
     /**
      * Creates an entry variant. Uses PUT …/variants/{variant_uid} (CMA upsert — same URL as {@link #updateEntryVariant}).
+     * <p>
+     * Branch scope: inherits stack {@value Util#BRANCH}; override with {@link #addBranch(String)} or {@link #addHeader(String, String)}
+     * ({@value Util#BRANCH}) on this entry. Variant personalization header {@value Util#X_CS_VARIANT_UID} is orthogonal.
      *
      * @param variantUid variant UID path segment
      * @param requestBody JSON body per API (typically wraps fields under {@code entry})
@@ -787,6 +824,9 @@ public class Entry implements BaseImplementation<Entry> {
 
     /**
      * Updates an entry variant. Same HTTP request shape as create (PUT upsert).
+     * <p>
+     * Branch scope: inherits stack {@value Util#BRANCH}; override with {@link #addBranch(String)} or {@link #addHeader(String, String)}
+     * ({@value Util#BRANCH}) on this entry.
      *
      * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-entry-variant">Update Entry Variant</a>
      */
@@ -800,6 +840,9 @@ public class Entry implements BaseImplementation<Entry> {
 
     /**
      * Deletes an entry variant.
+     * <p>
+     * Branch scope: inherits stack {@value Util#BRANCH}; override with {@link #addBranch(String)} or {@link #addHeader(String, String)}
+     * ({@value Util#BRANCH}) on this entry.
      *
      * @param variantUid variant UID path segment
      * @return Retrofit call for DELETE …/variants/{variant_uid}
@@ -859,7 +902,10 @@ public class Entry implements BaseImplementation<Entry> {
     /**
      * Publishes entry variants using the entry publish endpoint with {@code entry.variants} in the body.
      * Sends header {@value Util#API_VERSION}={@value Util#API_VERSION_ENTRY_VARIANTS_PUBLISH} unless already set on this entry instance.
-     * Use {@link #addParam(String, Object)} for optional {@code locale} query parameter; use {@link #addBranch(String)} for branch scope.
+     * Use {@link #addParam(String, Object)} for optional {@code locale} query parameter.
+     * <p>
+     * Branch scope: stack {@value Util#BRANCH} is copied into the publish request headers together with {@code api_version};
+     * override with {@link #addBranch(String)} or {@link #addHeader(String, String)} ({@value Util#BRANCH}) on this entry.
      *
      * @param requestBody full publish payload including {@code entry}, {@code locale}, etc.
      */
@@ -938,6 +984,9 @@ public class Entry implements BaseImplementation<Entry> {
     /**
      * Unpublishes entry variants via the entry unpublish endpoint with {@code entry.variants} in the body.
      * Sends header {@value Util#API_VERSION}={@value Util#API_VERSION_ENTRY_VARIANTS_PUBLISH} unless already set.
+     * <p>
+     * Branch scope: stack {@value Util#BRANCH} is forwarded; override with {@link #addBranch(String)} or {@link #addHeader(String, String)}
+     * ({@value Util#BRANCH}) on this entry.
      */
     public Call<ResponseBody> unpublishEntryVariants(@NotNull JSONObject requestBody) {
         validateCT();
