@@ -39,6 +39,20 @@ public class Util {
     public static final String AUTHTOKEN = "authtoken";
     public static final String EARLY_ACCESS_HEADER = "x-header-ea";
     public static final String BRANCH = "branch";
+
+    /**
+     * Request header to fetch a base entry with a specific entry variant applied (personalization).
+     */
+    public static final String X_CS_VARIANT_UID = "x-cs-variant-uid";
+
+    /**
+     * Required on publish/unpublish when the request body includes {@code entry.variants} (entry variant flows).
+     */
+    public static final String API_VERSION = "api_version";
+
+    /** Value for {@link #API_VERSION} when publishing or unpublishing entry variants per Content Management API. */
+    public static final String API_VERSION_ENTRY_VARIANTS_PUBLISH = "3.2";
+
     public static final String X_USER_AGENT = "X-User-Agent";
     public static final String USER_AGENT = "User-Agent";
     public static final String CONTENT_TYPE = "Content-Type";
