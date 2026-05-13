@@ -25,6 +25,26 @@ public class TestClient {
     public final static String DEV_HOST = (env.get("dev_host") != null) ? env.get("dev_host").trim() : "api.contentstack.io";
     public final static String VARIANT_GROUP_UID = (env.get("variantGroupUid") != null) ? env.get("variantGroupUid")
             : "variantGroupUid99999999";
+
+    /** Content type UID for entry-variant tests (default {@code blog}). */
+    public static final String ENTRY_VARIANT_CONTENT_TYPE_UID =
+            env.get("entryVariantContentTypeUid") != null ? env.get("entryVariantContentTypeUid") : "blog";
+
+    /** Stack branch for entry-variant tests (default {@code develop}). */
+    public static final String ENTRY_VARIANT_BRANCH =
+            env.get("entryVariantBranch") != null ? env.get("entryVariantBranch") : "develop";
+
+    /** Locale query param for entry-variant tests (default {@code en-us}). */
+    public static final String ENTRY_VARIANT_LOCALE =
+            env.get("entryVariantLocale") != null ? env.get("entryVariantLocale") : "en-us";
+
+    /**
+     * {@code true} when {@code apiKey} / {@code managementToken} were not loaded from {@code .env} (defaults apply).
+     */
+    public static boolean isUsingDefaultStackCredentials() {
+        return env.get("apiKey") == null || env.get("managementToken") == null;
+    }
+
     private static Contentstack instance;
     private static Stack stackInstance;
 
