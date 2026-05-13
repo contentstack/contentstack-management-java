@@ -1,0 +1,15 @@
+{
+  "entry": {
+    "title": "Blue|v1",
+    "url": "/blue",
+    "single_line": "blue variant v1",
+    "group": [
+      {
+        "single_line": "blue variant group 1"
+      },
+      {
+        "single_line": "blue variant group 2"
+      }
+    ]
+  }
+}
