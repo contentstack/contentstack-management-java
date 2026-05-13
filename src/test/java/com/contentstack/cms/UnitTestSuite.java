@@ -1,6 +1,7 @@
 package com.contentstack.cms;
 
 import com.contentstack.cms.core.AuthInterceptorTest;
+import com.contentstack.cms.stack.EntryVariantUnitTest;
 import com.contentstack.cms.stack.EnvironmentUnitTest;
 import com.contentstack.cms.stack.GlobalFieldUnitTests;
 import com.contentstack.cms.stack.LocaleUnitTest;
@@ -25,6 +26,7 @@ import org.junit.runner.RunWith;
         ContentstackUnitTest.class,
         
         // Stack module tests (only public classes)
+        EntryVariantUnitTest.class,
         EnvironmentUnitTest.class,
         GlobalFieldUnitTests.class,
         LocaleUnitTest.class,
