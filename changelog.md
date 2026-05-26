@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.11.2
+
+### Jun 01, 2026
+
+- Fix: `SocketTimeoutException` now correctly triggers the retry mechanism in `AuthInterceptor` and `OAuthInterceptor`. Previously, network-level timeouts bypassed retry logic entirely, causing `.setRetry(true)` to have no effect on timeout errors.
+
 ## v1.11.1
 
 ### Apr 06, 2026
