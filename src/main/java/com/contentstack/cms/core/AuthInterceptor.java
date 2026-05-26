@@ -1,6 +1,7 @@
 package com.contentstack.cms.core;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -116,21 +117,35 @@ public class AuthInterceptor implements Interceptor {
         this.retryConfig = retryConfig != null ? retryConfig : RetryConfig.defaultConfig();
     }
 
-    private Response executeRequest(Chain chain, Request request, int retryCount) throws IOException{
-        Response response = chain.proceed(request);
-        int code = response.code();
-        if(retryCount < retryConfig.getRetryLimit() && retryConfig.getRetryCondition().shouldRetry(code, null)){
-            response.close();
-            long delay = RetryUtil.calculateDelay(retryConfig, retryCount+1, code);
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-                throw new IOException("Retry interrupted", ex);
+    private Response executeRequest(Chain chain, Request request, int retryCount) throws IOException {
+        try {
+            Response response = chain.proceed(request);
+            int code = response.code();
+            if (retryCount < retryConfig.getRetryLimit() && retryConfig.getRetryCondition().shouldRetry(code, null)) {
+                response.close();
+                long delay = RetryUtil.calculateDelay(retryConfig, retryCount + 1, code);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    throw new IOException("Retry interrupted", ex);
+                }
+                return executeRequest(chain, request, retryCount + 1);
             }
-            return executeRequest(chain, request, retryCount + 1);
+            return response;
+        } catch (SocketTimeoutException e) {
+            if (retryCount < retryConfig.getRetryLimit() && retryConfig.getRetryCondition().shouldRetry(0, e)) {
+                long delay = RetryUtil.calculateDelay(retryConfig, retryCount + 1, 0);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    throw new IOException("Retry interrupted", ex);
+                }
+                return executeRequest(chain, request, retryCount + 1);
+            }
+            throw e;
         }
-        return response;
     }
 
 }
