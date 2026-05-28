@@ -3,7 +3,9 @@ package com.contentstack.cms;
 import java.io.IOException;
 import java.net.Proxy;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +32,7 @@ import com.google.gson.Gson;
 import com.contentstack.cms.core.RetryConfig;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
@@ -609,6 +612,7 @@ public class Contentstack {
          * evicted after 5 minutes of inactivity.
          */
         private ConnectionPool connectionPool = new ConnectionPool(); // Connection
+        private List<Protocol> protocols = null;
 
         /**
          * Instantiates a new Builder.
@@ -710,6 +714,11 @@ public class Contentstack {
         public Builder setConnectTimeout(int connectTimeoutSeconds) {
             validateTimeoutSeconds(connectTimeoutSeconds, "connectTimeout");
             this.connectTimeoutSeconds = connectTimeoutSeconds;
+            return this;
+        }
+
+        public Builder setProtocols(@NotNull List<Protocol> protocols) {
+            this.protocols = protocols;
             return this;
         }
 
@@ -881,6 +890,9 @@ public class Contentstack {
                     .readTimeout(Duration.ofSeconds(readSec))
                     .writeTimeout(Duration.ofSeconds(writeSec))
                     .retryOnConnectionFailure(retryOnFailure);
+            if (this.protocols != null && !this.protocols.isEmpty()) {
+                builder.protocols(this.protocols);
+            }
 
             // Add either OAuth or traditional auth interceptor
             if (this.oauthConfig != null) {
