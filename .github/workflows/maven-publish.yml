@@ -1,9 +1,11 @@
 name: Publish package to the Maven Central Repository
 
+# Publishes when a GitHub Release is created (same pattern as before tag-based experiments).
 on:
   release:
     types:
       - created
+
 jobs:
   publish-maven:
     runs-on: ubuntu-latest

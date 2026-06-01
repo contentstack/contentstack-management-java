@@ -1,6 +1,7 @@
 package com.contentstack.cms.oauth;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -112,7 +113,22 @@ public class OAuthInterceptor implements Interceptor {
         }
 
         // Execute request
-        Response response = chain.proceed(request);
+        Response response;
+        try {
+            response = chain.proceed(request);
+        } catch (SocketTimeoutException e) {
+            if (retryCount < retryConfig.getRetryLimit() && retryConfig.getRetryCondition().shouldRetry(0, e)) {
+                long delay = RetryUtil.calculateDelay(retryConfig, retryCount + 1, 0);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    throw new IOException("Retry interrupted", ex);
+                }
+                return executeRequest(chain, request, retryCount + 1);
+            }
+            throw e;
+        }
 
         // Handle error responses
         if (!response.isSuccessful() && retryCount < retryConfig.getRetryLimit()) {
