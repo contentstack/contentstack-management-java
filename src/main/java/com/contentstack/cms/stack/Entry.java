@@ -1,10 +1,12 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.core.ErrorMessages;
+import com.contentstack.cms.core.Util;
 
 import com.contentstack.cms.BaseImplementation;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -66,6 +68,52 @@ public class Entry implements BaseImplementation<Entry> {
 
     private void validateCT() {
         Objects.requireNonNull(this.contentTypeUid, ERROR_CT_UID);
+    }
+
+    private void validateVariantUid(@NotNull String variantUid) {
+        Objects.requireNonNull(variantUid, ErrorMessages.VARIANT_UID_REQUIRED);
+        if (variantUid.isEmpty()) {
+            throw new IllegalArgumentException(ErrorMessages.VARIANT_UID_REQUIRED);
+        }
+    }
+
+    /**
+     * Header map for a variant request when {@code branchUid} is supplied for this call only (does not mutate {@link #headers}).
+     * Null or blank {@code branchUid} keeps {@link #headers} as-is (stack / {@link #addBranch(String)} behavior).
+     */
+    private Map<String, Object> variantHeadersWithOptionalBranch(@Nullable String branchUid) {
+        if (branchUid == null || branchUid.isEmpty()) {
+            return this.headers;
+        }
+        HashMap<String, Object> copy = new HashMap<>(this.headers);
+        copy.put(Util.BRANCH, branchUid);
+        return copy;
+    }
+
+    /**
+     * Sets the branch header for requests scoped to a stack branch (e.g. development).
+     * Overrides the branch set via {@link com.contentstack.cms.Contentstack#stack(String, String, String)} for this
+     * {@link Entry} instance only (including entry-variant CRUD, publish, and unpublish). Uses header key {@value Util#BRANCH}.
+     *
+     * @param branchUid branch UID or alias target branch UID
+     * @return this entry instance for chaining
+     */
+    public Entry addBranch(@NotNull String branchUid) {
+        this.headers.put(Util.BRANCH, branchUid);
+        return this;
+    }
+
+    /**
+     * Sets {@value Util#X_CS_VARIANT_UID} for {@link #fetch()} / {@link #fetchAsPojo()} to retrieve the base entry with a
+     * specific variant applied (personalization).
+     *
+     * @param variantUid Content variant UID (e.g. {@code cs…})
+     * @return this entry instance for chaining
+     */
+    public Entry withAppliedVariantUid(@NotNull String variantUid) {
+        validateVariantUid(variantUid);
+        this.headers.put(Util.X_CS_VARIANT_UID, variantUid);
+        return this;
     }
 
     /**
@@ -711,6 +759,102 @@ public class Entry implements BaseImplementation<Entry> {
     }
 
     /**
+     * Retrieves all entry variants for this entry.
+     * <p>
+     * Use {@link #addParam(String, Object)} for optional queries such as {@code locale}, {@code include_workflow}.
+     * Branch scope: stack {@value Util#BRANCH} from {@link com.contentstack.cms.Contentstack#stack(String, String, String)}
+     * is forwarded; {@link #addBranch(String)} overrides for this entry only.
+     *
+     * @return Retrofit call for GET …/entries/{entry_uid}/variants
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-entry-variants">Get all entry variants</a>
+     */
+    public Call<ResponseBody> fetchEntryVariants() {
+        validateCT();
+        validateEntry();
+        return this.service.fetchEntryVariants(this.headers, this.contentTypeUid, this.entryUid, this.params);
+    }
+
+    /**
+     * Retrieves a single entry variant using {@link #headers} for {@value Util#BRANCH} (stack default and/or {@link #addBranch(String)}).
+     *
+     * @param variantUid variant UID path segment
+     * @return Retrofit call for GET …/variants/{variant_uid}
+     * @see #fetchEntryVariant(String, String)
+     */
+    public Call<ResponseBody> fetchEntryVariant(@NotNull String variantUid) {
+        return fetchEntryVariant(variantUid, null);
+    }
+
+    /**
+     * Retrieves a single entry variant with an optional per-call {@value Util#BRANCH} override.
+     * <p>
+     * When {@code branchUid} is non-blank, it replaces {@value Util#BRANCH} on this request only (stack and {@link #addBranch(String)}
+     * values are not mutated on the entry). When {@code branchUid} is {@code null} or blank, behavior matches {@link #fetchEntryVariant(String)}.
+     * {@link #withAppliedVariantUid(String)} ({@value Util#X_CS_VARIANT_UID}) is unrelated to branch.
+     *
+     * @param variantUid variant UID path segment
+     * @param branchUid optional branch UID or alias for this request only; {@code null} or empty to use entry headers
+     * @return Retrofit call for GET …/variants/{variant_uid}
+     */
+    public Call<ResponseBody> fetchEntryVariant(@NotNull String variantUid, @Nullable String branchUid) {
+        validateCT();
+        validateEntry();
+        validateVariantUid(variantUid);
+        return this.service.fetchEntryVariant(variantHeadersWithOptionalBranch(branchUid), this.contentTypeUid,
+                this.entryUid, variantUid, this.params);
+    }
+
+    /**
+     * Creates an entry variant. Uses PUT …/variants/{variant_uid} (CMA upsert — same URL as {@link #updateEntryVariant}).
+     * <p>
+     * Branch scope: inherits stack {@value Util#BRANCH}; override with {@link #addBranch(String)} or {@link #addHeader(String, String)}
+     * ({@value Util#BRANCH}) on this entry. Variant personalization header {@value Util#X_CS_VARIANT_UID} is orthogonal.
+     *
+     * @param variantUid variant UID path segment
+     * @param requestBody JSON body per API (typically wraps fields under {@code entry})
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#create-entry-variant">Create Entry Variant</a>
+     */
+    public Call<ResponseBody> createEntryVariant(@NotNull String variantUid, @NotNull JSONObject requestBody) {
+        validateCT();
+        validateEntry();
+        validateVariantUid(variantUid);
+        return this.service.createEntryVariant(this.headers, this.contentTypeUid, this.entryUid, variantUid, this.params,
+                requestBody);
+    }
+
+    /**
+     * Updates an entry variant. Same HTTP request shape as create (PUT upsert).
+     * <p>
+     * Branch scope: inherits stack {@value Util#BRANCH}; override with {@link #addBranch(String)} or {@link #addHeader(String, String)}
+     * ({@value Util#BRANCH}) on this entry.
+     *
+     * @see <a href="https://www.contentstack.com/docs/developers/apis/content-management-api/#update-entry-variant">Update Entry Variant</a>
+     */
+    public Call<ResponseBody> updateEntryVariant(@NotNull String variantUid, @NotNull JSONObject requestBody) {
+        validateCT();
+        validateEntry();
+        validateVariantUid(variantUid);
+        return this.service.updateEntryVariant(this.headers, this.contentTypeUid, this.entryUid, variantUid, this.params,
+                requestBody);
+    }
+
+    /**
+     * Deletes an entry variant.
+     * <p>
+     * Branch scope: inherits stack {@value Util#BRANCH}; override with {@link #addBranch(String)} or {@link #addHeader(String, String)}
+     * ({@value Util#BRANCH}) on this entry.
+     *
+     * @param variantUid variant UID path segment
+     * @return Retrofit call for DELETE …/variants/{variant_uid}
+     */
+    public Call<ResponseBody> deleteEntryVariant(@NotNull String variantUid) {
+        validateCT();
+        validateEntry();
+        validateVariantUid(variantUid);
+        return this.service.deleteEntryVariant(this.headers, this.contentTypeUid, this.entryUid, variantUid, this.params);
+    }
+
+    /**
      * To Publish an entry request lets you publish an entry either immediately or
      * schedule it for a later date/time.
      * <br>
@@ -752,7 +896,25 @@ public class Entry implements BaseImplementation<Entry> {
     public Call<ResponseBody> publish(@NotNull JSONObject requestBody) {
         validateCT();
         validateEntry();
-        return this.service.publish(this.headers, this.contentTypeUid, this.entryUid, requestBody);
+        return this.service.publish(this.headers, this.contentTypeUid, this.entryUid, this.params, requestBody);
+    }
+
+    /**
+     * Publishes entry variants using the entry publish endpoint with {@code entry.variants} in the body.
+     * Sends header {@value Util#API_VERSION}={@value Util#API_VERSION_ENTRY_VARIANTS_PUBLISH} unless already set on this entry instance.
+     * Use {@link #addParam(String, Object)} for optional {@code locale} query parameter.
+     * <p>
+     * Branch scope: stack {@value Util#BRANCH} is copied into the publish request headers together with {@code api_version};
+     * override with {@link #addBranch(String)} or {@link #addHeader(String, String)} ({@value Util#BRANCH}) on this entry.
+     *
+     * @param requestBody full publish payload including {@code entry}, {@code locale}, etc.
+     */
+    public Call<ResponseBody> publishEntryVariants(@NotNull JSONObject requestBody) {
+        validateCT();
+        validateEntry();
+        HashMap<String, Object> publishHeaders = new HashMap<>(this.headers);
+        publishHeaders.putIfAbsent(Util.API_VERSION, Util.API_VERSION_ENTRY_VARIANTS_PUBLISH);
+        return this.service.publish(publishHeaders, this.contentTypeUid, this.entryUid, this.params, requestBody);
     }
 
     /**
@@ -816,9 +978,23 @@ public class Entry implements BaseImplementation<Entry> {
     public Call<ResponseBody> unpublish(@NotNull JSONObject requestBody) {
         validateCT();
         validateEntry();
-        return this.service.unpublish(this.headers, this.contentTypeUid, this.entryUid, requestBody);
+        return this.service.unpublish(this.headers, this.contentTypeUid, this.entryUid, this.params, requestBody);
     }
 
+    /**
+     * Unpublishes entry variants via the entry unpublish endpoint with {@code entry.variants} in the body.
+     * Sends header {@value Util#API_VERSION}={@value Util#API_VERSION_ENTRY_VARIANTS_PUBLISH} unless already set.
+     * <p>
+     * Branch scope: stack {@value Util#BRANCH} is forwarded; override with {@link #addBranch(String)} or {@link #addHeader(String, String)}
+     * ({@value Util#BRANCH}) on this entry.
+     */
+    public Call<ResponseBody> unpublishEntryVariants(@NotNull JSONObject requestBody) {
+        validateCT();
+        validateEntry();
+        HashMap<String, Object> unpublishHeaders = new HashMap<>(this.headers);
+        unpublishHeaders.putIfAbsent(Util.API_VERSION, Util.API_VERSION_ENTRY_VARIANTS_PUBLISH);
+        return this.service.unpublish(unpublishHeaders, this.contentTypeUid, this.entryUid, this.params, requestBody);
+    }
 
     /**
      * Get instance of  taxonomy search filter class instance through which we can query on taxonomy based on content type

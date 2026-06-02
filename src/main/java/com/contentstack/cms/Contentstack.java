@@ -442,16 +442,20 @@ public class Contentstack {
      * property). Within a stack, you can create content structures, content
      * entries, users, etc. related to the project
      * <p>
+     * Passing {@code branch} sets the {@value com.contentstack.cms.core.Util#BRANCH} request header for this stack.
+     * That header applies to entries and entry-variant operations ({@code …/variants/…}) unless overridden per instance,
+     * e.g. {@link com.contentstack.cms.stack.Entry#addBranch(String)} replaces {@code branch} for that entry only.
+     * <p>
      * <b> Example </b>
      *
      * <pre>
      * Contentstack client = new Contentstack.Builder().build();
-     * Stack org = client.stack();
+     * Stack stack = client.stack("API_KEY", "MANAGEMENT_TOKEN", "feature-branch");
      * </pre>
      *
      * @param managementToken the authorization for the stack
      * @param apiKey the apiKey for the stack
-     * @param branch the branch that include branching in the response
+     * @param branch branch UID or alias for the {@value com.contentstack.cms.core.Util#BRANCH} header
      * @return the stack instance
      */
     public Stack stack(@NotNull String apiKey, @NotNull String managementToken, @NotNull String branch) {
