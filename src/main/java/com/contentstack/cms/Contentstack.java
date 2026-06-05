@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import com.contentstack.cms.core.AuthInterceptor;
+import com.contentstack.cms.core.Endpoint;
 import com.contentstack.cms.core.Util;
 import static com.contentstack.cms.core.Util.API_KEY;
 import static com.contentstack.cms.core.Util.AUTHORIZATION;
@@ -561,6 +562,81 @@ public class Contentstack {
         return oauthLogout(false);
     }
 
+    /**
+     * Forces a live download of the Contentstack regions registry and replaces
+     * the in-memory cache. Useful when new regions or service URLs have been
+     * published since the SDK JAR was built.
+     *
+     * <pre>{@code
+     * int count = Contentstack.refreshRegions();
+     * // now getContentstackEndpoint() resolves from the freshly downloaded registry
+     * }</pre>
+     *
+     * @return the number of regions loaded from the live registry
+     * @throws RuntimeException if the download fails
+     */
+    public static int refreshRegions() {
+        return Endpoint.refresh();
+    }
+
+    /**
+     * Resolves a Contentstack service endpoint URL for the given region.
+     *
+     * <pre>{@code
+     * // Full URL
+     * String url = Contentstack.getContentstackEndpoint("eu", "contentManagement");
+     * // → "https://eu-api.contentstack.com"
+     *
+     * // Host only (for Builder.setHost)
+     * String host = Contentstack.getContentstackEndpoint("eu", "contentManagement", true);
+     * // → "eu-api.contentstack.com"
+     * }</pre>
+     *
+     * @param region    region ID or alias (e.g. {@code na}, {@code eu}, {@code azure-na})
+     * @param service   service key (e.g. {@code contentManagement}, {@code contentDelivery})
+     * @param omitHttps when {@code true}, strips {@code https://} from the returned URL
+     * @return the resolved URL string
+     * @throws IllegalArgumentException if region or service is unknown
+     */
+    public static String getContentstackEndpoint(String region, String service, boolean omitHttps) {
+        return Endpoint.getContentstackEndpoint(region, service, omitHttps);
+    }
+
+    /**
+     * Resolves a Contentstack service endpoint URL for the given region (with scheme).
+     *
+     * @param region  region ID or alias
+     * @param service service key
+     * @return the resolved URL including {@code https://}
+     * @throws IllegalArgumentException if region or service is unknown
+     */
+    public static String getContentstackEndpoint(String region, String service) {
+        return Endpoint.getContentstackEndpoint(region, service);
+    }
+
+    /**
+     * Returns all endpoint URLs for the given region as an ordered map.
+     *
+     * @param region region ID or alias
+     * @return map of service name → URL (includes {@code https://})
+     * @throws IllegalArgumentException if region is unknown or empty
+     */
+    public static java.util.Map<String, String> getContentstackEndpoints(String region) {
+        return Endpoint.getContentstackEndpoints(region);
+    }
+
+    /**
+     * Returns all endpoint URLs for the given region as an ordered map.
+     *
+     * @param region    region ID or alias
+     * @param omitHttps when {@code true}, strips {@code https://} from every URL
+     * @return map of service name → URL
+     * @throws IllegalArgumentException if region is unknown or empty
+     */
+    public static java.util.Map<String, String> getContentstackEndpoints(String region, boolean omitHttps) {
+        return Endpoint.getContentstackEndpoints(region, omitHttps);
+    }
+
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
         this.port = builder.port;
@@ -575,6 +651,16 @@ public class Contentstack {
         this.oauthHandler = builder.oauthHandler;
         this.earlyAccess = builder.earlyAccess;
         this.retryConfig = builder.retryConfig;
+    }
+
+    /** Returns the API hostname this client is configured to target. */
+    public String getHost() {
+        return host;
+    }
+
+    /** Returns the full Retrofit base URL (e.g. {@code https://eu-api.contentstack.com/v3/}). */
+    public String getBaseUrl() {
+        return instance.baseUrl().toString();
     }
 
     public RetryConfig getRetryConfig() {
@@ -662,6 +748,30 @@ public class Contentstack {
          */
         public Builder setHost(@NotNull String hostname) {
             this.hostname = hostname;
+            return this;
+        }
+
+        /**
+         * Configures the client to target a specific Contentstack region by resolving
+         * the correct Content Management API host from the bundled regions registry.
+         *
+         * <p>This is a convenience alternative to calling {@link #setHost(String)} with
+         * a manually constructed hostname.
+         *
+         * <pre>{@code
+         * Contentstack client = new Contentstack.Builder()
+         *     .setAuthtoken("authtoken")
+         *     .setRegion(ContentstackRegion.EU)
+         *     .build();
+         * }</pre>
+         *
+         * @param region region ID or alias (e.g. {@code "na"}, {@code "eu"}, {@code "azure-na"}).
+         *               Use constants from {@link com.contentstack.cms.core.ContentstackRegion}.
+         * @return this Builder
+         * @throws IllegalArgumentException if the region is unknown or empty
+         */
+        public Builder setRegion(@NotNull String region) {
+            this.hostname = Endpoint.getContentstackEndpoint(region, "contentManagement", true);
             return this;
         }
 
