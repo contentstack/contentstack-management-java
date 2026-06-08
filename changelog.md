@@ -4,12 +4,7 @@
 
 ### Jun 05, 2026
 
-- Feature: Dynamic endpoint resolution via `Endpoint.getContentstackEndpoint()` backed by the Contentstack Regions Registry (`https://artifacts.contentstack.com/regions.json`). Resolves the correct API URL for any of the 7 supported regions (NA, EU, AU, Azure NA, Azure EU, GCP NA, GCP EU) and 18 service keys without hardcoding host strings.
-- Feature: `Contentstack.Builder.setRegion(String)` — convenience method to target a region directly (e.g. `.setRegion("eu")`), automatically resolving the correct Content Management API host.
-- Feature: `Contentstack.getContentstackEndpoint(region, service)` and `Contentstack.getContentstackEndpoints(region)` static proxy methods for ad-hoc URL resolution.
-- Feature: `Contentstack.refreshRegions()` — forces a live download of the regions registry and refreshes the in-memory cache, so newly published regions or service URLs are available without upgrading the SDK.
-- Feature: `regions.json` bundled in the JAR and auto-refreshed at build time via `scripts/download-regions.sh` (invoked on the Maven `generate-resources` phase).
-- Feature: `Contentstack.getHost()` and `Contentstack.getBaseUrl()` public accessors on the client instance.
+- Feature: Dynamic endpoint resolution via `Endpoint.getContentstackEndpoint()` and `Builder.setRegion()` backed by the Contentstack Regions Registry.
 
 ## v1.11.2
 
