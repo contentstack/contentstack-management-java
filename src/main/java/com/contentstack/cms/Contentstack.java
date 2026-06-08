@@ -761,12 +761,12 @@ public class Contentstack {
          * <pre>{@code
          * Contentstack client = new Contentstack.Builder()
          *     .setAuthtoken("authtoken")
-         *     .setRegion(ContentstackRegion.EU)
+         *     .setRegion("eu")
          *     .build();
          * }</pre>
          *
-         * @param region region ID or alias (e.g. {@code "na"}, {@code "eu"}, {@code "azure-na"}).
-         *               Use constants from {@link com.contentstack.cms.core.ContentstackRegion}.
+         * @param region region ID or alias (e.g. {@code "na"}, {@code "eu"}, {@code "azure-na"},
+         *               {@code "azure-eu"}, {@code "gcp-na"}, {@code "gcp-eu"}, {@code "au"}).
          * @return this Builder
          * @throws IllegalArgumentException if the region is unknown or empty
          */
