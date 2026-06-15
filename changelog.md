@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.12.0
+
+### Jun 15, 2026
+
+- Feature: Dynamic endpoint resolution via `Endpoint.getContentstackEndpoint()` and `Builder.setRegion()` backed by the Contentstack Regions Registry.
+
 ## v1.11.2
 
 ### Jun 01, 2026
