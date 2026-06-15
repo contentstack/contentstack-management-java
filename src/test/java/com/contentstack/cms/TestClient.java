@@ -23,6 +23,7 @@ public class TestClient {
             : "managementToken99999999";
 
     public final static String DEV_HOST = (env.get("dev_host") != null) ? env.get("dev_host").trim() : "api.contentstack.io";
+    public final static String REGION = (env.get("region") != null) ? env.get("region").trim() : "na";
     public final static String VARIANT_GROUP_UID = (env.get("variantGroupUid") != null) ? env.get("variantGroupUid")
             : "variantGroupUid99999999";
     private static Contentstack instance;
