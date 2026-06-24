@@ -747,8 +747,33 @@ public class Contentstack {
          * @return Client host
          */
         public Builder setHost(@NotNull String hostname) {
-            this.hostname = hostname;
+            this.hostname = validateHostname(hostname);
             return this;
+        }
+
+        /**
+         * Validates that the supplied hostname is a bare host (optionally with a
+         * port) and does not smuggle a scheme, credentials, path, query, or other
+         * characters that could redirect outbound requests to an unintended
+         * destination. This guards against Server-Side Request Forgery (SSRF)
+         * when the host is sourced from untrusted input.
+         *
+         * @param hostname the candidate host
+         * @return the validated host, unchanged
+         * @throws IllegalArgumentException if the host is null, blank, or malformed
+         */
+        private static String validateHostname(String hostname) {
+            if (hostname == null || hostname.trim().isEmpty()) {
+                throw new IllegalArgumentException("Hostname must not be null or empty");
+            }
+            String host = hostname.trim();
+            // Reject embedded scheme, credentials, path/query/fragment, whitespace,
+            // and other characters that would change the request target.
+            if (!host.matches("^[A-Za-z0-9.-]+(:\\d{1,5})?$")) {
+                throw new IllegalArgumentException(
+                        "Invalid hostname: '" + hostname + "'. Expected a bare host name with an optional port.");
+            }
+            return host;
         }
 
         /**
@@ -974,7 +999,10 @@ public class Contentstack {
         }
 
         private void validateClient(Contentstack contentstack) {
-            String baseUrl = Util.PROTOCOL + "://" + this.hostname + "/" + version + "/";
+            // Re-validate the host at build time so SSRF protection applies regardless
+            // of how the hostname was set (setHost, region resolution, or default).
+            String validatedHost = validateHostname(this.hostname);
+            String baseUrl = Util.PROTOCOL + "://" + validatedHost + "/" + version + "/";
             this.instance = new Retrofit.Builder().baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient(contentstack, this.retry)).build();
