@@ -73,20 +73,18 @@ public class OAuthConfig {
      */
     public String getFormattedAuthorizationEndpoint() {
         if (authEndpoint != null) {
-            return authEndpoint;
+            return validateHttpsEndpoint(authEndpoint);
         }
 
-        String hostname = host != null ? host : Util.OAUTH_APP_HOST;
+        // Only use the configured host when it is a genuine Contentstack host;
+        // otherwise fall back to the default. This prevents SSRF via a host such
+        // as "evil-contentstack.attacker.com" that merely contains the substring.
+        String hostname = isTrustedContentstackHost(host) ? host : Util.OAUTH_APP_HOST;
 
-        // Transform hostname if needed
-        if (hostname.contains("contentstack")) {
-            hostname = hostname
-                    .replaceAll("-api\\.", "-app.") // eu-api.contentstack.com -> eu-app.contentstack.com
-                    .replaceAll("^api\\.", "app.") // api.contentstack.io -> app.contentstack.io
-                    .replaceAll("\\.io$", ".com"); // *.io -> *.com
-        } else {
-            hostname = Util.OAUTH_APP_HOST;
-        }
+        hostname = hostname
+                .replaceAll("-api\\.", "-app.") // eu-api.contentstack.com -> eu-app.contentstack.com
+                .replaceAll("^api\\.", "app.") // api.contentstack.io -> app.contentstack.io
+                .replaceAll("\\.io$", ".com"); // *.io -> *.com
 
         return "https://" + hostname + String.format(Util.OAUTH_AUTHORIZE_ENDPOINT, appId);
     }
@@ -98,22 +96,72 @@ public class OAuthConfig {
      */
     public String getTokenEndpoint() {
         if (tokenEndpoint != null) {
-            return tokenEndpoint;
+            return validateHttpsEndpoint(tokenEndpoint);
         }
 
-        String hostname = host != null ? host : Util.OAUTH_API_HOST;
+        // Only use the configured host when it is a genuine Contentstack host;
+        // otherwise fall back to the default. This prevents SSRF via a host such
+        // as "evil-contentstack.attacker.com" that merely contains the substring.
+        String hostname = isTrustedContentstackHost(host) ? host : Util.OAUTH_API_HOST;
 
-        // Transform hostname if needed
-        if (hostname.contains("contentstack")) {
-            hostname = hostname 
-                    .replaceAll("-api\\.", "-developerhub-api.") // eu-api.contentstack.com -> eu-developerhub-api.contentstack.com
-                    .replaceAll("^api\\.", "developerhub-api.") // api.contentstack.io -> developerhub-api.contentstack.io
-                    .replaceAll("\\.io$", ".com"); // *.io -> *.com
-        } else {
-            hostname = Util.OAUTH_API_HOST;
-        }
+        hostname = hostname
+                .replaceAll("-api\\.", "-developerhub-api.") // eu-api.contentstack.com -> eu-developerhub-api.contentstack.com
+                .replaceAll("^api\\.", "developerhub-api.") // api.contentstack.io -> developerhub-api.contentstack.io
+                .replaceAll("\\.io$", ".com"); // *.io -> *.com
 
         return "https://" + hostname + Util.OAUTH_TOKEN_ENDPOINT;
+    }
+
+    /**
+     * Determines whether the supplied host is a bare Contentstack hostname that
+     * is safe to use as an outbound request target.
+     *
+     * <p>The host must be a bare host name (optionally with a port) — no embedded
+     * scheme, credentials, path, query, fragment, or whitespace — and must resolve
+     * to a {@code contentstack.com} or {@code contentstack.io} domain. This guards
+     * against Server-Side Request Forgery (SSRF) when the host originates from
+     * untrusted input.
+     *
+     * @param candidate the candidate host
+     * @return true if the host is a trusted, well-formed Contentstack host
+     */
+    private static boolean isTrustedContentstackHost(String candidate) {
+        if (candidate == null) {
+            return false;
+        }
+        String host = candidate.trim();
+        // Reject embedded scheme, credentials, path/query/fragment, whitespace,
+        // and any other characters that would change the request target.
+        if (!host.matches("^[A-Za-z0-9.-]+(:\\d{1,5})?$")) {
+            return false;
+        }
+        int portIndex = host.indexOf(':');
+        String hostOnly = (portIndex >= 0 ? host.substring(0, portIndex) : host).toLowerCase();
+        return hostOnly.equals("contentstack.com")
+                || hostOnly.equals("contentstack.io")
+                || hostOnly.endsWith(".contentstack.com")
+                || hostOnly.endsWith(".contentstack.io");
+    }
+
+    /**
+     * Validates that an explicitly configured OAuth endpoint is a well-formed
+     * absolute HTTPS URL. Rejecting non-HTTPS schemes prevents the endpoint from
+     * being pointed at internal services or non-web protocols (SSRF).
+     *
+     * @param endpoint the configured endpoint URL
+     * @return the endpoint, unchanged, when valid
+     * @throws IllegalArgumentException if the endpoint is not a valid HTTPS URL
+     */
+    private static String validateHttpsEndpoint(String endpoint) {
+        try {
+            URL url = new URL(endpoint);
+            if (!"https".equalsIgnoreCase(url.getProtocol())) {
+                throw new IllegalArgumentException("OAuth endpoint must use HTTPS: " + endpoint);
+            }
+            return endpoint;
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("Invalid OAuth endpoint URL: " + endpoint, e);
+        }
     }
 
     /**

@@ -42,6 +42,18 @@ public class Endpoint {
     private static final String REGIONS_URL = "https://artifacts.contentstack.com/regions.json";
     private static final String REGIONS_RESOURCE = "regions.json";
 
+    /**
+     * Domain suffixes that endpoint URLs are permitted to target. The regions
+     * registry is fetched from a remote resource, so every URL derived from it
+     * is validated against this allowlist before it can be used as a request
+     * target. This prevents Server-Side Request Forgery (SSRF) should the
+     * registry ever be tampered with or point at an unexpected host.
+     */
+    private static final String[] TRUSTED_DOMAIN_SUFFIXES = {
+            ".contentstack.com",
+            ".contentstack.io"
+    };
+
     private static volatile JsonArray regionsData = null;
 
     private Endpoint() {}
@@ -82,7 +94,7 @@ public class Endpoint {
             throw new IllegalArgumentException(
                     "Service \"" + service + "\" not found for region \"" + regionRow.get("id").getAsString() + "\"");
         }
-        String url = endpoints.get(service).getAsString();
+        String url = validateTrustedEndpoint(endpoints.get(service).getAsString());
         return omitHttps ? stripHttps(url) : url;
     }
 
@@ -113,7 +125,7 @@ public class Endpoint {
         Map<String, String> result = new LinkedHashMap<>();
         if (endpoints != null) {
             for (Map.Entry<String, JsonElement> entry : endpoints.entrySet()) {
-                String url = entry.getValue().getAsString();
+                String url = validateTrustedEndpoint(entry.getValue().getAsString());
                 result.put(entry.getKey(), omitHttps ? stripHttps(url) : url);
             }
         }
@@ -225,6 +237,40 @@ public class Endpoint {
                     "contentstack/cms: Failed to refresh regions.json from " + REGIONS_URL + ". " +
                     "Check network connectivity and try again.", e);
         }
+    }
+
+    /**
+     * Validates that an endpoint URL sourced from the regions registry is a
+     * well-formed HTTPS URL whose host belongs to a trusted Contentstack domain.
+     *
+     * <p>The regions registry is loaded from a remote resource; constraining the
+     * host to an allowlist here neutralizes any Server-Side Request Forgery (SSRF)
+     * risk before the value can flow into an outbound request.
+     *
+     * @param url the endpoint URL read from the registry
+     * @return the URL, unchanged, when it targets a trusted host
+     * @throws IllegalArgumentException if the URL is malformed, not HTTPS, or
+     *                                  targets an untrusted host
+     */
+    private static String validateTrustedEndpoint(String url) {
+        URL parsed;
+        try {
+            parsed = new URL(url);
+        } catch (java.net.MalformedURLException e) {
+            throw new IllegalArgumentException("Malformed endpoint URL in regions registry: " + url, e);
+        }
+        if (!"https".equalsIgnoreCase(parsed.getProtocol())) {
+            throw new IllegalArgumentException("Endpoint URL must use HTTPS: " + url);
+        }
+        String host = parsed.getHost() == null ? "" : parsed.getHost().toLowerCase();
+        for (String suffix : TRUSTED_DOMAIN_SUFFIXES) {
+            // suffix begins with '.', so "contentstack.com" itself is matched via
+            // the leading-dot form only for subdomains; also allow the bare apex.
+            if (host.endsWith(suffix) || host.equals(suffix.substring(1))) {
+                return url;
+            }
+        }
+        throw new IllegalArgumentException("Endpoint URL targets an untrusted host: " + url);
     }
 
     private static String stripHttps(String url) {
