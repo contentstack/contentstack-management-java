@@ -965,8 +965,7 @@ public class Contentstack {
             OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
                     .appId(appId)
                     .clientId(clientId)
-                    .redirectUri(redirectUri)
-                    .host(host);
+                    .redirectUri(redirectUri);
 
             // Only set clientSecret if provided (otherwise PKCE flow will be used)
             if (clientSecret != null && !clientSecret.trim().isEmpty()) {
@@ -978,7 +977,16 @@ public class Contentstack {
                 builder.tokenCallback(this.tokenCallback);
             }
 
-            this.oauthConfig = builder.build();
+            // Validate the required fields first so their errors surface ahead of
+            // host validation, matching the previous configuration-error behaviour.
+            builder.build().validate();
+
+            // Validate the host before it is stored on the OAuth config, so the same
+            // SSRF protection that guards the main API host also applies here
+            // regardless of how the host was sourced (setHost, region resolution,
+            // or a value passed directly by the caller).
+            String validatedHost = host != null ? validateHostname(host) : null;
+            this.oauthConfig = builder.host(validatedHost).build();
             return this;
         }
 
