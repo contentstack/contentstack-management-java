@@ -335,6 +335,56 @@ public class OAuthTest {
                 customTokenEndpoint, tokenUrl);
     }
 
+    @Test
+    public void testSsrfHostIsRejected() {
+        // Hosts that merely contain the "contentstack" substring, or that smuggle
+        // a scheme/credentials/path, must NOT be used as the request target.
+        String[] maliciousHosts = {
+                "evil-contentstack.attacker.com",
+                "contentstack.attacker.com",
+                "attacker.com",
+                "attacker.com/contentstack.com",
+                "user@contentstack.com.attacker.com",
+                "http://contentstack.com@attacker.com"
+        };
+
+        for (String malicious : maliciousHosts) {
+            OAuthConfig config = OAuthConfig.builder()
+                    .appId(TEST_APP_ID)
+                    .clientId(TEST_CLIENT_ID)
+                    .redirectUri(TEST_REDIRECT_URI)
+                    .host(malicious)
+                    .build();
+
+            String authUrl = config.getFormattedAuthorizationEndpoint();
+            String tokenUrl = config.getTokenEndpoint();
+
+            assertFalse("Auth URL must not target malicious host " + malicious + ": " + authUrl,
+                    authUrl.contains("attacker.com"));
+            assertFalse("Token URL must not target malicious host " + malicious + ": " + tokenUrl,
+                    tokenUrl.contains("attacker.com"));
+            // The request target must fall back to a genuine Contentstack domain.
+            assertTrue("Auth URL should target a Contentstack host: " + authUrl,
+                    authUrl.startsWith("https://") && authUrl.contains(".contentstack.com/"));
+            assertTrue("Token URL should target a Contentstack host: " + tokenUrl,
+                    tokenUrl.startsWith("https://") && tokenUrl.contains(".contentstack.com/"));
+        }
+    }
+
+    @Test
+    public void testNonHttpsCustomEndpointRejected() {
+        // An explicitly configured endpoint must be HTTPS; non-HTTPS schemes that
+        // could reach internal services or non-web protocols are rejected.
+        OAuthConfig config = OAuthConfig.builder()
+                .appId(TEST_APP_ID)
+                .clientId(TEST_CLIENT_ID)
+                .redirectUri(TEST_REDIRECT_URI)
+                .tokenEndpoint("http://169.254.169.254/latest/meta-data")
+                .build();
+
+        assertThrows(IllegalArgumentException.class, config::getTokenEndpoint);
+    }
+
 
 
     // =================
