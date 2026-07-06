@@ -2,6 +2,7 @@ package com.contentstack.cms;
 
 import com.contentstack.cms.core.AuthInterceptorTest;
 import com.contentstack.cms.core.EndpointTest;
+import com.contentstack.cms.stack.AssetUnitTest;
 import com.contentstack.cms.stack.EnvironmentUnitTest;
 import com.contentstack.cms.stack.GlobalFieldUnitTests;
 import com.contentstack.cms.stack.LocaleUnitTest;
@@ -27,6 +28,7 @@ import org.junit.runner.RunWith;
         EndpointTest.class,
         
         // Stack module tests (only public classes)
+        AssetUnitTest.class,
         EnvironmentUnitTest.class,
         GlobalFieldUnitTests.class,
         LocaleUnitTest.class,
