@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.12.2
+
+### Jul 06, 2026
+
+- Snyk fix
+
+## v1.12.1
+
+### Jun 29, 2026
+
+- Snyk fix
+
+## v1.12.0
+
+### Jun 15, 2026
+
+- Feature: Dynamic endpoint resolution via `Endpoint.getContentstackEndpoint()` and `Builder.setRegion()` backed by the Contentstack Regions Registry.
+
+## v1.11.2
+
+### Jun 01, 2026
+
+- Fix: `SocketTimeoutException` now correctly triggers the retry mechanism in `AuthInterceptor` and `OAuthInterceptor`. Previously, network-level timeouts bypassed retry logic entirely, causing `.setRetry(true)` to have no effect on timeout errors.
+- Enhancement: Added `setProtocols(List<Protocol>)` to the Builder, allowing callers to restrict the HTTP protocol (e.g. force HTTP/1.1 via `Collections.singletonList(Protocol.HTTP_1_1)`) for environments where proxies or intermediaries have issues with HTTP/2.
+
+## v1.11.1
+
+### Apr 06, 2026
+
+- Fix: `setTimeout` now applies to OkHttp connect, read, and write timeouts (previously only connect). Optional `setConnectTimeout`, `setReadTimeout`, and `setWriteTimeout` override individual phases.
+- Build: Maven Surefire updated with `surefire-junit-platform` so JUnit 5 tests run when enabled.
+
+## v1.11.0
+
+### Feb 09, 2026
+
+- Enhancement: Retry Mechanism
+
 ## v1.10.2
 
 ### Jan 27, 2026

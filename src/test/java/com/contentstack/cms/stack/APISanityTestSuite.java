@@ -8,12 +8,13 @@ package com.contentstack.cms.stack;
  @SuppressWarnings("deprecation")
  @RunWith(JUnitPlatform.class)
 @SelectClasses({
+        EndpointAPITest.class,
         TaxonomyAPITest.class,
         AssetAPITest.class,
         ContentTypeAPITest.class,
-        ContentTypeRealAPITest.class,  // Real API tests with actual CRUD operations
+        ContentTypeRealAPITest.class,
         EntryFieldsAPITest.class,
-        EntryRealAPITest.class,  // Real API tests with actual CRUD operations
+        EntryRealAPITest.class,
         EnvironmentAPITest.class,
         ExtensionAPITest.class,
         LocaleAPITest.class,
@@ -22,7 +23,7 @@ package com.contentstack.cms.stack;
         TokenAPITest.class,
         OrgApiTests.class,
         GlobalFieldAPITest.class,
-        GlobalFieldRealAPITest.class,  // Real API tests with actual CRUD operations
+        GlobalFieldRealAPITest.class,
         VariantGroupAPITest.class,
         VariantGroupTest.class,
         ReleaseAPITest.class

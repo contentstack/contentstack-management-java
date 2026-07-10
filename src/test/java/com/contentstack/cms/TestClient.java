@@ -24,31 +24,26 @@ public class TestClient {
     public final static String MANAGEMENT_TOKEN = getEnvValue("MANAGEMENT_TOKEN", "managementToken", "managementToken99999999");
 
     public final static String DEV_HOST = getEnvValue("HOST", "dev_host", "api.contentstack.io").trim();
+    public final static String REGION = getEnvValue("REGION", "region", "na");
     public final static String VARIANT_GROUP_UID = getEnvValue("VARIANT_GROUP_UID", "variantGroupUid", "variantGroupUid99999999");
-    
+
     // Credentials for normal login (without 2FA)
     public final static String EMAIL = getEnvValue("EMAIL", "email", null);
     public final static String PASSWORD = getEnvValue("PASSWORD", "password", null);
-    
+
     // Credentials for 2FA/TOTP login
     public final static String TFA_EMAIL = getEnvValue("TFA_EMAIL", "tfaEmail", null);
     public final static String TFA_PASSWORD = getEnvValue("TFA_PASSWORD", "tfaPassword", null);
     public final static String MFA_SECRET = getEnvValue("MFA_SECRET", "mfaSecret", null);
-    
+
     // Cached auth token - obtained via login
     private static String cachedAuthToken = null;
     private static boolean loginAttempted = false;
-    
+
     // Static auth token from env (fallback)
     private static final String ENV_AUTHTOKEN = getEnvValue("AUTHTOKEN", "authToken", null);
-    
-    /**
-     * Get the auth token. First tries to use cached token from login,
-     * then falls back to static AUTHTOKEN from env, then tries to login.
-     * NOTE: This is non-final so it can be updated after login completes.
-     */
+
     public static String AUTHTOKEN = getAuthToken();
-    
     private static Contentstack instance;
     private static Stack stackInstance;
 

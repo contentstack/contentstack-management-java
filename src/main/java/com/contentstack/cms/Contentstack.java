@@ -3,7 +3,9 @@ package com.contentstack.cms;
 import java.io.IOException;
 import java.net.Proxy;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -12,6 +14,7 @@ import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import com.contentstack.cms.core.AuthInterceptor;
+import com.contentstack.cms.core.Endpoint;
 import com.contentstack.cms.core.Util;
 import static com.contentstack.cms.core.Util.API_KEY;
 import static com.contentstack.cms.core.Util.AUTHORIZATION;
@@ -20,17 +23,17 @@ import com.contentstack.cms.models.Error;
 import com.contentstack.cms.models.LoginDetails;
 import com.contentstack.cms.models.OAuthConfig;
 import com.contentstack.cms.models.OAuthTokens;
-import com.contentstack.cms.oauth.TokenCallback;
 import com.contentstack.cms.oauth.OAuthHandler;
 import com.contentstack.cms.oauth.OAuthInterceptor;
+import com.contentstack.cms.oauth.TokenCallback;
 import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
 import com.contentstack.cms.user.User;
 import com.google.gson.Gson;
-import com.warrenstrange.googleauth.GoogleAuthenticator;
-
+import com.contentstack.cms.core.RetryConfig;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
@@ -63,6 +66,7 @@ public class Contentstack {
     protected OAuthHandler oauthHandler;
     protected String[] earlyAccess;
     protected User user;
+    protected RetryConfig retryConfig;
 
     /**
      * All accounts registered with Contentstack are known as Users. A stack can
@@ -558,6 +562,81 @@ public class Contentstack {
         return oauthLogout(false);
     }
 
+    /**
+     * Forces a live download of the Contentstack regions registry and replaces
+     * the in-memory cache. Useful when new regions or service URLs have been
+     * published since the SDK JAR was built.
+     *
+     * <pre>{@code
+     * int count = Contentstack.refreshRegions();
+     * // now getContentstackEndpoint() resolves from the freshly downloaded registry
+     * }</pre>
+     *
+     * @return the number of regions loaded from the live registry
+     * @throws RuntimeException if the download fails
+     */
+    public static int refreshRegions() {
+        return Endpoint.refresh();
+    }
+
+    /**
+     * Resolves a Contentstack service endpoint URL for the given region.
+     *
+     * <pre>{@code
+     * // Full URL
+     * String url = Contentstack.getContentstackEndpoint("eu", "contentManagement");
+     * // → "https://eu-api.contentstack.com"
+     *
+     * // Host only (for Builder.setHost)
+     * String host = Contentstack.getContentstackEndpoint("eu", "contentManagement", true);
+     * // → "eu-api.contentstack.com"
+     * }</pre>
+     *
+     * @param region    region ID or alias (e.g. {@code na}, {@code eu}, {@code azure-na})
+     * @param service   service key (e.g. {@code contentManagement}, {@code contentDelivery})
+     * @param omitHttps when {@code true}, strips {@code https://} from the returned URL
+     * @return the resolved URL string
+     * @throws IllegalArgumentException if region or service is unknown
+     */
+    public static String getContentstackEndpoint(String region, String service, boolean omitHttps) {
+        return Endpoint.getContentstackEndpoint(region, service, omitHttps);
+    }
+
+    /**
+     * Resolves a Contentstack service endpoint URL for the given region (with scheme).
+     *
+     * @param region  region ID or alias
+     * @param service service key
+     * @return the resolved URL including {@code https://}
+     * @throws IllegalArgumentException if region or service is unknown
+     */
+    public static String getContentstackEndpoint(String region, String service) {
+        return Endpoint.getContentstackEndpoint(region, service);
+    }
+
+    /**
+     * Returns all endpoint URLs for the given region as an ordered map.
+     *
+     * @param region region ID or alias
+     * @return map of service name → URL (includes {@code https://})
+     * @throws IllegalArgumentException if region is unknown or empty
+     */
+    public static java.util.Map<String, String> getContentstackEndpoints(String region) {
+        return Endpoint.getContentstackEndpoints(region);
+    }
+
+    /**
+     * Returns all endpoint URLs for the given region as an ordered map.
+     *
+     * @param region    region ID or alias
+     * @param omitHttps when {@code true}, strips {@code https://} from every URL
+     * @return map of service name → URL
+     * @throws IllegalArgumentException if region is unknown or empty
+     */
+    public static java.util.Map<String, String> getContentstackEndpoints(String region, boolean omitHttps) {
+        return Endpoint.getContentstackEndpoints(region, omitHttps);
+    }
+
     public Contentstack(Builder builder) {
         this.host = builder.hostname;
         this.port = builder.port;
@@ -571,6 +650,21 @@ public class Contentstack {
         this.oauthInterceptor = builder.oauthInterceptor;
         this.oauthHandler = builder.oauthHandler;
         this.earlyAccess = builder.earlyAccess;
+        this.retryConfig = builder.retryConfig;
+    }
+
+    /** Returns the API hostname this client is configured to target. */
+    public String getHost() {
+        return host;
+    }
+
+    /** Returns the full Retrofit base URL (e.g. {@code https://eu-api.contentstack.com/v3/}). */
+    public String getBaseUrl() {
+        return instance.baseUrl().toString();
+    }
+
+    public RetryConfig getRetryConfig() {
+        return retryConfig;
     }
 
     /**
@@ -594,13 +688,17 @@ public class Contentstack {
         private String port = Util.PORT; // Default PORT for Contentstack API
         private String version = Util.VERSION; // Default Version for Contentstack API
         private int timeout = Util.TIMEOUT; // Default timeout 30 seconds
+        private Integer connectTimeoutSeconds;
+        private Integer readTimeoutSeconds;
+        private Integer writeTimeoutSeconds;
         private Boolean retry = Util.RETRY_ON_FAILURE;// Default base url for contentstack
-
+        private RetryConfig retryConfig = RetryConfig.defaultConfig();
         /**
          * Default ConnectionPool holds up to 5 idle connections which will be
          * evicted after 5 minutes of inactivity.
          */
         private ConnectionPool connectionPool = new ConnectionPool(); // Connection
+        private List<Protocol> protocols = null;
 
         /**
          * Instantiates a new Builder.
@@ -649,7 +747,56 @@ public class Contentstack {
          * @return Client host
          */
         public Builder setHost(@NotNull String hostname) {
-            this.hostname = hostname;
+            this.hostname = validateHostname(hostname);
+            return this;
+        }
+
+        /**
+         * Validates that the supplied hostname is a bare host (optionally with a
+         * port) and does not smuggle a scheme, credentials, path, query, or other
+         * characters that could redirect outbound requests to an unintended
+         * destination. This guards against Server-Side Request Forgery (SSRF)
+         * when the host is sourced from untrusted input.
+         *
+         * @param hostname the candidate host
+         * @return the validated host, unchanged
+         * @throws IllegalArgumentException if the host is null, blank, or malformed
+         */
+        private static String validateHostname(String hostname) {
+            if (hostname == null || hostname.trim().isEmpty()) {
+                throw new IllegalArgumentException("Hostname must not be null or empty");
+            }
+            String host = hostname.trim();
+            // Reject embedded scheme, credentials, path/query/fragment, whitespace,
+            // and other characters that would change the request target.
+            if (!host.matches("^[A-Za-z0-9.-]+(:\\d{1,5})?$")) {
+                throw new IllegalArgumentException(
+                        "Invalid hostname: '" + hostname + "'. Expected a bare host name with an optional port.");
+            }
+            return host;
+        }
+
+        /**
+         * Configures the client to target a specific Contentstack region by resolving
+         * the correct Content Management API host from the bundled regions registry.
+         *
+         * <p>This is a convenience alternative to calling {@link #setHost(String)} with
+         * a manually constructed hostname.
+         *
+         * <pre>{@code
+         * Contentstack client = new Contentstack.Builder()
+         *     .setAuthtoken("authtoken")
+         *     .setRegion("eu")
+         *     .build();
+         * }</pre>
+         *
+         * @param region region ID or alias (e.g. {@code "na"}, {@code "eu"}, {@code "azure-na"},
+         *               {@code "azure-eu"}, {@code "gcp-na"}, {@code "gcp-eu"}, {@code "au"}).
+         * @return this Builder
+         * @throws IllegalArgumentException if the region is unknown or empty
+         */
+        public Builder setRegion(@NotNull String region) {
+            this.hostname = Endpoint.getContentstackEndpoint(region, "contentManagement", true);
             return this;
         }
 
@@ -682,9 +829,41 @@ public class Contentstack {
          * @return Client timeout
          */
         public Builder setTimeout(int timeout) {
+            validateTimeoutSeconds(timeout, "timeout");
             this.timeout = timeout;
             return this;
         }
+
+        public Builder setReadTimeout(int readTimeoutSeconds) {
+            validateTimeoutSeconds(readTimeoutSeconds, "readTimeout");
+            this.readTimeoutSeconds = readTimeoutSeconds;
+            return this;
+        }
+
+        public Builder setWriteTimeout(int writeTimeoutSeconds) {
+            validateTimeoutSeconds(writeTimeoutSeconds, "writeTimeout");
+            this.writeTimeoutSeconds = writeTimeoutSeconds;
+            return this;
+        }
+
+        public Builder setConnectTimeout(int connectTimeoutSeconds) {
+            validateTimeoutSeconds(connectTimeoutSeconds, "connectTimeout");
+            this.connectTimeoutSeconds = connectTimeoutSeconds;
+            return this;
+        }
+
+        public Builder setProtocols(@NotNull List<Protocol> protocols) {
+            this.protocols = protocols;
+            return this;
+        }
+
+        private static void validateTimeoutSeconds(int seconds, String name) {
+            if (seconds <= 0) {
+                throw new IllegalArgumentException(name + " must be positive.");
+            }
+        }
+
+
 
         /**
          * Create a new connection pool with tuning parameters appropriate for a
@@ -786,8 +965,7 @@ public class Contentstack {
             OAuthConfig.OAuthConfigBuilder builder = OAuthConfig.builder()
                     .appId(appId)
                     .clientId(clientId)
-                    .redirectUri(redirectUri)
-                    .host(host);
+                    .redirectUri(redirectUri);
 
             // Only set clientSecret if provided (otherwise PKCE flow will be used)
             if (clientSecret != null && !clientSecret.trim().isEmpty()) {
@@ -799,7 +977,16 @@ public class Contentstack {
                 builder.tokenCallback(this.tokenCallback);
             }
 
-            this.oauthConfig = builder.build();
+            // Validate the required fields first so their errors surface ahead of
+            // host validation, matching the previous configuration-error behaviour.
+            builder.build().validate();
+
+            // Validate the host before it is stored on the OAuth config, so the same
+            // SSRF protection that guards the main API host also applies here
+            // regardless of how the host was sourced (setHost, region resolution,
+            // or a value passed directly by the caller).
+            String validatedHost = host != null ? validateHostname(host) : null;
+            this.oauthConfig = builder.host(validatedHost).build();
             return this;
         }
 
@@ -820,7 +1007,10 @@ public class Contentstack {
         }
 
         private void validateClient(Contentstack contentstack) {
-            String baseUrl = Util.PROTOCOL + "://" + this.hostname + "/" + version + "/";
+            // Re-validate the host at build time so SSRF protection applies regardless
+            // of how the hostname was set (setHost, region resolution, or default).
+            String validatedHost = validateHostname(this.hostname);
+            String baseUrl = Util.PROTOCOL + "://" + validatedHost + "/" + version + "/";
             this.instance = new Retrofit.Builder().baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient(contentstack, this.retry)).build();
@@ -835,12 +1025,20 @@ public class Contentstack {
         }
 
         private OkHttpClient httpClient(Contentstack contentstack, Boolean retryOnFailure) {
+            int connectSec = this.connectTimeoutSeconds != null ? this.connectTimeoutSeconds : this.timeout;
+            int readSec = this.readTimeoutSeconds != null ? this.readTimeoutSeconds : this.timeout;
+            int writeSec = this.writeTimeoutSeconds != null ? this.writeTimeoutSeconds : this.timeout;
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .connectionPool(this.connectionPool)
                     .addInterceptor(logger())
                     .proxy(this.proxy)
-                    .connectTimeout(Duration.ofSeconds(this.timeout))
+                    .connectTimeout(Duration.ofSeconds(connectSec))
+                    .readTimeout(Duration.ofSeconds(readSec))
+                    .writeTimeout(Duration.ofSeconds(writeSec))
                     .retryOnConnectionFailure(retryOnFailure);
+            if (this.protocols != null && !this.protocols.isEmpty()) {
+                builder.protocols(this.protocols);
+            }
 
             // Add either OAuth or traditional auth interceptor
             if (this.oauthConfig != null) {
@@ -853,7 +1051,7 @@ public class Contentstack {
                 if (this.earlyAccess != null) {
                     this.oauthInterceptor.setEarlyAccess(this.earlyAccess);
                 }
-
+                this.oauthInterceptor.setRetryConfig(this.retryConfig);
                 // Add interceptor to handle OAuth, token refresh, and retries
                 builder.addInterceptor(this.oauthInterceptor);
             } else {
@@ -863,7 +1061,7 @@ public class Contentstack {
                 if (this.earlyAccess != null) {
                     this.authInterceptor.setEarlyAccess(this.earlyAccess);
                 }
-                
+                this.authInterceptor.setRetryConfig(this.retryConfig);
                 builder.addInterceptor(this.authInterceptor);
             }
 
@@ -873,6 +1071,13 @@ public class Contentstack {
         private HttpLoggingInterceptor logger() {
             return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE);
         }
+
+
+        public Builder setRetryConfig(RetryConfig retryConfig) {
+            this.retryConfig = retryConfig;
+            return this;
+        }
+
 
     }
 }

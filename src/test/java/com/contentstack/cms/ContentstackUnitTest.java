@@ -5,6 +5,7 @@ import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
 import okhttp3.mockwebserver.MockResponse;
@@ -17,8 +18,11 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ContentstackUnitTest {
 
@@ -160,11 +164,91 @@ public class ContentstackUnitTest {
     }
 
     @Test
+    void setProtocols_http1Only_buildsSuccessfully() {
+        List<Protocol> protocols = Collections.singletonList(Protocol.HTTP_1_1);
+        Contentstack contentstack = new Contentstack.Builder()
+                .setProtocols(protocols)
+                .build();
+        Assertions.assertNotNull(contentstack);
+    }
+
+    @Test
+    void setProtocols_http2AndHttp1_buildsSuccessfully() {
+        List<Protocol> protocols = List.of(Protocol.HTTP_2, Protocol.HTTP_1_1);
+        Contentstack contentstack = new Contentstack.Builder()
+                .setProtocols(protocols)
+                .build();
+        Assertions.assertNotNull(contentstack);
+    }
+
+    @Test
     void setTimeout() {
         Contentstack contentstack = new Contentstack.Builder()
                 .setTimeout(3)
                 .build();
         Assertions.assertEquals(3, contentstack.timeout);
+    }
+
+    @Test
+    void setTimeoutZeroThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setTimeout(0));
+    }
+
+    @Test
+    void setTimeoutNegativeThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setTimeout(-1));
+    }
+
+    @Test
+    void setReadTimeoutZeroThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setReadTimeout(0));
+    }
+
+    @Test
+    void setWriteTimeoutNegativeThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setWriteTimeout(-5));
+    }
+
+    @Test
+    void setConnectTimeoutInvalidThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Contentstack.Builder().setConnectTimeout(-1));
+    }
+
+    @Test
+    void okHttpTimeoutsMatchSetTimeout() {
+        Contentstack client = new Contentstack.Builder().setTimeout(45).build();
+        OkHttpClient ok = (OkHttpClient) client.instance.callFactory();
+        Assertions.assertEquals(45_000, ok.connectTimeoutMillis());
+        Assertions.assertEquals(45_000, ok.readTimeoutMillis());
+        Assertions.assertEquals(45_000, ok.writeTimeoutMillis());
+    }
+
+    @Test
+    void okHttpDefaultTimeoutsUseUtilTimeout() {
+        Contentstack client = new Contentstack.Builder().build();
+        OkHttpClient ok = (OkHttpClient) client.instance.callFactory();
+        int expectedMs = (int) TimeUnit.SECONDS.toMillis(30);
+        Assertions.assertEquals(expectedMs, ok.connectTimeoutMillis());
+        Assertions.assertEquals(expectedMs, ok.readTimeoutMillis());
+        Assertions.assertEquals(expectedMs, ok.writeTimeoutMillis());
+    }
+
+    @Test
+    void okHttpPerLegOverridesFallBackToSetTimeout() {
+        Contentstack client = new Contentstack.Builder()
+                .setTimeout(10)
+                .setReadTimeout(90)
+                .build();
+        OkHttpClient ok = (OkHttpClient) client.instance.callFactory();
+        Assertions.assertEquals(10_000, ok.connectTimeoutMillis());
+        Assertions.assertEquals(90_000, ok.readTimeoutMillis());
+        Assertions.assertEquals(10_000, ok.writeTimeoutMillis());
+        Assertions.assertEquals(10, client.timeout);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.contentstack.cms.core;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,7 @@ public class AuthInterceptor implements Interceptor {
 
     protected String authtoken;
     protected String[] earlyAccess;
-
+    protected RetryConfig retryConfig = RetryConfig.defaultConfig();
     // The `public AuthInterceptor() {}` is a default constructor for the
     // `AuthInterceptor` class. It is
     // used to create an instance of the `AuthInterceptor` class without passing any
@@ -93,7 +94,7 @@ public class AuthInterceptor implements Interceptor {
             String commaSeparated = String.join(", ", earlyAccess);
             request.addHeader(Util.EARLY_ACCESS_HEADER, commaSeparated);
         }
-        return chain.proceed(request.build());
+        return executeRequest(chain, request.build(), 0);
     }
 
     /**
@@ -110,6 +111,41 @@ public class AuthInterceptor implements Interceptor {
         String path = request.url().encodedPath();
         // Match pattern: /v3/releases/{release_uid} (no trailing path segments)
         return path.matches(".*/releases/[^/]+$");
+    }
+
+    public void setRetryConfig(RetryConfig retryConfig) {
+        this.retryConfig = retryConfig != null ? retryConfig : RetryConfig.defaultConfig();
+    }
+
+    private Response executeRequest(Chain chain, Request request, int retryCount) throws IOException {
+        try {
+            Response response = chain.proceed(request);
+            int code = response.code();
+            if (retryCount < retryConfig.getRetryLimit() && retryConfig.getRetryCondition().shouldRetry(code, null)) {
+                response.close();
+                long delay = RetryUtil.calculateDelay(retryConfig, retryCount + 1, code);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    throw new IOException("Retry interrupted", ex);
+                }
+                return executeRequest(chain, request, retryCount + 1);
+            }
+            return response;
+        } catch (SocketTimeoutException e) {
+            if (retryCount < retryConfig.getRetryLimit() && retryConfig.getRetryCondition().shouldRetry(0, e)) {
+                long delay = RetryUtil.calculateDelay(retryConfig, retryCount + 1, 0);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    throw new IOException("Retry interrupted", ex);
+                }
+                return executeRequest(chain, request, retryCount + 1);
+            }
+            throw e;
+        }
     }
 
 }
