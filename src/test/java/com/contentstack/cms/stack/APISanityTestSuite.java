@@ -26,6 +26,7 @@ package com.contentstack.cms.stack;
         GlobalFieldRealAPITest.class,
         VariantGroupAPITest.class,
         VariantGroupTest.class,
+        EntryVariantAPITest.class,
         ReleaseAPITest.class
 
 })

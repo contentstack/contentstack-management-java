@@ -27,6 +27,10 @@ public class TestClient {
     public final static String REGION = getEnvValue("REGION", "region", "na");
     public final static String VARIANT_GROUP_UID = getEnvValue("VARIANT_GROUP_UID", "variantGroupUid", "variantGroupUid99999999");
 
+    public static final String ENTRY_VARIANT_CONTENT_TYPE_UID = getEnvValue("ENTRY_VARIANT_CONTENT_TYPE_UID", "entryVariantContentTypeUid", "blog");
+    public static final String ENTRY_VARIANT_BRANCH = getEnvValue("ENTRY_VARIANT_BRANCH", "entryVariantBranch", "develop");
+    public static final String ENTRY_VARIANT_LOCALE = getEnvValue("ENTRY_VARIANT_LOCALE", "entryVariantLocale", "en-us");
+
     // Credentials for normal login (without 2FA)
     public final static String EMAIL = getEnvValue("EMAIL", "email", null);
     public final static String PASSWORD = getEnvValue("PASSWORD", "password", null);
@@ -44,6 +48,10 @@ public class TestClient {
     private static final String ENV_AUTHTOKEN = getEnvValue("AUTHTOKEN", "authToken", null);
 
     public static String AUTHTOKEN = getAuthToken();
+
+    public static boolean isUsingDefaultStackCredentials() {
+        return env.get("apiKey") == null || env.get("managementToken") == null;
+    }
     private static Contentstack instance;
     private static Stack stackInstance;
 
