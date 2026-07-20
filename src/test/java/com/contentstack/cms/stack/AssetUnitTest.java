@@ -10,9 +10,10 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Tag("unit")
-class AssetUnitTest {
+public class AssetUnitTest {
 
     protected static String AUTHTOKEN = TestClient.AUTHTOKEN;
     protected static String API_KEY = TestClient.API_KEY;
@@ -66,7 +67,7 @@ class AssetUnitTest {
         Request resp = asset.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -146,7 +147,7 @@ class AssetUnitTest {
                 .request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -196,7 +197,7 @@ class AssetUnitTest {
         Request resp = asset.delete().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -210,7 +211,7 @@ class AssetUnitTest {
         Request resp = asset.rteInformation().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -228,7 +229,7 @@ class AssetUnitTest {
         Request resp = asset.setVersionName(2, body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -261,7 +262,7 @@ class AssetUnitTest {
         Request resp = asset.deleteVersionName(2).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -365,7 +366,7 @@ class AssetUnitTest {
         Request resp = asset.unpublish(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(2, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -382,7 +383,7 @@ class AssetUnitTest {
         Request resp = assetFolder.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -443,7 +444,7 @@ class AssetUnitTest {
         Request resp = asset.folder().create(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(3, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -465,7 +466,7 @@ class AssetUnitTest {
         Request resp = asset.folder(_uid).update(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -480,7 +481,7 @@ class AssetUnitTest {
         Request resp = asset.folder(_uid).delete().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(0, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -488,6 +489,106 @@ class AssetUnitTest {
                 resp.url().encodedPath());        Assertions.assertNull(
                 resp.url().query());
         Assertions.assertNull(resp.body());    }
+
+    // ==================== Asset Scanning Tests ====================
+    // Feature: Asset Scanning (plan-based; enabled by default for orgs with damAccess)
+    // Possible _asset_scan_status values: pending | clean | quarantined | not_scanned
+    // not_scanned — returned for assets uploaded before scanning was enabled on the stack.
+    // API tests against a scan-enabled stack are in AssetAPITest.
+    // ==============================================================
+
+    @Test
+    void testFetchIncludesScanStatusParam() {
+        asset.clearParams();
+        asset.addParam("include_asset_scan_status", true);
+        Request resp = asset.fetch().request();
+        Assertions.assertEquals("GET", resp.method());
+        Assertions.assertEquals("/v3/assets/" + _uid, resp.url().encodedPath());
+        Assertions.assertTrue(
+                Objects.requireNonNull(resp.url().query()).contains("include_asset_scan_status=true"));
+        Assertions.assertNull(resp.body());
+    }
+
+    @Test
+    void testFindIncludesScanStatusParam() {
+        asset.clearParams();
+        asset.addParam("include_asset_scan_status", true);
+        Request resp = asset.find().request();
+        Assertions.assertEquals("GET", resp.method());
+        Assertions.assertEquals("/v3/assets", resp.url().encodedPath());
+        Assertions.assertTrue(
+                Objects.requireNonNull(resp.url().query()).contains("include_asset_scan_status=true"));
+        Assertions.assertNull(resp.body());
+    }
+
+    @Test
+    void testUploadIncludesScanStatusParam() {
+        asset.clearParams();
+        asset.addParam("include_asset_scan_status", true);
+        String filePath = "src/test/resources/asset.png";
+        Request resp = asset.uploadAsset(filePath, "test upload for scan status").request();
+        Assertions.assertEquals("POST", resp.method());
+        Assertions.assertEquals("/v3/assets", resp.url().encodedPath());
+        Assertions.assertTrue(
+                Objects.requireNonNull(resp.url().query()).contains("include_asset_scan_status=true"));
+        Assertions.assertNotNull(resp.body());
+    }
+
+    @Test
+    void testFetchWithoutScanStatusParamExcludesField() {
+        // Omitting the param means _asset_scan_status is not requested.
+        // Legacy assets (not_scanned) and new assets alike will not include the field.
+        asset.clearParams();
+        Request resp = asset.fetch().request();
+        String query = resp.url().query();
+        Assertions.assertTrue(query == null || !query.contains("include_asset_scan_status"),
+                "include_asset_scan_status must be absent when not explicitly set");
+        Assertions.assertNull(resp.body());
+    }
+
+    @Test
+    void testScanStatusParamCoexistsWithOtherParams() {
+        asset.clearParams();
+        asset.addParam("include_asset_scan_status", true);
+        asset.addParam("include_publish_details", true);
+        asset.addParam("environment", "production");
+        Request resp = asset.fetch().request();
+        String query = Objects.requireNonNull(resp.url().query());
+        Assertions.assertTrue(query.contains("include_asset_scan_status=true"));
+        Assertions.assertTrue(query.contains("include_publish_details=true"));
+        Assertions.assertTrue(query.contains("environment=production"));
+    }
+
+    @Test
+    void testPublishIncludesApiVersionHeader() {
+        // api_version: 3.2 is required for CDA-side scan validation on publish.
+        // Without it, quarantined assets incorrectly appear as published in the UI.
+        asset.clearParams();
+        asset.addHeader("api_version", "3.2");
+        JSONObject body = new JSONObject();
+        Request resp = asset.publish(body).request();
+        Assertions.assertEquals("POST", resp.method());
+        Assertions.assertEquals("/v3/assets/" + _uid + "/publish", resp.url().encodedPath());
+        Assertions.assertEquals("3.2", resp.header("api_version"));
+        Assertions.assertNotNull(resp.body());
+    }
+
+    @Test
+    void testApiVersionHeaderScopedToPublish() {
+        // api_version: 3.2 must be set explicitly per-call and must not be a global header.
+        // Setting it globally would affect all API calls and could break other functionality.
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put(Util.API_KEY, API_KEY);
+        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+        Asset freshAsset = TestClient.getClient().stack(headers).asset(_uid);
+        freshAsset.clearParams();
+        Request resp = freshAsset.fetch().request();
+        Assertions.assertEquals("GET", resp.method());
+        Assertions.assertNull(resp.header("api_version"),
+                "api_version header must not be present on fetch unless explicitly added");
+    }
+
+    // ==================== End Asset Scanning Tests ====================
 
     @Test
     void testAssetValidate() {
