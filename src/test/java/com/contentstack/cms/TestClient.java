@@ -29,15 +29,20 @@ public class TestClient {
 
     /** Content type UID for entry-variant tests (default {@code blog}). */
     public static final String ENTRY_VARIANT_CONTENT_TYPE_UID =
-            env.get("entryVariantContentTypeUid") != null ? env.get("entryVariantContentTypeUid") : "blog";
+            isBlank(env.get("entryVariantContentTypeUid")) ? "blog" : env.get("entryVariantContentTypeUid").trim();
 
     /** Stack branch for entry-variant tests (default {@code develop}). */
     public static final String ENTRY_VARIANT_BRANCH =
-            env.get("entryVariantBranch") != null ? env.get("entryVariantBranch") : "develop";
+            isBlank(env.get("entryVariantBranch")) ? "develop" : env.get("entryVariantBranch").trim();
 
     /** Locale query param for entry-variant tests (default {@code en-us}). */
     public static final String ENTRY_VARIANT_LOCALE =
-            env.get("entryVariantLocale") != null ? env.get("entryVariantLocale") : "en-us";
+            isBlank(env.get("entryVariantLocale")) ? "en-us" : env.get("entryVariantLocale").trim();
+
+    /** {@code true} if {@code value} is null, empty, or whitespace-only. */
+    private static boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
 
     /**
      * {@code true} when {@code apiKey} / {@code managementToken} were not loaded from {@code .env} (defaults apply).
