@@ -5,6 +5,7 @@ import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
 import okhttp3.mockwebserver.MockResponse;
@@ -17,7 +18,9 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -158,6 +161,24 @@ public class ContentstackUnitTest {
                 .setVersion("v8")
                 .build();
         Assertions.assertEquals("v8", contentstack.version);
+    }
+
+    @Test
+    void setProtocols_http1Only_buildsSuccessfully() {
+        List<Protocol> protocols = Collections.singletonList(Protocol.HTTP_1_1);
+        Contentstack contentstack = new Contentstack.Builder()
+                .setProtocols(protocols)
+                .build();
+        Assertions.assertNotNull(contentstack);
+    }
+
+    @Test
+    void setProtocols_http2AndHttp1_buildsSuccessfully() {
+        List<Protocol> protocols = List.of(Protocol.HTTP_2, Protocol.HTTP_1_1);
+        Contentstack contentstack = new Contentstack.Builder()
+                .setProtocols(protocols)
+                .build();
+        Assertions.assertNotNull(contentstack);
     }
 
     @Test
