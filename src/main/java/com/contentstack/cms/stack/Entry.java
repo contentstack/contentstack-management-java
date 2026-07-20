@@ -72,7 +72,7 @@ public class Entry implements BaseImplementation<Entry> {
 
     private void validateVariantUid(@NotNull String variantUid) {
         Objects.requireNonNull(variantUid, ErrorMessages.VARIANT_UID_REQUIRED);
-        if (variantUid.isEmpty()) {
+        if (variantUid.trim().isEmpty()) {
             throw new IllegalArgumentException(ErrorMessages.VARIANT_UID_REQUIRED);
         }
     }
@@ -82,7 +82,7 @@ public class Entry implements BaseImplementation<Entry> {
      * Null or blank {@code branchUid} keeps {@link #headers} as-is (stack / {@link #addBranch(String)} behavior).
      */
     private Map<String, Object> variantHeadersWithOptionalBranch(@Nullable String branchUid) {
-        if (branchUid == null || branchUid.isEmpty()) {
+        if (branchUid == null || branchUid.trim().isEmpty()) {
             return this.headers;
         }
         HashMap<String, Object> copy = new HashMap<>(this.headers);
@@ -99,6 +99,10 @@ public class Entry implements BaseImplementation<Entry> {
      * @return this entry instance for chaining
      */
     public Entry addBranch(@NotNull String branchUid) {
+        Objects.requireNonNull(branchUid, ErrorMessages.BRANCH_UID_REQUIRED);
+        if (branchUid.trim().isEmpty()) {
+            throw new IllegalArgumentException(ErrorMessages.BRANCH_UID_REQUIRED);
+        }
         this.headers.put(Util.BRANCH, branchUid);
         return this;
     }
