@@ -8,7 +8,8 @@ package com.contentstack.cms.stack;
  @SuppressWarnings("deprecation")
  @RunWith(JUnitPlatform.class)
  @SelectClasses({
-         TaxonomyAPITest.class,
+         EndpointAPITest.class,
+        TaxonomyAPITest.class,
          AssetAPITest.class,
          ContentTypeAPITest.class,
          EntryFieldsAPITest.class,
