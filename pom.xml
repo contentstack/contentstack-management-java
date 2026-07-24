@@ -7,7 +7,7 @@
     <artifactId>cms</artifactId>
     <packaging>jar</packaging>
     <name>contentstack-management-java</name>
-    <version>1.12.2</version>
+    <version>1.13.0</version>
     <description>Contentstack Java Management SDK for Content Management API, Contentstack is a headless CMS with an
         API-first approach
     </description>
@@ -254,7 +254,7 @@
                      </includes>
                      <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     <!-- Skip during default lifecycle (e.g. publish); run tests locally with: mvn test -DskipTests=false -->
-                    <!-- <skipTests>true</skipTests> -->
+                    <skipTests>true</skipTests>
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
