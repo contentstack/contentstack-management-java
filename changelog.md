@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.13.0
+
+### Jul 27, 2026
+
+- Feature: Branch support in entry variants
+
 ## v1.12.2
 
 ### Jul 06, 2026
