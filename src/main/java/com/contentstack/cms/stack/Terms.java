@@ -278,6 +278,37 @@ public class Terms implements BaseImplementation<Terms> {
         return this.taxonomyService.reorder(this.headers, this.taxonomyId, termUid, this.params, body);
     }
 
+    /**
+     * Localize a term into the given locale.
+     *
+     * @param termUid the term to localize
+     * @param body    the request body, e.g. {@code {"term": {"uid": "...", "name": "..."}}}
+     * @param locale  the target locale, e.g. {@code hi-in}
+     * @return instance of Call <p> <b>Example</b> <pre> {@code
+     * Stack stack = new Contentstack.Builder().build().stack(headers);
+     * Term term = stack.taxonomy("taxonomyId").terms().localize("termId", body, "hi-in");
+     * } </pre>
+     */
+    public Call<ResponseBody> localize(@NotNull String termUid, @NotNull JSONObject body, @NotNull String locale) {
+        this.params.put("locale", locale);
+        return this.taxonomyService.localizeTerm(this.headers, this.taxonomyId, termUid, this.params, body);
+    }
+
+    /**
+     * Unlocalize a term from the given locale.
+     *
+     * @param termUid the term to unlocalize
+     * @param locale  the locale to remove, e.g. {@code hi-in}
+     * @return instance of Call <p> <b>Example</b> <pre> {@code
+     * Stack stack = new Contentstack.Builder().build().stack(headers);
+     * Term term = stack.taxonomy("taxonomyId").terms().unlocalize("termId", "hi-in");
+     * } </pre>
+     */
+    public Call<ResponseBody> unlocalize(@NotNull String termUid, @NotNull String locale) {
+        this.params.put("locale", locale);
+        return this.taxonomyService.unlocalizeTerm(this.headers, this.taxonomyId, termUid, this.params);
+    }
+
 
     /**
      * Search call.

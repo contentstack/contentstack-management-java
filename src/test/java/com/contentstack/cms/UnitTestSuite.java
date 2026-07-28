@@ -7,6 +7,7 @@ import com.contentstack.cms.stack.EnvironmentUnitTest;
 import com.contentstack.cms.stack.GlobalFieldUnitTests;
 import com.contentstack.cms.stack.LocaleUnitTest;
 import com.contentstack.cms.stack.ReleaseUnitTest;
+import com.contentstack.cms.stack.TaxonomyTest;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.runner.RunWith;
@@ -32,7 +33,8 @@ import org.junit.runner.RunWith;
         EnvironmentUnitTest.class,
         GlobalFieldUnitTests.class,
         LocaleUnitTest.class,
-        ReleaseUnitTest.class
+        ReleaseUnitTest.class,
+        TaxonomyTest.class
 })
 public class UnitTestSuite {
 }
