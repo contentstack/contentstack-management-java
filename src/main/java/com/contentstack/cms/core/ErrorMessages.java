@@ -37,6 +37,7 @@ public final class ErrorMessages {
     public static final String RELEASE_UID_REQUIRED = "Release UID is required. Provide a valid Release UID and try again.";
     public static final String ROLE_UID_REQUIRED = "Role UID is required. Provide a valid Role UID and try again.";
     public static final String VARIANT_GROUP_UID_REQUIRED = "Variant Group UID is required. Provide a valid Variant Group UID and try again.";
+    public static final String VARIANT_UID_REQUIRED = "Variant UID is required. Provide a valid Variant UID and try again.";
     public static final String WEBHOOK_UID_REQUIRED = "Webhook UID is required. Provide a valid Webhook UID and try again.";
     public static final String WORKFLOW_UID_REQUIRED = "Workflow UID is required. Provide a valid Workflow UID and try again.";
 
