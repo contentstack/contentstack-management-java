@@ -103,12 +103,28 @@ public class AuthInterceptor implements Interceptor {
         RequestObserver localObserver = observer;
         if (localObserver != null) {
             try {
-                localObserver.onCall(finalRequest, response, System.currentTimeMillis() - startedAt);
+                // Never hand credentials to observers: sensitive headers are
+                // masked on a defensive copy before the callback sees it.
+                localObserver.onCall(maskSensitiveHeaders(finalRequest), response,
+                        System.currentTimeMillis() - startedAt);
             } catch (Exception ignored) {
                 // observers must never break real requests
             }
         }
         return response;
+    }
+
+    private static Request maskSensitiveHeaders(Request request) {
+        Request.Builder masked = request.newBuilder();
+        for (String name : new String[]{"authtoken", "authorization", "access_token"}) {
+            String value = request.header(name);
+            if (value != null) {
+                masked.header(name, value.length() > 12
+                        ? value.substring(0, 6) + "..." + value.substring(value.length() - 4)
+                        : "***");
+            }
+        }
+        return masked.build();
     }
 
     /**

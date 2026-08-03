@@ -107,6 +107,7 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
             call.sdkMethod = detectSdkMethod(request.method(), request.url().encodedPath());
             try {
                 String body = response.peekBody(MAX_BODY_CHARS + 1).string();
+                body = redactSecrets(body);
                 call.responseBody = body.length() > MAX_BODY_CHARS
                         ? body.substring(0, MAX_BODY_CHARS) + "\n... (truncated)" : body;
             } catch (Exception e) {
@@ -132,7 +133,7 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
                 if (len > 0 && len < 65536) {
                     Buffer buffer = new Buffer();
                     request.body().writeTo(buffer);
-                    String body = buffer.readString(StandardCharsets.UTF_8).replace("'", "'\\''");
+                    String body = redactSecrets(buffer.readString(StandardCharsets.UTF_8)).replace("'", "'\\''");
                     curl.append(" \\\n  -d '").append(body).append("'");
                 }
             } catch (Exception ignored) {
@@ -140,6 +141,27 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
             }
         }
         return curl.toString();
+    }
+
+    /**
+     * Redacts credential values from JSON payloads before they enter the report:
+     * passwords, auth/session tokens, management/delivery token values, OAuth
+     * secrets and TOTP secrets. The report is shipped as a CI artifact, so no
+     * live secret may survive into it.
+     */
+    private static final Pattern SECRET_JSON_FIELDS = Pattern.compile(
+            "(\"(?:password|authtoken|token|management_token|secret|mfaSecret|tfaToken|tfa_token|"
+                    + "access_token|refresh_token|client_secret|api_secret)\"\\s*:\\s*\")([^\"]*)(\")",
+            Pattern.CASE_INSENSITIVE);
+    private static final Pattern CS_TOKEN_PATTERN = Pattern.compile("\\bcs[a-f0-9]{16,}\\b");
+
+    static String redactSecrets(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+        String redacted = SECRET_JSON_FIELDS.matcher(text).replaceAll("$1***REDACTED***$3");
+        redacted = CS_TOKEN_PATTERN.matcher(redacted).replaceAll("cs***REDACTED***");
+        return redacted;
     }
 
     private static String mask(String headerName, String value) {
