@@ -36,8 +36,11 @@ public class TaxonomyAPITest {
     protected static String MANAGEMENT_TOKEN = TestClient.MANAGEMENT_TOKEN;
     protected static Stack stackInstance;
     protected static Taxonomy taxonomy;
+    protected static Terms terms;
+    // Fixed taxonomy UID used by the request-building tests (publish/localize/unlocalize)
+    protected static String _uid = "sample_one";
     private JSONParser parser = new JSONParser();
-    
+
     // Track created resources for cleanup
     private String createdTaxonomyUid;
     private String createdTermUid;
@@ -54,6 +57,7 @@ public class TaxonomyAPITest {
                 .build()
                 .stack(headers);
         taxonomy = stackInstance.taxonomy();
+        terms = stackInstance.taxonomy(_uid).terms();
     }
 
     // ==================== TAXONOMY API TESTS ====================
