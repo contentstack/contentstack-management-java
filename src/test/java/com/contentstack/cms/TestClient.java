@@ -20,8 +20,10 @@ public class TestClient {
     public final static String USER_ID = getEnvValue("USER_ID", "userId", "c11e668e0295477f");
     public final static String OWNERSHIP = getEnvValue("OWNERSHIP_TOKEN", "ownershipToken", "ownershipTokenId");
     // file deepcode ignore NonCryptoHardcodedSecret/test: <please specify a reason of ignoring this>
-    public final static String API_KEY = getEnvValue("API_KEY", "apiKey", "apiKey99999999");
-    public final static String MANAGEMENT_TOKEN = getEnvValue("MANAGEMENT_TOKEN", "managementToken", "managementToken99999999");
+    // In dynamic mode (DYNAMIC_STACK=true) these come from the dynamically created
+    // test stack (see TestStackContext); otherwise from .env as before.
+    public final static String API_KEY = resolveApiKey();
+    public final static String MANAGEMENT_TOKEN = resolveManagementToken();
 
     public final static String DEV_HOST = getEnvValue("HOST", "dev_host", "api.contentstack.io").trim();
     public final static String REGION = getEnvValue("REGION", "region", "na");
@@ -50,7 +52,11 @@ public class TestClient {
     public static String AUTHTOKEN = getAuthToken();
 
     public static boolean isUsingDefaultStackCredentials() {
-        return env.get("apiKey") == null || env.get("managementToken") == null;
+        if (TestStackContext.isStackCreated()) {
+            return false; // dynamic stack provides real credentials
+        }
+        return getEnvValue("API_KEY", "apiKey", null) == null
+                || getEnvValue("MANAGEMENT_TOKEN", "managementToken", null) == null;
     }
     private static Contentstack instance;
     private static Stack stackInstance;
@@ -74,6 +80,42 @@ public class TestClient {
         }
         return defaultValue;
     }
+
+    /**
+     * API key resolution: dynamic test stack (DYNAMIC_STACK=true) first,
+     * then .env, then placeholder. TestStackContext is self-contained
+     * (never references TestClient), so calling it during static init is safe.
+     */
+    private static String resolveApiKey() {
+        if (TestStackContext.isDynamicMode()) {
+            TestStackContext.ensureSetup();
+            if (TestStackContext.isStackCreated()) {
+                return TestStackContext.getStackApiKey();
+            }
+        }
+        return getEnvValue("API_KEY", "apiKey", "apiKey99999999");
+    }
+
+    /**
+     * Management token resolution: dynamic test stack first, then .env, then placeholder.
+     *
+     * <p>IMPORTANT: when the dynamic stack was created but its token wasn't, we must
+     * NOT fall back to the static .env token - it belongs to a different stack and
+     * every request pairing it with the dynamic API key would 412.
+     */
+    private static String resolveManagementToken() {
+        if (TestStackContext.isDynamicMode()) {
+            TestStackContext.ensureSetup();
+            if (TestStackContext.getManagementToken() != null) {
+                return TestStackContext.getManagementToken();
+            }
+            if (TestStackContext.isStackCreated()) {
+                System.err.println("[TestClient] Dynamic stack has no management token - using placeholder (tests needing it will fail)");
+                return "managementToken99999999";
+            }
+        }
+        return getEnvValue("MANAGEMENT_TOKEN", "managementToken", "managementToken99999999");
+    }
     
     /**
      * Get auth token - either from cache, env, or by logging in.
@@ -83,7 +125,18 @@ public class TestClient {
         if (cachedAuthToken != null && !cachedAuthToken.isEmpty()) {
             return cachedAuthToken;
         }
-        
+
+        // 1.5. Dynamic mode: reuse the session TestStackContext already logged in with
+        if (TestStackContext.isDynamicMode()) {
+            TestStackContext.ensureSetup();
+            String dynamicToken = TestStackContext.getAuthtoken();
+            if (dynamicToken != null && !dynamicToken.isEmpty()) {
+                System.out.println("[TestClient] Using authtoken from dynamic test stack session");
+                cachedAuthToken = dynamicToken;
+                return cachedAuthToken;
+            }
+        }
+
         // 2. Check if there's a static token in env
         if (ENV_AUTHTOKEN != null && !ENV_AUTHTOKEN.isEmpty()) {
             System.out.println("[TestClient] Using AUTHTOKEN from environment");

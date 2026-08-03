@@ -11,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
+import com.contentstack.cms.TestStackContext;
 import com.contentstack.cms.Utils;
 import com.contentstack.cms.core.Util;
 
@@ -50,7 +51,13 @@ public class TaxonomyAPITest {
         final String AUTHTOKEN = TestClient.AUTHTOKEN;
         HashMap<String, Object> headers = new HashMap<>();
         headers.put(Util.API_KEY, API_KEY);
-        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+        // Taxonomy APIs cannot be scoped into a management token (probe-verified,
+        // see docs/DYNAMIC-TEST-FIXTURES.md). On the dynamic stack we omit the
+        // authorization header so the client's authtoken applies; on the static
+        // stack the UI-created full-access token keeps working as before.
+        if (!TestStackContext.isStackCreated()) {
+            headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+        }
         stackInstance = new Contentstack.Builder()
                 .setAuthtoken(AUTHTOKEN)
                 .setHost(TestClient.DEV_HOST)
@@ -473,7 +480,11 @@ public class TaxonomyAPITest {
         terms.addParams(params);
         terms.addHeaders(headers);
         Request request = terms.reorder("sample_one", new JSONObject()).request();
-        Assertions.assertEquals(3, request.headers().names().size());
+        // api_key + Accept-Encoding, plus authorization only on the static stack
+        // (dynamic mode omits it - taxonomy is not scopeable into mgmt tokens)
+        Assertions.assertTrue(request.headers().names().size() >= 2,
+                "Expected at least api_key + Accept-Encoding headers, got: " + request.headers().names());
+        Assertions.assertTrue(request.headers().names().contains("api_key"));
         Assertions.assertEquals("PUT", request.method());
         Assertions.assertTrue(request.url().isHttps());
         Assertions.assertEquals(6, request.url().pathSegments().size());

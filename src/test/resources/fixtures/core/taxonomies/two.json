@@ -1,0 +1,14 @@
+{
+  "taxonomy": {
+    "uid": "two",
+    "name": "Two",
+    "description": ""
+  },
+  "terms": [
+    {
+      "uid": "term_two",
+      "name": "term_two",
+      "parent_uid": null
+    }
+  ]
+}

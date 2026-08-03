@@ -1,0 +1,84 @@
+{
+  "taxonomy": {
+    "uid": "india",
+    "name": "India",
+    "description": "India Description"
+  },
+  "terms": [
+    {
+      "uid": "gujrat",
+      "name": "Gujrat",
+      "parent_uid": null
+    },
+    {
+      "uid": "karnataka",
+      "name": "Karnataka",
+      "parent_uid": null
+    },
+    {
+      "uid": "maharashtra",
+      "name": "Maharashtra",
+      "parent_uid": null
+    },
+    {
+      "uid": "north_india",
+      "name": "North India",
+      "parent_uid": null
+    },
+    {
+      "uid": "south_india",
+      "name": "South India",
+      "parent_uid": null
+    },
+    {
+      "uid": "hosapete",
+      "name": "Hosapete",
+      "parent_uid": "karnataka"
+    },
+    {
+      "uid": "jamnagar",
+      "name": "Jamnagar",
+      "parent_uid": "gujrat"
+    },
+    {
+      "uid": "kerala",
+      "name": "Kerala",
+      "parent_uid": "south_india"
+    },
+    {
+      "uid": "mumbai",
+      "name": "Mumbai",
+      "parent_uid": "maharashtra"
+    },
+    {
+      "uid": "up",
+      "name": "UP",
+      "parent_uid": "north_india"
+    },
+    {
+      "uid": "himachal",
+      "name": "Himachal",
+      "parent_uid": "north_india"
+    },
+    {
+      "uid": "pune",
+      "name": "Pune",
+      "parent_uid": "maharashtra"
+    },
+    {
+      "uid": "shimoga",
+      "name": "Shimoga",
+      "parent_uid": "karnataka"
+    },
+    {
+      "uid": "surat",
+      "name": "Surat",
+      "parent_uid": "gujrat"
+    },
+    {
+      "uid": "tamilnadu",
+      "name": "Tamilnadu",
+      "parent_uid": "south_india"
+    }
+  ]
+}

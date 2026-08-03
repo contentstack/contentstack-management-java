@@ -6,3 +6,5 @@ fileignoreconfig:
     - filecontent
 - filename: .dccache
   checksum: 56b07d2204dee34290e064faf1d244643c63998888d962d4f8b2d206d604c8d4
+- filename: src/test/java/com/contentstack/cms/TestStackContext.java
+  checksum: 54119d0f9bdc14155a861e1d9219e06cd95d80fa8278dff02236ffc52b2c22a6

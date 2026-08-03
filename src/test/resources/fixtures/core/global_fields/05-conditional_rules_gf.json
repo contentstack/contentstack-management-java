@@ -1,0 +1,73 @@
+{
+  "global_field": {
+    "uid": "conditional_rules_gf",
+    "title": "Conditional Rules Global Field",
+    "description": "",
+    "schema": [
+      {
+        "uid": "is_featured",
+        "data_type": "boolean",
+        "display_name": "Is Featured?",
+        "mandatory": false,
+        "non_localizable": false,
+        "unique": false,
+        "multiple": false,
+        "field_metadata": {
+          "description": "",
+          "default_value": false
+        }
+      },
+      {
+        "uid": "featured_label",
+        "data_type": "text",
+        "display_name": "Featured Label",
+        "field_metadata": {
+          "multiline": false,
+          "version": 3,
+          "description": "",
+          "default_value": ""
+        },
+        "mandatory": false,
+        "non_localizable": false,
+        "unique": false,
+        "multiple": false,
+        "format": "",
+        "error_messages": {
+          "format": ""
+        }
+      },
+      {
+        "uid": "detailed_description",
+        "data_type": "text",
+        "display_name": "Detailed Description",
+        "field_metadata": {
+          "multiline": true,
+          "version": 3,
+          "description": "",
+          "default_value": ""
+        },
+        "mandatory": false,
+        "non_localizable": false,
+        "unique": false,
+        "multiple": false,
+        "format": "",
+        "error_messages": {
+          "format": ""
+        }
+      },
+      {
+        "uid": "priority_score",
+        "data_type": "number",
+        "display_name": "Priority Score",
+        "mandatory": false,
+        "non_localizable": false,
+        "unique": false,
+        "multiple": false,
+        "field_metadata": {
+          "description": "",
+          "default_value": ""
+        }
+      }
+    ]
+  }
+}

@@ -46,7 +46,10 @@ public class StackAPITest {
             Response<ResponseBody> response = stack.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
-                Assertions.assertTrue(jsonResp.has("stacks"));
+                // with an api_key header the API returns a single "stack";
+                // without it, a "stacks" array - accept both
+                Assertions.assertTrue(jsonResp.has("stacks") || jsonResp.has("stack"),
+                        "Response should contain 'stacks' or 'stack'");
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -62,7 +65,10 @@ public class StackAPITest {
             Response<ResponseBody> response = stack.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
-                Assertions.assertTrue(jsonResp.has("stacks"));
+                // with an api_key header the API returns a single "stack";
+                // without it, a "stacks" array - accept both
+                Assertions.assertTrue(jsonResp.has("stacks") || jsonResp.has("stack"),
+                        "Response should contain 'stacks' or 'stack'");
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -82,7 +88,10 @@ public class StackAPITest {
             Response<ResponseBody> response = stack.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
-                Assertions.assertTrue(jsonResp.has("stacks"));
+                // with an api_key header the API returns a single "stack";
+                // without it, a "stacks" array - accept both
+                Assertions.assertTrue(jsonResp.has("stacks") || jsonResp.has("stack"),
+                        "Response should contain 'stacks' or 'stack'");
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -102,7 +111,10 @@ public class StackAPITest {
             Response<ResponseBody> response = stack.find().execute();
             if (response.isSuccessful()) {
                 JsonObject jsonResp = toJson(response);
-                Assertions.assertTrue(jsonResp.has("stacks"));
+                // with an api_key header the API returns a single "stack";
+                // without it, a "stacks" array - accept both
+                Assertions.assertTrue(jsonResp.has("stacks") || jsonResp.has("stack"),
+                        "Response should contain 'stacks' or 'stack'");
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -132,10 +144,12 @@ public class StackAPITest {
                 assert response.errorBody() != null;
                 Error error = new Gson().fromJson(response.errorBody().string(), Error.class);
                 int errCode = error.getErrorCode();
-                // Accept either 105 (not authorized - user not owner) or 309 (validation error)
-                // Error 105 means the current user doesn't have permission to transfer ownership
-                Assertions.assertTrue(errCode == 105 || errCode == 309, 
-                        "Expected error code 105 or 309, but got: " + errCode);
+                // Accept 105 (not authorized), 309 (validation error) or
+                // 141 (transfer failed - e.g. target user not part of the org).
+                // 141 appears now that the client actually authenticates
+                // (the authtoken was silently missing before the SDK fix).
+                Assertions.assertTrue(errCode == 105 || errCode == 309 || errCode == 141,
+                        "Expected error code 105, 309 or 141, but got: " + errCode);
             }
         } catch (IOException e) {
             log.warning(e.getLocalizedMessage());
@@ -172,7 +186,8 @@ public class StackAPITest {
                             .request()
                             .url()
                             .query());
-            Assertions.assertEquals(6,
+            // 7 headers: client-level authtoken now attached by AuthInterceptor
+            Assertions.assertEquals(7,
                     response.raw().request().headers().size());
 
         }
@@ -270,7 +285,9 @@ public class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/share",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(6,
+                // 7 headers: the client-level authtoken is now attached by
+                // AuthInterceptor (was silently missing before the SDK fix)
+                Assertions.assertEquals(7,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
@@ -301,7 +318,9 @@ public class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/unshare",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(6,
+                // 7 headers: the client-level authtoken is now attached by
+                // AuthInterceptor (was silently missing before the SDK fix)
+                Assertions.assertEquals(7,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {
@@ -318,7 +337,10 @@ public class StackAPITest {
         Response<ResponseBody> response = stack.allUsers().execute();
         if (response.isSuccessful()) {
             JsonObject jsonResp = toJson(response);
-            Assertions.assertTrue(jsonResp.has("stacks"));
+            // with an api_key header the API returns a single "stack" (with
+            // collaborators); without it, a "stacks" array - accept both
+            Assertions.assertTrue(jsonResp.has("stacks") || jsonResp.has("stack"),
+                    "Response should contain 'stacks' or 'stack'");
         } else {
             Assertions.assertTrue(true,
                     response.raw().request().url()
@@ -350,7 +372,9 @@ public class StackAPITest {
             } else {
                 Assertions.assertEquals("/v3/stacks/users/roles",
                         response.raw().request().url().encodedPath());
-                Assertions.assertEquals(6,
+                // 7 headers: the client-level authtoken is now attached by
+                // AuthInterceptor (was silently missing before the SDK fix)
+                Assertions.assertEquals(7,
                         response.raw().request().headers().size());
             }
         } catch (IOException e) {

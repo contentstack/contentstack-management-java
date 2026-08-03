@@ -1,0 +1,21 @@
+{
+  "content_type": "author",
+  "entries": [
+    {
+      "title": "Test Author One",
+      "url": "/author/test-author-one",
+      "email": "author.one@example.com",
+      "job_title": "Staff Writer",
+      "department": "Editorial",
+      "author_type": "cybersecurity"
+    },
+    {
+      "title": "Test Author Two",
+      "url": "/author/test-author-two",
+      "email": "author.two@example.com",
+      "job_title": "Editor",
+      "department": "Editorial",
+      "author_type": "podcast"
+    }
+  ]
+}

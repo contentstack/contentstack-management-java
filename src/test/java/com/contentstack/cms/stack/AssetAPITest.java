@@ -161,7 +161,8 @@ class AssetAPITest {
         asset.addHeader("authorization", MANAGEMENT_TOKEN);
         String filePath = "src/test/resources/assets/logo.png";
         Response<ResponseBody> resp = asset.replace(filePath, "Test asset replacement").execute();
-        Assertions.assertEquals(5, resp.raw().request().headers().size());
+        // 6 headers: client-level authtoken now attached by AuthInterceptor
+        Assertions.assertEquals(6, resp.raw().request().headers().size());
         Assertions.assertTrue(resp.raw().request().headers().names().contains("api_key"));
         Assertions.assertTrue(resp.raw().request().headers().names().contains("authorization"));
         Assertions.assertTrue(resp.raw().request().isHttps(), "always works on https");
@@ -402,9 +403,18 @@ class AssetAPITest {
     @Order(14)
     void testPublishAssetWithApiVersionHeader() throws IOException {
         Assumptions.assumeTrue(uploadedAssetUid != null, "Skipping: no uploaded asset from testUploadAssetIncludesScanStatusPending");
-        Asset scanAsset = client.stack(API_KEY, MANAGEMENT_TOKEN).asset(uploadedAssetUid);
-        scanAsset.addHeader("api_key", API_KEY);
-        scanAsset.addHeader("authorization", MANAGEMENT_TOKEN);
+        // Publishing cannot be granted to a scoped (API-created) management token;
+        // on the dynamic stack we publish with the authtoken instead - same as the
+        // JS sanity suite. The static stack's UI-created token works as before.
+        Asset scanAsset;
+        if (com.contentstack.cms.TestStackContext.isStackCreated()) {
+            scanAsset = client.stack(API_KEY).asset(uploadedAssetUid);
+            scanAsset.addHeader("api_key", API_KEY);
+        } else {
+            scanAsset = client.stack(API_KEY, MANAGEMENT_TOKEN).asset(uploadedAssetUid);
+            scanAsset.addHeader("api_key", API_KEY);
+            scanAsset.addHeader("authorization", MANAGEMENT_TOKEN);
+        }
         scanAsset.addHeader("api_version", "3.2");
         JSONObject publishBody = new JSONObject();
         JSONObject publishDetails = new JSONObject();

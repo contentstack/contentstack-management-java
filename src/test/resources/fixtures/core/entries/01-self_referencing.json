@@ -1,0 +1,21 @@
+{
+  "content_type": "self_referencing",
+  "entries": [
+    {
+      "title": "Root Node",
+      "category": "parent",
+      "description": "Top of the self-referencing tree"
+    },
+    {
+      "title": "Child Node",
+      "category": "child",
+      "description": "References the root entry",
+      "parent_entry": [
+        {
+          "uid": "{{ref:self_referencing:0}}",
+          "_content_type_uid": "self_referencing"
+        }
+      ]
+    }
+  ]
+}

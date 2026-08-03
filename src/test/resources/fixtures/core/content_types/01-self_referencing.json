@@ -1,0 +1,115 @@
+{
+  "content_type": {
+    "uid": "self_referencing",
+    "title": "Self Referencing",
+    "description": "Content type that references itself to test hierarchical tree structures and recursive references in CLI imports.",
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "field_metadata": {
+          "_default": true,
+          "version": 3
+        },
+        "mandatory": true,
+        "unique": true,
+        "multiple": false,
+        "non_localizable": false
+      },
+      {
+        "uid": "category",
+        "data_type": "text",
+        "display_name": "Node Category",
+        "display_type": "dropdown",
+        "enum": {
+          "advanced": true,
+          "choices": [
+            {
+              "value": "parent",
+              "key": "Parent Node"
+            },
+            {
+              "value": "child",
+              "key": "Child Node"
+            },
+            {
+              "value": "leaf",
+              "key": "Leaf Node"
+            }
+          ]
+        },
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "uid": "description",
+        "data_type": "text",
+        "display_name": "Description",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "multiline": true,
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "uid": "parent_entry",
+        "data_type": "reference",
+        "display_name": "Parent Entry",
+        "reference_to": [
+          "self_referencing"
+        ],
+        "field_metadata": {
+          "ref_multiple": false,
+          "ref_multiple_content_types": true
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "uid": "child_entries",
+        "data_type": "reference",
+        "display_name": "Child Entries",
+        "reference_to": [
+          "self_referencing"
+        ],
+        "field_metadata": {
+          "ref_multiple": true,
+          "ref_multiple_content_types": true
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      }
+    ],
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "sub_title": [],
+      "title": "title"
+    }
+  }
+}

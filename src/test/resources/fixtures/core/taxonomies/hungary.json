@@ -1,0 +1,49 @@
+{
+  "taxonomy": {
+    "uid": "hungary",
+    "name": "Hungary",
+    "description": "Hungary Description"
+  },
+  "terms": [
+    {
+      "uid": "budapest_region",
+      "name": "Budapest Region",
+      "parent_uid": null
+    },
+    {
+      "uid": "baranya",
+      "name": "Baranya",
+      "parent_uid": null
+    },
+    {
+      "uid": "budapest",
+      "name": "Budapest",
+      "parent_uid": "budapest_region"
+    },
+    {
+      "uid": "pecs",
+      "name": "P\u00e9cs",
+      "parent_uid": "baranya"
+    },
+    {
+      "uid": "szentendre",
+      "name": "Szentendre",
+      "parent_uid": "budapest_region"
+    },
+    {
+      "uid": "belvros_ujhegy",
+      "name": "Belv\u00e1ros-\u00dajhegy",
+      "parent_uid": "pecs"
+    },
+    {
+      "uid": "district_i_varhegy",
+      "name": "District I \u2013 V\u00e1rhegy",
+      "parent_uid": "budapest"
+    },
+    {
+      "uid": "district_v_belvros",
+      "name": "District V \u2013 Belv\u00e1ros",
+      "parent_uid": "budapest"
+    }
+  ]
+}

@@ -1,0 +1,1063 @@
+{
+  "content_type": {
+    "uid": "complex_all_fields",
+    "title": "Complex All Fields",
+    "description": "Comprehensive content type covering all field types for CLI E2E testing. Tests field visibility rules, global field embeds, self-references, and multi-state entry publishing.",
+    "schema": [
+      {
+        "data_type": "text",
+        "display_name": "Title",
+        "field_metadata": {
+          "_default": true,
+          "version": 3
+        },
+        "mandatory": true,
+        "uid": "title",
+        "unique": true,
+        "multiple": false,
+        "non_localizable": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Multi Line Text",
+        "uid": "multi_line",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "multiline": true,
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "number",
+        "display_name": "Integer Number",
+        "uid": "number_int",
+        "field_metadata": {
+          "description": "",
+          "default_value": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "number",
+        "display_name": "Decimal Number",
+        "uid": "number_float",
+        "field_metadata": {
+          "description": "",
+          "default_value": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "boolean",
+        "display_name": "Boolean Toggle",
+        "uid": "bool_field",
+        "field_metadata": {
+          "description": "",
+          "default_value": false
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "isodate",
+        "display_name": "Date Field",
+        "uid": "date_field",
+        "startDate": null,
+        "endDate": null,
+        "field_metadata": {
+          "description": "",
+          "default_value": {
+            "custom": false,
+            "date": "",
+            "time": ""
+          },
+          "hide_time": true
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "link",
+        "display_name": "Link Field",
+        "uid": "link_field",
+        "field_metadata": {
+          "description": "",
+          "default_value": {
+            "title": "",
+            "url": ""
+          }
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "json",
+        "display_name": "JSON Rich Text Editor",
+        "uid": "json_rte",
+        "field_metadata": {
+          "allow_json_rte": true,
+          "embed_entry": true,
+          "description": "",
+          "default_value": "",
+          "multiline": false,
+          "rich_text_type": "advanced",
+          "options": [
+            "undo",
+            "redo",
+            "h2",
+            "h3",
+            "h4",
+            "bold",
+            "underline",
+            "italic",
+            "deleted",
+            "lists",
+            "alignment",
+            "link",
+            "properties"
+          ]
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "reference_to": [
+          "sys_assets",
+          "author"
+        ],
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false,
+        "mandatory": false,
+        "plugins": []
+      },
+      {
+        "data_type": "file",
+        "display_name": "Single Asset",
+        "uid": "single_asset",
+        "field_metadata": {
+          "description": "",
+          "rich_text_type": "standard",
+          "image": false
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "file",
+        "display_name": "Multiple Assets",
+        "uid": "multi_asset",
+        "field_metadata": {
+          "description": "",
+          "rich_text_type": "standard",
+          "image": false
+        },
+        "mandatory": false,
+        "multiple": true,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "reference",
+        "display_name": "Single Reference to Author",
+        "uid": "single_ref",
+        "reference_to": [
+          "author"
+        ],
+        "field_metadata": {
+          "ref_multiple": false,
+          "ref_multiple_content_types": true
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "reference",
+        "display_name": "Self Reference",
+        "uid": "self_ref",
+        "reference_to": [
+          "complex_all_fields"
+        ],
+        "field_metadata": {
+          "ref_multiple": true,
+          "ref_multiple_content_types": true
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Dropdown Select",
+        "uid": "dropdown_select",
+        "display_type": "dropdown",
+        "enum": {
+          "advanced": true,
+          "choices": [
+            {
+              "value": "alpha",
+              "key": "Alpha"
+            },
+            {
+              "value": "beta",
+              "key": "Beta"
+            },
+            {
+              "value": "gamma",
+              "key": "Gamma"
+            },
+            {
+              "value": "gallery",
+              "key": "Gallery"
+            }
+          ]
+        },
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Checkbox Multi-Select",
+        "uid": "checkbox_multi",
+        "display_type": "checkbox",
+        "enum": {
+          "advanced": true,
+          "choices": [
+            {
+              "value": "tag_one",
+              "key": "Tag One"
+            },
+            {
+              "value": "tag_two",
+              "key": "Tag Two"
+            },
+            {
+              "value": "tag_three",
+              "key": "Tag Three"
+            }
+          ]
+        },
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": true,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "group",
+        "display_name": "Group Block",
+        "uid": "group_block",
+        "field_metadata": {
+          "description": "",
+          "instruction": ""
+        },
+        "schema": [
+          {
+            "data_type": "text",
+            "display_name": "Group Title",
+            "uid": "group_title",
+            "field_metadata": {
+              "description": "",
+              "default_value": "",
+              "multiline": false,
+              "version": 3
+            },
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false
+          },
+          {
+            "data_type": "number",
+            "display_name": "Group Number",
+            "uid": "group_number",
+            "field_metadata": {
+              "description": "",
+              "default_value": ""
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false
+          },
+          {
+            "data_type": "boolean",
+            "display_name": "Group Boolean",
+            "uid": "group_bool",
+            "field_metadata": {
+              "description": "",
+              "default_value": false
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false
+          }
+        ],
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "blocks",
+        "display_name": "Modular Blocks",
+        "uid": "modular_blocks",
+        "field_metadata": {
+          "instruction": "",
+          "description": ""
+        },
+        "mandatory": false,
+        "multiple": true,
+        "non_localizable": false,
+        "unique": false,
+        "blocks": [
+          {
+            "uid": "text_block",
+            "title": "Text Block",
+            "schema": [
+              {
+                "data_type": "text",
+                "display_name": "Block Heading",
+                "uid": "block_heading",
+                "field_metadata": {
+                  "description": "",
+                  "default_value": "",
+                  "multiline": false,
+                  "version": 3
+                },
+                "format": "",
+                "error_messages": {
+                  "format": ""
+                },
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false
+              },
+              {
+                "data_type": "text",
+                "display_name": "Block Body",
+                "uid": "block_body",
+                "field_metadata": {
+                  "description": "",
+                  "default_value": "",
+                  "multiline": true,
+                  "version": 3
+                },
+                "format": "",
+                "error_messages": {
+                  "format": ""
+                },
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false
+              }
+            ]
+          },
+          {
+            "uid": "media_block",
+            "title": "Media Block",
+            "schema": [
+              {
+                "data_type": "text",
+                "display_name": "Caption",
+                "uid": "media_caption",
+                "field_metadata": {
+                  "description": "",
+                  "default_value": "",
+                  "multiline": false,
+                  "version": 3
+                },
+                "format": "",
+                "error_messages": {
+                  "format": ""
+                },
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false
+              },
+              {
+                "data_type": "file",
+                "display_name": "Media File",
+                "uid": "media_file",
+                "field_metadata": {
+                  "description": "",
+                  "rich_text_type": "standard",
+                  "image": false
+                },
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "data_type": "global_field",
+        "display_name": "All Field Types Global Field",
+        "uid": "global_ref",
+        "reference_to": "all_field_types_gf",
+        "field_metadata": {
+          "description": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false,
+        "schema": [
+          {
+            "uid": "gf_single_text",
+            "data_type": "text",
+            "display_name": "Single Line Text",
+            "field_metadata": {
+              "multiline": false,
+              "version": 3,
+              "description": "",
+              "default_value": ""
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "gf_multi_text",
+            "data_type": "text",
+            "display_name": "Multi Line Text",
+            "field_metadata": {
+              "multiline": true,
+              "version": 3,
+              "description": "",
+              "default_value": ""
+            },
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "gf_number_int",
+            "data_type": "number",
+            "display_name": "Integer Number",
+            "field_metadata": {
+              "description": "",
+              "default_value": ""
+            },
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "gf_number_float",
+            "data_type": "number",
+            "display_name": "Decimal Number",
+            "field_metadata": {
+              "description": "",
+              "default_value": ""
+            },
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "gf_boolean",
+            "data_type": "boolean",
+            "display_name": "Boolean Toggle",
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "field_metadata": {
+              "description": "",
+              "default_value": false
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "gf_link",
+            "data_type": "link",
+            "display_name": "Link Field",
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "field_metadata": {
+              "description": "",
+              "default_value": {
+                "title": "",
+                "url": ""
+              }
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "gf_json_blob",
+            "data_type": "text",
+            "display_name": "Raw JSON Blob (text)",
+            "field_metadata": {
+              "multiline": true,
+              "description": "",
+              "default_value": "",
+              "version": 3
+            },
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "mandatory": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "gf_file_single",
+            "data_type": "file",
+            "display_name": "Single File",
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "field_metadata": {
+              "description": "",
+              "rich_text_type": "standard",
+              "image": false
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "gf_file_multi",
+            "data_type": "file",
+            "display_name": "Multiple Files",
+            "mandatory": false,
+            "multiple": true,
+            "non_localizable": false,
+            "unique": false,
+            "field_metadata": {
+              "description": "",
+              "rich_text_type": "standard",
+              "image": false
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          }
+        ]
+      },
+      {
+        "data_type": "global_field",
+        "display_name": "Conditional Rules Global Field",
+        "uid": "conditional_gf",
+        "reference_to": "conditional_rules_gf",
+        "field_metadata": {
+          "description": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false,
+        "schema": [
+          {
+            "uid": "is_featured",
+            "data_type": "boolean",
+            "display_name": "Is Featured?",
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "field_metadata": {
+              "description": "",
+              "default_value": false
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "featured_label",
+            "data_type": "text",
+            "display_name": "Featured Label",
+            "field_metadata": {
+              "multiline": false,
+              "version": 3,
+              "description": "",
+              "default_value": ""
+            },
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "detailed_description",
+            "data_type": "text",
+            "display_name": "Detailed Description",
+            "field_metadata": {
+              "multiline": true,
+              "version": 3,
+              "description": "",
+              "default_value": ""
+            },
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "priority_score",
+            "data_type": "number",
+            "display_name": "Priority Score",
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "multiple": false,
+            "field_metadata": {
+              "description": "",
+              "default_value": ""
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          }
+        ]
+      },
+      {
+        "data_type": "taxonomy",
+        "display_name": "Taxonomy Hungary",
+        "uid": "taxonomies",
+        "taxonomies": [
+          {
+            "taxonomy_uid": "hungary",
+            "max_terms": 10,
+            "mandatory": false,
+            "multiple": true,
+            "non_localizable": false
+          },
+          {
+            "taxonomy_uid": "usa",
+            "max_terms": 10,
+            "mandatory": false,
+            "multiple": true,
+            "non_localizable": false
+          },
+          {
+            "taxonomy_uid": "india",
+            "max_terms": 10,
+            "mandatory": false,
+            "multiple": true,
+            "non_localizable": false
+          }
+        ],
+        "field_metadata": {
+          "description": "",
+          "default_value": ""
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": true,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Regex Validated Text",
+        "uid": "regex_text",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "multiline": false,
+          "version": 3
+        },
+        "format": "^[A-Z]{2,5}-[0-9]{3,6}$",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Mandatory Locale Field",
+        "uid": "mandatory_locale_field",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "multiline": false,
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": true,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Conditional Field (shown when bool_field = true)",
+        "uid": "conditional_field",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "multiline": false,
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "uid": "nested_gf_test",
+        "data_type": "global_field",
+        "display_name": "Nested GF Test (5 levels)",
+        "reference_to": "nested_gf_l1",
+        "field_metadata": {
+          "description": "Tests 5-level nested global field: nested_gf_l1\u2192l2\u2192l3\u2192l4\u2192all_field_types_gf"
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false,
+        "schema": [
+          {
+            "uid": "l1_label",
+            "data_type": "text",
+            "display_name": "Level 1 Label",
+            "field_metadata": {
+              "multiline": false,
+              "version": 3,
+              "description": "",
+              "default_value": ""
+            },
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "uid": "l2_ref",
+            "data_type": "global_field",
+            "display_name": "Level 2 Reference",
+            "reference_to": "nested_gf_l2",
+            "field_metadata": {
+              "description": ""
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "indexed": false,
+            "inbuilt_model": false,
+            "schema": [
+              {
+                "uid": "l2_label",
+                "data_type": "text",
+                "display_name": "Level 2 Label",
+                "field_metadata": {
+                  "multiline": false,
+                  "version": 3,
+                  "description": "",
+                  "default_value": ""
+                },
+                "format": "",
+                "error_messages": {
+                  "format": ""
+                },
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+              },
+              {
+                "uid": "l3_ref",
+                "data_type": "global_field",
+                "display_name": "All Field Types GF Reference",
+                "reference_to": "all_field_types_gf",
+                "field_metadata": {
+                  "description": ""
+                },
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false,
+                "schema": [
+                  {
+                    "uid": "gf_single_text",
+                    "data_type": "text",
+                    "display_name": "Single Line Text",
+                    "field_metadata": {
+                      "multiline": false,
+                      "version": 3,
+                      "description": "",
+                      "default_value": ""
+                    },
+                    "mandatory": false,
+                    "multiple": false,
+                    "non_localizable": false,
+                    "unique": false,
+                    "format": "",
+                    "error_messages": {
+                      "format": ""
+                    },
+                    "indexed": false,
+                    "inbuilt_model": false
+                  },
+                  {
+                    "uid": "gf_multi_text",
+                    "data_type": "text",
+                    "display_name": "Multi Line Text",
+                    "field_metadata": {
+                      "multiline": true,
+                      "version": 3,
+                      "description": "",
+                      "default_value": ""
+                    },
+                    "mandatory": false,
+                    "non_localizable": false,
+                    "unique": false,
+                    "multiple": false,
+                    "format": "",
+                    "error_messages": {
+                      "format": ""
+                    },
+                    "indexed": false,
+                    "inbuilt_model": false
+                  },
+                  {
+                    "uid": "gf_number_int",
+                    "data_type": "number",
+                    "display_name": "Integer Number",
+                    "field_metadata": {
+                      "description": "",
+                      "default_value": ""
+                    },
+                    "mandatory": false,
+                    "non_localizable": false,
+                    "unique": false,
+                    "multiple": false,
+                    "indexed": false,
+                    "inbuilt_model": false
+                  },
+                  {
+                    "uid": "gf_number_float",
+                    "data_type": "number",
+                    "display_name": "Decimal Number",
+                    "field_metadata": {
+                      "description": "",
+                      "default_value": ""
+                    },
+                    "mandatory": false,
+                    "non_localizable": false,
+                    "unique": false,
+                    "multiple": false,
+                    "indexed": false,
+                    "inbuilt_model": false
+                  },
+                  {
+                    "uid": "gf_boolean",
+                    "data_type": "boolean",
+                    "display_name": "Boolean Toggle",
+                    "mandatory": false,
+                    "non_localizable": false,
+                    "unique": false,
+                    "multiple": false,
+                    "field_metadata": {
+                      "description": "",
+                      "default_value": false
+                    },
+                    "indexed": false,
+                    "inbuilt_model": false
+                  },
+                  {
+                    "uid": "gf_link",
+                    "data_type": "link",
+                    "display_name": "Link Field",
+                    "mandatory": false,
+                    "non_localizable": false,
+                    "unique": false,
+                    "multiple": false,
+                    "field_metadata": {
+                      "description": "",
+                      "default_value": {
+                        "title": "",
+                        "url": ""
+                      }
+                    },
+                    "indexed": false,
+                    "inbuilt_model": false
+                  },
+                  {
+                    "uid": "gf_json_blob",
+                    "data_type": "text",
+                    "display_name": "Raw JSON Blob (text)",
+                    "field_metadata": {
+                      "multiline": true,
+                      "description": "",
+                      "default_value": "",
+                      "version": 3
+                    },
+                    "format": "",
+                    "error_messages": {
+                      "format": ""
+                    },
+                    "multiple": false,
+                    "non_localizable": false,
+                    "unique": false,
+                    "mandatory": false,
+                    "indexed": false,
+                    "inbuilt_model": false
+                  },
+                  {
+                    "uid": "gf_file_single",
+                    "data_type": "file",
+                    "display_name": "Single File",
+                    "mandatory": false,
+                    "multiple": false,
+                    "non_localizable": false,
+                    "unique": false,
+                    "field_metadata": {
+                      "description": "",
+                      "rich_text_type": "standard",
+                      "image": false
+                    },
+                    "indexed": false,
+                    "inbuilt_model": false
+                  },
+                  {
+                    "uid": "gf_file_multi",
+                    "data_type": "file",
+                    "display_name": "Multiple Files",
+                    "mandatory": false,
+                    "multiple": true,
+                    "non_localizable": false,
+                    "unique": false,
+                    "field_metadata": {
+                      "description": "",
+                      "rich_text_type": "standard",
+                      "image": false
+                    },
+                    "indexed": false,
+                    "inbuilt_model": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "sub_title": [],
+      "title": "title"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "environments": [
+    {
+      "name": "development",
+      "urls": [
+        {
+          "url": "",
+          "locale": "en-us"
+        }
+      ]
+    },
+    {
+      "name": "production",
+      "urls": [
+        {
+          "url": "",
+          "locale": "en-us"
+        }
+      ]
+    },
+    {
+      "name": "preview",
+      "urls": [
+        {
+          "url": "",
+          "locale": "en-us"
+        }
+      ]
+    }
+  ]
+}

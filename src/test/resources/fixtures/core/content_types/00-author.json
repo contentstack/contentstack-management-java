@@ -1,0 +1,606 @@
+{
+  "content_type": {
+    "uid": "author",
+    "title": "Author",
+    "description": "",
+    "schema": [
+      {
+        "data_type": "text",
+        "display_name": "Title",
+        "field_metadata": {
+          "_default": true,
+          "version": 3
+        },
+        "mandatory": true,
+        "uid": "title",
+        "unique": true,
+        "multiple": false,
+        "non_localizable": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "URL",
+        "uid": "url",
+        "field_metadata": {
+          "_default": true,
+          "version": 3
+        },
+        "multiple": false,
+        "unique": false,
+        "mandatory": false,
+        "non_localizable": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Preheader Tag",
+        "uid": "preheader_tag",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Job Title",
+        "uid": "job_title",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Department",
+        "uid": "department",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "text",
+        "display_name": "Email",
+        "uid": "email",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "version": 3
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "file",
+        "display_name": "Image",
+        "uid": "image",
+        "field_metadata": {
+          "description": "",
+          "rich_text_type": "standard",
+          "image": true
+        },
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false,
+        "dimension": {
+          "width": {
+            "min": null,
+            "max": null
+          },
+          "height": {
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      {
+        "data_type": "global_field",
+        "display_name": "Bio",
+        "reference_to": "content_block",
+        "field_metadata": {
+          "description": ""
+        },
+        "uid": "content_block",
+        "mandatory": false,
+        "multiple": false,
+        "non_localizable": false,
+        "unique": false,
+        "schema": [
+          {
+            "data_type": "text",
+            "display_name": "Title",
+            "uid": "title",
+            "field_metadata": {
+              "description": "",
+              "default_value": "",
+              "placeholder": "Title",
+              "version": 3
+            },
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "data_type": "text",
+            "display_name": "Content Block Id",
+            "uid": "content_block_id",
+            "field_metadata": {
+              "description": "This is the id assigned to the content to use as an anchor.",
+              "default_value": "",
+              "version": 3
+            },
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "data_type": "text",
+            "display_name": "Html",
+            "uid": "html",
+            "field_metadata": {
+              "allow_rich_text": true,
+              "description": "",
+              "multiline": false,
+              "rich_text_type": "custom",
+              "options": [
+                "html",
+                "undo",
+                "redo",
+                "h2",
+                "h3",
+                "h4",
+                "bold",
+                "underline",
+                "italic",
+                "lists",
+                "alignment",
+                "imagemanager",
+                "table",
+                "link",
+                "properties"
+              ],
+              "embed_entry": false,
+              "version": 3
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "data_type": "json",
+            "display_name": "JSON Rich Text Editor",
+            "uid": "json_rte",
+            "field_metadata": {
+              "allow_json_rte": true,
+              "embed_entry": false,
+              "description": "",
+              "default_value": "",
+              "multiline": false,
+              "rich_text_type": "custom",
+              "options": [
+                "undo",
+                "redo",
+                "h2",
+                "h3",
+                "h4",
+                "bold",
+                "underline",
+                "italic",
+                "deleted",
+                "lists",
+                "alignment",
+                "imagemanager",
+                "properties",
+                "link"
+              ]
+            },
+            "format": "",
+            "error_messages": {
+              "format": ""
+            },
+            "reference_to": [
+              "sys_assets"
+            ],
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "mandatory": false,
+            "plugins": [],
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "data_type": "group",
+            "display_name": "Links",
+            "field_metadata": {
+              "description": "",
+              "instruction": ""
+            },
+            "schema": [
+              {
+                "data_type": "link",
+                "display_name": "Link",
+                "uid": "link",
+                "field_metadata": {
+                  "description": "",
+                  "default_value": {
+                    "title": "",
+                    "url": ""
+                  },
+                  "isTitle": true,
+                  "instruction": "Link must start with a slash."
+                },
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+              },
+              {
+                "data_type": "text",
+                "display_name": "Appearance",
+                "display_type": "dropdown",
+                "enum": {
+                  "advanced": true,
+                  "choices": [
+                    {
+                      "value": "default",
+                      "key": "Default"
+                    },
+                    {
+                      "value": "primary",
+                      "key": "Primary"
+                    },
+                    {
+                      "value": "secondary",
+                      "key": "Secondary"
+                    },
+                    {
+                      "value": "arrow",
+                      "key": "CTA Arrow"
+                    }
+                  ]
+                },
+                "multiple": false,
+                "uid": "appearance",
+                "field_metadata": {
+                  "description": "",
+                  "default_value": "default",
+                  "isTitle": false,
+                  "default_key": "Default",
+                  "version": 3
+                },
+                "mandatory": true,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+              },
+              {
+                "data_type": "text",
+                "display_name": "Icon",
+                "display_type": "dropdown",
+                "enum": {
+                  "advanced": true,
+                  "choices": [
+                    {
+                      "value": "none",
+                      "key": "None"
+                    },
+                    {
+                      "value": "ExternalLink",
+                      "key": "External Link"
+                    },
+                    {
+                      "value": "PdfDocument",
+                      "key": "Pdf Document"
+                    }
+                  ]
+                },
+                "multiple": false,
+                "uid": "icon",
+                "field_metadata": {
+                  "description": "",
+                  "default_value": "none",
+                  "default_key": "None",
+                  "version": 3
+                },
+                "mandatory": true,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+              },
+              {
+                "data_type": "text",
+                "display_name": "Target",
+                "display_type": "dropdown",
+                "enum": {
+                  "advanced": true,
+                  "choices": [
+                    {
+                      "value": "_self",
+                      "key": "Self"
+                    },
+                    {
+                      "value": "_blank",
+                      "key": "Blank"
+                    }
+                  ]
+                },
+                "multiple": false,
+                "uid": "target",
+                "field_metadata": {
+                  "description": "",
+                  "default_value": "_self",
+                  "default_key": "Self",
+                  "version": 3
+                },
+                "mandatory": true,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+              },
+              {
+                "data_type": "group",
+                "display_name": "Permissions",
+                "field_metadata": {
+                  "description": "",
+                  "instruction": ""
+                },
+                "schema": [
+                  {
+                    "data_type": "text",
+                    "display_name": "Level",
+                    "display_type": "checkbox",
+                    "enum": {
+                      "advanced": true,
+                      "choices": [
+                        {
+                          "value": "full",
+                          "key": "Full"
+                        },
+                        {
+                          "value": "basic",
+                          "key": "Basic"
+                        },
+                        {
+                          "value": "registered",
+                          "key": "Registered"
+                        },
+                        {
+                          "value": "public",
+                          "key": "Public"
+                        }
+                      ]
+                    },
+                    "multiple": true,
+                    "uid": "level",
+                    "field_metadata": {
+                      "description": "",
+                      "default_value": "public",
+                      "default_key": "Public",
+                      "version": 3
+                    },
+                    "mandatory": true,
+                    "non_localizable": false,
+                    "unique": false,
+                    "indexed": false,
+                    "inbuilt_model": false
+                  }
+                ],
+                "uid": "permissions",
+                "mandatory": false,
+                "multiple": false,
+                "non_localizable": false,
+                "unique": false,
+                "indexed": false,
+                "inbuilt_model": false
+              }
+            ],
+            "uid": "links",
+            "mandatory": false,
+            "multiple": true,
+            "non_localizable": false,
+            "unique": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "data_type": "text",
+            "display_name": "Link appearance",
+            "display_type": "dropdown",
+            "enum": {
+              "advanced": true,
+              "choices": [
+                {
+                  "value": "horizontal",
+                  "key": "Horizontal"
+                },
+                {
+                  "value": "vertical",
+                  "key": "Vertical"
+                }
+              ]
+            },
+            "multiple": false,
+            "uid": "link_appearance",
+            "field_metadata": {
+              "description": "",
+              "default_value": "horizontal",
+              "default_key": "Horizontal",
+              "version": 3
+            },
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "data_type": "number",
+            "display_name": "Max Width",
+            "uid": "max_width",
+            "field_metadata": {
+              "description": "",
+              "default_value": ""
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "min": null,
+            "indexed": false,
+            "inbuilt_model": false
+          },
+          {
+            "data_type": "file",
+            "display_name": "Image",
+            "uid": "image",
+            "field_metadata": {
+              "description": "",
+              "rich_text_type": "standard",
+              "image": true
+            },
+            "mandatory": false,
+            "multiple": false,
+            "non_localizable": false,
+            "unique": false,
+            "dimension": {
+              "width": {
+                "min": null,
+                "max": null
+              },
+              "height": {
+                "min": null,
+                "max": null
+              }
+            },
+            "indexed": false,
+            "inbuilt_model": false
+          }
+        ]
+      },
+      {
+        "data_type": "text",
+        "display_name": "Author Type",
+        "display_type": "checkbox",
+        "enum": {
+          "advanced": true,
+          "choices": [
+            {
+              "value": "cybersecurity",
+              "key": "Cybersecurity"
+            },
+            {
+              "value": "podcast",
+              "key": "Podcast"
+            }
+          ]
+        },
+        "multiple": true,
+        "uid": "author_type",
+        "field_metadata": {
+          "description": "",
+          "default_value": "",
+          "default_key": "",
+          "version": 3
+        },
+        "mandatory": true,
+        "non_localizable": false,
+        "unique": false
+      },
+      {
+        "data_type": "taxonomy",
+        "display_name": "Taxonomy",
+        "uid": "taxonomies",
+        "taxonomies": [
+          {
+            "taxonomy_uid": "one",
+            "mandatory": false,
+            "multiple": true,
+            "non_localizable": false
+          },
+          {
+            "taxonomy_uid": "two",
+            "mandatory": false,
+            "multiple": true,
+            "non_localizable": false
+          }
+        ],
+        "field_metadata": {
+          "description": "",
+          "default_value": ""
+        },
+        "format": "",
+        "error_messages": {
+          "format": ""
+        },
+        "mandatory": false,
+        "multiple": true,
+        "non_localizable": false,
+        "unique": false
+      }
+    ],
+    "options": {
+      "is_page": true,
+      "singleton": false,
+      "sub_title": [],
+      "title": "title",
+      "url_pattern": "/:title",
+      "url_prefix": "/cybersecurity-hub/contributors/"
+    }
+  }
+}

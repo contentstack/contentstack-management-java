@@ -1,0 +1,84 @@
+{
+  "taxonomy": {
+    "uid": "usa",
+    "name": "USA",
+    "description": "USA Test taxonomy 1"
+  },
+  "terms": [
+    {
+      "uid": "florida",
+      "name": "florida",
+      "parent_uid": null
+    },
+    {
+      "uid": "new_york",
+      "name": "new_york",
+      "parent_uid": null
+    },
+    {
+      "uid": "texas",
+      "name": "texas",
+      "parent_uid": null
+    },
+    {
+      "uid": "california",
+      "name": "california",
+      "parent_uid": null
+    },
+    {
+      "uid": "west_coast",
+      "name": "West Coast",
+      "parent_uid": null
+    },
+    {
+      "uid": "austin",
+      "name": "Austin",
+      "parent_uid": "texas"
+    },
+    {
+      "uid": "bronx",
+      "name": "Bronx",
+      "parent_uid": "new_york"
+    },
+    {
+      "uid": "miami",
+      "name": "Miami",
+      "parent_uid": "florida"
+    },
+    {
+      "uid": "rich",
+      "name": "Rich",
+      "parent_uid": "west_coast"
+    },
+    {
+      "uid": "san_diago",
+      "name": "San Diago",
+      "parent_uid": "california"
+    },
+    {
+      "uid": "houston",
+      "name": "Houston",
+      "parent_uid": "texas"
+    },
+    {
+      "uid": "orlando",
+      "name": "Orlando",
+      "parent_uid": "florida"
+    },
+    {
+      "uid": "poor",
+      "name": "Poor",
+      "parent_uid": "west_coast"
+    },
+    {
+      "uid": "queens",
+      "name": "Queens",
+      "parent_uid": "new_york"
+    },
+    {
+      "uid": "san_jose",
+      "name": "San Jose",
+      "parent_uid": "california"
+    }
+  ]
+}
