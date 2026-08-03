@@ -160,6 +160,7 @@ public final class TestStackContext {
             System.out.println("[TestStackContext]   API key: " + stackApiKey);
             System.out.println("[TestStackContext]   Management token: " + managementToken);
             System.out.println("[TestStackContext]   Remember to delete it manually when done!");
+            writeStatusFile("preserved " + stackName + " " + stackApiKey);
             return;
         }
 
@@ -173,14 +174,32 @@ public final class TestStackContext {
             try (Response response = http.newCall(request).execute()) {
                 if (response.isSuccessful()) {
                     System.out.println("[TestStackContext] Deleted test stack: " + stackName);
+                    writeStatusFile("deleted " + stackName);
                 } else {
                     System.err.println("[TestStackContext] Stack deletion failed with " + response.code()
                             + " - delete manually: " + stackName + " (" + stackApiKey + ")");
+                    writeStatusFile("delete-failed " + stackName + " " + stackApiKey);
                 }
             }
         } catch (Exception e) {
             System.err.println("[TestStackContext] Stack deletion error: " + e.getMessage()
                     + " - delete manually: " + stackName + " (" + stackApiKey + ")");
+            writeStatusFile("delete-failed " + stackName + " " + stackApiKey);
+        }
+    }
+
+    /**
+     * Writes the teardown outcome to a file in the working directory. The
+     * shutdown hook's stdout doesn't reliably reach the surefire/maven log
+     * (observed both locally and on GoCD), so pipelines read this file to
+     * report whether the dynamic stack was cleaned up.
+     */
+    private static void writeStatusFile(String status) {
+        try {
+            java.nio.file.Files.write(java.nio.file.Paths.get("dynamic-stack-status.txt"),
+                    (status + System.lineSeparator()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            // best effort only
         }
     }
 
