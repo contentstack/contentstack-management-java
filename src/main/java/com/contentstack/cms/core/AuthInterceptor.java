@@ -86,7 +86,10 @@ public class AuthInterceptor implements Interceptor {
             request.header(Util.CONTENT_TYPE, Util.CONTENT_TYPE_VALUE);
         }
 
-        if (this.authtoken != null) {
+        // Attach the client-level authtoken only when the request doesn't already
+        // carry one (e.g. via @HeaderMap) - addHeader would APPEND a duplicate
+        // authtoken header and the API rejects the request as unauthenticated.
+        if (this.authtoken != null && originalRequest.header(Util.AUTHTOKEN) == null) {
             request.addHeader(Util.AUTHTOKEN, this.authtoken);
         }
         

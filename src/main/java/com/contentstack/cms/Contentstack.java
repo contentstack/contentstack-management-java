@@ -1059,8 +1059,12 @@ public class Contentstack {
                 // Add interceptor to handle OAuth, token refresh, and retries
                 builder.addInterceptor(this.oauthInterceptor);
             } else {
-                this.authInterceptor = contentstack.interceptor = new AuthInterceptor();
-                
+                // Wire the Builder's authtoken into the interceptor so that
+                // clients built via setAuthtoken(..) actually authenticate.
+                // (Previously only login() set it, so setAuthtoken-built clients
+                // silently sent no authtoken header at all.)
+                this.authInterceptor = contentstack.interceptor = new AuthInterceptor(this.authtoken);
+
                 // Configure early access if needed
                 if (this.earlyAccess != null) {
                     this.authInterceptor.setEarlyAccess(this.earlyAccess);
