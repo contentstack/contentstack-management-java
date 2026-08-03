@@ -234,7 +234,7 @@ public class OrgApiTests {
         HashMap<String, Object> query = new HashMap<>();
         query.put("include_plan", true);
         String strBody = "{\n" +
-                "\t\"transfer_to\": \"shaileshmishra@gmail.com\"\n" +
+                "\t\"transfer_to\": \"transfer.user@example.com\"\n" +
                 "}";
         JSONObject body = theJSONBody(strBody);
         ORG = TestClient.getClient().organization(ORG_ID)

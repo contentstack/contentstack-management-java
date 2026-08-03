@@ -177,7 +177,10 @@ public final class TestStackContext {
             System.out.println("[TestStackContext] DELETE_DYNAMIC_RESOURCES=false - preserving resources for debugging:");
             System.out.println("[TestStackContext]   Stack: " + stackName);
             System.out.println("[TestStackContext]   API key: " + stackApiKey);
-            System.out.println("[TestStackContext]   Management token: " + managementToken);
+            // never print token values in logs (CI console is org-visible);
+            // fetch/regenerate the token from the preserved stack's UI if needed
+            System.out.println("[TestStackContext]   Management token: "
+                    + (managementToken == null ? "none" : managementToken.substring(0, 6) + "*** (value not logged)"));
             if (amStackCreated) {
                 System.out.println("[TestStackContext]   AM stack: " + amStackName + " (" + amStackApiKey + ")");
             }
