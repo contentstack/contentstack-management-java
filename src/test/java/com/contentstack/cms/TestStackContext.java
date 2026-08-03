@@ -65,6 +65,19 @@ public final class TestStackContext {
     private static String managementToken;
     private static String managementTokenUid;
 
+    // Optional: second stack inside the Asset-Management org (AM_ORG_UID) for
+    // DAM / Contentstack Assets scan tests - mirrors the JS suite's Part 2.
+    private static final String AM_ORG_UID = getEnv("AM_ORG_UID", "amOrgUid", null);
+    private static String amStackApiKey;
+    private static String amStackName;
+    private static boolean amStackCreated = false;
+
+    // Optional: Personalize project linked to the test stack (JS suite parity)
+    private static final String PERSONALIZE_HOST =
+            getEnv("PERSONALIZE_HOST", "personalizeHost", "personalize-api.contentstack.com").trim();
+    private static String personalizeProjectUid;
+    private static boolean personalizeCreated = false;
+
     private static boolean setupAttempted = false;
     private static boolean stackCreated = false;
     private static boolean tornDown = false;
@@ -131,10 +144,16 @@ public final class TestStackContext {
                 new FixtureSeeder(HOST, stackApiKey, authtoken).seedAll();
             }
 
+            // Optional extras (both non-fatal; skipped when env not configured)
+            createAmStack();
+            createPersonalizeProject();
+
             System.out.println("============================================================");
             System.out.println("[TestStackContext] Dynamic setup complete");
             System.out.println("[TestStackContext]   Stack: " + stackName + " (" + stackApiKey + ")");
             System.out.println("[TestStackContext]   Management token: " + (managementToken != null ? "created" : "NOT created (tests fall back to authtoken)"));
+            System.out.println("[TestStackContext]   AM stack: " + (amStackCreated ? amStackName + " (" + amStackApiKey + ")" : "not created (AM_ORG_UID unset or failed)"));
+            System.out.println("[TestStackContext]   Personalize project: " + (personalizeCreated ? personalizeProjectUid : "not created"));
             System.out.println("============================================================");
         } catch (Exception e) {
             System.err.println("[TestStackContext] Dynamic setup FAILED: " + e.getMessage());
@@ -159,10 +178,20 @@ public final class TestStackContext {
             System.out.println("[TestStackContext]   Stack: " + stackName);
             System.out.println("[TestStackContext]   API key: " + stackApiKey);
             System.out.println("[TestStackContext]   Management token: " + managementToken);
-            System.out.println("[TestStackContext]   Remember to delete it manually when done!");
+            if (amStackCreated) {
+                System.out.println("[TestStackContext]   AM stack: " + amStackName + " (" + amStackApiKey + ")");
+            }
+            if (personalizeCreated) {
+                System.out.println("[TestStackContext]   Personalize project: " + personalizeProjectUid);
+            }
+            System.out.println("[TestStackContext]   Remember to delete them manually when done!");
             writeStatusFile("preserved " + stackName + " " + stackApiKey);
             return;
         }
+
+        // Linked/secondary resources first, then the main stack
+        deletePersonalizeProject();
+        deleteAmStack();
 
         try {
             Request request = new Request.Builder()
@@ -230,6 +259,21 @@ public final class TestStackContext {
     /** @return true once the dynamic stack has been created successfully */
     public static boolean isStackCreated() {
         return stackCreated;
+    }
+
+    /** @return api key of the AM-org test stack, or null when not created */
+    public static String getAmStackApiKey() {
+        return amStackApiKey;
+    }
+
+    /** @return true when the optional AM-org stack exists (AM_ORG_UID configured) */
+    public static boolean isAmStackCreated() {
+        return amStackCreated;
+    }
+
+    /** @return uid of the Personalize project linked to the test stack, or null */
+    public static String getPersonalizeProjectUid() {
+        return personalizeProjectUid;
     }
 
     // =============================================================================
@@ -374,6 +418,150 @@ public final class TestStackContext {
             System.err.println("[TestStackContext] Management token creation error: " + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Creates a second stack inside the Asset-Management org (AM_ORG_UID) for
+     * DAM / Contentstack Assets scan tests - the JS suite's "Part 2" pattern.
+     * Skipped silently when AM_ORG_UID is not configured; failures are non-fatal
+     * (AM tests skip themselves when the stack is absent).
+     */
+    @SuppressWarnings("unchecked")
+    private static void createAmStack() {
+        if (AM_ORG_UID == null || AM_ORG_UID.trim().isEmpty()) {
+            return;
+        }
+        amStackName = "SDK_Test_Java_AM_" + shortId();
+        System.out.println("[TestStackContext] Creating AM-org test stack: " + amStackName + " ...");
+        try {
+            JSONObject stack = new JSONObject();
+            stack.put("name", amStackName);
+            stack.put("description", "Automated Java CMA SDK AM-org test stack");
+            stack.put("master_locale", "en-us");
+            JSONObject body = new JSONObject();
+            body.put("stack", stack);
+            Request request = new Request.Builder()
+                    .url("https://" + HOST + "/v3/stacks")
+                    .header("authtoken", authtoken)
+                    .header("organization_uid", AM_ORG_UID.trim())
+                    .post(RequestBody.create(body.toJSONString(), JSON_MEDIA))
+                    .build();
+            try (Response response = http.newCall(request).execute()) {
+                String responseBody = response.body() != null ? response.body().string() : "";
+                if (!response.isSuccessful()) {
+                    System.err.println("[TestStackContext] AM stack creation failed (" + response.code() + "): "
+                            + responseBody + " - AM scan tests will be skipped");
+                    return;
+                }
+                JSONObject json = (JSONObject) parser.parse(responseBody);
+                JSONObject stackObj = (JSONObject) json.get("stack");
+                amStackApiKey = (String) stackObj.get("api_key");
+                amStackCreated = true;
+            }
+            System.out.println("[TestStackContext] Created AM stack " + amStackName + " (api_key: " + amStackApiKey + ")");
+            Thread.sleep(5000); // same provisioning wait as the main stack
+        } catch (Exception e) {
+            System.err.println("[TestStackContext] AM stack creation error: " + e.getMessage()
+                    + " - AM scan tests will be skipped");
+        }
+    }
+
+    /**
+     * Creates a Personalize project linked to the test stack (JS suite parity).
+     * Non-fatal: personalize-dependent tests skip when the project is absent.
+     */
+    @SuppressWarnings("unchecked")
+    private static void createPersonalizeProject() {
+        if (PERSONALIZE_HOST == null || PERSONALIZE_HOST.isEmpty()) {
+            return;
+        }
+        String projectName = "SDK_Test_Java_Proj_" + shortId();
+        System.out.println("[TestStackContext] Creating personalize project: " + projectName + " ...");
+        try {
+            JSONObject body = new JSONObject();
+            body.put("name", projectName);
+            body.put("description", "Automated Java CMA SDK test project");
+            body.put("connectedStackApiKey", stackApiKey);
+            Request request = new Request.Builder()
+                    .url("https://" + PERSONALIZE_HOST + "/projects")
+                    .header("authtoken", authtoken)
+                    .header("organization_uid", ORGANIZATION)
+                    .post(RequestBody.create(body.toJSONString(), JSON_MEDIA))
+                    .build();
+            try (Response response = http.newCall(request).execute()) {
+                String responseBody = response.body() != null ? response.body().string() : "";
+                if (!response.isSuccessful()) {
+                    System.err.println("[TestStackContext] Personalize project creation failed ("
+                            + response.code() + "): " + truncate(responseBody) + " - personalize tests will be skipped");
+                    return;
+                }
+                JSONObject json = (JSONObject) parser.parse(responseBody);
+                Object uid = json.get("uid") != null ? json.get("uid")
+                        : json.get("project_uid") != null ? json.get("project_uid") : json.get("_id");
+                personalizeProjectUid = uid != null ? uid.toString() : null;
+                personalizeCreated = personalizeProjectUid != null;
+            }
+            if (personalizeCreated) {
+                System.out.println("[TestStackContext] Created personalize project: " + personalizeProjectUid);
+            }
+        } catch (Exception e) {
+            System.err.println("[TestStackContext] Personalize project creation error: " + e.getMessage());
+        }
+    }
+
+    private static void deleteAmStack() {
+        if (!amStackCreated) {
+            return;
+        }
+        try {
+            Request request = new Request.Builder()
+                    .url("https://" + HOST + "/v3/stacks")
+                    .header("api_key", amStackApiKey)
+                    .header("authtoken", authtoken)
+                    .delete()
+                    .build();
+            try (Response response = http.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    System.out.println("[TestStackContext] Deleted AM test stack: " + amStackName);
+                    amStackCreated = false;
+                } else {
+                    System.err.println("[TestStackContext] AM stack deletion failed with " + response.code()
+                            + " - delete manually: " + amStackName + " (" + amStackApiKey + ")");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[TestStackContext] AM stack deletion error: " + e.getMessage()
+                    + " - delete manually: " + amStackName + " (" + amStackApiKey + ")");
+        }
+    }
+
+    private static void deletePersonalizeProject() {
+        if (!personalizeCreated) {
+            return;
+        }
+        try {
+            Request request = new Request.Builder()
+                    .url("https://" + PERSONALIZE_HOST + "/projects/" + personalizeProjectUid)
+                    .header("authtoken", authtoken)
+                    .header("organization_uid", ORGANIZATION)
+                    .delete()
+                    .build();
+            try (Response response = http.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    System.out.println("[TestStackContext] Deleted personalize project: " + personalizeProjectUid);
+                    personalizeCreated = false;
+                } else {
+                    System.err.println("[TestStackContext] Personalize project deletion failed with " + response.code()
+                            + " - delete manually: " + personalizeProjectUid);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[TestStackContext] Personalize project deletion error: " + e.getMessage());
+        }
+    }
+
+    private static String truncate(String s) {
+        return s != null && s.length() > 160 ? s.substring(0, 160) + "..." : String.valueOf(s);
     }
 
     /**

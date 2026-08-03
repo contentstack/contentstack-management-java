@@ -1,6 +1,7 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.organization.OrgApiTests;
+import com.contentstack.cms.user.TfaLoginAPITest;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.runner.RunWith;
@@ -29,6 +30,7 @@ import org.junit.runner.RunWith;
         LocaleAPITest.class,
         EnvironmentAPITest.class,
         AssetAPITest.class,
+        AssetScanAMAPITest.class,
         TaxonomyAPITest.class,
         // Phase C: schema (global fields before content types)
         GlobalFieldAPITest.class,
@@ -47,8 +49,9 @@ import org.junit.runner.RunWith;
         RoleAPITest.class,
         TokenAPITest.class,
         ReleaseAPITest.class,
-        // Phase G: org-level
-        OrgApiTests.class
+        // Phase G: org/user-level (2FA login last - it creates its own sessions)
+        OrgApiTests.class,
+        TfaLoginAPITest.class
 })
 public class APISanityTestSuite {
 

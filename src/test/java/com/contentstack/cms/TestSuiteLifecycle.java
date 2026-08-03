@@ -33,7 +33,10 @@ public class TestSuiteLifecycle implements LauncherSessionListener {
 
     @Override
     public void launcherSessionClosed(LauncherSession session) {
-        // Intentionally empty - see class javadoc. Teardown runs in the JVM
-        // shutdown hook so nested launcher sessions can't kill the stack early.
+        // Stack teardown deliberately does NOT happen here - see class javadoc;
+        // it runs in the JVM shutdown hook so nested launcher sessions can't
+        // kill the stack early. Refreshing the custom report here is safe:
+        // it just overwrites a file, and the shutdown hook writes the final one.
+        TestReporter.writeReport();
     }
 }

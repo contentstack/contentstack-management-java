@@ -97,7 +97,41 @@ public class AuthInterceptor implements Interceptor {
             String commaSeparated = String.join(", ", earlyAccess);
             request.addHeader(Util.EARLY_ACCESS_HEADER, commaSeparated);
         }
-        return executeRequest(chain, request.build(), 0);
+        Request finalRequest = request.build();
+        long startedAt = System.currentTimeMillis();
+        Response response = executeRequest(chain, finalRequest, 0);
+        RequestObserver localObserver = observer;
+        if (localObserver != null) {
+            try {
+                localObserver.onCall(finalRequest, response, System.currentTimeMillis() - startedAt);
+            } catch (Exception ignored) {
+                // observers must never break real requests
+            }
+        }
+        return response;
+    }
+
+    /**
+     * Observer for outgoing requests/responses. Intended for test harnesses
+     * and diagnostics (e.g. capturing cURL commands for test reports);
+     * not part of the public API surface.
+     */
+    public interface RequestObserver {
+        void onCall(Request request, Response response, long durationMs);
+    }
+
+    private static volatile RequestObserver observer;
+
+    /**
+     * Registers a JVM-wide request observer (pass null to remove). The observer
+     * is invoked after each request completes, with the final request (including
+     * interceptor-added headers) and the response. Exceptions thrown by the
+     * observer are swallowed.
+     *
+     * @param requestObserver the observer, or null to unregister
+     */
+    public static void setRequestObserver(RequestObserver requestObserver) {
+        observer = requestObserver;
     }
 
     /**
