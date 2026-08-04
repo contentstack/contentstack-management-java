@@ -69,10 +69,30 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
         String actual;
         String skipReason;
         List<CapturedCall> calls = new ArrayList<>();
+        List<String[]> assertions = new ArrayList<>(); // {description, expected, actual}
     }
 
     private static final List<TestRecord> RECORDS = Collections.synchronizedList(new ArrayList<>());
     private static final List<CapturedCall> CURRENT_CALLS = Collections.synchronizedList(new ArrayList<>());
+    private static final List<String[]> CURRENT_ASSERTIONS = Collections.synchronizedList(new ArrayList<>());
+
+    /**
+     * Optional assertion tracking - the Java counterpart of the JS suite's
+     * {@code trackedExpect}. Tests may call this alongside their JUnit
+     * assertions to surface "Expected vs Actual" detail for PASSING tests:
+     *
+     * <pre>
+     * TestReporter.trackAssertion("Environment name", expectedName, env.getName());
+     * Assertions.assertEquals(expectedName, env.getName());
+     * </pre>
+     *
+     * Untracked tests still get a synthesized Expected-vs-Actual section
+     * derived from their API calls.
+     */
+    public static void trackAssertion(String description, Object expected, Object actual) {
+        CURRENT_ASSERTIONS.add(new String[]{
+                String.valueOf(description), String.valueOf(expected), String.valueOf(actual)});
+    }
     private static final ThreadLocal<Long> TEST_START = new ThreadLocal<>();
     private static final int MAX_BODY_CHARS = 4000;
     private static volatile boolean initialized = false;
@@ -218,12 +238,70 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
             {"DELETE", "/taxonomies/[^/]+$", "stack.taxonomy(uid).delete()"},
             {"POST", "/taxonomies/[^/]+/terms$", "taxonomy.terms().create()"},
             {"GET", "/roles$", "stack.roles().find()"},
+            {"GET", "/roles/[^/]+$", "stack.roles(uid).fetch()"},
             {"POST", "/releases$", "stack.releases().create()"},
             {"GET", "/releases$", "stack.releases().find()"},
+            {"GET", "/releases/[^/]+$", "stack.releases(uid).fetch()"},
+            {"PUT", "/releases/[^/]+$", "stack.releases(uid).update()"},
+            {"DELETE", "/releases/[^/]+$", "stack.releases(uid).delete()"},
+            {"POST", "/releases/[^/]+/deploy$", "release.deploy()"},
+            {"POST", "/releases/[^/]+/clone$", "release.clone()"},
+            {"GET", "/releases/[^/]+/items$", "release.item().fetch()"},
+            {"POST", "/stacks/users/roles$", "stack.updateUserRoles()"},
+            {"POST", "/stacks/share$", "stack.share()"},
+            {"POST", "/stacks/unshare$", "stack.unshare()"},
+            {"POST", "/stacks/transfer_ownership$", "stack.transferOwnership()"},
+            {"POST", "/stacks/accept_ownership.*", "stack.acceptOwnership()"},
+            {"POST", "/stacks/settings$", "stack.updateSetting()"},
+            {"GET", "/stacks/settings$", "stack.setting()"},
+            {"PUT", "/stacks$", "stack.update()"},
+            {"PUT", "/taxonomies/[^/]+$", "stack.taxonomy(uid).update()"},
+            {"GET", "/taxonomies/[^/]+/terms$", "taxonomy.terms().find()"},
+            {"GET", "/taxonomies/[^/]+/terms/[^/]+$", "taxonomy.terms().fetch(uid)"},
+            {"PUT", "/taxonomies/[^/]+/terms/[^/]+$", "taxonomy.terms().update(uid)"},
+            {"DELETE", "/taxonomies/[^/]+/terms/[^/]+$", "taxonomy.terms().delete(uid)"},
+            {"PUT", "/taxonomies/[^/]+/terms/[^/]+/move$", "taxonomy.terms().reorder()"},
+            {"GET", "/taxonomies/[^/]+/terms/[^/]+/ancestors$", "taxonomy.terms().ancestors()"},
+            {"GET", "/taxonomies/[^/]+/terms/[^/]+/descendants$", "taxonomy.terms().descendants()"},
+            {"GET", "/locales/[^/]+$", "stack.locale(code).fetch()"},
+            {"PUT", "/locales/[^/]+$", "stack.locale(code).update()"},
+            {"DELETE", "/locales/[^/]+$", "stack.locale(code).delete()"},
+            {"PUT", "/environments/[^/]+$", "stack.environment(name).update()"},
+            {"DELETE", "/environments/[^/]+$", "stack.environment(name).delete()"},
+            {"PUT", "/global_fields/[^/]+$", "stack.globalField(uid).update()"},
+            {"DELETE", "/global_fields/[^/]+$", "stack.globalField(uid).delete()"},
+            {"POST", "/webhooks$", "stack.webhook().create()"},
+            {"GET", "/webhooks$", "stack.webhook().find()"},
+            {"POST", "/workflows$", "stack.workflow().create()"},
+            {"GET", "/workflows$", "stack.workflow().find()"},
+            {"POST", "/labels$", "stack.label().create()"},
+            {"GET", "/labels$", "stack.label().find()"},
+            {"GET", "/extensions.*", "stack.extensions()...."},
+            {"DELETE", "/stacks/management_tokens/[^/]+$", "stack.managementToken(uid).delete()"},
+            {"DELETE", "/stacks/delivery_tokens/[^/]+$", "stack.deliveryToken(uid).delete()"},
+            {"POST", "/bulk/publish$", "stack.bulkOperation().publish()"},
+            {"POST", "/bulk/unpublish$", "stack.bulkOperation().unpublish()"},
+            {"GET", "/organizations$", "client.organization().find()"},
+            {"GET", "/organizations/[^/]+$", "client.organization(uid).fetch()"},
+            {"GET", "/organizations/[^/]+/stacks$", "organization.stacks()"},
+            {"GET", "/organizations/[^/]+/share.*", "organization.allInvitations()"},
+            {"POST", "/organizations/[^/]+/share$", "organization.inviteUser()"},
+            {"POST", "/organizations/[^/]+/transfer-ownership$", "organization.transferOwnership()"},
+            {"GET", "/organizations/[^/]+/roles$", "organization.roles()"},
             {"GET", "/organizations.*", "client.organization()...."},
             {"GET", "/stacks/branches.*", "stack.branch()...."},
             {"POST", "/variant_groups$", "stack.variantGroup().create()"},
             {"GET", "/variant_groups$", "stack.variantGroup().find()"},
+            {"PUT", "/user$", "client.user().update()"},
+            {"POST", "/user/forgot_password$", "client.user().forgotPassword()"},
+            {"GET", "/content_types/[^/]+/entries/[^/]+/export$", "entry.export()"},
+            {"GET", "/content_types/[^/]+/entries/[^/]+/versions$", "entry.versionName().find()"},
+            {"GET", "/content_types/[^/]+/export$", "contentType.export()"},
+            {"GET", "/content_types/[^/]+/references$", "contentType.reference()"},
+            {"GET", "/stacks/accept_ownership/[^/]+$", "stack.acceptOwnership()"},
+            {"GET", "/stacks/delivery_tokens/[^/]+$", "stack.deliveryToken(uid).fetch()"},
+            {"GET", "/stacks/management_tokens/[^/]+$", "stack.managementToken(uid).fetch()"},
+            {"PUT", "/stacks/delivery_tokens/[^/]+$", "stack.deliveryToken(uid).update()"},
     };
 
     private static String detectSdkMethod(String method, String path) {
@@ -243,6 +321,7 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
     @Override
     public void beforeEach(ExtensionContext context) {
         CURRENT_CALLS.clear();
+        CURRENT_ASSERTIONS.clear();
         TEST_START.set(System.currentTimeMillis());
     }
 
@@ -290,6 +369,10 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
         synchronized (CURRENT_CALLS) {
             record.calls.addAll(CURRENT_CALLS);
             CURRENT_CALLS.clear();
+        }
+        synchronized (CURRENT_ASSERTIONS) {
+            record.assertions.addAll(CURRENT_ASSERTIONS);
+            CURRENT_ASSERTIONS.clear();
         }
         RECORDS.add(record);
         return record;
@@ -354,6 +437,9 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
                 .append(".sdk{background:#e8f0fe;color:#1a56db;border-radius:4px;font-size:11px;padding:2px 8px;font-family:monospace}")
                 .append(".fail-msg{background:#fdecea;border:1px solid #f5c6c1;color:#8a1f11;padding:10px 12px;border-radius:6px;font-size:13px;white-space:pre-wrap;word-break:break-word}")
                 .append(".skip-msg{background:#fff8e1;border:1px solid #ffe082;color:#7a5c00;padding:10px 12px;border-radius:6px;font-size:13px}")
+                .append(".sdkline{margin:4px 0}.sdkline .sdk{font-size:12px;padding:4px 10px}")
+                .append(".assertions .assertion{font-size:13px;margin:8px 0;color:#0f9d58;font-weight:600}")
+                .append(".assertions .ea{margin-top:4px;font-weight:400}")
                 .append("</style></head><body>");
 
         h.append("<header><h1>Java CMA SDK &mdash; API Test Report</h1><div class='stats'>")
@@ -385,12 +471,58 @@ public class TestReporter implements BeforeEachCallback, TestWatcher {
                 if (r.failureMessage != null) {
                     h.append("<div class='sect'>Failure</div><div class='fail-msg'>").append(esc(r.failureMessage)).append("</div>");
                 }
-                if (r.expected != null || r.actual != null) {
-                    h.append("<div class='sect'>Expected vs Actual</div><div class='ea'>")
+
+                // 📊 Expected vs Actual - always present (JS-report parity):
+                // tracked assertions > failure detail > synthesized from API calls
+                h.append("<div class='sect'>&#128202; Expected vs Actual</div>");
+                if (!r.assertions.isEmpty()) {
+                    h.append("<div class='assertions'>");
+                    for (String[] a : r.assertions) {
+                        h.append("<div class='assertion'>&#10003; ").append(esc(a[0]))
+                                .append("<div class='ea'><div><div class='lbl'>Expected</div><pre>").append(esc(a[1]))
+                                .append("</pre></div><div><div class='lbl'>Actual</div><pre>").append(esc(a[2]))
+                                .append("</pre></div></div></div>");
+                    }
+                    h.append("</div>");
+                } else if (r.expected != null || r.actual != null) {
+                    h.append("<div class='ea'>")
                             .append("<div><div class='lbl'>Expected</div><pre>").append(esc(String.valueOf(r.expected))).append("</pre></div>")
                             .append("<div><div class='lbl'>Actual</div><pre>").append(esc(String.valueOf(r.actual))).append("</pre></div>")
                             .append("</div>");
+                } else if (!r.calls.isEmpty()) {
+                    StringBuilder actualLines = new StringBuilder();
+                    for (CapturedCall c : r.calls) {
+                        if (actualLines.length() > 0) actualLines.append("\n");
+                        actualLines.append(c.status).append(" - ").append(c.method).append(" ").append(shortUrl(c.url));
+                    }
+                    h.append("<div class='ea'>")
+                            .append("<div><div class='lbl'>Expected</div><pre>")
+                            .append("PASSED".equals(r.status) ? "Successful API interaction / valid request"
+                                    : "Successful API interaction")
+                            .append("</pre></div>")
+                            .append("<div><div class='lbl'>Actual</div><pre>").append(esc(actualLines.toString())).append("</pre></div>")
+                            .append("</div>");
+                } else {
+                    h.append("<div class='ea'>")
+                            .append("<div><div class='lbl'>Expected</div><pre>All assertions pass</pre></div>")
+                            .append("<div><div class='lbl'>Actual</div><pre>").append(r.status)
+                            .append(" (request-building / offline test - no HTTP calls)</pre></div>")
+                            .append("</div>");
                 }
+
+                // 📦 SDK Method Tested - unique methods across this test's calls
+                if (!r.calls.isEmpty()) {
+                    java.util.LinkedHashSet<String> methods = new java.util.LinkedHashSet<>();
+                    for (CapturedCall c : r.calls) {
+                        methods.add(c.sdkMethod);
+                    }
+                    h.append("<div class='sect'>&#128230; SDK Method Tested</div><div class='sdkline'>");
+                    for (String m : methods) {
+                        h.append("<span class='sdk'>").append(esc(m)).append("</span> ");
+                    }
+                    h.append("</div>");
+                }
+
                 if (r.skipReason != null) {
                     h.append("<div class='sect'>Skip reason</div><div class='skip-msg'>").append(esc(r.skipReason)).append("</div>");
                 }
