@@ -37,6 +37,29 @@ public interface TaxonomyService {
             @HeaderMap Map<String, Object> headers,
             @Path("taxonomy_uid") String uid);
 
+    @POST("taxonomies/publish")
+    Call<ResponseBody> publish(
+            @HeaderMap Map<String, Object> headers,
+            @Body JSONObject body);
+
+    @POST("taxonomies/unpublish")
+    Call<ResponseBody> unpublish(
+            @HeaderMap Map<String, Object> headers,
+            @Body JSONObject body);
+
+    @POST("taxonomies/{taxonomy_uid}")
+    Call<ResponseBody> localize(
+            @HeaderMap Map<String, Object> headers,
+            @Path("taxonomy_uid") String uid,
+            @QueryMap Map<String, Object> params,
+            @Body JSONObject body);
+
+    @DELETE("taxonomies/{taxonomy_uid}")
+    Call<ResponseBody> unlocalize(
+            @HeaderMap Map<String, Object> headers,
+            @Path("taxonomy_uid") String uid,
+            @QueryMap Map<String, Object> params);
+
 
     //    --Terms--
     @POST("taxonomies/{taxonomy_uid}/terms")
@@ -86,6 +109,21 @@ public interface TaxonomyService {
             @Path("term_id") String termId,
             @QueryMap Map<String, Object> queryParams,
             @Body JSONObject body);
+
+    @POST("taxonomies/{taxonomy_uid}/terms/{term_id}")
+    Call<ResponseBody> localizeTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @Path("term_id") String termId,
+            @QueryMap Map<String, Object> queryParams,
+            @Body JSONObject body);
+
+    @DELETE("taxonomies/{taxonomy_uid}/terms/{term_id}")
+    Call<ResponseBody> unlocalizeTerm(
+            @HeaderMap HashMap<String, Object> headers,
+            @Path("taxonomy_uid") String taxonomyId,
+            @Path("term_id") String termId,
+            @QueryMap Map<String, Object> queryParams);
 
     @GET("taxonomies/$all/terms")
     Call<ResponseBody> searchTerm(

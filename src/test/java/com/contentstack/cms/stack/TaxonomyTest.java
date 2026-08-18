@@ -2,6 +2,7 @@ package com.contentstack.cms.stack;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.TestClient;
+import com.contentstack.cms.core.ErrorMessages;
 import com.contentstack.cms.core.Util;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -12,11 +13,12 @@ import org.junit.jupiter.api.*;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 
 @Tag("unit")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class TaxonomyTest {
+public class TaxonomyTest {
 
     protected static String API_KEY = TestClient.API_KEY;
     protected static String _uid = TestClient.AUTHTOKEN;
@@ -278,6 +280,43 @@ class TaxonomyTest {
                 request.url().encodedQuery());    }
 
     @Test
+    void testLocalizeTerm() {
+        terms.clearParams();
+        JSONObject termDetails = new JSONObject();
+        termDetails.put("uid", "term_1");
+        termDetails.put("name", "Term 1 Hindi");
+        JSONObject term = new JSONObject();
+        term.put("term", termDetails);
+        Request request = terms.localize("term_1", term, "hi-in").request();
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
+        Assertions.assertEquals("terms", request.url().pathSegments().get(3));
+        Assertions.assertEquals("term_1", request.url().pathSegments().get(4));
+        Assertions.assertEquals("locale=hi-in", request.url().encodedQuery());
+        Assertions.assertNotNull(request.body());
+    }
+
+    @Test
+    void testUnlocalizeTerm() {
+        terms.clearParams();
+        Request request = terms.unlocalize("term_1", "hi-in").request();
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals(5, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
+        Assertions.assertEquals("terms", request.url().pathSegments().get(3));
+        Assertions.assertEquals("term_1", request.url().pathSegments().get(4));
+        Assertions.assertEquals("locale=hi-in", request.url().encodedQuery());
+        Assertions.assertNull(request.body());
+    }
+
+    @Test
     void findTestAPI() throws IOException {
         Taxonomy taxonomy = new Contentstack.Builder()
                 .setAuthtoken(TestClient.AUTHTOKEN)
@@ -287,6 +326,113 @@ class TaxonomyTest {
                 .taxonomy();
         Response<ResponseBody> response = taxonomy.addHeader("authtoken", "blt67b95aeb964f5262").find().execute();
         System.out.println(response);
+    }
+
+
+    private static Taxonomy newTaxonomy() {
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put(Util.API_KEY, API_KEY);
+        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+        return new Contentstack.Builder().setAuthtoken(TestClient.AUTHTOKEN).build().stack(headers).taxonomy();
+    }
+
+    private static Taxonomy newTaxonomy(String uid) {
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put(Util.API_KEY, API_KEY);
+        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+        return new Contentstack.Builder().setAuthtoken(TestClient.AUTHTOKEN).build().stack(headers).taxonomy(uid);
+    }
+
+    @Test
+    void publishTest() {
+        JSONObject publishBody = new JSONObject();
+        publishBody.put("locales", Collections.singletonList("en-us"));
+        publishBody.put("environments", Collections.singletonList("production"));
+        Request request = taxonomy.publish(publishBody).request();
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertEquals("publish", request.url().pathSegments().get(2));
+        Assertions.assertNotNull(request.body());
+    }
+
+    @Test
+    void publishTestWithBranchHeader() {
+        Taxonomy localTaxonomy = newTaxonomy();
+        localTaxonomy.addHeader("branch", "dev");
+        JSONObject publishBody = new JSONObject();
+        publishBody.put("locales", Collections.singletonList("en-us"));
+        Request request = localTaxonomy.publish(publishBody).request();
+        Assertions.assertEquals("dev", request.header("branch"));
+    }
+
+    @Test
+    void unpublishTest() {
+        JSONObject unpublishBody = new JSONObject();
+        unpublishBody.put("locales", Collections.singletonList("en-us"));
+        unpublishBody.put("environments", Collections.singletonList("production"));
+        Request request = taxonomy.unpublish(unpublishBody).request();
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertEquals("unpublish", request.url().pathSegments().get(2));
+        Assertions.assertNotNull(request.body());
+    }
+
+    @Test
+    void localizeTest() {
+        Taxonomy uidTaxonomy = newTaxonomy(_uid);
+        JSONObject taxonomyDetails = new JSONObject();
+        taxonomyDetails.put("uid", _uid);
+        taxonomyDetails.put("name", "Taxonomy 1");
+        JSONObject localizeBody = new JSONObject();
+        localizeBody.put("taxonomy", taxonomyDetails);
+        Request request = uidTaxonomy.localize(localizeBody, "hi-in").request();
+        Assertions.assertEquals("POST", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
+        Assertions.assertEquals("locale=hi-in", request.url().encodedQuery());
+        Assertions.assertNotNull(request.body());
+    }
+
+    @Test
+    void localizeTestWithoutUidThrows() {
+        JSONObject taxonomyDetails = new JSONObject();
+        taxonomyDetails.put("uid", _uid);
+        taxonomyDetails.put("name", "Taxonomy 1");
+        JSONObject localizeBody = new JSONObject();
+        localizeBody.put("taxonomy", taxonomyDetails);
+        NullPointerException exception = Assertions.assertThrows(NullPointerException.class,
+                () -> taxonomy.localize(localizeBody, "hi-in"));
+        Assertions.assertEquals(ErrorMessages.TAXONOMY_UID_REQUIRED, exception.getMessage());
+    }
+
+    @Test
+    void unlocalizeTest() {
+        Taxonomy uidTaxonomy = newTaxonomy(_uid);
+        Request request = uidTaxonomy.unlocalize("hi-in").request();
+        Assertions.assertEquals("DELETE", request.method());
+        Assertions.assertTrue(request.url().isHttps());
+        Assertions.assertEquals(3, request.url().pathSegments().size());
+        Assertions.assertEquals("v3", request.url().pathSegments().get(0));
+        Assertions.assertEquals("taxonomies", request.url().pathSegments().get(1));
+        Assertions.assertEquals(_uid, request.url().pathSegments().get(2));
+        Assertions.assertEquals("locale=hi-in", request.url().encodedQuery());
+        Assertions.assertNull(request.body());
+    }
+
+    @Test
+    void unlocalizeTestWithoutUidThrows() {
+        NullPointerException exception = Assertions.assertThrows(NullPointerException.class,
+                () -> taxonomy.unlocalize("hi-in"));
+        Assertions.assertEquals(ErrorMessages.TAXONOMY_UID_REQUIRED, exception.getMessage());
     }
 
     @Test
