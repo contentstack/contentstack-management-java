@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.14.0
+
+### Aug 24, 2026
+
+- Feat: Added taxonomy and term publish, unpublish, localize, and unlocalize support
+
 ## v1.13.1
 
 ### Aug 17, 2026
