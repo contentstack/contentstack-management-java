@@ -1,6 +1,7 @@
 package com.contentstack.cms.stack;
 
 import com.contentstack.cms.BaseImplementation;
+import com.contentstack.cms.core.ErrorMessages;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -8,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 
 /**
@@ -227,6 +229,63 @@ public class Taxonomy implements BaseImplementation<Taxonomy> {
      */
     public Call<ResponseBody> delete(@NotNull String taxonomyId) {
         return this.taxonomyService.delete(this.headers, taxonomyId);
+    }
+
+    /**
+     * Publish one or more taxonomies to the given environments/locales.
+     * Call on a collection-level instance, e.g. {@code stack.taxonomy()}.
+     *
+     * @param body the request body, e.g. {@code {"locales": [...], "environments": [...], "items": [{"uid": "..."}]}}
+     * @return the call <b>Example</b> <pre>     {@code
+     *     Response<ResponseBody> response = taxonomy.publish(body).execute();
+     *     } </pre>
+     */
+    public Call<ResponseBody> publish(@NotNull JSONObject body) {
+        return this.taxonomyService.publish(this.headers, body);
+    }
+
+    /**
+     * Unpublish one or more taxonomies from the given environments/locales.
+     * Call on a collection-level instance, e.g. {@code stack.taxonomy()}.
+     *
+     * @param body the request body, e.g. {@code {"locales": [...], "environments": [...], "items": [{"uid": "..."}]}}
+     * @return the call <b>Example</b> <pre>     {@code
+     *     Response<ResponseBody> response = taxonomy.unpublish(body).execute();
+     *     } </pre>
+     */
+    public Call<ResponseBody> unpublish(@NotNull JSONObject body) {
+        return this.taxonomyService.unpublish(this.headers, body);
+    }
+
+    /**
+     * Localize a taxonomy into the given locale.
+     * Call on an instance-level taxonomy, e.g. {@code stack.taxonomy("taxonomyId")}.
+     *
+     * @param body   the request body, e.g. {@code {"taxonomy": {"name": "..."}}}
+     * @param locale the target locale, e.g. {@code hi-in}
+     * @return the call <b>Example</b> <pre>     {@code
+     *     Response<ResponseBody> response = taxonomy.localize(body, "hi-in").execute();
+     *     } </pre>
+     */
+    public Call<ResponseBody> localize(@NotNull JSONObject body, @NotNull String locale) {
+        Objects.requireNonNull(this.taxonomyId, ErrorMessages.TAXONOMY_UID_REQUIRED);
+        this.params.put("locale", locale);
+        return this.taxonomyService.localize(this.headers, this.taxonomyId, this.params, body);
+    }
+
+    /**
+     * Unlocalize a taxonomy from the given locale.
+     * Call on an instance-level taxonomy, e.g. {@code stack.taxonomy("taxonomyId")}.
+     *
+     * @param locale the locale to remove, e.g. {@code hi-in}
+     * @return the call <b>Example</b> <pre>     {@code
+     *     Response<ResponseBody> response = taxonomy.unlocalize("hi-in").execute();
+     *     } </pre>
+     */
+    public Call<ResponseBody> unlocalize(@NotNull String locale) {
+        Objects.requireNonNull(this.taxonomyId, ErrorMessages.TAXONOMY_UID_REQUIRED);
+        this.params.put("locale", locale);
+        return this.taxonomyService.unlocalize(this.headers, this.taxonomyId, this.params);
     }
 
 

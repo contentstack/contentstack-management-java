@@ -1,0 +1,6 @@
+
+{
+    "locales": ["en-us"],
+    "environments": ["production"],
+    "items": [{ "uid": "sample_one" }]
+  }
