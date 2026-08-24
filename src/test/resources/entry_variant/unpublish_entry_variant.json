@@ -1,0 +1,12 @@
+{
+  "entry": {
+    "environments": ["development"],
+    "locales": ["en-us"],
+    "variants": [
+      {
+        "version": 1
+      }
+    ]
+  },
+  "locale": "en-us"
+}

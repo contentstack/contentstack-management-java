@@ -26,6 +26,31 @@ public class TestClient {
     public final static String REGION = (env.get("region") != null) ? env.get("region").trim() : "na";
     public final static String VARIANT_GROUP_UID = (env.get("variantGroupUid") != null) ? env.get("variantGroupUid")
             : "variantGroupUid99999999";
+
+    /** Content type UID for entry-variant tests (default {@code blog}). */
+    public static final String ENTRY_VARIANT_CONTENT_TYPE_UID =
+            isBlank(env.get("entryVariantContentTypeUid")) ? "blog" : env.get("entryVariantContentTypeUid").trim();
+
+    /** Stack branch for entry-variant tests (default {@code develop}). */
+    public static final String ENTRY_VARIANT_BRANCH =
+            isBlank(env.get("entryVariantBranch")) ? "develop" : env.get("entryVariantBranch").trim();
+
+    /** Locale query param for entry-variant tests (default {@code en-us}). */
+    public static final String ENTRY_VARIANT_LOCALE =
+            isBlank(env.get("entryVariantLocale")) ? "en-us" : env.get("entryVariantLocale").trim();
+
+    /** {@code true} if {@code value} is null, empty, or whitespace-only. */
+    private static boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    /**
+     * {@code true} when {@code apiKey} / {@code managementToken} were not loaded from {@code .env} (defaults apply).
+     */
+    public static boolean isUsingDefaultStackCredentials() {
+        return env.get("apiKey") == null || env.get("managementToken") == null;
+    }
+
     private static Contentstack instance;
     private static Stack stackInstance;
 

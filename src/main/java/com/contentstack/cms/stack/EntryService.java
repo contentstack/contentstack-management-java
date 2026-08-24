@@ -5,7 +5,6 @@ import org.json.simple.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.*;
 
-import java.util.List;
 import java.util.Map;
 
 public interface EntryService {
@@ -147,6 +146,7 @@ public interface EntryService {
             @HeaderMap Map<String, Object> headers,
             @Path("content_type_uid") String contentTypeUid,
             @Path("entry_uid") String entryUid,
+            @QueryMap(encoded = true) Map<String, Object> queryParameters,
             @Body JSONObject requestBody);
 
     @POST("bulk/publish?x-bulk-action=publish")
@@ -160,7 +160,57 @@ public interface EntryService {
             @HeaderMap Map<String, Object> headers,
             @Path("content_type_uid") String contentTypeUid,
             @Path("entry_uid") String entryUid,
+            @QueryMap(encoded = true) Map<String, Object> queryParameters,
             @Body JSONObject requestBody);
+
+    @GET("content_types/{content_type_uid}/entries/{entry_uid}/variants")
+    Call<ResponseBody> fetchEntryVariants(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Path("entry_uid") String entryUid,
+            @QueryMap(encoded = true) Map<String, Object> queryParameters);
+
+    @GET("content_types/{content_type_uid}/entries/{entry_uid}/variants/{variant_uid}")
+    Call<ResponseBody> fetchEntryVariant(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Path("entry_uid") String entryUid,
+            @Path("variant_uid") String variantUid,
+            @QueryMap(encoded = true) Map<String, Object> queryParameters);
+
+    /**
+     * Create entry variant (PUT …/variants/{variant_uid}). Same HTTP contract as update — CMA upserts on this path.
+     */
+    @Headers("Content-Type: application/json")
+    @PUT("content_types/{content_type_uid}/entries/{entry_uid}/variants/{variant_uid}")
+    Call<ResponseBody> createEntryVariant(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Path("entry_uid") String entryUid,
+            @Path("variant_uid") String variantUid,
+            @QueryMap(encoded = true) Map<String, Object> queryParameters,
+            @Body JSONObject requestBody);
+
+    /**
+     * Update entry variant — delegates to {@link #createEntryVariant}; API uses one PUT upsert for both operations.
+     */
+    default Call<ResponseBody> updateEntryVariant(
+            Map<String, Object> headers,
+            String contentTypeUid,
+            String entryUid,
+            String variantUid,
+            Map<String, Object> queryParameters,
+            JSONObject requestBody) {
+        return createEntryVariant(headers, contentTypeUid, entryUid, variantUid, queryParameters, requestBody);
+    }
+
+    @DELETE("content_types/{content_type_uid}/entries/{entry_uid}/variants/{variant_uid}")
+    Call<ResponseBody> deleteEntryVariant(
+            @HeaderMap Map<String, Object> headers,
+            @Path("content_type_uid") String contentTypeUid,
+            @Path("entry_uid") String entryUid,
+            @Path("variant_uid") String variantUid,
+            @QueryMap(encoded = true) Map<String, Object> queryParameters);
 
     @GET("content_types/{content_type_uid}/entries")
     Call<ResponseBody> filterTaxonomy(

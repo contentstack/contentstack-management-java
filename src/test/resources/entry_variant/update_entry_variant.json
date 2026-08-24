@@ -1,0 +1,17 @@
+{
+  "entry": {
+    "title": "blue |v2",
+    "url": "/blue",
+    "single_line": "blue variant v2 ",
+    "group": [
+      {
+        "single_line": "Variant 2",
+        "multi_line": "Variant 2 Multi"
+      },
+      {
+        "single_line": "Variant 1",
+        "multi_line": "Variant 1 Multi"
+      }
+    ]
+  }
+}
