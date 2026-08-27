@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.14.1
+
+### Aug 26, 2026
+
+- Fix: Upgraded `org.jsoup:jsoup` to 1.23.2 to address a Snyk-reported Allocation of Resources Without Limits or Throttling vulnerability (CVE-2026-75140)
+
 ## v1.14.0
 
 ### Aug 24, 2026
