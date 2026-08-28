@@ -91,7 +91,7 @@
         <rxjava-source.version>3.1.12</rxjava-source.version>
         <retrofit-source.version>3.0.0</retrofit-source.version>
         <converter-gson-version>3.0.0</converter-gson-version>
-        <okhttp.version>5.3.2</okhttp.version>
+        <okhttp.version>5.4.0</okhttp.version>
         <jococo-plugin.version>0.8.13</jococo-plugin.version>
         <lombok-source.version>1.18.44</lombok-source.version>
         <junit-jupiter.version>5.11.4</junit-jupiter.version>
