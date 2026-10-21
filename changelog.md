@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.15.0
+
+### Oct 21, 2026
+
+- Feat: Added the opt-in `Contentstack.Builder.setSerializeNulls(boolean)` option. When enabled, `null` values in request bodies are sent to the API instead of being dropped, so a field's value (for example a Number field on a localized entry) can be cleared. Off by default; existing behavior is unchanged.
+
 ## v1.14.1
 
 ### Aug 26, 2026
