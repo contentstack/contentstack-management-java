@@ -30,6 +30,7 @@ import com.contentstack.cms.organization.Organization;
 import com.contentstack.cms.stack.Stack;
 import com.contentstack.cms.user.User;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.contentstack.cms.core.RetryConfig;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -696,6 +697,7 @@ public class Contentstack {
         private Integer readTimeoutSeconds;
         private Integer writeTimeoutSeconds;
         private Boolean retry = Util.RETRY_ON_FAILURE;// Default base url for contentstack
+        private boolean serializeNulls = false;
         private RetryConfig retryConfig = RetryConfig.defaultConfig();
         /**
          * Default ConnectionPool holds up to 5 idle connections which will be
@@ -741,6 +743,22 @@ public class Contentstack {
          */
         public Builder setRetry(@NotNull Boolean retry) {
             this.retry = retry;
+            return this;
+        }
+
+        /**
+         * Controls whether {@code null} values in request bodies are sent to the API.
+         * <p>
+         * By default {@code null} values are dropped before the request is sent, so
+         * {@code "field": null} behaves exactly like leaving the field out. Enable this
+         * to send {@code null} explicitly, for example to clear a Number field's value
+         * on an entry. It applies to every request made through this client.
+         *
+         * @param serializeNulls {@code true} to send {@code null} values, {@code false} (default) to drop them
+         * @return the Builder
+         */
+        public Builder setSerializeNulls(boolean serializeNulls) {
+            this.serializeNulls = serializeNulls;
             return this;
         }
 
@@ -1015,8 +1033,12 @@ public class Contentstack {
             // of how the hostname was set (setHost, region resolution, or default).
             String validatedHost = validateHostname(this.hostname);
             String baseUrl = Util.PROTOCOL + "://" + validatedHost + "/" + version + "/";
+            GsonBuilder gson = new GsonBuilder();
+            if (serializeNulls) {
+                gson.serializeNulls();
+            }
             this.instance = new Retrofit.Builder().baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson.create()))
                     .client(httpClient(contentstack, this.retry)).build();
             contentstack.instance = this.instance;
 
