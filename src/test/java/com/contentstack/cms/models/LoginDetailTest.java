@@ -1,5 +1,6 @@
 package com.contentstack.cms.models;
 
+import java.util.UUID;
 import com.contentstack.cms.core.AuthInterceptor;
 import okhttp3.Interceptor;
 import okhttp3.internal.http.RealInterceptorChain;
@@ -102,9 +103,9 @@ public class LoginDetailTest {
     @Test
     void getterSetterUserModelUsername() {
         UserModel userModel = new UserModel();
-        // deepcode ignore NoHardcodedCredentials/test: <please specify a reason of ignoring this>
-        userModel.setUsername("***REMOVED***");
-        Assertions.assertEquals("***REMOVED***",
+        String username = UUID.randomUUID().toString();
+        userModel.setUsername(username);
+        Assertions.assertEquals(username,
                 userModel.getUsername());
     }
 
