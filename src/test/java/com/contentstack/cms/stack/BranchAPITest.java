@@ -33,12 +33,21 @@ public class BranchAPITest {
     static final String UNKNOWN_ENV = "no_such_env_dx31564";
     static final String SOURCE = "main";
 
-    /** Unique per run, so reruns on the same stack do not collide. */
-    private static final String RUN = "dx31564_" + Long.toString(System.currentTimeMillis(), 36);
-    private static final String UID_TWO = RUN + "_two";
-    private static final String UID_EMPTY = RUN + "_empty";
-    private static final String UID_UNKNOWN = RUN + "_unknown";
-    private static final String UID_MIXED = RUN + "_mixed";
+    /**
+     * Unique per run, so reruns on the same stack do not collide. Branch UIDs allow at most
+     * 15 characters, lowercase letters and digits only: "b" plus the last 5 base-36 digits of
+     * the current time, then one letter per UID below (7 characters in total).
+     */
+    private static final String RUN = runId();
+    private static final String UID_TWO = RUN + "a";
+    private static final String UID_EMPTY = RUN + "b";
+    private static final String UID_UNKNOWN = RUN + "c";
+    private static final String UID_MIXED = RUN + "d";
+
+    private static String runId() {
+        String time = Long.toString(System.currentTimeMillis(), 36);
+        return "b" + time.substring(time.length() - 5);
+    }
 
     /** Branches this class created, deleted in {@link #cleanUp()}. */
     private static final List<String> CREATED = new ArrayList<>();
@@ -73,8 +82,8 @@ public class BranchAPITest {
     void createWithTwoEnvironmentNames() throws IOException {
         Response<ResponseBody> response = stack.branch()
                 .create(body(UID_TWO, Arrays.asList(ENV_DEVELOPMENT, ENV_PRODUCTION))).execute();
-        assertTrue(response.isSuccessful(), "create with two environment names should succeed");
         CREATED.add(UID_TWO);
+        assertTrue(response.isSuccessful(), "create with two environment names should succeed");
     }
 
     @Test
@@ -91,8 +100,8 @@ public class BranchAPITest {
     void createWithEmptyListClonesNoEnvironments() throws Exception {
         Response<ResponseBody> response = stack.branch()
                 .create(body(UID_EMPTY, Collections.<String>emptyList())).execute();
-        assertTrue(response.isSuccessful(), "create with an empty list should succeed");
         CREATED.add(UID_EMPTY);
+        assertTrue(response.isSuccessful(), "create with an empty list should succeed");
 
         Response<ResponseBody> fetched = stack.branch(UID_EMPTY).fetch().execute();
         assertTrue(fetched.isSuccessful(), "fetch of the created branch should succeed");
@@ -106,6 +115,8 @@ public class BranchAPITest {
                 .create(body(UID_UNKNOWN, Collections.singletonList(UNKNOWN_ENV))).execute();
         assertEquals(422, response.code(), "an unknown environment name should give the API's 422");
         assertNotNull(response.errorBody(), "the API's error body should be present");
+        assertTrue(response.errorBody().string().contains("publish_config.environments"),
+                "the 422 body should name publish_config.environments");
 
         Response<ResponseBody> fetched = stack.branch(UID_UNKNOWN).fetch().execute();
         assertFalse(fetched.isSuccessful(), "no branch should exist after a rejected create");
@@ -118,6 +129,8 @@ public class BranchAPITest {
                 .create(body(UID_MIXED, Arrays.asList(ENV_DEVELOPMENT, UNKNOWN_ENV))).execute();
         assertEquals(422, response.code(), "a mix with an unknown name should give the API's 422");
         assertNotNull(response.errorBody(), "the API's error body should be present");
+        assertTrue(response.errorBody().string().contains("publish_config.environments"),
+                "the 422 body should name publish_config.environments");
 
         Response<ResponseBody> fetched = stack.branch(UID_MIXED).fetch().execute();
         assertFalse(fetched.isSuccessful(), "no branch should exist after a rejected create");
@@ -140,9 +153,13 @@ public class BranchAPITest {
     private static List<String> environmentsOf(Response<ResponseBody> response) throws Exception {
         JSONObject json = (JSONObject) new JSONParser().parse(response.body().string());
         JSONObject branch = (JSONObject) json.get("branch");
+        assertNotNull(branch, "the fetch response should carry a 'branch' object");
         JSONObject publishConfig = (JSONObject) branch.get("publish_config");
+        assertNotNull(publishConfig, "the branch should carry a 'publish_config' object");
+        Object environments = publishConfig.get("environments");
+        assertNotNull(environments, "publish_config should carry an 'environments' list");
         List<String> names = new ArrayList<>();
-        for (Object name : (List<?>) publishConfig.get("environments")) {
+        for (Object name : (List<?>) environments) {
             names.add((String) name);
         }
         return names;
