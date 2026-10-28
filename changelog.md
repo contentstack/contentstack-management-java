@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.16.0
+
+### Oct 28, 2026
+
+- Feat: Branch create accepts an optional `branch.publish_config.environments` list of environment names, so a branch can clone only the environments it needs. `[]` clones none; omitting `publish_config` clones all environments, as before. The list is sent unchanged, the SDK adds no length limit, and an unknown name (or a mix) returns the API's 422 error body unchanged with no branch created.
+
 ## v1.15.0
 
 ### Oct 21, 2026
