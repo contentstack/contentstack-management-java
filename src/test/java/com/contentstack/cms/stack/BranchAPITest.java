@@ -113,6 +113,7 @@ public class BranchAPITest {
     void createWithUnknownNameIsRejectedAndCreatesNoBranch() throws Exception {
         Response<ResponseBody> response = stack.branch()
                 .create(body(UID_UNKNOWN, Collections.singletonList(UNKNOWN_ENV))).execute();
+        CREATED.add(UID_UNKNOWN);
         assertEquals(422, response.code(), "an unknown environment name should give the API's 422");
         assertNotNull(response.errorBody(), "the API's error body should be present");
         assertTrue(response.errorBody().string().contains("publish_config.environments"),
@@ -127,6 +128,7 @@ public class BranchAPITest {
     void createWithMixedNamesIsRejectedAndCreatesNoBranch() throws Exception {
         Response<ResponseBody> response = stack.branch()
                 .create(body(UID_MIXED, Arrays.asList(ENV_DEVELOPMENT, UNKNOWN_ENV))).execute();
+        CREATED.add(UID_MIXED);
         assertEquals(422, response.code(), "a mix with an unknown name should give the API's 422");
         assertNotNull(response.errorBody(), "the API's error body should be present");
         assertTrue(response.errorBody().string().contains("publish_config.environments"),
