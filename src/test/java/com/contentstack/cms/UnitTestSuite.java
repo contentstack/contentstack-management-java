@@ -3,6 +3,7 @@ package com.contentstack.cms;
 import com.contentstack.cms.core.AuthInterceptorTest;
 import com.contentstack.cms.core.EndpointTest;
 import com.contentstack.cms.stack.AssetUnitTest;
+import com.contentstack.cms.stack.BranchUnitTest;
 import com.contentstack.cms.stack.EntryVariantUnitTest;
 import com.contentstack.cms.stack.EnvironmentUnitTest;
 import com.contentstack.cms.stack.GlobalFieldUnitTests;
@@ -33,6 +34,7 @@ import org.junit.runner.RunWith;
         AssetUnitTest.class,
         EntryVariantUnitTest.class,
         EnvironmentUnitTest.class,
+        BranchUnitTest.class,
         GlobalFieldUnitTests.class,
         LocaleUnitTest.class,
         ReleaseUnitTest.class,
