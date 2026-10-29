@@ -2,7 +2,10 @@ package com.contentstack.cms;
 
 import com.contentstack.cms.core.AuthInterceptor;
 import com.contentstack.cms.organization.Organization;
+import com.contentstack.cms.stack.Entry;
 import com.contentstack.cms.stack.Stack;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -12,7 +15,10 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.Assertions;
+import okio.Buffer;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
+import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -410,6 +416,73 @@ public class ContentstackUnitTest {
         
         Assertions.assertNotNull(client.earlyAccess);
         Assertions.assertEquals(0, client.earlyAccess.length);
+    }
+
+    @Test
+    void localizeBodyKeepsNullFieldWhenSerializeNullsEnabled() throws IOException {
+        Contentstack client = new Contentstack.Builder().setSerializeNulls(true).build();
+
+        JsonObject entry = sentEntry(entryOf(client).localize(entryBody(fieldsWith("position", null)), "de-de"));
+
+        Assertions.assertTrue(entry.has("position"));
+        Assertions.assertTrue(entry.get("position").isJsonNull());
+    }
+
+    @Test
+    void localizeBodyDropsNullFieldByDefault() throws IOException {
+        Contentstack client = new Contentstack.Builder().build();
+
+        JsonObject entry = sentEntry(entryOf(client).localize(entryBody(fieldsWith("position", null)), "de-de"));
+
+        Assertions.assertFalse(entry.has("position"));
+        Assertions.assertEquals("example", entry.get("title").getAsString());
+    }
+
+    @Test
+    void localizeBodyKeepsNullInsideGroupFieldWhenSerializeNullsEnabled() throws IOException {
+        Contentstack client = new Contentstack.Builder().setSerializeNulls(true).build();
+        Map<String, Object> group = new HashMap<>();
+        group.put("label", "kept");
+        group.put("position", null);
+
+        JsonObject entry = sentEntry(entryOf(client).localize(entryBody(fieldsWith("group", group)), "de-de"));
+
+        JsonObject sentGroup = entry.getAsJsonObject("group");
+        Assertions.assertTrue(sentGroup.get("position").isJsonNull());
+        Assertions.assertEquals("kept", sentGroup.get("label").getAsString());
+    }
+
+    @Test
+    void updateBodyKeepsNullFieldWhenSerializeNullsEnabled() throws IOException {
+        Contentstack client = new Contentstack.Builder().setSerializeNulls(true).build();
+
+        JsonObject entry = sentEntry(entryOf(client).update(entryBody(fieldsWith("position", null))));
+
+        Assertions.assertTrue(entry.has("position"));
+        Assertions.assertTrue(entry.get("position").isJsonNull());
+    }
+
+    private static Map<String, Object> fieldsWith(String field, Object value) {
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("title", "example");
+        fields.put(field, value);
+        return fields;
+    }
+
+    private static JSONObject entryBody(Map<String, Object> fields) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("entry", fields);
+        return new JSONObject(body);
+    }
+
+    private static Entry entryOf(Contentstack client) {
+        return client.stack("api_key", "management_token").contentType("newspage").entry("entry_uid");
+    }
+
+    private static JsonObject sentEntry(Call<ResponseBody> call) throws IOException {
+        Buffer buffer = new Buffer();
+        call.request().body().writeTo(buffer);
+        return JsonParser.parseString(buffer.readUtf8()).getAsJsonObject().getAsJsonObject("entry");
     }
 
 }
