@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.15.0
+
+### Nov 02, 2026
+
+- Feat: Added the opt-in `Contentstack.Builder.setSerializeNulls(boolean)` option. When enabled, `null` values in request bodies are sent to the API instead of being dropped, so a field's value (for example a Number field on a localized entry) can be cleared. Off by default; existing behavior is unchanged.
+- Tests: Replaced hardcoded usernames and API keys in `LoginDetailTest` and `TestClient` with generated values to resolve Snyk Code findings (DX-22133, DX-22134). No change to the published artifact.
+
 ## v1.14.1
 
 ### Aug 26, 2026
