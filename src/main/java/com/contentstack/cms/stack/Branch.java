@@ -159,6 +159,32 @@ public class Branch implements BaseImplementation<Branch> {
     /**
      * The Create a branch request creates a new branch in a particular stack of
      * your organization.
+     * <p>
+     * Optionally set {@code branch.publish_config.environments} to a list of
+     * environment <b>names</b> (not UIDs) to choose which environments the branch
+     * clones:
+     * <ul>
+     * <li>a list of names clones only those environments;</li>
+     * <li>an empty list {@code []} clones none;</li>
+     * <li>omitting {@code publish_config} clones all environments, as before.</li>
+     * </ul>
+     * The list is sent unchanged. The SDK does not validate the names or limit the
+     * list length. An unknown name, or a mix of known and unknown names, is
+     * rejected by the API with a 422; the API's error body is returned unchanged
+     * and no branch is created.
+     * <p>
+     * Example body:
+     * <pre>{@code
+     * JSONObject publishConfig = new JSONObject();
+     * publishConfig.put("environments", Arrays.asList("development", "staging"));
+     * JSONObject branch = new JSONObject();
+     * branch.put("uid", "branch_uid");
+     * branch.put("source", "main");
+     * branch.put("publish_config", publishConfig);
+     * JSONObject body = new JSONObject();
+     * body.put("branch", branch);
+     * stack.branch().create(body).execute();
+     * }</pre>
      *
      * @param body the request body
      * @return Call

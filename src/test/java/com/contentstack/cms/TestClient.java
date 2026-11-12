@@ -40,6 +40,15 @@ public class TestClient {
     public static final String ENTRY_VARIANT_LOCALE =
             isBlank(env.get("entryVariantLocale")) ? "en-us" : env.get("entryVariantLocale").trim();
 
+    /** Login email for tests that log in with a real account (null when {@code EMAIL} is not set in {@code .env}). */
+    public static final String EMAIL = env.get("EMAIL");
+
+    /** Login password for tests that log in with a real account (null when {@code PASSWORD} is not set in {@code .env}). */
+    public static final String PASSWORD = env.get("PASSWORD");
+
+    /** MFA secret for accounts with two-factor on (null when {@code MFA_SECRET} is not set in {@code .env}). */
+    public static final String MFA_SECRET = env.get("MFA_SECRET");
+
     /** {@code true} if {@code value} is null, empty, or whitespace-only. */
     private static boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
@@ -50,6 +59,11 @@ public class TestClient {
      */
     public static boolean isUsingDefaultStackCredentials() {
         return env.get("apiKey") == null || env.get("managementToken") == null;
+    }
+
+    /** {@code true} when {@code apiKey} is set to a non-blank value in {@code .env}. */
+    public static boolean isApiKeyConfigured() {
+        return !isBlank(env.get("apiKey"));
     }
 
     private static Contentstack instance;
