@@ -46,6 +46,9 @@ public class TestClient {
     /** Login password for tests that log in with a real account (null when {@code PASSWORD} is not set in {@code .env}). */
     public static final String PASSWORD = env.get("PASSWORD");
 
+    /** MFA secret for accounts with two-factor on (null when {@code MFA_SECRET} is not set in {@code .env}). */
+    public static final String MFA_SECRET = env.get("MFA_SECRET");
+
     /** {@code true} if {@code value} is null, empty, or whitespace-only. */
     private static boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();

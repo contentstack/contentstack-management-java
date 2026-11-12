@@ -35,6 +35,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * Needs {@code EMAIL}, {@code PASSWORD} and {@code apiKey} in {@code .env} (or the environment). When any of
  * them is missing the whole class is skipped with an "not run" message, which is not a pass.
  * <p>
+ * If the account has two-factor on, also set {@code MFA_SECRET}: the login then passes it as {@code mfaSecret}
+ * and the SDK generates the one-time code. Without it the plain email and password login is used.
+ * <p>
  * Branch creation is asynchronous: after each successful create the test polls the branch until fetch
  * succeeds. A rejected create leaves no branch, which the API reports as 422 with error_code 905 (the same
  * answer as a branch that does not exist).
@@ -103,7 +106,15 @@ public class BranchAPITest {
         Assumptions.assumeTrue(apiKeyConfigured, "not run: apiKey is not set in .env");
 
         client = new Contentstack.Builder().setHost(TestClient.DEV_HOST).build();
-        Response<LoginDetails> login = client.login(email, password);
+        Response<LoginDetails> login;
+        if (isSet(TestClient.MFA_SECRET)) {
+            // The account has two-factor on: let the SDK generate the TOTP from the secret.
+            HashMap<String, String> mfaParams = new HashMap<>();
+            mfaParams.put("mfaSecret", TestClient.MFA_SECRET);
+            login = client.login(email, password, mfaParams);
+        } else {
+            login = client.login(email, password);
+        }
         assertTrue(login.isSuccessful(), "login with EMAIL / PASSWORD should succeed");
         loggedIn = true;
 
