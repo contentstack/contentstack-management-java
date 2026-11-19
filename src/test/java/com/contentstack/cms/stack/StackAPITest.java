@@ -35,7 +35,12 @@ public class StackAPITest {
 
     @BeforeAll
     public void setUp() {
-        stack = TestClient.getStack();
+        /*
+         * Fresh Stack from the client — the organization_uid headers added below must not leak into the
+         * {@link TestClient#getStack()} singleton: the Releases API answers 500 when that header is present,
+         * which broke {@link ReleaseAPITest}.
+         */
+        stack = TestClient.getClient().stack(apiKey, TestClient.MANAGEMENT_TOKEN);
     }
 
     @Test
