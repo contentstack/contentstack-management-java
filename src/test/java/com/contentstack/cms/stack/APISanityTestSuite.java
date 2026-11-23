@@ -11,6 +11,7 @@ package com.contentstack.cms.stack;
          EndpointAPITest.class,
         TaxonomyAPITest.class,
          AssetAPITest.class,
+         BranchAPITest.class,
          ContentTypeAPITest.class,
          EntryFieldsAPITest.class,
          EnvironmentAPITest.class,

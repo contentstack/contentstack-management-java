@@ -1,10 +1,17 @@
 # Changelog
 
+## v1.16.0
+
+### Nov 12, 2026
+
+- Feat: Branch create accepts an optional `branch.publish_config.environments` list of environment names, so a branch can clone only the environments it needs. `[]` clones none; omitting `publish_config` clones all environments, as before. The list is sent unchanged, the SDK adds no length limit, and an unknown name (or a mix) returns the API's 422 error body unchanged with no branch created.
+
 ## v1.15.0
 
-### Oct 21, 2026
+### Nov 02, 2026
 
 - Feat: Added the opt-in `Contentstack.Builder.setSerializeNulls(boolean)` option. When enabled, `null` values in request bodies are sent to the API instead of being dropped, so a field's value (for example a Number field on a localized entry) can be cleared. Off by default; existing behavior is unchanged.
+- Tests: Replaced hardcoded usernames and API keys in `LoginDetailTest` and `TestClient` with generated values to resolve Snyk Code findings (DX-22133, DX-22134). No change to the published artifact.
 
 ## v1.14.1
 
