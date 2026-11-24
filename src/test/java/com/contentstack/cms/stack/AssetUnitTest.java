@@ -67,7 +67,7 @@ public class AssetUnitTest {
         Request resp = asset.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -147,7 +147,7 @@ public class AssetUnitTest {
                 .request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -197,7 +197,7 @@ public class AssetUnitTest {
         Request resp = asset.delete().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -211,7 +211,7 @@ public class AssetUnitTest {
         Request resp = asset.rteInformation().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -229,7 +229,7 @@ public class AssetUnitTest {
         Request resp = asset.setVersionName(2, body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -262,7 +262,7 @@ public class AssetUnitTest {
         Request resp = asset.deleteVersionName(2).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -366,7 +366,7 @@ public class AssetUnitTest {
         Request resp = asset.unpublish(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -383,7 +383,7 @@ public class AssetUnitTest {
         Request resp = assetFolder.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -444,7 +444,7 @@ public class AssetUnitTest {
         Request resp = asset.folder().create(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -563,10 +563,16 @@ public class AssetUnitTest {
     void testPublishIncludesApiVersionHeader() {
         // api_version: 3.2 is required for CDA-side scan validation on publish.
         // Without it, quarantined assets incorrectly appear as published in the UI.
-        asset.clearParams();
-        asset.addHeader("api_version", "3.2");
+        // Use a fresh Asset: adding api_version to the shared static `asset` leaks the header
+        // into later tests (e.g. testAssetGetByTypeVideo asserts exactly 2 headers).
+        HashMap<String, Object> headers = new HashMap<>();
+        headers.put(Util.API_KEY, API_KEY);
+        headers.put(Util.AUTHORIZATION, MANAGEMENT_TOKEN);
+        Asset publishAsset = TestClient.getClient().stack(headers).asset(_uid);
+        publishAsset.clearParams();
+        publishAsset.addHeader("api_version", "3.2");
         JSONObject body = new JSONObject();
-        Request resp = asset.publish(body).request();
+        Request resp = publishAsset.publish(body).request();
         Assertions.assertEquals("POST", resp.method());
         Assertions.assertEquals("/v3/assets/" + _uid + "/publish", resp.url().encodedPath());
         Assertions.assertEquals("3.2", resp.header("api_version"));
