@@ -67,7 +67,7 @@ public class AssetUnitTest {
         Request resp = asset.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -147,7 +147,7 @@ public class AssetUnitTest {
                 .request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("PUT", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -197,7 +197,7 @@ public class AssetUnitTest {
         Request resp = asset.delete().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -211,7 +211,7 @@ public class AssetUnitTest {
         Request resp = asset.rteInformation().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -229,7 +229,7 @@ public class AssetUnitTest {
         Request resp = asset.setVersionName(2, body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -262,7 +262,7 @@ public class AssetUnitTest {
         Request resp = asset.deleteVersionName(2).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("DELETE", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -366,7 +366,7 @@ public class AssetUnitTest {
         Request resp = asset.unpublish(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -383,7 +383,7 @@ public class AssetUnitTest {
         Request resp = assetFolder.fetch().request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("GET", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
@@ -444,7 +444,7 @@ public class AssetUnitTest {
         Request resp = asset.folder().create(_body).request();
         Assertions.assertTrue(resp.isHttps());
         Assertions.assertEquals("POST", resp.method());
-        Assertions.assertEquals(3, resp.headers().size());
+        Assertions.assertEquals(2, resp.headers().size());
         Collection<String> matcher = new ArrayList<>();
         matcher.add("api_key");
         matcher.add("authorization");
